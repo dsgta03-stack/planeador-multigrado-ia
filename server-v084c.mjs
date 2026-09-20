@@ -46,7 +46,7 @@ async function page(){
     if(!sessions.length)return;
     $('sessionsPlan').innerHTML=sessions.map(s=>{
       const moments=(s.work_moments||[]).map(m=>{
-        const others=(m.other_blocks||[]).map(b=>'<div class="gradeBlock" style="margin:8px 0"><b>'+esc(b.block)+'</b> · '+esc((b.grades||[]).map(g=>g+'.º').join(', '))+'<br><b>Actividad autónoma:</b> '+esc(b.activity)+'<br><b>PDA vinculados:</b> '+esc((b.pda_ids||[]).join(', ')||'Sin PDA asignado a este tramo')+'<br><b>Apoyo para autonomía:</b> '+esc(b.autonomy_support)+'<br><b>Recursos:</b> '+esc((b.resources||[]).join(', '))+'<br><b>Evidencia:</b> '+esc(b.evidence)+'<br><b>Seguimiento:</b> '+esc(b.assessment)+'</div>').join('');
+        const others=(m.other_blocks||[]).map(b=>'<div class="gradeBlock" style="margin:8px 0"><b>'+esc(b.block)+'</b> · '+esc((b.grades||[]).map(g=>g+'.º').join(', '))+'<br><b>Actividad:</b> '+esc(b.activity)+(b.teacher_tone_guidance?'<br><b>Orientación para conducirla:</b> '+esc(b.teacher_tone_guidance):'')+'<br><b>PDA vinculados:</b> '+esc((b.pda_ids||[]).join(', ')||'Sin PDA asignado a este tramo')+'<br><b>Apoyo para autonomía:</b> '+esc(b.autonomy_support)+'<br><b>Recursos:</b> '+esc((b.resources||[]).join(', '))+'<br><b>Evidencia:</b> '+esc(b.evidence)+'<br><b>Seguimiento:</b> '+esc(b.assessment)+'</div>').join('');
         return '<div class="gradeBlock"><b>Momento '+esc(m.moment)+' · '+esc(m.minutes)+' min</b><br><b>Atención directa:</b> '+esc(m.direct_teacher_block)+'<br><b>Intervención docente:</b> '+esc(m.direct_teacher_action)+(others?'<div style="margin-top:8px"><b>Mientras tanto, los demás bloques:</b>'+others+'</div>':'')+'</div>';
       }).join('');
       return '<div class="session"><strong>Sesión '+esc(s.session_number)+' · '+esc(s.total_minutes)+' min</strong><br><b>Propósito:</b> '+esc(s.purpose)+'<br><b>PDA de la sesión:</b> '+esc((s.pda_ids||[]).join(', '))+(s.continuity_from_previous?'<br><b>Continuidad:</b> '+esc(s.continuity_from_previous):'')+'<div class="gradeBlock" style="margin-top:10px"><b>Apertura común · '+esc(s.opening_minutes)+' min</b><br>'+esc(s.common_opening)+'</div>'+moments+'<div class="gradeBlock"><b>Cierre común · '+esc(s.closure_minutes)+' min</b><br>'+esc(s.common_closure)+'</div>'+(s.prepares_next?'<div class="muted"><b>Enlace con la siguiente sesión:</b> '+esc(s.prepares_next)+'</div>':'')+'</div>';
@@ -86,7 +86,7 @@ async function page(){
       if(!(data.sessions||[]).length)$('sessionsPlan').innerHTML=baseSessions;
       const ev=(data.evaluation||[]).map(e=>{const row=vals.find(v=>v.pda_id===e.pda_id);return '<div class="gradeBlock"><b>'+esc(row?.grade||'')+'.º · '+esc(e.pda_id)+'</b><br><b>Criterio observable:</b> '+esc(e.criterion)+'<br><b>Evidencia:</b> '+esc(e.evidence)+'<br><b>Instrumento:</b> '+esc(e.instrument)+'</div>';}).join('');
       $('evaluation').innerHTML=renderProducts(data)+(ev?'<h4>Evaluación alineada a PDA</h4><p class="muted">Los criterios se derivan directamente de los PDA seleccionados.</p>'+ev:'')+'<h4>Orientación formativa complementaria</h4>'+baseEval;
-      const ltgUse=(data.ltg_use||[]).map(x=>'<div class="notice"><b>Uso sugerido para '+esc(x.pda_id)+':</b> '+esc(x.usage)+'</div>').join('');
+      const ltgUse=(data.ltg_use||[]).map(x=>'<div class="notice"><b>Uso del LTG para '+esc(x.pda_id)+':</b> '+esc(x.usage)+(x.adaptation?'<br><b>Adaptación al grupo multigrado:</b> '+esc(x.adaptation):'')+'</div>').join('');
       $('ltgPlan').innerHTML=baseLtg+ltgUse;
       const corrections=(data.operational_corrections||[]).length?'<div class="notice"><b>Ajustes operativos realizados antes de entregar la secuencia</b><br>'+data.operational_corrections.map(x=>'• '+esc(x)).join('<br>')+'</div>':'';
       const curricular=(data.curricular_review_required||[]).length?'<div class="notice warn"><b>Decisiones curriculares que requieren revisión docente</b><br>'+data.curricular_review_required.map(x=>'• '+esc(x)).join('<br>')+'</div>':'';
@@ -110,7 +110,7 @@ const server=http.createServer(async(req,res)=>{
   if(req.method==='GET'&&req.url==='/'){
     try{const html=await page();res.writeHead(200,{"content-type":"text/html; charset=utf-8","cache-control":"no-store"});res.end(html);}catch(e){res.writeHead(502);res.end(String(e));}return;
   }
-  if(req.method==='GET'&&req.url==='/health'){json(res,200,{ok:true,version:'0.8.4c',retrieval:'SEMANTIC-PDA-LAB-V2',planSupport:'PLAN-SEQUENCE-MULTIGRADE-V2'});return;}
+  if(req.method==='GET'&&req.url==='/health'){json(res,200,{ok:true,version:'0.8.4c',retrieval:'SEMANTIC-PDA-LAB-V2',planSupport:'PLAN-SEQUENCE-MULTIGRADE-V3-LTG'});return;}
   if(req.method==='POST'&&req.url==='/api/retrieve'){
     let raw='';req.on('data',c=>{raw+=c;if(raw.length>30000)req.destroy();});
     req.on('end',async()=>{try{const body=JSON.parse(raw||'{}');const r=await fetch(GEMINI_URL,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({grados:body.grados,contexto:body.contexto,situacion_problema:body.situacion_problema,intereses:body.intereses||[],sesiones:body.sesiones||5,minutos:body.minutos||90})});const data=await r.json();json(res,r.status,data);}catch(e){json(res,500,{code:'RETRIEVAL_PROXY_ERROR',message:String(e)});}});return;
