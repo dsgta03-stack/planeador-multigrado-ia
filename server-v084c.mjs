@@ -12,10 +12,13 @@ async function page(){
   const r=await fetch(UPSTREAM,{headers:{"cache-control":"no-cache"}});
   let html=await r.text();
   html=html.replaceAll("Demo V0.8.4b · pertinencia absoluta experimental","Demo V0.8.4c · planeación multigrado contextual");
-  html=html.replace("La problemática es la puerta principal. El porcentaje expresa pertinencia absoluta estimada, no posición relativa. Los PDA sin vinculación suficiente quedan fuera de la vista principal, pero puedes revisar opciones relacionadas. La selección final sigue siendo del docente.","La problemática y el contexto orientan la selección de candidatos oficiales. Después de tu selección, el sistema integra justificación, secuencia multigrado, diferenciación, evaluación y viabilidad sin modificar los textos oficiales ni tus decisiones curriculares.");
+  html=html.replace("La problemática es la puerta principal. El porcentaje expresa pertinencia absoluta estimada, no posición relativa. Los PDA sin vinculación suficiente quedan fuera de la vista principal, pero puedes revisar opciones relacionadas. La selección final sigue siendo del docente.","La problemática y el contexto orientan la selección de candidatos oficiales. Después de tu selección, el sistema integra justificación, secuencia multigrado, diferenciación, evaluación, materiales y viabilidad sin modificar los textos oficiales ni tus decisiones curriculares.");
 
   const extra=String.raw`<script>
   state.latestPlanData=null;
+  state.materialSuggestions={};
+  state.materialSuggestionSeq=0;
+
   const drawListBase=drawList;
   drawList=function(){
     drawListBase();
@@ -36,9 +39,8 @@ async function page(){
     const evaluationSection=$('evaluation').closest('.section');
     const section=document.createElement('div');
     section.className='section'; section.id='materialsSection';
-    section.innerHTML='<h3>Materiales didácticos sugeridos</h3><p class="muted">Genera solo lo que necesites. Cada material se construirá a partir de los PDA seleccionados y de esta planeación.</p><div class="actions" style="justify-content:flex-start;flex-wrap:wrap"><button class="secondary materialBtn" data-type="worksheet">Hoja de trabajo</button><button class="secondary materialBtn" data-type="manipulative">Material manipulable</button><button class="secondary materialBtn" data-type="teacher_guide">Guía breve para el docente</button><button class="secondary materialBtn" data-type="assessment">Instrumento de evaluación</button></div><div id="materialStatus"></div><div id="materialOutput"></div>';
+    section.innerHTML='<h3>Materiales imprimibles seleccionados</h3><p class="muted">La planeación propone materiales dentro de cada actividad. Usa el botón <b>Generar este imprimible</b> únicamente cuando quieras prepararlo. El resultado aparecerá aquí.</p><div id="materialStatus"></div><div id="materialOutput"><p class="muted">Todavía no has generado ningún material.</p></div>';
     evaluationSection.insertAdjacentElement('afterend',section);
-    section.querySelectorAll('.materialBtn').forEach(b=>b.onclick=()=>generateMaterial(b.dataset.type));
   }
 
   function renderSelected(data){
@@ -53,13 +55,30 @@ async function page(){
     }).join('');
   }
 
+  function registerPrintable(suggestion,ctx){
+    const id='ms'+(++state.materialSuggestionSeq);
+    state.materialSuggestions[id]={suggestion,ctx};
+    return id;
+  }
+
+  function renderMaterialSupport(ms,ctx){
+    if(!ms)return '';
+    const available=(ms.available_resources||[]).length?'<div style="margin-top:8px"><b>Material que ya podemos utilizar:</b> '+esc(ms.available_resources.join(', '))+'</div>':'';
+    const prepare=(ms.to_prepare_or_find||[]).length?'<div style="margin-top:8px"><b>Material que conviene conseguir o preparar:</b>'+ms.to_prepare_or_find.map(x=>'<div class="muted" style="margin:5px 0 0 12px">• <b>'+esc(x.item)+'</b>: '+esc(x.purpose)+(x.alternative?'<br><span style="margin-left:10px"><b>Alternativa:</b> '+esc(x.alternative)+'</span>':'')+'</div>').join('')+'</div>':'';
+    const printables=(ms.printable_suggestions||[]).length?'<div style="margin-top:10px"><b>Material imprimible sugerido:</b>'+ms.printable_suggestions.map(p=>{const id=registerPrintable(p,ctx);return '<div class="notice" style="margin-top:7px"><b>'+esc(p.title)+'</b> <span class="muted">('+esc(String(p.format||'material').replaceAll('_',' '))+')</span><br>'+esc(p.description)+'<br><b>Uso:</b> '+esc(p.use)+'<br><b>Para:</b> '+esc((p.grades||[]).map(g=>g+'.º').join(', '))+' · <b>PDA:</b> '+esc((p.pda_ids||[]).join(', '))+(p.optional?'<br><span class="muted">Opcional: puede realizarse sin imprimir si se utiliza una alternativa disponible.</span>':'')+'<div class="actions" style="justify-content:flex-start;margin-top:7px"><button class="secondary" onclick="generateSuggestedMaterial(\''+id+'\')">Generar este imprimible</button></div></div>'}).join('')+'</div>':'';
+    return available+prepare+printables;
+  }
+
   function renderSessions(data){
     const sessions=data.sessions||[];
     if(!sessions.length)return;
+    state.materialSuggestions={};state.materialSuggestionSeq=0;
     $('sessionsPlan').innerHTML=sessions.map(s=>{
       const moments=(s.work_moments||[]).map(m=>{
-        const others=(m.other_blocks||[]).map(b=>'<div class="gradeBlock" style="margin:8px 0"><b>'+esc(b.block)+'</b> · '+esc((b.grades||[]).map(g=>g+'.º').join(', '))+'<br><b>Actividad:</b> '+esc(b.activity)+(b.teacher_tone_guidance?'<br><b>Orientación para conducirla:</b> '+esc(b.teacher_tone_guidance):'')+'<br><b>PDA vinculados:</b> '+esc((b.pda_ids||[]).join(', ')||'Sin PDA asignado a este tramo')+'<br><b>Apoyo para autonomía:</b> '+esc(b.autonomy_support)+'<br><b>Recursos:</b> '+esc((b.resources||[]).join(', '))+'<br><b>Evidencia:</b> '+esc(b.evidence)+'<br><b>Seguimiento:</b> '+esc(b.assessment)+'</div>').join('');
-        return '<div class="gradeBlock"><b>Momento '+esc(m.moment)+' · '+esc(m.minutes)+' min</b><br><b>Atención directa:</b> '+esc(m.direct_teacher_block)+'<br><b>Trabajo acompañado:</b> '+esc(m.direct_teacher_action)+(others?'<div style="margin-top:8px"><b>Mientras tanto, los demás bloques:</b>'+others+'</div>':'')+'</div>';
+        const directCtx={session:s.session_number,moment:m.moment,block:m.direct_teacher_block,activity:m.direct_teacher_action};
+        const directMaterials=renderMaterialSupport(m.direct_material_support,directCtx);
+        const others=(m.other_blocks||[]).map(b=>{const ctx={session:s.session_number,moment:m.moment,block:b.block,grades:b.grades,activity:b.activity,pda_ids:b.pda_ids};return '<div class="gradeBlock" style="margin:8px 0"><b>'+esc(b.block)+'</b> · '+esc((b.grades||[]).map(g=>g+'.º').join(', '))+'<br><b>Actividad:</b> '+esc(b.activity)+(b.teacher_tone_guidance?'<br><b>Orientación para conducirla:</b> '+esc(b.teacher_tone_guidance):'')+'<br><b>PDA vinculados:</b> '+esc((b.pda_ids||[]).join(', ')||'Sin PDA asignado a este tramo')+'<br><b>Apoyo para autonomía:</b> '+esc(b.autonomy_support)+renderMaterialSupport(b.material_support,ctx)+'<br><b>Evidencia:</b> '+esc(b.evidence)+'<br><b>Seguimiento:</b> '+esc(b.assessment)+'</div>';}).join('');
+        return '<div class="gradeBlock"><b>Momento '+esc(m.moment)+' · '+esc(m.minutes)+' min</b><br><b>Atención directa:</b> '+esc(m.direct_teacher_block)+'<br><b>Trabajo acompañado:</b> '+esc(m.direct_teacher_action)+directMaterials+(others?'<div style="margin-top:8px"><b>Mientras tanto, los demás bloques:</b>'+others+'</div>':'')+'</div>';
       }).join('');
       return '<div class="session"><strong>Sesión '+esc(s.session_number)+' · '+esc(s.total_minutes)+' min</strong><br><b>Propósito:</b> '+esc(s.purpose)+'<br><b>PDA de la sesión:</b> '+esc((s.pda_ids||[]).join(', '))+(s.continuity_from_previous?'<br><b>Continuidad:</b> '+esc(s.continuity_from_previous):'')+'<div class="gradeBlock" style="margin-top:10px"><b>Apertura común · '+esc(s.opening_minutes)+' min</b><br>'+esc(s.common_opening)+'</div>'+moments+'<div class="gradeBlock"><b>Cierre común · '+esc(s.closure_minutes)+' min</b><br>'+esc(s.common_closure)+'</div>'+(s.prepares_next?'<div class="muted"><b>Enlace con la siguiente sesión:</b> '+esc(s.prepares_next)+'</div>':'')+'</div>';
     }).join('');
@@ -72,6 +91,7 @@ async function page(){
   }
 
   function materialTypeLabel(type){return ({worksheet:'Hoja de trabajo',manipulative:'Material manipulable',teacher_guide:'Guía breve para el docente',assessment:'Instrumento de evaluación'})[type]||'Material';}
+  function typeFromFormat(format){if(['imagenes','tarjetas','recortable','etiquetas'].includes(format))return 'manipulative';if(format==='lista_de_cotejo')return 'assessment';return 'worksheet';}
 
   function renderMaterial(data){
     const sections=(data.sections||[]).map(s=>'<div class="gradeBlock"><b>'+esc(s.heading)+'</b><div style="white-space:pre-wrap;margin-top:6px">'+esc(s.content)+'</div>'+(s.response_space_hint?'<div class="muted" style="margin-top:6px"><b>Espacio sugerido:</b> '+esc(s.response_space_hint)+'</div>':'')+'</div>').join('');
@@ -80,23 +100,29 @@ async function page(){
     const diff=(data.differentiation_notes||[]).length?'<p><b>Ajustes y diferenciación:</b><br>'+data.differentiation_notes.map(x=>'• '+esc(x)).join('<br>')+'</p>':'';
     $('materialOutput').innerHTML='<div class="summary"><div class="muted">'+esc(materialTypeLabel(data.material_type))+'</div><h3 style="margin:5px 0">'+esc(data.title)+'</h3><p><b>Propósito:</b> '+esc(data.purpose)+'</p><p><b>Dirigido a:</b> '+esc(data.applies_to)+'</p>'+prep+(data.student_instructions?'<div class="notice"><b>Consigna:</b> '+esc(data.student_instructions)+'</div>':'')+sections+teacher+diff+'<p><b>Recursos:</b> '+esc((data.resources||[]).join(', '))+'</p><p><b>Evidencia observable:</b> '+esc(data.observable_evidence)+'</p>'+(data.answer_or_reference?'<p><b>Referencia para revisión:</b> '+esc(data.answer_or_reference)+'</p>':'')+(data.printing_notes?'<p class="muted"><b>Preparación/impresión:</b> '+esc(data.printing_notes)+'</p>':'')+'<div class="actions"><button class="secondary" id="printMaterial">Imprimir este material</button></div></div>';
     document.getElementById('printMaterial').onclick=()=>window.print();
+    document.getElementById('materialsSection')?.scrollIntoView({behavior:'smooth',block:'start'});
   }
 
-  async function generateMaterial(type){
+  async function generateSuggestedMaterial(id){
+    const item=state.materialSuggestions[id];
     const vals=Object.values(state.selected).sort((a,b)=>a.grade-b.grade);
-    if(!vals.length||!state.latestPlanData)return;
-    $('materialStatus').innerHTML='<div class="notice">Preparando '+esc(materialTypeLabel(type).toLowerCase())+'...</div>';
+    if(!item||!vals.length||!state.latestPlanData)return;
+    ensureMaterialsSection();
+    const p=item.suggestion,ctx=item.ctx||{};
+    const type=typeFromFormat(p.format);
+    $('materialStatus').innerHTML='<div class="notice">Preparando: <b>'+esc(p.title)+'</b>...</div>';
     $('materialOutput').innerHTML='';
-    const sessionContext=JSON.stringify({question:state.latestPlanData.guiding_question,sessions:state.latestPlanData.sessions,products:state.latestPlanData.products,evaluation:state.latestPlanData.evaluation,ltg_use:state.latestPlanData.ltg_use}).slice(0,18000);
-    const payload={type,pda_ids:vals.map(v=>v.pda_id),grades:[...new Set(vals.map(v=>v.grade))],problem:$('problem').value.trim(),context:$('context').value.trim(),reading:$('reading').value,writing:$('writing').value,autonomy:$('autonomy').value,connectivity:$('connectivity').value,resources:$('resources').value.trim(),supports:$('supports').value.trim()||'No especificados',session_context:sessionContext};
+    const requestedIds=(p.pda_ids||[]).filter(id=>vals.some(v=>v.pda_id===id));
+    const requestedGrades=(p.grades||[]).filter(g=>vals.some(v=>v.grade===g));
+    const payload={type,pda_ids:requestedIds.length?requestedIds:vals.map(v=>v.pda_id),grades:requestedGrades.length?requestedGrades:[...new Set(vals.map(v=>v.grade))],problem:$('problem').value.trim(),context:$('context').value.trim(),reading:$('reading').value,writing:$('writing').value,autonomy:$('autonomy').value,connectivity:$('connectivity').value,resources:$('resources').value.trim(),supports:$('supports').value.trim()||'No especificados',session_context:JSON.stringify(ctx).slice(0,8000),requested_suggestion:p};
     try{
       const r=await fetch('/api/material',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(payload)});
       const data=await r.json();
       if(!r.ok)throw new Error(data.message||data.code||'No fue posible generar el material');
-      $('materialStatus').innerHTML='';
-      renderMaterial(data);
+      $('materialStatus').innerHTML='';renderMaterial(data);
     }catch(error){$('materialStatus').innerHTML='<div class="notice warn">No fue posible generar el material. '+esc(String(error))+'</div>';}
   }
+  window.generateSuggestedMaterial=generateSuggestedMaterial;
 
   async function applyPlanSupport(){
     const vals=Object.values(state.selected).sort((a,b)=>a.grade-b.grade);
@@ -149,13 +175,13 @@ const server=http.createServer(async(req,res)=>{
   if(req.method==='GET'&&req.url==='/'){
     try{const html=await page();res.writeHead(200,{"content-type":"text/html; charset=utf-8","cache-control":"no-store"});res.end(html);}catch(e){res.writeHead(502);res.end(String(e));}return;
   }
-  if(req.method==='GET'&&req.url==='/health'){json(res,200,{ok:true,version:'0.8.4c',retrieval:'SEMANTIC-PDA-LAB-V2',planSupport:'PLAN-SEQUENCE-MULTIGRADE-V4',materials:'TEACHING-MATERIAL-V1'});return;}
+  if(req.method==='GET'&&req.url==='/health'){json(res,200,{ok:true,version:'0.8.4c',retrieval:'SEMANTIC-PDA-LAB-V2',planSupport:'PLAN-SEQUENCE-MULTIGRADE-V5-MATERIALS',materials:'TEACHING-MATERIAL-V2-CONTEXTUAL'});return;}
   if(req.method==='POST'&&req.url==='/api/retrieve'){
     let raw='';req.on('data',c=>{raw+=c;if(raw.length>30000)req.destroy();});
     req.on('end',async()=>{try{const body=JSON.parse(raw||'{}');const r=await fetch(GEMINI_URL,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({grados:body.grados,contexto:body.contexto,situacion_problema:body.situacion_problema,intereses:body.intereses||[],sesiones:body.sesiones||5,minutos:body.minutos||90})});const data=await r.json();json(res,r.status,data);}catch(e){json(res,500,{code:'RETRIEVAL_PROXY_ERROR',message:String(e)});}});return;
   }
   if(req.method==='POST'&&req.url==='/api/gemini-plan'){
-    let raw='';req.on('data',c=>{raw+=c;if(raw.length>80000)req.destroy();});
+    let raw='';req.on('data',c=>{raw+=c;if(raw.length>100000)req.destroy();});
     req.on('end',async()=>{try{const body=JSON.parse(raw||'{}');const r=await fetch(PLAN_URL,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body)});const data=await r.json();json(res,r.status,data);}catch(e){json(res,500,{code:'PLAN_PROXY_ERROR',message:String(e)});}});return;
   }
   if(req.method==='POST'&&req.url==='/api/material'){
