@@ -21,6 +21,15 @@ function parse(buf){try{return JSON.parse(buf.toString("utf8"))}catch{return nul
 async function callChild(path,raw,authorization,timeout=560000){const r=await fetch(CHILD_ORIGIN+path,{method:"POST",headers:{"content-type":"application/json",authorization},body:raw||"{}",signal:AbortSignal.timeout(timeout)});return{status:r.status,contentType:r.headers.get("content-type")||"application/json; charset=utf-8",data:Buffer.from(await r.arrayBuffer()),engine:r.headers.get("x-multiplan-plan-engine")||""}}
 function send(res,r,engine,extra={}){res.writeHead(r.status,{"content-type":r.contentType,"cache-control":"no-store","x-multiplan-plan-engine":engine,"x-multiplan-v65-shadow":SHADOW_ENABLED?"enabled-beta8-non-governing":"disabled",...extra});res.end(r.data)}
 
+function patchTeacherSelectionLanguage(html){
+  return String(html)
+    .replaceAll("Sin PDA seleccionado en '+missing.map(g=>g+'.º').join(', ')+'. Puedes continuar; quedará como advertencia pedagógica.","Sin PDA seleccionado en '+missing.map(g=>g+'.º').join(', ')+'. Estos grados participarán de forma transversal en el proyecto, sin atribución curricular automática.")
+    .replaceAll("Sin PDA seleccionado por decisión docente. No bloquea el avance, pero el validador lo registra como advertencia.","Sin PDA seleccionado por decisión docente. Participará transversalmente en el proyecto con actividades adaptadas a sus características, sin atribuirle un PDA ajeno.")
+    .replaceAll("sin PDA seleccionado: definir evidencia y criterio solo cuando exista un aprendizaje curricular decidido.","sin PDA seleccionado: registrar aportes y evidencias del proyecto sin presentarlos como logro de un PDA no seleccionado.")
+    .replaceAll("Revisar grados sin PDA: '+missingGrades.map(g=>g+'.º').join(', ')","Grados con participación transversal sin PDA: '+missingGrades.map(g=>g+'.º').join(', ')")
+    .replaceAll("Hay grados activos sin PDA seleccionado; es una decisión permitida, pero requiere revisión curricular antes de cerrar la planeación.","Hay grados sin PDA seleccionado por decisión docente; participarán transversalmente en el proyecto y no recibirán PDA, LTG ni criterios curriculares ajenos.");
+}
+
 async function runShadow(raw,authorization,basePlan){
   try{
     const request=JSON.parse(raw||"{}");
@@ -48,16 +57,28 @@ async function routePlan(req,res){
   if(SHADOW_ENABLED&&r.status===200&&plan&&String(plan.engineVersion||engine).startsWith("V6.4"))setImmediate(()=>void runShadow(raw,authorization,plan));
 }
 
-async function proxy(req,res){try{const headers={};for(const n of["content-type","authorization","accept","cookie"])if(req.headers[n])headers[n]=req.headers[n];const init={method:req.method,headers};if(req.method!=="GET"&&req.method!=="HEAD")init.body=await readBody(req);const r=await fetch(CHILD_ORIGIN+req.url,init);const type=r.headers.get("content-type")||"application/octet-stream";const data=Buffer.from(await r.arrayBuffer());res.writeHead(r.status,{"content-type":type,"cache-control":r.headers.get("cache-control")||"no-store"});res.end(data)}catch(e){json(res,502,{code:"V0106_PROXY_ERROR",message:String(e)})}}
+async function proxy(req,res){
+  try{
+    const headers={};for(const n of["content-type","authorization","accept","cookie"])if(req.headers[n])headers[n]=req.headers[n];
+    const init={method:req.method,headers};if(req.method!=="GET"&&req.method!=="HEAD")init.body=await readBody(req);
+    const r=await fetch(CHILD_ORIGIN+req.url,init);
+    const type=r.headers.get("content-type")||"application/octet-stream";
+    if(req.method==="GET"&&req.url==="/"&&type.includes("text/html")){
+      const html=patchTeacherSelectionLanguage(await r.text());
+      res.writeHead(r.status,{"content-type":"text/html; charset=utf-8","cache-control":"no-store"});res.end(html);return;
+    }
+    const data=Buffer.from(await r.arrayBuffer());res.writeHead(r.status,{"content-type":type,"cache-control":r.headers.get("cache-control")||"no-store"});res.end(data);
+  }catch(e){json(res,502,{code:"V0106_PROXY_ERROR",message:String(e)})}
+}
 
 const server=http.createServer(async(req,res)=>{
   if(req.method==="GET"&&req.url==="/health"){
     try{
       const r=await fetch(CHILD_ORIGIN+"/health");const childHealth=await r.json().catch(()=>({}));
-      return json(res,r.ok?200:503,{ok:r.ok,version:"0.10.6",teacherSelectionPolicy:childHealth.teacherSelectionPolicy||"AUTHORITATIVE_NO_AUTO_PDA",zeroPdaPlanning:childHealth.zeroPdaPlanning||"SUPPORTED",missingPdaPolicy:childHealth.missingPdaPolicy||"TRANSVERSAL_PROJECT_ADAPTATION_ONLY",crossGradePdaPolicy:"FORBIDDEN",stableEnginePatch:"V6.2.1 function v12 teacher-selection-lock",didacticEnginePatch:"V6.4 Beta.5 function v2 teacher-selection-lock",shadowEngine:"V6.5-METHODOLOGY-ENGINE-BETA.8",shadowMode:SHADOW_ENABLED?"ACTIVE_NON_GOVERNING":"DISABLED",shadowIsolation:"ONLY_BETA8_AT_TOP_LEVEL; LOWER_METHODOLOGY_SHADOWS_DISABLED",shadowGoal:"TEACHER-SELECTION-GATE + EXISTING-METHODOLOGY-QUALITY-GATES",userResponseAlwaysFrom:"server-v0105-zero-pda-teacher-lock.mjs",child:childHealth});
-    }catch(e){return json(res,503,{ok:false,version:"0.10.6",code:"V0105_CHILD_NOT_READY",message:String(e)})}
+      return json(res,r.ok?200:503,{ok:r.ok,version:"0.10.6.1",teacherSelectionPolicy:childHealth.teacherSelectionPolicy||"AUTHORITATIVE_NO_AUTO_PDA",zeroPdaPlanning:childHealth.zeroPdaPlanning||"SUPPORTED",missingPdaPolicy:childHealth.missingPdaPolicy||"TRANSVERSAL_PROJECT_ADAPTATION_ONLY",crossGradePdaPolicy:"FORBIDDEN",noPdaUiLanguage:"TRANSVERSAL_NOT_WARNING",stableEnginePatch:"V6.2.1 function v12 teacher-selection-lock",didacticEnginePatch:"V6.4 Beta.5 function v2 teacher-selection-lock",shadowEngine:"V6.5-METHODOLOGY-ENGINE-BETA.8",shadowMode:SHADOW_ENABLED?"ACTIVE_NON_GOVERNING":"DISABLED",shadowIsolation:"ONLY_BETA8_AT_TOP_LEVEL; LOWER_METHODOLOGY_SHADOWS_DISABLED",shadowGoal:"TEACHER-SELECTION-GATE + EXISTING-METHODOLOGY-QUALITY-GATES",userResponseAlwaysFrom:"server-v0105-zero-pda-teacher-lock.mjs",child:childHealth});
+    }catch(e){return json(res,503,{ok:false,version:"0.10.6.1",code:"V0105_CHILD_NOT_READY",message:String(e)})}
   }
   if(req.method==="POST"&&req.url==="/api/gemini-plan")return routePlan(req,res);
   return proxy(req,res);
 });
-server.listen(PORT,"0.0.0.0",()=>console.log(`Multiplan v0.10.6 on ${PORT}; child v0.10.5 on ${CHILD_PORT}; only V6.5 Beta.8 shadow=${SHADOW_ENABLED}`));
+server.listen(PORT,"0.0.0.0",()=>console.log(`Multiplan v0.10.6.1 on ${PORT}; child v0.10.5 on ${CHILD_PORT}; only V6.5 Beta.8 shadow=${SHADOW_ENABLED}`));
