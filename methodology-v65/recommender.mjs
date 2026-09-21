@@ -26,8 +26,10 @@ function detectExistingMethodology(basePlan={}){
   if(scenario.includes('comunitario')) strong.push({id:'proyectos_comunitarios',reason:'El proyecto LTG base pertenece al escenario Comunitario.'});
   const steamHits=['indagamos','comprendemos','socializamos y aplicamos','reflexionamos el camino andado'].filter(x=>titles.includes(x)).length;
   if(steamHits>=3) strong.push({id:'steam',reason:'Los momentos LTG recuperados coinciden de forma suficiente con una secuencia de indagación STEAM.'});
-  if(/presentamos|recolectamos|formulamos el problema|organizamos la experiencia|vivimos la experiencia|valoramos la experiencia/.test(titles)) strong.push({id:'abp',reason:'Los momentos LTG recuperados coinciden con ABP.'});
-  if(/punto de partida|identificamos las necesidades para definir el servicio|organicemos las actividades|creatividad en marcha|valoramos y compartimos nuestros logros/.test(titles)) strong.push({id:'aprendizaje_servicio',reason:'Los momentos LTG recuperados coinciden con Aprendizaje Servicio.'});
+  const abpHits=['presentamos','recolectamos','formulamos el problema','organizamos la experiencia','vivimos la experiencia','valoramos la experiencia'].filter(x=>titles.includes(x)).length;
+  if(abpHits>=3) strong.push({id:'abp',reason:'Los momentos LTG recuperados coinciden de forma suficiente con ABP.'});
+  const serviceHits=['punto de partida','identificamos las necesidades para definir el servicio','organicemos las actividades','creatividad en marcha','valoramos y compartimos nuestros logros'].filter(x=>titles.includes(x)).length;
+  if(serviceHits>=3) strong.push({id:'aprendizaje_servicio',reason:'Los momentos LTG recuperados coinciden de forma suficiente con Aprendizaje Servicio.'});
   return strong;
 }
 
