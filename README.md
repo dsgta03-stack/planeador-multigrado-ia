@@ -5,9 +5,8 @@ Aplicación para construir planeaciones de primaria alineadas con la Nueva Escue
 ## Estado actual
 
 - Interfaz: **V0.8.6** en Railway, sin cambio visual por Project Core.
-- Motor activo de planeación: **V6.2-PROJECT-CORE-PDA-LTG-LINKING-BETA**.
-- Función activa: `plan-support-project-core-v1`.
-- Respaldo estable preservado: **PLAN-SEQUENCE-MULTIGRADE-V6.2.1-STRICT-TRACE** en `plan-support-gemini-lab` versión 11.
+- Planeaciones de **un grado**: **V6.2-PROJECT-CORE-PDA-LTG-LINKING-BETA** mediante `plan-support-project-core-v1`.
+- Planeaciones de **2 o más grados**: continúan en **PLAN-SEQUENCE-MULTIGRADE-V6.2.1-STRICT-TRACE** mediante `plan-support-gemini-lab` versión 11.
 - Modelo: Gemini a través de Edge Functions de Supabase.
 - Autenticación: Supabase Auth por correo y contraseña.
 - Corpus curricular: **1,333 PDA oficiales**.
@@ -29,13 +28,13 @@ Flujo:
 - `LTG_ADAPTED`: el núcleo del LTG es pertinente, pero requiere contextualizar situación, actividades, producto, recursos o extensión.
 - `MULTIPLAN_GENERATED`: ningún proyecto LTG alcanza compatibilidad suficiente sin forzar problema, PDA o contexto.
 
-Marcar un LTG en la interfaz significa **disponibilidad o interés docente**, no obligación de utilizarlo. Un proyecto marcado puede ser descartado si otro proyecto oficialmente vinculado es claramente más pertinente. Cuando en el futuro la interfaz permita declarar expresamente un proyecto principal, el backend ya admite `principal_project_id` y lo conserva como base, adaptándolo cuando haga falta.
+Marcar un LTG en la interfaz significa **disponibilidad o interés docente**, no obligación. Un proyecto marcado puede ser descartado si otro proyecto oficialmente vinculado es claramente más pertinente. El backend también admite `principal_project_id` para un futuro control explícito de “proyecto principal”.
 
-Cada PDA se interpreta como comprensiones, acciones de aprendizaje y señales de evidencia antes de construir las actividades.
+Cada PDA se interpreta como comprensiones, acciones de aprendizaje y señales de evidencia antes de construir actividades.
 
-Los proyectos complementarios sólo quedan autorizados cuando la evaluación semántica indica que aportan al mismo hilo. No se incorporan proyectos por mera coincidencia temática.
+Los proyectos complementarios sólo quedan autorizados cuando la evaluación semántica indica que aportan al mismo hilo. No se incorporan por mera coincidencia temática.
 
-Los títulos oficiales de momentos/actividades LTG se conservan únicamente en la **trazabilidad**. Esta Beta no organiza la narrativa mediante fases específicas de ABP, STEAM, Aprendizaje Servicio o Proyectos Comunitarios.
+Los títulos oficiales de momentos/actividades LTG se conservan únicamente en la **trazabilidad**. La narrativa de las sesiones no usa fases específicas de ABP, STEAM, Aprendizaje Servicio o Proyectos Comunitarios.
 
 ## Alcance deliberadamente pendiente
 
@@ -48,32 +47,35 @@ Project Core Beta **no implementa todavía**:
 - cambios de experiencia de usuario;
 - cambios de esquema de base de datos.
 
-La forma de salida sigue siendo compatible con V0.8.6 para evitar cambios de interfaz.
+Por esta razón, el router de producción aplica Project Core sólo cuando la solicitud contiene **exactamente un grado**. Las solicitudes de 2 o más grados se envían al V6.2.1 estable, preservando el funcionamiento multigrado que ya estaba validado.
 
 ## Seguridad
 
-Las funciones que generan consumo de modelo requieren un `access_token` válido de Supabase Auth. `plan-support-project-core-v1` valida el token dentro de la función antes de llamar a Gemini y guarda nuevas ejecuciones con el `user_id` autenticado.
+Las funciones que generan consumo de modelo requieren un `access_token` válido de Supabase Auth. `plan-support-project-core-v1` valida el token antes de llamar a Gemini y guarda nuevas ejecuciones con el `user_id` autenticado.
 
 La antigua función de prueba `plan-support-project-core-beta` fue neutralizada y responde `410 DEPRECATED_INTERNAL_BETA`; ya no llama a Gemini.
 
-El respaldo `plan-support-gemini-lab` continúa autenticado y disponible para rollback. El antiguo publicador V0.8 está desactivado y el generador OpenAI V2 permanece deprecado.
+El respaldo `plan-support-gemini-lab` continúa autenticado y disponible. El antiguo publicador V0.8 está desactivado y el generador OpenAI V2 permanece deprecado.
 
 ## Producción y rollback
 
-Railway ejecuta actualmente:
+Railway ejecuta:
 
 `node server-v086-projectcore.mjs`
 
-Esta capa sólo intercepta `POST /api/gemini-plan` y lo envía a Project Core. Todos los demás endpoints y la interfaz siguen pasando por **`server-v086.mjs`**, que permanece intacto y ejecutándose como proceso hijo.
+Esta capa intercepta `POST /api/gemini-plan` y decide:
 
-Hay dos formas de rollback:
+- 1 grado → Project Core Beta;
+- 2 o más grados → V6.2.1 estable.
 
-1. Cambiar el start command de Railway a `node server-v086.mjs`.
-2. Mantener el router nuevo y establecer `MULTIPLAN_PROJECT_CORE_ENABLED=false`.
+Todos los demás endpoints y la interfaz siguen pasando por **`server-v086.mjs`**, que permanece intacto y ejecutándose como proceso hijo.
 
-En ambos casos la planeación vuelve a **PLAN-SEQUENCE-MULTIGRADE-V6.2.1-STRICT-TRACE** sin modificar la base ni la interfaz.
+Rollback completo:
 
-El `/health` del servicio informa tanto el motor activo como el respaldo estable.
+1. Cambiar el start command de Railway a `node server-v086.mjs`, o
+2. mantener el router nuevo y establecer `MULTIPLAN_PROJECT_CORE_ENABLED=false`.
+
+El `/health` informa el motor de un grado, el motor multigrado y el respaldo estable.
 
 ## Nota de desarrollo
 
