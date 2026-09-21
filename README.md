@@ -4,9 +4,9 @@ Aplicación para construir planeaciones de primaria alineadas con la Nueva Escue
 
 ## Estado actual
 
-- Interfaz: **V0.8.8** en Railway.
+- Interfaz/Router: **V0.8.9** en Railway.
 - Planeaciones de **un grado**: **V6.4-DIDACTIC-EXECUTION-BETA.2**.
-- Planeaciones de **2 a 6 grados**: **V6.4-MULTIGRADE-DIDACTIC-BETA.1**.
+- Planeaciones de **2 a 6 grados**: **V6.4-MULTIGRADE-DIDACTIC-BETA.2**.
 - Respaldo multigrado estable: **PLAN-SEQUENCE-MULTIGRADE-V6.2.1-STRICT-TRACE**.
 - Respaldos inferiores para un grado: **V6.3-PROJECT-ACTION-CONTINUITY-BETA.4** y **V6.2-PROJECT-CORE-PDA-LTG-LINKING-BETA**.
 - Autenticación: Supabase Auth.
@@ -17,95 +17,86 @@ Aplicación para construir planeaciones de primaria alineadas con la Nueva Escue
 
 ## V6.4 Didactic Execution
 
-V6.4 corrige una debilidad importante: una actividad no puede limitarse a expresiones como “guiar la lectura”, “acompañar la elaboración”, “coordinar el registro” o “hacer un cartel”.
+V6.4 exige actividades ejecutables: qué hará el docente, qué harán los alumnos, 3–6 pasos, minutos por paso, consignas, resultados esperados, comprobaciones, apoyos, transición, evidencia y aporte al producto.
 
-Cada momento debe explicar de forma ejecutable qué hará el docente, qué harán los alumnos, de 3 a 6 pasos, minutos por paso, consignas, resultado esperado, comprobaciones, apoyos, transición, evidencia y contribución al producto.
+## V6.4 Multigrade Didactic Beta.2
 
-## V6.4 Multigrade Didactic
+V6.4-MG se construye **encima de V6.2.1 estable**. V6.2.1 genera y valida primero la estructura: sesiones, tiempos, PDA, atención directa, trabajo simultáneo y trazabilidad LTG. Esa estructura se trata como inmutable.
 
-La versión multigrado se construye **encima de V6.2.1 estable**. V6.2.1 sigue siendo responsable de generar y validar primero la estructura: sesiones, tiempos, atención directa, trabajo simultáneo, PDA y trazabilidad LTG. V6.4-MG recibe esa estructura aprobada como un esqueleto inmutable y sólo amplía cómo se ejecutan las actividades.
+La primera Beta multigrado intentaba enriquecer toda la planeación de seis grados en una sola respuesta de Gemini. En una ejecución real superó el timeout del router y cayó correctamente a V6.2.1. Beta.2 corrige esto con la estrategia:
 
-Reglas principales:
+**`SESSION-WISE-PARALLEL-ENRICHMENT`**
+
+Flujo:
+
+1. V6.2.1 produce una planeación estructural aprobada.
+2. V6.4-MG crea inmediatamente un registro diagnóstico en `plan_runs`.
+3. Cada sesión se envía a Gemini como una unidad pequeña e independiente.
+4. Las sesiones se enriquecen en paralelo.
+5. Si una sesión queda incompleta, sólo esa sesión tiene un intento de corrección.
+6. Se reconstruye la planeación sin modificar minutos, PDA, grados, bloques o referencias LTG.
+7. Un validador final comprueba toda la estructura.
+8. Si V6.4-MG falla, el router conserva el fallback automático a V6.2.1 estable.
+
+### Reglas multigrado
 
 - un solo docente real por momento;
 - máximo 2 grados bajo atención directa cuando hay 3 o más grados;
-- todos los demás grados trabajan simultáneamente;
-- no se pueden cambiar los grados asignados, PDA, LTG, `activity_order` ni minutos definidos por V6.2.1;
-- el bloque atendido recibe un procedimiento docente de 3–6 pasos;
-- cada bloque autónomo recibe instrucciones preparadas antes de la rotación, 3–6 pasos, materiales, autocontrol, estrategia si se atoran y evidencia;
-- los procedimientos de todos los bloques de un mismo momento duran exactamente los mismos minutos porque ocurren simultáneamente;
-- 1.º–2.º pueden usar oralidad, dibujo, pictogramas, clasificación, dictado, modelos y manipulables cuando corresponde;
-- los grados mayores aumentan análisis, registro, cálculo, argumentación, diseño y producción;
-- sin internet, ningún bloque puede depender de recursos en línea.
+- todos los demás grados tienen trabajo simultáneo explícito;
+- los grados, PDA, LTG, `activity_order` y minutos definidos por V6.2.1 no pueden cambiar;
+- el bloque atendido recibe procedimiento docente de 3–6 pasos;
+- cada bloque autónomo recibe instrucciones previas, procedimiento de 3–6 pasos, materiales, autocontrol, estrategia si se atoran y evidencia;
+- todos los procedimientos de un momento duran exactamente los mismos minutos porque ocurren simultáneamente;
+- en alfabetización inicial pueden usarse oralidad, dibujo, pictogramas, dictado, modelos y manipulables;
+- los grados mayores incrementan análisis, cálculo, registro, argumentación, diseño y producción;
+- sin internet, ninguna actividad puede depender de recursos en línea.
 
-V6.4-MG también produce una tarjeta `multigrade_project` con problema común, pregunta guía, producto colectivo y una contribución diferenciada por cada grado.
+V6.4-MG produce también `multigrade_project`: problema común, pregunta guía, producto colectivo y contribución diferenciada por grado.
 
-## Validación multigrado adicional
+## Interfaz multigrado
 
-Antes de entregar una salida V6.4-MG se vuelve a comprobar que:
+La vista distingue:
 
-1. la estructura aprobada por V6.2.1 no haya cambiado;
-2. los PDA permanezcan iguales;
-3. la atención directa conserve los mismos grados;
-4. la trazabilidad LTG permanezca intacta;
-5. cada momento cubra exactamente todos los grados una sola vez;
-6. los procedimientos directos sean ejecutables;
-7. los procedimientos autónomos sean ejecutables sin interrumpir al docente;
-8. la duración de cada procedimiento coincida con los minutos del momento.
+- **CON EL DOCENTE** — procedimiento paso a paso del bloque atendido;
+- **TRABAJO AUTÓNOMO** — qué hacen simultáneamente los demás grados;
+- **Procedimiento autónomo** — pasos, materiales, autocontrol, qué hacer si se atoran y resultado esperado.
 
-Si falla alguno de estos controles, V6.4-MG devuelve error de calidad y el router utiliza automáticamente V6.2.1 estable.
+El renderer fue introducido en V0.8.8 y permanece debajo de V0.8.9.
 
-## Interfaz V0.8.8
+## Seguridad
 
-La vista multigrado distingue claramente:
+Las funciones productivas validan una sesión real de Supabase Auth. Una petición con token inválido devuelve `401` antes de consumir modelo.
 
-- **CON EL DOCENTE**: bloque atendido y procedimiento paso a paso;
-- **TRABAJO AUTÓNOMO**: qué hacen simultáneamente los demás grados;
-- **Procedimiento autónomo**: pasos, materiales, autocontrol, qué hacer si se atoran y resultado esperado.
-
-También muestra el proyecto común y el aporte previsto por grado. La vista anterior permanece debajo como respaldo visual.
-
-## Seguridad y alcance
-
-Todas las rutas productivas de generación validan una sesión real de Supabase Auth. Una petición con token inválido se rechaza con `401` antes de consumir modelo.
-
-No se modificaron:
-
-- PDA oficiales;
-- tablas curriculares;
-- corpus LTG;
-- usuarios;
-- materiales avanzados;
-- fases específicas completas de las metodologías.
-
-El arnés temporal de V6.4 unigrado permanece neutralizado. El intento de crear un nuevo arnés de usuarios para V6.4-MG fue descartado al ser bloqueado por controles de seguridad; no se debilitó Auth para realizar pruebas.
+No se modificaron PDA oficiales, tablas curriculares, corpus LTG, usuarios ni las fases específicas completas de las metodologías.
 
 ## Producción y rollback
 
-Railway ejecuta actualmente:
+Railway ejecuta:
 
-`node server-v088-multigrade-didactic.mjs`
+`node server-v089-multigrade-didactic.mjs`
 
 Cadena de protección:
 
-1. **V6.4 Multigrade Didactic** — 2 a 6 grados.
-2. **V6.2.1 Stable** — fallback automático multigrado ante `422`, error de servidor, red o timeout.
+1. **V6.4 Multigrade Didactic Beta.2** — 2 a 6 grados, enriquecimiento por sesión.
+2. **V6.2.1 Stable** — fallback automático multigrado ante error de calidad, servidor, red o timeout.
 3. Para un grado: **V6.4 Didactic Execution → V6.3 Project Action → Project Core v1 → V6.2.1**.
 
-Todos los entrypoints anteriores permanecen intactos:
+V0.8.9 ejecuta V0.8.8 como proceso hijo con su intento multigrado desactivado, evitando doble enriquecimiento. Los entrypoints previos permanecen intactos:
 
+- `server-v088-multigrade-didactic.mjs`
 - `server-v086-didactic.mjs`
 - `server-v086-projectaction.mjs`
 - `server-v086-projectcore.mjs`
 - `server-v086.mjs`
 
-Rollback multigrado:
+Rollback:
 
-- `MULTIPLAN_V64_MG_ENABLED=false` → salta V6.4-MG y vuelve al stack anterior;
-- start command `node server-v086-didactic.mjs` → elimina por completo la capa multigrado nueva;
-- start command `node server-v086.mjs` → rollback completo al V6.2.1 estable.
+- cambiar el start command a `node server-v088-multigrade-didactic.mjs` para volver a la revisión anterior;
+- `MULTIPLAN_V64_MG_ENABLED=false` para saltar la capa V6.4-MG del router activo;
+- `node server-v086-didactic.mjs` para volver al stack V6.4 unigrado + V6.2.1 multigrado;
+- `node server-v086.mjs` para rollback completo al V6.2.1 estable.
 
-`/health` informa explícitamente el motor V6.4-MG, el motor unigrado y todos los fallbacks.
+`/health` informa la versión activa, estrategia multigrado y fallbacks.
 
 ## Nota de desarrollo
 
