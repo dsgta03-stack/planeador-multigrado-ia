@@ -1,0 +1,17 @@
+name: V6.5 Methodology Beta Tests
+
+on:
+  push:
+    branches: [v65-methodology-engine-beta]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run V6.5 methodology suite
+        run: node tests/v65-methodology.test.mjs
