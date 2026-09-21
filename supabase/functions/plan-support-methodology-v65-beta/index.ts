@@ -1,7 +1,7 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { buildMethodologyOverlay, ENGINE_VERSION } from "../../../methodology-v65/engine.mjs";
-import { methodologyById } from "../../../methodology-v65/catalog.mjs";
+import { buildMethodologyOverlay, ENGINE_VERSION } from "./methodology-v65/engine.mjs";
+import { methodologyById } from "./methodology-v65/catalog.mjs";
 
 const URL=Deno.env.get("SUPABASE_URL")!;
 const SERVICE=Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
