@@ -43,27 +43,50 @@ function readBody(req, maxBytes = 180000) {
   });
 }
 
-async function projectCore(req, res) {
-  const authorization = String(req.headers.authorization || "");
-  if (!authorization.startsWith("Bearer ")) return json(res, 401, { code: "AUTH_REQUIRED" });
+function authHeader(req) {
+  return String(req.headers.authorization || "");
+}
+
+async function forwardPost(res, url, raw, authorization, engineLabel) {
   try {
-    const body = await readBody(req);
-    const r = await fetch(PROJECT_CORE_URL, {
+    const r = await fetch(url, {
       method: "POST",
       headers: { "content-type": "application/json", authorization },
-      body: body || "{}",
+      body: raw || "{}",
     });
     const data = Buffer.from(await r.arrayBuffer());
     res.writeHead(r.status, {
       "content-type": r.headers.get("content-type") || "application/json; charset=utf-8",
       "cache-control": "no-store",
-      "x-multiplan-plan-engine": "V6.2-PROJECT-CORE-PDA-LTG-LINKING-BETA",
+      "x-multiplan-plan-engine": engineLabel,
     });
     res.end(data);
   } catch (error) {
     const status = String(error?.message || error) === "PAYLOAD_TOO_LARGE" ? 413 : 502;
-    json(res, status, { code: "PROJECT_CORE_UPSTREAM_ERROR", message: String(error) });
+    json(res, status, { code: "PLAN_UPSTREAM_ERROR", message: String(error) });
   }
+}
+
+async function routePlan(req, res) {
+  const authorization = authHeader(req);
+  if (!authorization.startsWith("Bearer ")) return json(res, 401, { code: "AUTH_REQUIRED" });
+  let raw;
+  try { raw = await readBody(req); }
+  catch (error) { return json(res, 413, { code: "PAYLOAD_TOO_LARGE", message: String(error) }); }
+
+  let body;
+  try { body = JSON.parse(raw || "{}"); }
+  catch { return json(res, 400, { code: "INVALID_JSON" }); }
+
+  const grades = [...new Set((Array.isArray(body?.grados) ? body.grados : []).map(Number).filter(Number.isInteger))];
+  const useProjectCore = PROJECT_CORE_ENABLED && grades.length === 1;
+
+  if (useProjectCore) {
+    return forwardPost(res, PROJECT_CORE_URL, raw, authorization, "V6.2-PROJECT-CORE-PDA-LTG-LINKING-BETA");
+  }
+
+  // Scope protection: multigrade keeps the previously validated V6.2.1 engine.
+  return forwardPost(res, CHILD_ORIGIN + "/api/gemini-plan", raw, authorization, "PLAN-SEQUENCE-MULTIGRADE-V6.2.1-STRICT-TRACE");
 }
 
 async function stableProxy(req, res) {
@@ -95,8 +118,10 @@ const server = http.createServer(async (req, res) => {
         ok: r.ok,
         version: "0.8.6",
         interfaceChanged: false,
-        activePlanningEngine: PROJECT_CORE_ENABLED ? "V6.2-PROJECT-CORE-PDA-LTG-LINKING-BETA" : "PLAN-SEQUENCE-MULTIGRADE-V6.2.1-STRICT-TRACE",
         projectCoreEnabled: PROJECT_CORE_ENABLED,
+        projectCoreScope: "single-grade-only",
+        singleGradeEngine: PROJECT_CORE_ENABLED ? "V6.2-PROJECT-CORE-PDA-LTG-LINKING-BETA" : "PLAN-SEQUENCE-MULTIGRADE-V6.2.1-STRICT-TRACE",
+        multiGradeEngine: "PLAN-SEQUENCE-MULTIGRADE-V6.2.1-STRICT-TRACE",
         stableBackup: "PLAN-SEQUENCE-MULTIGRADE-V6.2.1-STRICT-TRACE",
         stableEntryPoint: "server-v086.mjs",
         child: childHealth,
@@ -106,12 +131,10 @@ const server = http.createServer(async (req, res) => {
     }
   }
 
-  if (req.method === "POST" && req.url === "/api/gemini-plan" && PROJECT_CORE_ENABLED) {
-    return projectCore(req, res);
-  }
+  if (req.method === "POST" && req.url === "/api/gemini-plan") return routePlan(req, res);
   return stableProxy(req, res);
 });
 
 server.listen(PORT, "0.0.0.0", () => {
-  console.log(`Multiplan Project Core router listening on ${PORT}; stable v0.8.6 child on ${CHILD_PORT}; projectCore=${PROJECT_CORE_ENABLED}`);
+  console.log(`Multiplan Project Core router listening on ${PORT}; stable v0.8.6 child on ${CHILD_PORT}; projectCore=${PROJECT_CORE_ENABLED}; scope=single-grade-only`);
 });
