@@ -1,8 +1,8 @@
 {
   "name": "planeador-multigrado-ia-demo",
-  "version": "0.8.5",
+  "version": "0.8.6",
   "private": true,
   "type": "module",
   "engines": { "node": ">=22" },
-  "scripts": { "start": "node server-v085b.mjs" }
+  "scripts": { "start": "node server-v086.mjs" }
 }
