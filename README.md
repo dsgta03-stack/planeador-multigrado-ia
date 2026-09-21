@@ -1,11 +1,11 @@
 # Multiplan — Planeador Multigrado IA
 
-Aplicación para construir planeaciones de primaria multigrado alineadas con la Nueva Escuela Mexicana, usando PDA oficiales y proyectos de los Libros de Texto Gratuitos (LTG) verificados en Supabase.
+Aplicación para construir planeaciones de primaria multigrado alineadas con la Nueva Escuela Mexicana, usando PDA oficiales y, cuando el docente los elige, proyectos de los Libros de Texto Gratuitos (LTG) verificados en Supabase.
 
 ## Estado actual
 
 - Interfaz: **V0.8.5** en Railway.
-- Motor pedagógico: **PLAN-SEQUENCE-MULTIGRADE-V6.2-STRICT-TRACE**.
+- Motor pedagógico: **PLAN-SEQUENCE-MULTIGRADE-V6.2.1-STRICT-TRACE**.
 - Modelo actual: Gemini a través de Edge Functions de Supabase.
 - Autenticación: Supabase Auth por correo y contraseña.
 - Corpus curricular: **1,333 PDA oficiales**.
@@ -18,17 +18,18 @@ Aplicación para construir planeaciones de primaria multigrado alineadas con la 
 1. El docente inicia sesión.
 2. Captura grados, matrícula por grado, contexto, problemática, niveles observables, conectividad y recursos.
 3. El sistema recupera candidatos PDA oficiales por grado.
-4. El docente selecciona los PDA y, de forma opcional, los LTG oficialmente vinculados.
-5. V6.2 genera la secuencia multigrado utilizando actividades LTG verificadas cuando fueron seleccionadas.
-6. El validador determinístico comprueba tiempos, cobertura de grados, atención docente, PDA, vínculos PDA↔LTG y trazabilidad de actividades.
+4. El docente selecciona los PDA y, de forma **opcional**, los LTG oficialmente vinculados.
+5. V6.2.1 genera la secuencia multigrado. Si hay LTG seleccionados, utiliza únicamente actividades verificadas; si no hay LTG, trabaja desde PDA y contexto sin inventar libros, páginas ni actividades.
+6. El validador determinístico comprueba tiempos, cobertura de grados, atención docente, PDA, vínculos PDA↔LTG y trazabilidad de actividades cuando corresponde.
 7. Cuando una salida no cumple las reglas estructurales, se permite una reparación automática y se vuelve a validar; una salida que continúa inválida no se entrega como aprobada.
 8. La interfaz puede solicitar materiales didácticos contextuales únicamente cuando son útiles para una actividad.
 
-## Reglas principales de V6.2
+## Reglas principales de V6.2.1
 
 - No inventar ni modificar el texto oficial de un PDA.
-- No inventar títulos, páginas o actividades de LTG.
-- Validar cada par PDA ↔ proyecto contra `project_pda`.
+- El LTG es opcional.
+- Sin LTG seleccionado, las referencias LTG deben permanecer vacías y no se permiten invenciones de libros, actividades o páginas.
+- Con LTG seleccionado, validar cada par PDA ↔ proyecto contra `project_pda`.
 - Reconstruir títulos y páginas desde `ltg_project_activities`.
 - Registrar sólo los `activity_order` realmente usados en la secuencia.
 - Cada sesión debe sumar exactamente los minutos solicitados.
@@ -56,7 +57,7 @@ El servicio de producción de Railway ejecuta `server-v085b.mjs`. Esta capa:
 - conserva la interfaz V0.8.4c como proceso interno;
 - agrega la autenticación de Supabase;
 - propaga el bearer token a las Edge Functions protegidas;
-- expone `/health` con la versión y motor actualmente activos.
+- expone `/health` con la versión de la interfaz y la familia del motor activo.
 
 El archivo activo se define también en `package.json`.
 
