@@ -4,122 +4,115 @@ Aplicación para construir planeaciones de primaria alineadas con la Nueva Escue
 
 ## Estado actual
 
-- Interfaz: **V0.8.6** en Railway, sin cambios visuales por V6.3.
-- Planeaciones de **un grado**: **V6.3-PROJECT-ACTION-CONTINUITY-BETA.4**.
-- Primer respaldo para un grado: **V6.2-PROJECT-CORE-PDA-LTG-LINKING-BETA** mediante `plan-support-project-core-v1`.
-- Planeaciones de **2 o más grados**: **PLAN-SEQUENCE-MULTIGRADE-V6.2.1-STRICT-TRACE** mediante `plan-support-gemini-lab` versión 11.
-- Modelo: Gemini a través de Edge Functions de Supabase.
-- Autenticación: Supabase Auth por correo y contraseña.
+- Interfaz: **V0.8.7** en Railway.
+- Planeaciones de **un grado**: **V6.4-DIDACTIC-EXECUTION-BETA.2**.
+- Primer respaldo: **V6.3-PROJECT-ACTION-CONTINUITY-BETA.4**.
+- Segundo respaldo: **V6.2-PROJECT-CORE-PDA-LTG-LINKING-BETA**.
+- Planeaciones de **2 o más grados**: **PLAN-SEQUENCE-MULTIGRADE-V6.2.1-STRICT-TRACE**.
+- Autenticación: Supabase Auth.
 - Corpus curricular: **1,333 PDA oficiales**.
-- Proyectos LTG: **427/427 cubiertos**.
+- Proyectos LTG: **427/427**.
 - Actividades LTG verificadas y enriquecidas: **2,364/2,364**.
 - Vínculos proyecto ↔ PDA: **1,418**.
 
-## V6.3 Project Action Continuity
+## V6.4 Didactic Execution
 
-La unidad principal sigue siendo el **proyecto**, pero V6.3 añade una capa de calidad sobre Project Core para convertir PDA y proyecto en actividades concretas y dependientes entre sí.
+V6.4 conserva Project Core y los cinco controles de V6.3, pero corrige una debilidad importante: una actividad ya no puede limitarse a expresiones como “guiar la lectura”, “acompañar la elaboración”, “coordinar el registro” o “hacer un cartel”.
 
-Flujo:
+Cada momento debe explicar de forma ejecutable:
 
-`problema/reto/necesidad/interés → PDA → búsqueda de proyectos LTG compatibles → LTG base / LTG adaptado / proyecto propio → acciones de aprendizaje → actividades activas → productos parciales → sesiones dependientes → producto final`
+- qué hará el docente;
+- qué harán los alumnos;
+- qué acción de aprendizaje del PDA se desarrolla;
+- de 3 a 6 pasos de procedimiento;
+- minutos por paso;
+- consigna o pregunta docente casi literal;
+- resultado esperado;
+- qué comprobar antes de avanzar;
+- apoyo si algún alumno no puede continuar;
+- transición hacia el siguiente avance;
+- evidencia y contribución al producto.
 
-### Cinco controles de calidad
+La suma de los pasos debe coincidir con los minutos del momento. Los bloques de 60 minutos o más son auditados para evitar procedimientos excesivamente resumidos.
 
-V6.3 valida de forma determinística:
+La interfaz V0.8.7 muestra un nuevo bloque **“Desarrollo didáctico paso a paso · V6.4”**. La vista resumida anterior queda disponible como respaldo visual.
 
-1. **Activity Specificity**: la actividad debe describir una acción observable del alumno; dialogar o reflexionar puede acompañar, pero no sustituir una actividad concreta.
-2. **PDA Action Alignment**: cada actividad debe declarar qué acción de aprendizaje derivada del PDA desarrolla.
-3. **Observable Evidence**: cada momento debe producir una evidencia identificable.
-4. **Product Progression**: cada sesión debe aportar un producto parcial o avance real hacia el producto final.
-5. **Session Dependency**: cada sesión produce un artefacto identificado por `output_artifact_id` y la siguiente debe reutilizarlo en `input_artifact_ids`.
+## Flujo pedagógico
 
-La V6.3 mantiene además tiempo exacto, PDA oficiales, trazabilidad LTG y validación de `activity_order`.
+`problema/reto/necesidad/interés → PDA → comparación de proyectos LTG → LTG base / LTG adaptado / proyecto propio → acciones de aprendizaje → actividades ejecutables → productos parciales → sesiones dependientes → producto final`
 
-### Decisión de proyecto
+Los nombres oficiales de momentos o actividades LTG se conservan en la trazabilidad (`ltg_use` y referencias LTG), pero una capa determinística evita utilizarlos como estructura narrativa de la planeación.
 
-El selector V6.3 compara proyectos LTG antes de generar uno propio:
+## Validaciones V6.4
 
-- `LTG_BASE`: el proyecto LTG puede sostener el hilo conductor.
-- `LTG_ADAPTED`: su núcleo es pertinente, pero requiere contextualización.
-- `MULTIPLAN_GENERATED`: ningún LTG alcanza compatibilidad suficiente sin forzar problema, PDA o contexto.
+V6.4 mantiene los cinco controles de V6.3:
 
-Marcar un LTG en la interfaz significa **disponibilidad o interés**, no obligación. La selección final considera problema, PDA, propósito, producto, contexto y utilidad de las actividades verificadas.
+1. actividad específica;
+2. alineación PDA → acción de aprendizaje;
+3. evidencia observable;
+4. progresión del producto;
+5. dependencia entre sesiones.
 
-### Metodologías específicas
+Y añade **Executable Procedure**, que exige un procedimiento suficientemente desarrollado para que otro docente pueda aplicar la actividad sin inventar los pasos faltantes.
 
-V6.3 **no implementa todavía** las fases oficiales de ABP, STEAM, Aprendizaje Servicio o Proyectos Comunitarios.
+## Prueba de referencia
 
-Los títulos originales de momentos/actividades LTG pueden aparecer en `ltg_use` como trazabilidad. Una capa determinística evita que esos nombres se conviertan en la estructura narrativa de las sesiones.
+Se probó el proyecto de 2.º **“Agua que no has de beber… ¡No la dejes correr!”** con 3 y 5 sesiones de 90 minutos.
 
-## Arquitectura V6.3
+La salida pasó de una instrucción general como “guiar la lectura de las páginas 116–118” a una secuencia que especifica lectura modelada, preguntas, recorrido por la escuela, observación de llaves y sanitarios, registro gráfico, comprobaciones, medición con botellas, construcción progresiva de propuestas y elaboración/difusión del producto.
 
-La generación de un grado utiliza dos llamadas de modelo, no tres:
+Las pruebas V6.4 fueron aprobadas con `executable_procedure=true`, `pda_action_alignment=true`, `observable_evidence=true`, `product_progression=true` y `session_dependency=true`.
 
-1. `project-core-selector-v63`: interpreta problema/PDA, compara proyectos LTG y bloquea la decisión de Project Core.
-2. `plan-support-project-action-v2`: genera la secuencia completa con acciones, evidencias, productos parciales y dependencias.
+## Alcance protegido
 
-`plan-support-project-action-v3` es una capa determinística sin llamada adicional a Gemini. Valida/repara únicamente casos seguros como acciones de aprendizaje demasiado cortas o menciones de fases metodológicas en la narrativa. No repara otros errores pedagógicos.
+V6.4 sólo gobierna solicitudes con **exactamente un grado**.
 
-La primera V6.3 experimental de tres llamadas (`plan-support-project-action-v1`) fue retirada por latencia y ahora responde `410`. El arnés temporal de pruebas también fue cerrado y responde `410`.
+Las solicitudes de dos o más grados continúan directamente en **V6.2.1**, ya que todavía no se implementa la nueva lógica didáctica dentro del motor multigrado.
 
-## Pruebas V6.3
+V6.4 no modifica:
 
-Se probaron los tres modos principales:
-
-- `LTG_BASE`: proyecto alimentario de 1.º con cadena registro → borrador → menú final.
-- `LTG_ADAPTED`: proyecto de reglamento adaptado al problema de inasistencia con cadena causas → acuerdos → folleto/tendedero → presentación final.
-- `MULTIPLAN_GENERATED`: proyecto de 4.º sobre separación de mezclas con cadena registro de propiedades → diseño → estación de separación funcional.
-
-En los casos aprobados los cinco controles de calidad quedaron en `true`. Los tiempos observados de las pruebas V6.3 de dos llamadas estuvieron aproximadamente entre **22 y 52 segundos**.
-
-## Alcance deliberadamente protegido
-
-V6.3 sólo gobierna solicitudes con **exactamente un grado**.
-
-Las solicitudes de dos o más grados continúan en V6.2.1, ya que esta versión no pretende implementar todavía el nuevo motor multigrado.
-
-Tampoco cambia todavía:
-
-- interfaz;
+- PDA oficiales;
+- tablas curriculares;
+- corpus LTG;
 - usuarios;
-- esquema de base de datos;
-- materiales didácticos avanzados;
-- evaluación avanzada;
-- fases específicas de metodologías.
+- materiales avanzados;
+- metodologías específicas completas;
+- motor multigrado estable.
 
 ## Seguridad
 
-Las funciones nuevas (`project-core-selector-v63`, `plan-support-project-action-v2` y `plan-support-project-action-v3`) validan un `access_token` real de Supabase Auth antes de procesar la solicitud.
+`plan-support-didactic-execution-v1` y `plan-support-didactic-execution-v2` requieren una sesión real antes de generar. Sin token responden `401 AUTH_REQUIRED`.
 
-Las rutas experimentales abiertas durante las pruebas fueron neutralizadas después de usarse. El antiguo publicador V0.8 continúa desactivado y el generador OpenAI V2 permanece deprecado.
+El arnés temporal `didactic-v64-test-harness` fue neutralizado después de las pruebas y responde `410 DEPRECATED_INTERNAL_BETA`.
 
-## Producción y cadena de rollback
+## Producción y rollback
 
-Railway ejecuta actualmente:
+Railway ejecuta:
 
-`node server-v086-projectaction.mjs`
+`node server-v086-didactic.mjs`
 
-La cadena es:
+Cadena de protección:
 
-1. **V6.3 Project Action** — un grado.
-2. **Project Core v1** — fallback automático para un grado si V6.3 devuelve error de calidad (`422`) o error de servidor/red.
-3. **V6.2.1 Stable** — motor conservado para 2+ grados y respaldo estable inferior.
+1. **V6.4 Didactic Execution** — un grado.
+2. **V6.3 Project Action** — fallback automático si V6.4 devuelve error de calidad (`422`) o error de servidor/red.
+3. **Project Core v1** — fallback inferior de V6.3.
+4. **V6.2.1 Stable** — motor multigrado y respaldo estable.
 
-Los archivos anteriores permanecen intactos:
+Los entrypoints anteriores permanecen intactos:
 
+- `server-v086-projectaction.mjs`
 - `server-v086-projectcore.mjs`
 - `server-v086.mjs`
 
-El router V6.3 ejecuta `server-v086-projectcore.mjs` como proceso hijo, y éste mantiene `server-v086.mjs` debajo.
+Rollback posible:
 
-Formas de rollback:
+- `MULTIPLAN_V64_ENABLED=false` → vuelve a V6.3 para un grado;
+- start command `node server-v086-projectaction.mjs` → elimina la capa V6.4;
+- start command `node server-v086-projectcore.mjs` → vuelve a Project Core;
+- start command `node server-v086.mjs` → rollback completo a V6.2.1.
 
-- establecer `MULTIPLAN_V63_ENABLED=false` para saltar V6.3 y volver al router Project Core;
-- cambiar el start command a `node server-v086-projectcore.mjs`;
-- para rollback completo al motor anterior, cambiar el start command a `node server-v086.mjs`.
-
-`/health` informa explícitamente V6.3, el fallback Project Core y el motor multigrado V6.2.1.
+`/health` informa de forma explícita V6.4, V6.3, Project Core y V6.2.1.
 
 ## Nota de desarrollo
 
-No agregar `service_role` ni secretos de Gemini al navegador o al repositorio. La clave publicable de Supabase puede utilizarse en cliente; los secretos permanecen en Supabase/Railway.
+No agregar `service_role` ni secretos de Gemini al navegador o al repositorio. Las claves privadas permanecen en Supabase/Railway.
