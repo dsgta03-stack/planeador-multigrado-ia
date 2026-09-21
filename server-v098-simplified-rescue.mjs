@@ -28,12 +28,14 @@ async function routePlan(req,res){const authorization=String(req.headers.authori
  const attempts=[];
  try{
    const mg=await call(MG5_URL,raw,authorization,460000);attempts.push({engine:mg.engine||"V6.4-MG-BETA.5",status:mg.status,executable:executable(mg)});
+   if(mg.status===401||mg.status===403)return send(res,mg,{"x-multiplan-route":"auth-rejected-primary"});
    if(executable(mg)){const p=parse(mg.data);send(res,mg,{"x-multiplan-route":"multigrade-beta5-primary","x-multiplan-fallback-count":"0"});setImmediate(()=>void runShadow(raw,authorization,p));return}
  }catch(e){attempts.push({engine:"V6.4-MG-BETA.5",status:"NETWORK_ERROR",error:String(e).slice(0,180)})}
 
  for(let i=1;i<=2;i++){
    try{
      const stable=await call(STABLE_URL,raw,authorization,360000);attempts.push({engine:stable.engine||"V6.2.1",status:stable.status,executable:executable(stable),attempt:i});
+     if(stable.status===401||stable.status===403)return send(res,stable,{"x-multiplan-route":"auth-rejected-stable","x-multiplan-stable-attempt":String(i)});
      if(executable(stable))return send(res,stable,{"x-multiplan-route":"multigrade-stable-direct-rescue","x-multiplan-stable-attempt":String(i),"x-multiplan-fallback-count":String(i)});
    }catch(e){attempts.push({engine:"V6.2.1",status:"NETWORK_ERROR",attempt:i,error:String(e).slice(0,180)})}
  }
@@ -42,5 +44,5 @@ async function routePlan(req,res){const authorization=String(req.headers.authori
 
 async function proxy(req,res){try{const headers={};for(const n of["content-type","authorization","accept","cookie"])if(req.headers[n])headers[n]=req.headers[n];const init={method:req.method,headers};if(req.method!=="GET"&&req.method!=="HEAD")init.body=await readBody(req);const r=await fetch(CHILD_ORIGIN+req.url,init);const type=r.headers.get("content-type")||"application/octet-stream";const data=Buffer.from(await r.arrayBuffer());res.writeHead(r.status,{"content-type":type,"cache-control":r.headers.get("cache-control")||"no-store"});res.end(data)}catch(e){json(res,502,{code:"V098_PROXY_ERROR",message:String(e)})}}
 
-const server=http.createServer(async(req,res)=>{if(req.method==="GET"&&req.url==="/health"){try{const r=await fetch(CHILD_ORIGIN+"/health");const childHealth=await r.json().catch(()=>({}));return json(res,r.ok?200:503,{ok:r.ok,version:"0.9.8",visibleMultigradePrimary:"V6.4-MULTIGRADE-DIDACTIC-BETA.5",visibleMultigradeRescue:"PLAN-SEQUENCE-MULTIGRADE-V6.2.1-STRICT-TRACE x2 direct",removedFromVisibleFallback:["V6.4 Beta.4","V6.4 Beta.3","V6.4 Beta.2"],responseGuard:"REQUIRE sessions[].work_moments[] before 200",shadowEngine:"V6.5-METHODOLOGY-ENGINE-BETA.4",shadowMode:SHADOW_ENABLED?"ACTIVE_NON_GOVERNING":"DISABLED",child:childHealth})}catch(e){return json(res,503,{ok:false,version:"0.9.8",code:"CHILD_NOT_READY",message:String(e)})}}if(req.method==="POST"&&req.url==="/api/gemini-plan")return routePlan(req,res);return proxy(req,res)});
+const server=http.createServer(async(req,res)=>{if(req.method==="GET"&&req.url==="/health"){try{const r=await fetch(CHILD_ORIGIN+"/health");const childHealth=await r.json().catch(()=>({}));return json(res,r.ok?200:503,{ok:r.ok,version:"0.9.8",visibleMultigradePrimary:"V6.4-MULTIGRADE-DIDACTIC-BETA.5",visibleMultigradeRescue:"PLAN-SEQUENCE-MULTIGRADE-V6.2.1-STRICT-TRACE x2 direct",removedFromVisibleFallback:["V6.4 Beta.4","V6.4 Beta.3","V6.4 Beta.2"],responseGuard:"REQUIRE sessions[].work_moments[] before 200",authFailurePolicy:"RETURN 401/403 IMMEDIATELY; NO GENERATION RETRIES",shadowEngine:"V6.5-METHODOLOGY-ENGINE-BETA.4",shadowMode:SHADOW_ENABLED?"ACTIVE_NON_GOVERNING":"DISABLED",child:childHealth})}catch(e){return json(res,503,{ok:false,version:"0.9.8",code:"CHILD_NOT_READY",message:String(e)})}}if(req.method==="POST"&&req.url==="/api/gemini-plan")return routePlan(req,res);return proxy(req,res)});
 server.listen(PORT,"0.0.0.0",()=>console.log(`Multiplan v0.9.8 on ${PORT}; simplified multigrade rescue; child v0.9.7 on ${CHILD_PORT}; V6.5 Beta.4 shadow=${SHADOW_ENABLED}`));
