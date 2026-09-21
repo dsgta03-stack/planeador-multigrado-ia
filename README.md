@@ -4,11 +4,11 @@ Aplicación para construir planeaciones de primaria alineadas con la Nueva Escue
 
 ## Estado actual
 
-- Interfaz: **V0.8.7** en Railway.
+- Interfaz: **V0.8.8** en Railway.
 - Planeaciones de **un grado**: **V6.4-DIDACTIC-EXECUTION-BETA.2**.
-- Primer respaldo: **V6.3-PROJECT-ACTION-CONTINUITY-BETA.4**.
-- Segundo respaldo: **V6.2-PROJECT-CORE-PDA-LTG-LINKING-BETA**.
-- Planeaciones de **2 o más grados**: **PLAN-SEQUENCE-MULTIGRADE-V6.2.1-STRICT-TRACE**.
+- Planeaciones de **2 a 6 grados**: **V6.4-MULTIGRADE-DIDACTIC-BETA.1**.
+- Respaldo multigrado estable: **PLAN-SEQUENCE-MULTIGRADE-V6.2.1-STRICT-TRACE**.
+- Respaldos inferiores para un grado: **V6.3-PROJECT-ACTION-CONTINUITY-BETA.4** y **V6.2-PROJECT-CORE-PDA-LTG-LINKING-BETA**.
 - Autenticación: Supabase Auth.
 - Corpus curricular: **1,333 PDA oficiales**.
 - Proyectos LTG: **427/427**.
@@ -17,101 +17,95 @@ Aplicación para construir planeaciones de primaria alineadas con la Nueva Escue
 
 ## V6.4 Didactic Execution
 
-V6.4 conserva Project Core y los cinco controles de V6.3, pero corrige una debilidad importante: una actividad ya no puede limitarse a expresiones como “guiar la lectura”, “acompañar la elaboración”, “coordinar el registro” o “hacer un cartel”.
+V6.4 corrige una debilidad importante: una actividad no puede limitarse a expresiones como “guiar la lectura”, “acompañar la elaboración”, “coordinar el registro” o “hacer un cartel”.
 
-Cada momento debe explicar de forma ejecutable:
+Cada momento debe explicar de forma ejecutable qué hará el docente, qué harán los alumnos, de 3 a 6 pasos, minutos por paso, consignas, resultado esperado, comprobaciones, apoyos, transición, evidencia y contribución al producto.
 
-- qué hará el docente;
-- qué harán los alumnos;
-- qué acción de aprendizaje del PDA se desarrolla;
-- de 3 a 6 pasos de procedimiento;
-- minutos por paso;
-- consigna o pregunta docente casi literal;
-- resultado esperado;
-- qué comprobar antes de avanzar;
-- apoyo si algún alumno no puede continuar;
-- transición hacia el siguiente avance;
-- evidencia y contribución al producto.
+## V6.4 Multigrade Didactic
 
-La suma de los pasos debe coincidir con los minutos del momento. Los bloques de 60 minutos o más son auditados para evitar procedimientos excesivamente resumidos.
+La versión multigrado se construye **encima de V6.2.1 estable**. V6.2.1 sigue siendo responsable de generar y validar primero la estructura: sesiones, tiempos, atención directa, trabajo simultáneo, PDA y trazabilidad LTG. V6.4-MG recibe esa estructura aprobada como un esqueleto inmutable y sólo amplía cómo se ejecutan las actividades.
 
-La interfaz V0.8.7 muestra un nuevo bloque **“Desarrollo didáctico paso a paso · V6.4”**. La vista resumida anterior queda disponible como respaldo visual.
+Reglas principales:
 
-## Flujo pedagógico
+- un solo docente real por momento;
+- máximo 2 grados bajo atención directa cuando hay 3 o más grados;
+- todos los demás grados trabajan simultáneamente;
+- no se pueden cambiar los grados asignados, PDA, LTG, `activity_order` ni minutos definidos por V6.2.1;
+- el bloque atendido recibe un procedimiento docente de 3–6 pasos;
+- cada bloque autónomo recibe instrucciones preparadas antes de la rotación, 3–6 pasos, materiales, autocontrol, estrategia si se atoran y evidencia;
+- los procedimientos de todos los bloques de un mismo momento duran exactamente los mismos minutos porque ocurren simultáneamente;
+- 1.º–2.º pueden usar oralidad, dibujo, pictogramas, clasificación, dictado, modelos y manipulables cuando corresponde;
+- los grados mayores aumentan análisis, registro, cálculo, argumentación, diseño y producción;
+- sin internet, ningún bloque puede depender de recursos en línea.
 
-`problema/reto/necesidad/interés → PDA → comparación de proyectos LTG → LTG base / LTG adaptado / proyecto propio → acciones de aprendizaje → actividades ejecutables → productos parciales → sesiones dependientes → producto final`
+V6.4-MG también produce una tarjeta `multigrade_project` con problema común, pregunta guía, producto colectivo y una contribución diferenciada por cada grado.
 
-Los nombres oficiales de momentos o actividades LTG se conservan en la trazabilidad (`ltg_use` y referencias LTG), pero una capa determinística evita utilizarlos como estructura narrativa de la planeación.
+## Validación multigrado adicional
 
-## Validaciones V6.4
+Antes de entregar una salida V6.4-MG se vuelve a comprobar que:
 
-V6.4 mantiene los cinco controles de V6.3:
+1. la estructura aprobada por V6.2.1 no haya cambiado;
+2. los PDA permanezcan iguales;
+3. la atención directa conserve los mismos grados;
+4. la trazabilidad LTG permanezca intacta;
+5. cada momento cubra exactamente todos los grados una sola vez;
+6. los procedimientos directos sean ejecutables;
+7. los procedimientos autónomos sean ejecutables sin interrumpir al docente;
+8. la duración de cada procedimiento coincida con los minutos del momento.
 
-1. actividad específica;
-2. alineación PDA → acción de aprendizaje;
-3. evidencia observable;
-4. progresión del producto;
-5. dependencia entre sesiones.
+Si falla alguno de estos controles, V6.4-MG devuelve error de calidad y el router utiliza automáticamente V6.2.1 estable.
 
-Y añade **Executable Procedure**, que exige un procedimiento suficientemente desarrollado para que otro docente pueda aplicar la actividad sin inventar los pasos faltantes.
+## Interfaz V0.8.8
 
-## Prueba de referencia
+La vista multigrado distingue claramente:
 
-Se probó el proyecto de 2.º **“Agua que no has de beber… ¡No la dejes correr!”** con 3 y 5 sesiones de 90 minutos.
+- **CON EL DOCENTE**: bloque atendido y procedimiento paso a paso;
+- **TRABAJO AUTÓNOMO**: qué hacen simultáneamente los demás grados;
+- **Procedimiento autónomo**: pasos, materiales, autocontrol, qué hacer si se atoran y resultado esperado.
 
-La salida pasó de una instrucción general como “guiar la lectura de las páginas 116–118” a una secuencia que especifica lectura modelada, preguntas, recorrido por la escuela, observación de llaves y sanitarios, registro gráfico, comprobaciones, medición con botellas, construcción progresiva de propuestas y elaboración/difusión del producto.
+También muestra el proyecto común y el aporte previsto por grado. La vista anterior permanece debajo como respaldo visual.
 
-Las pruebas V6.4 fueron aprobadas con `executable_procedure=true`, `pda_action_alignment=true`, `observable_evidence=true`, `product_progression=true` y `session_dependency=true`.
+## Seguridad y alcance
 
-## Alcance protegido
+Todas las rutas productivas de generación validan una sesión real de Supabase Auth. Una petición con token inválido se rechaza con `401` antes de consumir modelo.
 
-V6.4 sólo gobierna solicitudes con **exactamente un grado**.
-
-Las solicitudes de dos o más grados continúan directamente en **V6.2.1**, ya que todavía no se implementa la nueva lógica didáctica dentro del motor multigrado.
-
-V6.4 no modifica:
+No se modificaron:
 
 - PDA oficiales;
 - tablas curriculares;
 - corpus LTG;
 - usuarios;
 - materiales avanzados;
-- metodologías específicas completas;
-- motor multigrado estable.
+- fases específicas completas de las metodologías.
 
-## Seguridad
-
-`plan-support-didactic-execution-v1` y `plan-support-didactic-execution-v2` requieren una sesión real antes de generar. Sin token responden `401 AUTH_REQUIRED`.
-
-El arnés temporal `didactic-v64-test-harness` fue neutralizado después de las pruebas y responde `410 DEPRECATED_INTERNAL_BETA`.
+El arnés temporal de V6.4 unigrado permanece neutralizado. El intento de crear un nuevo arnés de usuarios para V6.4-MG fue descartado al ser bloqueado por controles de seguridad; no se debilitó Auth para realizar pruebas.
 
 ## Producción y rollback
 
-Railway ejecuta:
+Railway ejecuta actualmente:
 
-`node server-v086-didactic.mjs`
+`node server-v088-multigrade-didactic.mjs`
 
 Cadena de protección:
 
-1. **V6.4 Didactic Execution** — un grado.
-2. **V6.3 Project Action** — fallback automático si V6.4 devuelve error de calidad (`422`) o error de servidor/red.
-3. **Project Core v1** — fallback inferior de V6.3.
-4. **V6.2.1 Stable** — motor multigrado y respaldo estable.
+1. **V6.4 Multigrade Didactic** — 2 a 6 grados.
+2. **V6.2.1 Stable** — fallback automático multigrado ante `422`, error de servidor, red o timeout.
+3. Para un grado: **V6.4 Didactic Execution → V6.3 Project Action → Project Core v1 → V6.2.1**.
 
-Los entrypoints anteriores permanecen intactos:
+Todos los entrypoints anteriores permanecen intactos:
 
+- `server-v086-didactic.mjs`
 - `server-v086-projectaction.mjs`
 - `server-v086-projectcore.mjs`
 - `server-v086.mjs`
 
-Rollback posible:
+Rollback multigrado:
 
-- `MULTIPLAN_V64_ENABLED=false` → vuelve a V6.3 para un grado;
-- start command `node server-v086-projectaction.mjs` → elimina la capa V6.4;
-- start command `node server-v086-projectcore.mjs` → vuelve a Project Core;
-- start command `node server-v086.mjs` → rollback completo a V6.2.1.
+- `MULTIPLAN_V64_MG_ENABLED=false` → salta V6.4-MG y vuelve al stack anterior;
+- start command `node server-v086-didactic.mjs` → elimina por completo la capa multigrado nueva;
+- start command `node server-v086.mjs` → rollback completo al V6.2.1 estable.
 
-`/health` informa de forma explícita V6.4, V6.3, Project Core y V6.2.1.
+`/health` informa explícitamente el motor V6.4-MG, el motor unigrado y todos los fallbacks.
 
 ## Nota de desarrollo
 
