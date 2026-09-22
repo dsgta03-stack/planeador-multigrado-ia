@@ -1,6 +1,8 @@
 import http from "node:http";
 import { spawn } from "node:child_process";
 
+// This outer gateway keeps v0.12.1 intact and patches only the re-entrant UI observer.
+
 const PORT = Number(process.env.PORT || 3000);
 const CHILD_PORT = Number(process.env.MULTIPLAN_V0122_CHILD_PORT || 6701);
 const CHILD_ORIGIN = `http://127.0.0.1:${CHILD_PORT}`;
