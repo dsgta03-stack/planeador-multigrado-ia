@@ -144,7 +144,13 @@ Deno.serve(async (req) => {
     const upstream = await fetch(BETA7, { method: "POST", headers: { "content-type": "application/json", Authorization: auth }, body: JSON.stringify(body), signal: AbortSignal.timeout(420000) });
     const text = await upstream.text(); let out: any; try { out = JSON.parse(text); } catch { return json({ code: "V65_BETA9_BETA7_PARSE_ERROR" }, 502); }
     if (!upstream.ok) return json({ code: "V65_BETA9_BETA7_FAILED", upstream: out }, 502);
-    const chosen = String(out?.methodology_engine?.methodology_primary || out?.methodology_engine?.selected_methodology || methodology);
+    const primary = out?.methodology_engine?.methodology_primary;
+    const selected = out?.methodology_engine?.selected_methodology;
+    const chosen = String(
+      (primary && typeof primary === "object" ? primary.label || primary.id : primary) ||
+      (selected && typeof selected === "object" ? selected.label || selected.id : selected) ||
+      methodology,
+    );
     const required = safeTasks(base, trans), forbidden = strs(base?.transversal_forbidden_policy?.match_terms || []);
     let generated = { methodology: chosen, phase_sequence: [], tasks: [], grade_contributions: [] };
     if (required.length) generated = await callGemini({ problem: String(body.situacion_problema || ""), context: String(body.contexto || ""), resources: String(body.recursos || ""), supports: String(body.apoyos || ""), methodology: chosen, transversal_grades: trans, forbidden_concepts: forbidden, required_tasks: required, instruction: "La fase metodologica organiza la tarea segura; no sustituye su tema ni importa contenidos curriculares." });
