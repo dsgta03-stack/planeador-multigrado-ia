@@ -1,3 +1,4 @@
 UI preview deployment trigger for server-v0115-ui-plan-visibility.mjs.
 Add a resilient visible plan renderer and generation progress message so approved Beta.10 results are always shown to the teacher.
 Authentication, V6.5 Beta.10 and the guarded V6.4 fallback remain unchanged.
+Force deployment from current main after enabling full watch patterns.
