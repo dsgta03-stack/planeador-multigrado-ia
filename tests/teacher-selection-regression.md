@@ -51,7 +51,13 @@ Prueba aislada posterior, sin proporcionar PDA a la pasada transversal: PASS; ce
 
 ## Motores que deben conservar estas reglas
 
-- `PLAN-SEQUENCE-MULTIGRADE-V6.2.1-STRICT-TRACE+TRANSVERSAL-LOCK-V1.1`
-- `V6.4-MULTIGRADE-DIDACTIC-BETA.6-TRANSVERSAL-LOCK`
+- `PLAN-SEQUENCE-MULTIGRADE-V6.2.1-STRICT-TRACE+TRANSVERSAL-LOCK-V2.2-CONCEPT-GUARD`
+- `V6.4-MULTIGRADE-DIDACTIC-BETA.6.2-CONCEPT-GUARD`
 - Renderer: `GRADE-TASK-TRACE-V1`
-- V6.5 metodología: mientras existan grados transversales, no puede hacerse visible si no supera una reescritura metodológica transversal equivalente. Beta.8 mantiene actualmente esta compuerta en `REVISAR`.
+- V6.5 metodología: `V6.5-METHODOLOGY-ENGINE-BETA.9-TRANSVERSAL-ISOLATION` ejecuta la reescritura transversal equivalente, pero permanece en `shadow` hasta aprobar una ejecución real autenticada de extremo a extremo.
+
+## Regresión semántica derivada — 2026-09-22
+
+El caso C se amplió para derivar de forma explícita los conceptos propios del PDA ajeno. Con el problema de uso excesivo de redes sociales y un PDA de alimentación sólo en 4.º, la política bloqueó alimentación, nutrición, Plato del Bien Comer, grasa, azúcar, ultraprocesados y economía familiar. No hubo coincidencias en productos ni procedimientos transversales: PASS.
+
+El control D incluyó alimentación dentro de la problemática común para comprobar que el filtro no la excluyera indebidamente: PASS.
