@@ -1,193 +1,61 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "npm:@supabase/supabase-js@2.57.4";
 
-const ENGINE = "V6.5-METHODOLOGY-ENGINE-BETA.10-PROMOTION-GATE";
-const URL = Deno.env.get("SUPABASE_URL")!;
-const SERVICE = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-const BETA9 = `${URL}/functions/v1/plan-support-methodology-v65-beta9`;
-const db = createClient(URL, SERVICE, { auth: { persistSession: false, autoRefreshToken: false } });
-const CORS = {
-  "Access-Control-Allow-Origin": Deno.env.get("ALLOWED_ORIGIN") || "*",
-  "Access-Control-Allow-Headers": "authorization,x-client-info,apikey,content-type",
-  "Access-Control-Allow-Methods": "POST,OPTIONS",
-  "Cache-Control": "no-store",
+const ENGINE="V6.5-METHODOLOGY-ENGINE-BETA.10-PROMOTION-GATE";
+const REVISION="10.5-RESILIENT-ONE-PASS";
+const PRIMARY_MODEL="gemini-3.1-flash-lite";
+const FALLBACK_MODEL="gemini-3.6-flash";
+const URL=Deno.env.get("SUPABASE_URL")!,SERVICE=Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,GEMINI=Deno.env.get("Multiplan")!;
+const db=createClient(URL,SERVICE,{auth:{persistSession:false,autoRefreshToken:false}});
+const CORS={"Access-Control-Allow-Origin":Deno.env.get("ALLOWED_ORIGIN")||"*","Access-Control-Allow-Headers":"authorization,x-client-info,apikey,content-type","Access-Control-Allow-Methods":"POST,OPTIONS","Cache-Control":"no-store"};
+const json=(body:unknown,status=200,extra:Record<string,string>={})=>new Response(JSON.stringify(body),{status,headers:{...CORS,"content-type":"application/json",...extra}});
+const nums=(x:unknown)=>[...new Set((Array.isArray(x)?x:[]).map(Number).filter(Number.isInteger))];
+const strs=(x:unknown)=>[...new Set((Array.isArray(x)?x:[]).map(v=>String(v).trim()).filter(Boolean))].sort();
+const norm=(x:unknown)=>String(x??"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9ñ ]/g," ").replace(/\s+/g," ").trim();
+const stable=(x:unknown)=>JSON.stringify(x);
+const taskKey=(x:any)=>`${Number(x.session_number)}|${Number(x.moment)}|${Number(x.grade)}|${String(x.mode)}`;
+const METHODS:any={
+ abp:{id:"abp",label:"Aprendizaje Basado en Problemas",phases:["Presentemos","Recolectemos","Formulemos el problema","Organicemos la experiencia","Vivamos la experiencia","Resultados y análisis"]},
+ steam:{id:"steam",label:"Aprendizaje Basado en Indagación con enfoque STEAM",phases:["Introducción e identificación","Diseño de la indagación","Desarrollo de la indagación","Organización y construcción de respuestas","Presentación y aplicación","Reflexión y metacognición"]},
+ aprendizaje_servicio:{id:"aprendizaje_servicio",label:"Aprendizaje Servicio",phases:["Punto de partida","Lo que sé y lo que quiero saber","Organicemos las actividades","Creatividad en marcha","Compartimos y evaluamos lo aprendido"]},
+ proyectos_comunitarios:{id:"proyectos_comunitarios",label:"Aprendizaje Basado en Proyectos Comunitarios",phases:["Planeación","Acción","Intervención"]}
 };
-const json = (body: unknown, status = 200, extra: Record<string, string> = {}) =>
-  new Response(JSON.stringify(body), { status, headers: { ...CORS, "content-type": "application/json", ...extra } });
-const nums = (x: unknown) => [...new Set((Array.isArray(x) ? x : []).map(Number).filter(Number.isInteger))];
-const strs = (x: unknown) => [...new Set((Array.isArray(x) ? x : []).map((v) => String(v).trim()).filter(Boolean))].sort();
-const stable = (x: unknown) => JSON.stringify(x);
+function methodFrom(body:any){const raw=norm(body.methodology_selection||body.metodologia||"abp"),a:any={"aprendizaje basado en problemas":"abp",problemas:"abp",abp:"abp",steam:"steam","indagacion steam":"steam","aprendizaje servicio":"aprendizaje_servicio",servicio:"aprendizaje_servicio","proyectos comunitarios":"proyectos_comunitarios","aprendizaje basado en proyectos comunitarios":"proyectos_comunitarios"};return METHODS[a[raw]||raw]||METHODS.abp}
+function phases(method:any,sessions:any[]){return(sessions||[]).map((s:any,i:number)=>({session_number:Number(s.session_number),phase:method.phases[Math.min(method.phases.length-1,Math.floor(i*method.phases.length/Math.max(1,sessions.length)))]}))}
+function canonical(x:any):any{if(Array.isArray(x))return x.map(canonical);if(x&&typeof x==="object")return Object.fromEntries(Object.entries(x).sort(([a],[b])=>a.localeCompare(b)).map(([k,v])=>[k,canonical(v)]));return x}
+async function sha(x:any){const d=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(JSON.stringify(canonical(x))));return[...new Uint8Array(d)].map(n=>n.toString(16).padStart(2,"0")).join("")}
+function core(sessions:any[]){return(sessions||[]).map((s:any)=>({session_number:Number(s.session_number),total_minutes:Number(s.total_minutes),work_moments:(s.work_moments||[]).map((m:any)=>({moment:Number(m.moment),minutes:Number(m.minutes),direct_teacher_grades:nums(m.direct_teacher_grades).sort((a,b)=>a-b),direct_teacher_pda_ids:strs(m.direct_teacher_pda_ids),direct_ltg_refs:m.direct_ltg_refs||[],other_blocks:(m.other_blocks||[]).map((b:any)=>({grades:nums(b.grades).sort((a,c)=>a-c),pda_ids:strs(b.pda_ids),ltg_refs:b.ltg_refs||[]}))}))}))}
+function selectedRows(sessions:any[],trans:Set<number>){const out:any[]=[];for(const s of sessions||[])for(const m of s.work_moments||[])for(const t of m.grade_tasks||[]){if(trans.has(Number(t.grade)))continue;out.push({session_number:Number(s.session_number),moment:Number(m.moment),grade:Number(t.grade),mode:String(t.mode||""),curriculum_mode:String(t.curriculum_mode||""),pda_ids:strs(t.pda_ids),ltg_refs:t.ltg_refs||[]})}return out.sort((a,b)=>stable(a).localeCompare(stable(b)))}
+function safeTasks(base:any,trans:Set<number>){const out:any[]=[];for(const s of base.sessions||[])for(const m of s.work_moments||[])for(const t of m.grade_tasks||[]){const g=Number(t.grade);if(!trans.has(g)||t.curriculum_mode!=="TRANSVERSAL_PROJECT")continue;out.push({session_number:Number(s.session_number),moment:Number(m.moment),grade:g,mode:String(t.mode||""),minutes:Number(m.minutes),safe_action:String(t.action||""),safe_evidence:String(t.evidence||""),product_contribution:String(t.product_contribution||"")})}return out.sort((a,b)=>taskKey(a).localeCompare(taskKey(b)))}
+function grades(base:any){return nums([...(base.products||[]).map((x:any)=>x.grade),...(base.sessions||[]).flatMap((s:any)=>(s.work_moments||[]).flatMap((m:any)=>[...nums(m.direct_teacher_grades),...(m.other_blocks||[]).flatMap((b:any)=>nums(b.grades))]))]).sort((a,b)=>a-b)}
+function products(base:any,gs:number[]){const p=new Map((base.products||[]).map((x:any)=>[Number(x.grade),x])),c=new Map((base.multigrade_project?.grade_contributions||[]).map((x:any)=>[Number(x.grade),x]));return gs.map(grade=>{const x:any=p.get(grade)||c.get(grade)||{};return{grade,existing_product:String(x.final_evidence||x.contribution||x.evidence||x.partial_products?.[0]||`Aporte de ${grade}.º`)}})}
+const guide:any={type:"OBJECT",properties:{session_number:{type:"INTEGER"},phase:{type:"STRING"},purpose:{type:"STRING"},project_advance:{type:"STRING"},product_relation:{type:"STRING"},continuity_from_previous:{type:"STRING"},prepares_next:{type:"STRING"}},required:["session_number","phase","purpose","project_advance","product_relation","continuity_from_previous","prepares_next"]};
+const contribution:any={type:"OBJECT",properties:{grade:{type:"INTEGER"},contribution:{type:"STRING"},evidence:{type:"STRING"},why_it_matters:{type:"STRING"}},required:["grade","contribution","evidence","why_it_matters"]};
+const integrated:any={type:"OBJECT",properties:{title:{type:"STRING"},unifying_mission:{type:"STRING"},collective_product_or_service:{type:"STRING"},beneficiary:{type:"STRING"},impact_goal:{type:"STRING"},grade_contributions:{type:"ARRAY",items:contribution}},required:["title","unifying_mission","collective_product_or_service","beneficiary","impact_goal","grade_contributions"]};
+const schema:any={type:"OBJECT",properties:{methodology:{type:"STRING"},integrated_project:integrated,session_guidance:{type:"ARRAY",items:guide}},required:["methodology","integrated_project","session_guidance"]};
+const SYSTEM=`Eres especialista en metodologías de la Nueva Escuela Mexicana y primaria multigrado. Produce una sola integración metodológica ejecutable y concisa. La selección curricular del docente es inmutable. Recibes sólo resúmenes de productos y tareas seguras de grados transversales; no recibes PDA, LTG ni contenidos oficiales. forbidden_concepts es barrera estricta. Integra un único producto o servicio común. No inventes beneficiarios externos, internet, dispositivos, visitas, cantidades, porcentajes, resultados médicos ni recursos no declarados.`;
+async function callModel(model:string,prompt:any,timeout:number){const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`,{method:"POST",headers:{"content-type":"application/json","x-goog-api-key":GEMINI},body:JSON.stringify({systemInstruction:{parts:[{text:SYSTEM}]},contents:[{role:"user",parts:[{text:JSON.stringify(prompt)}]}],generationConfig:{temperature:0.2,maxOutputTokens:2600,responseMimeType:"application/json",responseSchema:schema}}),signal:AbortSignal.timeout(timeout)});const raw=await r.json();if(!r.ok)throw new Error(`GEMINI_${r.status}:${JSON.stringify(raw).slice(0,700)}`);const text=raw?.candidates?.[0]?.content?.parts?.map((p:any)=>p.text||"").join("")||"";if(!text)throw new Error("GEMINI_EMPTY");return JSON.parse(text)}
+const retryableModelError=(e:any)=>/GEMINI_(429|503)|RESOURCE_EXHAUSTED|UNAVAILABLE|timed out/i.test(String(e));
+async function generate(prompt:any){let last:any=null;for(const [model,timeout] of [[PRIMARY_MODEL,70000],[FALLBACK_MODEL,90000]] as [string,number][]){try{return{data:await callModel(model,prompt,timeout),model}}catch(e){last=e;if(!retryableModelError(e))throw e;await new Promise(r=>setTimeout(r,1500))}}throw last||new Error("MODEL_UNAVAILABLE")}
+function fixMinutes(steps:any[],target:number){if(!Array.isArray(steps)||steps.length<3||steps.length>6||target<steps.length)return;steps.forEach((x:any,i:number)=>{x.step=i+1;x.minutes=Math.max(1,Number(x.minutes)||1)});const weights=steps.map((x:any)=>x.minutes),available=target-steps.length,total=weights.reduce((a:number,b:number)=>a+b,0)||weights.length,alloc=weights.map((x:number)=>1+Math.floor(available*x/total));let left=target-alloc.reduce((a:number,b:number)=>a+b,0);for(let i=0;left>0;i++,left--)alloc[i%alloc.length]++;steps.forEach((x:any,i:number)=>x.minutes=alloc[i])}
+function fallbackProcedure(source:any){const count=3,target=Math.max(count,Number(source.minutes)||count),base=Math.floor(target/count),left=target-base*count;return Array.from({length:count},(_,i)=>({step:i+1,minutes:base+(i<left?1:0),student_action:i===0?String(source.safe_action||"Realiza la tarea indicada."):i===1?"Registra el avance y compáralo con la consigna.":"Revisa la evidencia y conserva el aporte para el siguiente momento.",teacher_support_or_preinstruction:source.mode==="DIRECT"?"El docente modela y verifica este paso.":"El docente deja la consigna y un ejemplo antes de rotar.",self_check:"Comprueba que el resultado corresponde a la consigna y está completo.",if_stuck:source.mode==="DIRECT"?"Solicita una explicación breve durante la atención directa.":"Consulta el ejemplo visible o pide apoyo a un compañero sin interrumpir al docente.",expected_result:i===count-1?String(source.safe_evidence||source.product_contribution||"Evidencia terminada."):"Avance verificable de la tarea."}))}
+function deriveTasks(base:any,required:any[],phaseRows:any[]){const phase=new Map(phaseRows.map((x:any)=>[Number(x.session_number),String(x.phase)]));return required.map(src=>{const session=(base.sessions||[]).find((s:any)=>Number(s.session_number)===src.session_number),moment=(session?.work_moments||[]).find((m:any)=>Number(m.moment)===src.moment),execution=(moment?.transversal_execution||[]).find((x:any)=>Number(x.grade)===src.grade&&String(x.mode)===src.mode);let procedure=structuredClone(execution?.procedure||[]);if(procedure.length<3||procedure.length>6)procedure=fallbackProcedure(src);fixMinutes(procedure,src.minutes);const p=phase.get(src.session_number)||"Desarrollo";return{session_number:src.session_number,moment:src.moment,grade:src.grade,mode:src.mode,methodology_phase:p,action:String(src.safe_action),procedure,evidence:String(src.safe_evidence),product_contribution:String(src.product_contribution),transition:"Conserva la evidencia y úsala para avanzar el producto común en el siguiente momento.",methodology_link:`La tarea aporta a la fase ${p} sin modificar su tema seguro ni atribuir currículo.`}})}
+const STOP=new Set(["para","como","cada","debe","deben","grado","alumnos","docente","trabajo","proyecto","sesion"]);
+const words=(x:any)=>[...new Set(norm(x).split(" ").filter(w=>w.length>=5&&!STOP.has(w)))];
+function validate(g:any,required:any[],forbidden:string[],method:any,phaseRows:any[],gs:number[]){const errors:string[]=[],hits:any[]=[],expected=new Map(required.map(x=>[taskKey(x),x])),received=new Map<string,any>();for(const x of g.tasks||[]){const k=taskKey(x);if(received.has(k))errors.push(`duplicate_${k}`);received.set(k,x)}for(const k of expected.keys())if(!received.has(k))errors.push(`missing_${k}`);for(const k of received.keys())if(!expected.has(k))errors.push(`unexpected_${k}`);for(const[k,x]of received){const src:any=expected.get(k);if(!src)continue;fixMinutes(x.procedure,src.minutes);if(!Array.isArray(x.procedure)||x.procedure.length<3||x.procedure.length>6)errors.push(`steps_${k}`);if((x.procedure||[]).reduce((n:number,p:any)=>n+Number(p.minutes||0),0)!==src.minutes)errors.push(`minutes_${k}`);const anchors=new Set(words(`${src.safe_action} ${src.safe_evidence} ${src.product_contribution}`)),used=words(JSON.stringify(x)).filter(w=>anchors.has(w));if(anchors.size&&used.length<Math.min(2,anchors.size))errors.push(`anchor_${k}`);const text=norm(JSON.stringify(x)),found=forbidden.filter(t=>text.includes(norm(t)));if(found.length)hits.push({key:k,terms:found})}if(norm(g.methodology)!==norm(method.label))errors.push("methodology_changed");const a=phaseRows.map(x=>x.session_number).sort((x:number,y:number)=>x-y),b=(g.session_guidance||[]).map((x:any)=>Number(x.session_number)).sort((x:number,y:number)=>x-y);if(stable(a)!==stable(b))errors.push("session_guidance_coverage");const cg=nums(g.integrated_project?.grade_contributions?.map((x:any)=>x.grade)).sort((x,y)=>x-y);if(stable(gs)!==stable(cg))errors.push("grade_contribution_coverage");return{errors,hits}}
+function apply(base:any,g:any,trans:Set<number>){const sessions=structuredClone(base.sessions||[]),map=new Map((g.tasks||[]).map((x:any)=>[taskKey(x),x]));for(const s of sessions)for(const m of s.work_moments||[]){const out:any[]=[];for(const original of m.grade_tasks||[]){const grade=Number(original.grade);if(!trans.has(grade)){out.push(original);continue}const x:any=map.get(taskKey({session_number:s.session_number,moment:m.moment,grade,mode:original.mode}));if(!x)continue;out.push({grade,curriculum_mode:"TRANSVERSAL_PROJECT",pda_ids:[],ltg_refs:[],mode:x.mode,action:x.action,procedure:x.procedure,evidence:x.evidence,assessment:"Seguimiento formativo del aporte al proyecto, sin atribución curricular automática.",product_contribution:x.product_contribution,transition:x.transition,methodology_phase:x.methodology_phase,methodology_link:x.methodology_link,source:"V65_BETA10_ONE_PASS_ISOLATED"})}m.grade_tasks=out.sort((a,b)=>Number(a.grade)-Number(b.grade));m.transversal_methodology_tasks=out.filter(x=>trans.has(Number(x.grade))) }return sessions}
+function transRows(sessions:any[],trans:Set<number>){const out:any[]=[];for(const s of sessions||[])for(const m of s.work_moments||[])for(const t of m.grade_tasks||[])if(trans.has(Number(t.grade)))out.push({session_number:Number(s.session_number),moment:Number(m.moment),grade:Number(t.grade),mode:String(t.mode||""),curriculum_mode:String(t.curriculum_mode||""),pda_ids:strs(t.pda_ids),ltg_refs:t.ltg_refs||[],shape:Array.isArray(t.procedure)&&t.procedure.length>=3&&t.procedure.length<=6,minutes:(t.procedure||[]).reduce((n:number,p:any)=>n+Number(p.minutes||0),0)===Number(m.minutes)});return out.sort((a,b)=>taskKey(a).localeCompare(taskKey(b)))}
+function provider(error:any){const d=String(error).toLowerCase();if(d.includes("gemini_429")||d.includes("resource_exhausted"))return{code:"V65_PROVIDER_QUOTA_EXHAUSTED",status:429,retryable:true};if(d.includes("gemini_503")||d.includes("unavailable")||d.includes("timed out"))return{code:"V65_PROVIDER_UNAVAILABLE",status:503,retryable:true};return{code:"V65_BETA10_ERROR",status:500,retryable:false}}
 
-function coreRows(sessions: any[]) {
-  return (sessions || []).map((s: any) => ({
-    session_number: Number(s.session_number),
-    total_minutes: Number(s.total_minutes),
-    work_moments: (s.work_moments || []).map((m: any) => ({
-      moment: Number(m.moment),
-      minutes: Number(m.minutes),
-      direct_teacher_grades: nums(m.direct_teacher_grades).sort((a, b) => a - b),
-      direct_teacher_pda_ids: strs(m.direct_teacher_pda_ids),
-      direct_ltg_refs: m.direct_ltg_refs || [],
-      other_blocks: (m.other_blocks || []).map((b: any) => ({
-        grades: nums(b.grades).sort((a, c) => a - c),
-        pda_ids: strs(b.pda_ids),
-        ltg_refs: b.ltg_refs || [],
-      })),
-    })),
-  }));
-}
-
-function selectedTaskRows(sessions: any[], transverse: Set<number>) {
-  const rows: any[] = [];
-  for (const s of sessions || []) for (const m of s.work_moments || []) for (const t of m.grade_tasks || []) {
-    const grade = Number(t.grade);
-    if (transverse.has(grade)) continue;
-    rows.push({
-      session_number: Number(s.session_number),
-      moment: Number(m.moment),
-      grade,
-      mode: String(t.mode || ""),
-      curriculum_mode: String(t.curriculum_mode || ""),
-      pda_ids: strs(t.pda_ids),
-      ltg_refs: t.ltg_refs || [],
-    });
-  }
-  return rows.sort((a, b) => stable(a).localeCompare(stable(b)));
-}
-
-function transversalRows(sessions: any[], transverse: Set<number>) {
-  const rows: any[] = [];
-  for (const s of sessions || []) for (const m of s.work_moments || []) for (const t of m.grade_tasks || []) {
-    const grade = Number(t.grade);
-    if (!transverse.has(grade)) continue;
-    rows.push({
-      session_number: Number(s.session_number),
-      moment: Number(m.moment),
-      grade,
-      mode: String(t.mode || ""),
-      curriculum_mode: String(t.curriculum_mode || ""),
-      pda_ids: strs(t.pda_ids),
-      ltg_refs: t.ltg_refs || [],
-      has_procedure: Array.isArray(t.procedure) && t.procedure.length >= 3 && t.procedure.length <= 6,
-    });
-  }
-  return rows.sort((a, b) => stable(a).localeCompare(stable(b)));
-}
-
-function expectedTransversalKeys(base: any, transverse: Set<number>) {
-  const keys: string[] = [];
-  for (const s of base?.sessions || []) for (const m of s.work_moments || []) {
-    const direct = new Set(nums(m.direct_teacher_grades));
-    const auto = new Set((m.other_blocks || []).flatMap((b: any) => nums(b.grades)));
-    for (const grade of transverse) {
-      const mode = direct.has(grade) ? "DIRECT" : auto.has(grade) ? "AUTONOMOUS" : "";
-      if (mode) keys.push(`${Number(s.session_number)}|${Number(m.moment)}|${grade}|${mode}`);
-    }
-  }
-  return keys.sort();
-}
-
-function actualTransversalKeys(rows: any[]) {
-  return rows.map((r: any) => `${r.session_number}|${r.moment}|${r.grade}|${r.mode}`).sort();
-}
-
-function minutesAreExact(sessions: any[], transverse: Set<number>) {
-  for (const s of sessions || []) for (const m of s.work_moments || []) for (const t of m.grade_tasks || []) {
-    if (!transverse.has(Number(t.grade))) continue;
-    if (!Array.isArray(t.procedure) || t.procedure.length < 3 || t.procedure.length > 6) return false;
-    const total = t.procedure.reduce((sum: number, p: any) => sum + Math.max(0, Number(p.minutes) || 0), 0);
-    if (total !== Number(m.minutes)) return false;
-  }
-  return true;
-}
-
-Deno.serve(async (req) => {
-  if (req.method === "OPTIONS") return new Response("ok", { headers: CORS });
-  if (req.method !== "POST") return json({ code: "METHOD_NOT_ALLOWED" }, 405);
-  let runId: string | null = null;
-  try {
-    const auth = req.headers.get("Authorization") || "";
-    const token = auth.startsWith("Bearer ") ? auth.slice(7) : "";
-    if (!token) return json({ code: "AUTH_REQUIRED" }, 401);
-    const au = await db.auth.getUser(token);
-    if (au.error || !au.data.user?.id) return json({ code: "AUTHENTICATED_USER_REQUIRED" }, 401);
-
-    const body = await req.json();
-    const base = body?.base_plan;
-    if (!base?.engineVersion?.startsWith("V6.4")) return json({ code: "V65_BETA10_REQUIRES_V64_BASE_PLAN" }, 400);
-
-    const upstream = await fetch(BETA9, {
-      method: "POST",
-      headers: { "content-type": "application/json", Authorization: auth },
-      body: JSON.stringify(body),
-      signal: AbortSignal.timeout(560000),
-    });
-    const text = await upstream.text();
-    let out: any;
-    try { out = JSON.parse(text); } catch { return json({ code: "V65_BETA10_BETA9_PARSE_ERROR" }, 502); }
-    if (!upstream.ok) return json({ code: "V65_BETA10_BETA9_FAILED", upstream: out }, 502);
-
-    const sessions = out?.methodology_engine?.transformed_sessions || [];
-    const transverse = new Set(nums(base?.transversal_grades));
-    const selectedBefore = selectedTaskRows(base?.sessions || [], transverse);
-    const selectedAfter = selectedTaskRows(sessions, transverse);
-    const transRows = transversalRows(sessions, transverse);
-    const expectedKeys = expectedTransversalKeys(base, transverse);
-    const actualKeys = actualTransversalKeys(transRows);
-
-    const upstreamApproved = out?.methodology_engine?.validator?.status === "APROBADO";
-    const gates = {
-      beta9_approved: upstreamApproved,
-      immutable_v64_core: stable(coreRows(base?.sessions || [])) === stable(coreRows(sessions)),
-      teacher_selection_preserved: stable(selectedBefore) === stable(selectedAfter),
-      exact_transversal_coverage: stable(expectedKeys) === stable(actualKeys),
-      transversal_pda_empty: transRows.every((r: any) => r.pda_ids.length === 0),
-      transversal_ltg_empty: transRows.every((r: any) => !r.ltg_refs || r.ltg_refs.length === 0),
-      transversal_mode_explicit: transRows.every((r: any) => r.curriculum_mode === "TRANSVERSAL_PROJECT"),
-      transversal_procedure_shape_valid: transRows.every((r: any) => r.has_procedure),
-      transversal_minutes_exact: minutesAreExact(sessions, transverse),
-    };
-    const status = Object.values(gates).every(Boolean) ? "APROBADO" : "REVISAR";
-    const failures = Object.entries(gates).filter(([, ok]) => !ok).map(([name]) => name);
-
-    const inserted = await db.from("plan_runs").insert({
-      user_id: au.data.user.id,
-      engine_version: ENGINE,
-      retrieval_version: `${base.engineVersion}+BETA9+DETERMINISTIC-PROMOTION-GATE`,
-      input_json: { methodology_selection: body.methodology_selection || body.metodologia || "auto", transversal_grades: [...transverse] },
-      retrieval_json: { base_run_id: base.run_id || null, beta9_run_id: out.run_id || null },
-      model_provider: "composite",
-      model_name: "beta9+deterministic-promotion-gate",
-      status,
-      request_hash: crypto.randomUUID(),
-    }).select("run_id").single();
-    if (inserted.data?.run_id) runId = inserted.data.run_id;
-
-    out.engineVersion = ENGINE;
-    out.run_id = runId;
-    out.base_run_id = base.run_id || null;
-    out.beta9_run_id = out.beta9_run_id || out?.methodology_engine?.beta9_run_id || null;
-    out.methodology_engine.version = ENGINE;
-    out.methodology_engine.promotion_gate = {
-      status,
-      promotable: status === "APROBADO",
-      gates,
-      failures,
-      teacher_selection_fingerprint: { before_count: selectedBefore.length, after_count: selectedAfter.length, exact: gates.teacher_selection_preserved },
-      transversal_fingerprint: { expected_count: expectedKeys.length, actual_count: actualKeys.length, exact: gates.exact_transversal_coverage },
-    };
-    out.methodology_engine.validator = {
-      ...out.methodology_engine.validator,
-      status,
-      gates: { ...(out.methodology_engine.validator?.gates || {}), ...gates },
-      promotion_failures: failures,
-      warnings: status === "APROBADO" ? [] : ["V6.5 Beta.10 permanece no gobernante hasta superar todas las compuertas deterministas."],
-    };
-
-    if (runId) await db.from("plan_runs").update({ model_output_json: out, validator_json: out.methodology_engine.validator, status, error_message: failures.length ? failures.join(",") : null }).eq("run_id", runId);
-    return json(out, 200, { "x-multiplan-plan-engine": ENGINE, "x-multiplan-v65-mode": "promotion-candidate-shadow" });
-  } catch (e) {
-    if (runId) await db.from("plan_runs").update({ status: "ERROR", error_message: String(e) }).eq("run_id", runId);
-    return json({ code: "V65_BETA10_ERROR", run_id: runId, message: String(e) }, 500, { "x-multiplan-plan-engine": ENGINE });
-  }
-});
+Deno.serve(async req=>{if(req.method==="OPTIONS")return new Response("ok",{headers:CORS});if(req.method!=="POST")return json({code:"METHOD_NOT_ALLOWED"},405);let runId:string|null=null;try{const auth=req.headers.get("Authorization")||"",token=auth.startsWith("Bearer ")?auth.slice(7):"";if(!token)return json({code:"AUTH_REQUIRED"},401);const user=await db.auth.getUser(token);if(user.error||!user.data.user?.id)return json({code:"AUTHENTICATED_USER_REQUIRED"},401);const body=await req.json(),base=body.base_plan;if(!base?.engineVersion?.startsWith("V6.4"))return json({code:"V65_BETA10_REQUIRES_V64_BASE_PLAN"},400);
+ const method=methodFrom(body),trans=new Set(nums(base.transversal_grades)),gs=grades(base),phaseRows=phases(method,base.sessions||[]),required=safeTasks(base,trans),forbidden=strs(base.transversal_forbidden_policy?.match_terms||[]);
+ const requestHash=await sha({revision:REVISION,base_plan:base,method:method.id,problem:body.situacion_problema||null,context:body.contexto||null,resources:body.recursos||null,supports:body.apoyos||null});
+ const cached=await db.from("plan_runs").select("run_id,model_output_json").eq("user_id",user.data.user.id).eq("engine_version",ENGINE).eq("request_hash",requestHash).eq("status","APROBADO").not("model_output_json","is",null).order("created_at",{ascending:false}).limit(1).maybeSingle();if(cached.data?.model_output_json?.methodology_engine?.promotion_gate?.promotable===true){const hit=structuredClone(cached.data.model_output_json);hit.methodology_engine.promotion_gate.cache={status:"HIT",revision:REVISION};return json(hit,200,{"x-multiplan-plan-engine":ENGINE,"x-multiplan-v65-mode":"promotion-candidate-shadow","x-multiplan-cache":"HIT"})}
+ const ins=await db.from("plan_runs").insert({user_id:user.data.user.id,engine_version:ENGINE,retrieval_version:`${base.engineVersion}+${REVISION}`,input_json:{methodology_selection:method.id,transversal_grades:[...trans]},retrieval_json:{base_run_id:base.run_id||null,generation_strategy:"ONE_PASS_ISOLATED_RESILIENT"},model_provider:"google",model_name:`${PRIMARY_MODEL}->${FALLBACK_MODEL}`,status:"GENERATING",request_hash:requestHash}).select("run_id").single();if(ins.data?.run_id)runId=ins.data.run_id;
+ const result=await generate({problem:String(body.situacion_problema||""),context:String(body.contexto||""),resources:String(body.recursos||""),supports:String(body.apoyos||""),methodology:method,required_phase_sequence:phaseRows,grade_products:products(base,gs),forbidden_concepts:forbidden,instruction:"Integra los aportes en un único proyecto o servicio común. Responde de forma breve y devuelve exactamente una guía por sesión y una contribución por grado."}),generated=result.data,modelUsed=result.model;generated.tasks=deriveTasks(base,required,phaseRows);
+ const checked=validate(generated,required,forbidden,method,phaseRows,gs),sessions=apply(base,generated,trans),before=selectedRows(base.sessions||[],trans),after=selectedRows(sessions,trans),rows=transRows(sessions,trans),expected=required.map(taskKey).sort(),actual=rows.map(taskKey).sort();
+ const gates={one_pass_generation_valid:checked.errors.length===0,immutable_v64_core:stable(core(base.sessions||[]))===stable(core(sessions)),teacher_selection_preserved:stable(before)===stable(after),exact_transversal_coverage:stable(expected)===stable(actual),no_foreign_concepts:checked.hits.length===0,transversal_pda_empty:rows.every(x=>x.pda_ids.length===0),transversal_ltg_empty:rows.every(x=>!x.ltg_refs?.length),transversal_mode_explicit:rows.every(x=>x.curriculum_mode==="TRANSVERSAL_PROJECT"),transversal_procedure_shape_valid:rows.every(x=>x.shape),transversal_minutes_exact:rows.every(x=>x.minutes)};
+ const failures=[...checked.errors,...checked.hits.map((x:any)=>`foreign_concept_${x.key}_${x.terms.join("_")}`),...Object.entries(gates).filter(([,ok])=>!ok).map(([name])=>name)],status=failures.length?"REVISAR":"APROBADO",out=structuredClone(base);
+ out.engineVersion=ENGINE;out.base_engine_version=base.engineVersion;out.base_run_id=base.run_id||null;out.run_id=runId;out.methodology_engine={version:ENGINE,methodology_primary:{id:method.id,label:method.label},selection_mode:"manual",integrated_project:generated.integrated_project,sessions:generated.session_guidance,transformed_sessions:sessions,transversal_methodology:{status:"APPLIED",isolation:"NO_PDA_OR_LTG_IN_PROMPT",grades:[...trans],required_tasks:required.length,generated_tasks:generated.tasks?.length||0},validator:{status,errors:failures,warnings:status==="APROBADO"?[]:["Beta.10 permanece no gobernante hasta superar las compuertas."],gates,generation_strategy:"ONE_PASS_ISOLATED_RESILIENT",model:modelUsed},promotion_gate:{status,promotable:status==="APROBADO",gates,failures,cache:{status:"MISS",revision:REVISION},provider:{primary:PRIMARY_MODEL,fallback:FALLBACK_MODEL,used:modelUsed},teacher_selection_fingerprint:{before_count:before.length,after_count:after.length,exact:gates.teacher_selection_preserved},transversal_fingerprint:{expected_count:expected.length,actual_count:actual.length,exact:gates.exact_transversal_coverage}}};
+ if(runId)await db.from("plan_runs").update({model_output_json:out,validator_json:out.methodology_engine.validator,model_name:modelUsed,status,error_message:failures.length?failures.join(",").slice(0,4000):null}).eq("run_id",runId);return json(out,200,{"x-multiplan-plan-engine":ENGINE,"x-multiplan-v65-mode":"promotion-candidate-shadow","x-multiplan-cache":"MISS","x-multiplan-model":modelUsed});
+ }catch(error){const p=provider(error);if(runId)await db.from("plan_runs").update({status:"ERROR",error_message:`${p.code}:${String(error)}`.slice(0,4000)}).eq("run_id",runId);return json({code:p.code,run_id:runId,retryable:p.retryable},p.status,{"x-multiplan-plan-engine":ENGINE,"x-multiplan-v65-mode":"promotion-candidate-shadow","x-multiplan-cache":"MISS"})}});
