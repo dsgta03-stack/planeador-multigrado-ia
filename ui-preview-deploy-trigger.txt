@@ -1,2 +1,3 @@
-UI preview deployment trigger for server-v0113-ui-professional.mjs.
-No production runtime logic changed.
+UI preview deployment trigger for server-v0114-ui-root-normalizer.mjs.
+Normalize root requests with query parameters so external links open the professional UI instead of NOT_FOUND.
+Backend v0.11.3 / V6.5 Beta.10 remains unchanged.
