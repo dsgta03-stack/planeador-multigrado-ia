@@ -1,3 +1,3 @@
-UI preview deployment trigger for server-v0114-ui-root-normalizer.mjs.
-Normalize root requests with query parameters so external links open the professional UI instead of NOT_FOUND.
-Backend v0.11.3 / V6.5 Beta.10 remains unchanged.
+UI preview deployment trigger for server-v0115-ui-plan-visibility.mjs.
+Add a resilient visible plan renderer and generation progress message so approved Beta.10 results are always shown to the teacher.
+Authentication, V6.5 Beta.10 and the guarded V6.4 fallback remain unchanged.
