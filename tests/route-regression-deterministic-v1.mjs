@@ -10,6 +10,7 @@ const suites = [
   { file: "history-fidelity-v1.mjs", covers: ["RTE-015"] },
   { file: "review-cache-fidelity-v1.mjs", covers: ["RTE-016", "RTE-017"] },
   { file: "docx-export-v1.mjs", covers: ["RTE-018"] },
+  { file: "review-stale-ui-v1.mjs", covers: ["RTE-019-STATIC"] },
   { file: "project-coherence-v1.mjs", covers: ["RTE-020-STRUCTURAL"] },
   { file: "full-cycle-fidelity-v1.mjs", covers: ["RTE-015", "RTE-016", "RTE-017", "RTE-018"] },
 ];
@@ -31,7 +32,7 @@ for (const suite of suites) {
 }
 
 const covered = new Set(results.flatMap(result => result.covers));
-for (const required of ["RTE-012-STRUCTURAL", "RTE-013", "RTE-015", "RTE-016", "RTE-017", "RTE-018", "RTE-020-STRUCTURAL"]) {
+for (const required of ["RTE-012-STRUCTURAL", "RTE-013", "RTE-015", "RTE-016", "RTE-017", "RTE-018", "RTE-019-STATIC", "RTE-020-STRUCTURAL"]) {
   assert.ok(covered.has(required), `Falta cobertura determinista declarada para ${required}`);
 }
 
