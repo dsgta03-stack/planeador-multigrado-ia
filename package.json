@@ -4,5 +4,5 @@
   "private": true,
   "type": "module",
   "engines": { "node": ">=22" },
-  "scripts": { "start": "node server-v0124-pedagogical-review-shadow.mjs" }
+  "scripts": { "start": "node server-v0124-history-fidelity-shadow.mjs" }
 }
