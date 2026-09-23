@@ -23,6 +23,11 @@
       "expected": {"rule_ids": ["PRJ-04"], "severity": "CRITICAL"}
     },
     {
+      "id": "pda-session-overdeclaration",
+      "description": "La cabecera de una sesión declara todos los PDA seleccionados, pero los momentos ejecutables sólo trazan un subconjunto.",
+      "expected": {"rule_ids": ["PDA-04"], "severity": "CRITICAL", "mode": "DETERMINISTIC-CONTEXT-POSTCHECK"}
+    },
+    {
       "id": "transversal-with-invented-pda",
       "description": "Una tarea TRANSVERSAL_PROJECT contiene pda_ids.",
       "expected": {"rule_ids": ["EVD-05"], "severity": "CRITICAL"}
