@@ -1,8 +1,8 @@
 {
   "name": "planeador-multigrado-ia-demo",
-  "version": "0.12.2",
+  "version": "0.12.3-pda-catalog-preview",
   "private": true,
   "type": "module",
   "engines": { "node": ">=22" },
-  "scripts": { "start": "node server-v0122-methodology-ui-freeze-fix.mjs" }
+  "scripts": { "start": "node server-v0123-pda-catalog.mjs" }
 }
