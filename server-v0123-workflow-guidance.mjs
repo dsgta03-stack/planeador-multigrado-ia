@@ -1,7 +1,7 @@
 import http from "node:http";
 import { spawn } from "node:child_process";
 
-// v0.12.3 is a visual workflow-guidance layer only.
+// v0.12.3 is a workflow-guidance layer over v0.12.2.
 // It preserves every API, planner rule, methodology rule and persistence behavior from v0.12.2.
 const PORT = Number(process.env.PORT || 3000);
 const CHILD_PORT = Number(process.env.MULTIPLAN_V0123_CHILD_PORT || 6801);
@@ -59,17 +59,22 @@ const WORKFLOW_UI = String.raw`
 </style>
 <script id="mp-workflow-v0123-script">(()=>{
   const STEPS=[
-    {id:'context',label:'Contexto',target:'contextCard',ready:()=>hasText('context')&&hasText('problem')&&selectedGrades()>0,waiting:'Define contexto, situación y grados.',done:'Contexto definido.'},
+    {id:'context',label:'Contexto',target:'contextCard',ready:()=>contextReady(),waiting:'Completa contexto, situación y grados.',done:'Contexto válido.'},
     {id:'pda',label:'PDA',target:'results',ready:()=>selectedPdas()>0,waiting:'Busca y selecciona los PDA pertinentes.',done:'PDA seleccionados.'},
     {id:'method',label:'Metodología',target:'mpMethodologyStep',ready:()=>methodChosen(),waiting:'Revisa la recomendación y decide.',done:'Metodología elegida.'},
     {id:'plan',label:'Planeación',target:'plan',ready:()=>planReady(),waiting:'Genera la secuencia didáctica.',done:'Planeación generada.'},
-    {id:'review',label:'Revisión',target:'plan',ready:()=>planReady(),waiting:'Comprueba coherencia antes de usarla.',done:'Lista para revisión docente.'},
+    {id:'review',label:'Revisión',target:'plan',ready:()=>reviewReady(),waiting:'Ejecuta la revisión pedagógica antes de considerar validada la planeación.',done:'Revisión pedagógica vigente.'},
   ];
-  function hasText(id){const el=document.getElementById(id);return !!String(el?.value||'').trim()}
+  function textAtLeast(id,min){const el=document.getElementById(id);return String(el?.value||'').trim().length>=min}
+  function contextReady(){return textAtLeast('context',10)&&textAtLeast('problem',5)&&selectedGrades()>0}
   function selectedGrades(){try{return Array.isArray(state?.grades)?state.grades.length:document.querySelectorAll('.grade.on').length}catch{return document.querySelectorAll('.grade.on').length}}
   function selectedPdas(){try{return Object.values(state?.selected||{}).filter(Boolean).length}catch{return document.querySelectorAll('.candidate.sel').length}}
   function methodChosen(){return !!document.querySelector('#mpMethodologyStep input[name="mpMethod"]:checked')||!!document.getElementById('mpPlanMethodHeader')}
   function planReady(){try{if(state?.latestPlanData&&Object.keys(state.latestPlanData).length)return true}catch{}const plan=document.getElementById('plan');if(!plan)return false;return !plan.classList.contains('hidden')&&plan.textContent.trim().length>120}
+  function reviewReady(){try{return !!(state?.pedagogicalReview||state?.reviewResult)?.status}catch{return false}}
+  function historyVisible(){const view=document.getElementById('mpHistoryView');return !!view&&getComputedStyle(view).display!=='none'}
+  function visible(el){if(!el)return false;if(el.classList?.contains('hidden'))return false;return !!(el.offsetWidth||el.offsetHeight||el.getClientRects().length)}
+  function clearSavedHistoryBanner(){const banner=document.getElementById('mpHistoryBackBanner');if(banner)banner.remove()}
   function build(){
     if(document.getElementById('mpWorkflowV0123'))return;
     const main=document.getElementById('mpMain'),hero=document.getElementById('mpHero');if(!main||!hero)return setTimeout(build,100);
@@ -80,18 +85,27 @@ const WORKFLOW_UI = String.raw`
     const steps=document.getElementById('mpWorkflowSteps');
     STEPS.forEach((step,i)=>{const b=document.createElement('button');b.type='button';b.className='mp-workflow-step';b.dataset.step=step.id;b.innerHTML='<span class="mp-workflow-num">'+(i+1)+'</span><span class="mp-workflow-label">'+step.label+'</span><span class="mp-workflow-state"></span>';b.addEventListener('click',()=>go(step));steps.appendChild(b)});
     const pill=document.querySelector('.mp-topbar .mp-pill');if(pill)pill.textContent='Multiplan v0.12.3 · V6.5 Beta.10';
-    document.addEventListener('input',scheduleUpdate,true);document.addEventListener('change',scheduleUpdate,true);document.addEventListener('click',()=>setTimeout(scheduleUpdate,120),true);
+    document.addEventListener('input',scheduleUpdate,true);document.addEventListener('change',scheduleUpdate,true);document.addEventListener('click',event=>{if(event.target?.closest?.('#search,#continue,#rebuild'))clearSavedHistoryBanner();setTimeout(scheduleUpdate,120)},true);
     update();setInterval(update,1200);
   }
-  function currentIndex(){for(let i=0;i<STEPS.length-1;i++)if(!STEPS[i].ready())return i;return planReady()?4:3}
+  function currentIndex(){for(let i=0;i<STEPS.length-1;i++)if(!STEPS[i].ready())return i;return 4}
   function update(){
-    const root=document.getElementById('mpWorkflowV0123');if(!root)return;
+    const root=document.getElementById('mpWorkflowV0123'),note=document.getElementById('mpWorkflowNote');if(!root)return;
+    const hide=historyVisible();root.style.display=hide?'none':'';if(hide){if(note)note.classList.remove('is-visible');return}
     const active=currentIndex();
-    root.querySelectorAll('.mp-workflow-step').forEach((button,i)=>{const step=STEPS[i],done=i<active||(i===4&&planReady());button.classList.toggle('is-done',done);button.classList.toggle('is-active',i===active);button.setAttribute('aria-current',i===active?'step':'false');const stateEl=button.querySelector('.mp-workflow-state');if(stateEl)stateEl.textContent=done?step.done:step.waiting});
-    const note=document.getElementById('mpWorkflowNote'),step=STEPS[active];if(note){note.classList.add('is-visible');note.innerHTML='<strong>Siguiente paso: '+step.label+'.</strong> '+step.waiting}
+    root.querySelectorAll('.mp-workflow-step').forEach((button,i)=>{const step=STEPS[i],done=step.ready()&&i<=active;button.classList.toggle('is-done',done);button.classList.toggle('is-active',i===active&&!step.ready());button.setAttribute('aria-current',i===active&&!step.ready()?'step':'false');const stateEl=button.querySelector('.mp-workflow-state');if(stateEl)stateEl.textContent=done?step.done:step.waiting});
+    const step=STEPS[active];if(note){note.classList.add('is-visible');note.innerHTML=step.ready()?'<strong>Ruta completa.</strong> La revisión pedagógica está vigente.':'<strong>Siguiente paso: '+step.label+'.</strong> '+step.waiting}
   }
   let queued=false;function scheduleUpdate(){if(queued)return;queued=true;requestAnimationFrame(()=>{queued=false;update()})}
-  function go(step){let target=document.getElementById(step.target);if(step.id==='method'&&(!target||target.classList.contains('hidden')))target=document.getElementById('results');if(target)target.scrollIntoView({behavior:'smooth',block:'start'})}
+  function targetFor(step){
+    const primary=document.getElementById(step.target);if(visible(primary))return primary;
+    if(step.id==='context')return document.getElementById('contextCard')||document.getElementById('context');
+    if(step.id==='pda')return visible(document.getElementById('results'))?document.getElementById('results'):document.getElementById('contextCard')||document.getElementById('search');
+    if(step.id==='method')return visible(document.getElementById('mpMethodologyStep'))?document.getElementById('mpMethodologyStep'):document.getElementById('results');
+    if(step.id==='plan')return visible(document.getElementById('plan'))?document.getElementById('plan'):document.getElementById('mpMethodologyStep')||document.getElementById('results');
+    return visible(document.getElementById('plan'))?document.getElementById('plan'):null;
+  }
+  function go(step){if(historyVisible())return;const target=targetFor(step);if(visible(target))target.scrollIntoView({behavior:'smooth',block:'start'})}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',build);else build();
 })();</script>`;
 
@@ -146,7 +160,7 @@ http.createServer(async (req, res) => {
     return json(res, 200, {
       ok: true,
       version: "0.12.3",
-      change: "WORKFLOW_GUIDANCE_UI",
+      change: "WORKFLOW_GUIDANCE_UI_HARDENED",
       base: "0.12.2",
       backendBehaviorModified: false,
       plannerRulesModified: false,
@@ -155,5 +169,5 @@ http.createServer(async (req, res) => {
   }
   return proxy(req, res);
 }).listen(PORT, "0.0.0.0", () => {
-  console.log(`Multiplan v0.12.3 on ${PORT}; workflow guidance UI over v0.12.2`);
+  console.log(`Multiplan v0.12.3 on ${PORT}; hardened workflow guidance UI over v0.12.2`);
 });
