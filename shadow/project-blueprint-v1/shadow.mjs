@@ -44,7 +44,7 @@ export async function generateShadow(sources,options={},provider=callProvider){
    gate=blueprintGate(input,semantic);
   }
   const status=reviewUnavailable?'PROVIDER_UNAVAILABLE':gate.status==='PASS'?'APPROVED':b.pda_analysis?.some(x=>['WEAK','INCOMPATIBLE'].includes(x.integration_strength))?'NEEDS_TEACHER_DECISION':revision===1?'NEEDS_REPAIR':gate.status==='NOT_EVALUABLE'?'NEEDS_REPAIR':'REJECTED';
-  revisions.push({revision,label:revision===1?(status==='APPROVED'?'PASS':'FAIL'):(status==='APPROVED'?'REPAIRED':'REPAIR_FAILED'),status,blueprint:b,gate,semantic,functional_diagnostics:b.final_outcome&&b.project_stages?functionalDiagnostics(b):[],diff:previous?structuralDiff(previous.blueprint,b):[],triggering_rules:repair?.triggering_rules.map(x=>x.rule_id)||[]});
+  revisions.push({revision,label:reviewUnavailable?'PROVIDER_UNAVAILABLE':revision===1?(status==='APPROVED'?'PASS':'FAIL'):(status==='APPROVED'?'REPAIRED':'REPAIR_FAILED'),status,blueprint:b,gate,semantic,functional_diagnostics:b.final_outcome&&b.project_stages?functionalDiagnostics(b):[],diff:previous?structuralDiff(previous.blueprint,b):[],triggering_rules:repair?.triggering_rules.map(x=>x.rule_id)||[]});
   if(['APPROVED','NEEDS_TEACHER_DECISION','PROVIDER_UNAVAILABLE'].includes(status))break;
  }
  const final=revisions.at(-1);

@@ -8,7 +8,7 @@ generator is implemented. No production database persistence is used.
 
 ```sh
 node --test shadow/project-blueprint-v1/tests/*.test.mjs
-node shadow/project-blueprint-v1/report.mjs
+node shadow/project-blueprint-v1/report-round2.mjs
 ```
 
 Do not rebuild fixtures to run tests: their versioned inputs and hashes are already
@@ -51,7 +51,7 @@ overlooks them. Satisfying their structure still requires semantic evaluation.
 
 Generation receives the three source contracts only. One repair attempt maximum
 is allowed per run. Original output, structural diff, triggering rules and failures
-are retained. Transport errors preserve earlier revisions and remain NEEDS_REPAIR.
+are retained. Exhausted transient provider errors preserve earlier revisions and return PROVIDER_UNAVAILABLE. The retry limit is three transport attempts with 1/2 second backoff; ambiguous timeouts are not replayed. Each complete review comprises GLOBAL, PDA, STAGES and METHOD checks of the same input. Incomplete local evidence cannot approve.
 Saved evidence is archived before a subsequent run writes the same filename.
 
 Approval is on an immutable envelope. The evaluated Blueprint remains DRAFT with
@@ -62,3 +62,5 @@ No production consumer is connected in this stage.
 `evidence/` contains real Gemini results separately from explicitly labeled test
 doubles. Read `DELIVERY.md` for results, limitations and the full schemas. The
 experiment is not ready for promotion or the SessionGraph phase.
+
+Round 2 is blocked by provider 503/429 responses. The current checkpoint contains complete corrected PB-007/PB-020 reviews; a full 22-fixture rerun and new generation remain pending. `run-generation-round2.mjs` enforces that prerequisite before sending any generation request. `DELIVERY-ROUND1.md` and `report.mjs` retain the historical round-1 delivery.

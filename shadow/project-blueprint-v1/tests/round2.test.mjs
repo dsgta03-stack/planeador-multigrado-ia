@@ -45,5 +45,5 @@ test('missing local proof cannot approve by operation labels alone',()=>{
 test('provider exhaustion during review retains candidate and consumes no repair revision',async()=>{
  const {blueprint,...src}=input();
  const r=await generateShadow(src,{},async task=>{if(task==='GENERATE')return{output:blueprint,telemetry:{task}};const e=Error('503');e.code='PROVIDER_UNAVAILABLE';throw e});
- assert.equal(r.status,'PROVIDER_UNAVAILABLE');assert.equal(r.revisions.length,1);assert.equal(r.repair_count,0);assert.equal(r.revisions[0].status,'PROVIDER_UNAVAILABLE');assert.equal(r.approved_blueprint_hash,null);
+ assert.equal(r.status,'PROVIDER_UNAVAILABLE');assert.equal(r.revisions.length,1);assert.equal(r.repair_count,0);assert.equal(r.revisions[0].status,'PROVIDER_UNAVAILABLE');assert.equal(r.revisions[0].label,'PROVIDER_UNAVAILABLE');assert.equal(r.approved_blueprint_hash,null);
 });

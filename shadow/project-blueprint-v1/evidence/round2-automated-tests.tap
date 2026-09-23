@@ -1,0 +1,388 @@
+TAP version 13
+# Subtest: hash changes: grades
+ok 1 - hash changes: grades
+  ---
+  duration_ms: 4.523881
+  type: 'test'
+  ...
+# Subtest: hash changes: selected_pda_ids
+ok 2 - hash changes: selected_pda_ids
+  ---
+  duration_ms: 0.762791
+  type: 'test'
+  ...
+# Subtest: hash changes: explicit_ltg_selections
+ok 3 - hash changes: explicit_ltg_selections
+  ---
+  duration_ms: 0.444416
+  type: 'test'
+  ...
+# Subtest: hash changes: requested_sessions
+ok 4 - hash changes: requested_sessions
+  ---
+  duration_ms: 0.479383
+  type: 'test'
+  ...
+# Subtest: hash changes: minutes_per_session
+ok 5 - hash changes: minutes_per_session
+  ---
+  duration_ms: 0.441722
+  type: 'test'
+  ...
+# Subtest: hash changes: original_problem
+ok 6 - hash changes: original_problem
+  ---
+  duration_ms: 0.471639
+  type: 'test'
+  ...
+# Subtest: hash changes: original_context
+ok 7 - hash changes: original_context
+  ---
+  duration_ms: 0.503743
+  type: 'test'
+  ...
+# Subtest: hash changes: students_by_grade
+ok 8 - hash changes: students_by_grade
+  ---
+  duration_ms: 0.451333
+  type: 'test'
+  ...
+# Subtest: hash changes: reading_profile
+ok 9 - hash changes: reading_profile
+  ---
+  duration_ms: 0.516619
+  type: 'test'
+  ...
+# Subtest: hash changes: writing_profile
+ok 10 - hash changes: writing_profile
+  ---
+  duration_ms: 1.549091
+  type: 'test'
+  ...
+# Subtest: hash changes: autonomy_profile
+ok 11 - hash changes: autonomy_profile
+  ---
+  duration_ms: 0.50463
+  type: 'test'
+  ...
+# Subtest: hash changes: connectivity
+ok 12 - hash changes: connectivity
+  ---
+  duration_ms: 0.607582
+  type: 'test'
+  ...
+# Subtest: hash changes: available_resources
+ok 13 - hash changes: available_resources
+  ---
+  duration_ms: 0.35569
+  type: 'test'
+  ...
+# Subtest: hash changes: supports
+ok 14 - hash changes: supports
+  ---
+  duration_ms: 0.323721
+  type: 'test'
+  ...
+# Subtest: hash changes: teacher_explicit_constraints
+ok 15 - hash changes: teacher_explicit_constraints
+  ---
+  duration_ms: 0.293323
+  type: 'test'
+  ...
+# Subtest: fingerprint stable across metadata and object key ordering
+ok 16 - fingerprint stable across metadata and object key ordering
+  ---
+  duration_ms: 0.587711
+  type: 'test'
+  ...
+# Subtest: official text changes snapshot hash
+ok 17 - official text changes snapshot hash
+  ---
+  duration_ms: 0.411022
+  type: 'test'
+  ...
+# Subtest: methodology unknown has no ABP fallback
+ok 18 - methodology unknown has no ABP fallback
+  ---
+  duration_ms: 0.326611
+  type: 'test'
+  ...
+# Subtest: accepted recommendation must equal choice
+ok 19 - accepted recommendation must equal choice
+  ---
+  duration_ms: 0.347412
+  type: 'test'
+  ...
+# Subtest: reject BPD-001
+ok 20 - reject BPD-001
+  ---
+  duration_ms: 4.788537
+  type: 'test'
+  ...
+# Subtest: reject BPD-002
+ok 21 - reject BPD-002
+  ---
+  duration_ms: 2.931344
+  type: 'test'
+  ...
+# Subtest: reject BPD-003
+ok 22 - reject BPD-003
+  ---
+  duration_ms: 2.043217
+  type: 'test'
+  ...
+# Subtest: reject BPD-004
+ok 23 - reject BPD-004
+  ---
+  duration_ms: 2.488477
+  type: 'test'
+  ...
+# Subtest: reject BPD-005
+ok 24 - reject BPD-005
+  ---
+  duration_ms: 3.233812
+  type: 'test'
+  ...
+# Subtest: reject BPD-006
+ok 25 - reject BPD-006
+  ---
+  duration_ms: 2.145858
+  type: 'test'
+  ...
+# Subtest: reject BPD-007
+ok 26 - reject BPD-007
+  ---
+  duration_ms: 2.349194
+  type: 'test'
+  ...
+# Subtest: reject BPD-008
+ok 27 - reject BPD-008
+  ---
+  duration_ms: 2.807062
+  type: 'test'
+  ...
+# Subtest: reject BPD-009
+ok 28 - reject BPD-009
+  ---
+  duration_ms: 3.592802
+  type: 'test'
+  ...
+# Subtest: reject BPD-010
+ok 29 - reject BPD-010
+  ---
+  duration_ms: 3.462299
+  type: 'test'
+  ...
+# Subtest: reject BPD-011
+ok 30 - reject BPD-011
+  ---
+  duration_ms: 1.89495
+  type: 'test'
+  ...
+# Subtest: reject BPD-012
+ok 31 - reject BPD-012
+  ---
+  duration_ms: 1.777033
+  type: 'test'
+  ...
+# Subtest: reject BPD-013
+ok 32 - reject BPD-013
+  ---
+  duration_ms: 1.368846
+  type: 'test'
+  ...
+# Subtest: reject BPD-014
+ok 33 - reject BPD-014
+  ---
+  duration_ms: 1.817578
+  type: 'test'
+  ...
+# Subtest: reject BPD-015
+ok 34 - reject BPD-015
+  ---
+  duration_ms: 1.4716
+  type: 'test'
+  ...
+# Subtest: reject BPD-016
+ok 35 - reject BPD-016
+  ---
+  duration_ms: 0.935208
+  type: 'test'
+  ...
+# Subtest: reject BPD-017
+ok 36 - reject BPD-017
+  ---
+  duration_ms: 1.81145
+  type: 'test'
+  ...
+# Subtest: reject BPD-018
+ok 37 - reject BPD-018
+  ---
+  duration_ms: 1.530393
+  type: 'test'
+  ...
+# Subtest: reject BPD-019
+ok 38 - reject BPD-019
+  ---
+  duration_ms: 2.568835
+  type: 'test'
+  ...
+# Subtest: reject BPD-020
+ok 39 - reject BPD-020
+  ---
+  duration_ms: 1.904952
+  type: 'test'
+  ...
+# Subtest: all authored deterministic fixtures
+ok 40 - all authored deterministic fixtures
+  ---
+  duration_ms: 34.735572
+  type: 'test'
+  ...
+# Subtest: gate does not mutate any input and no semantic means no PASS
+ok 41 - gate does not mutate any input and no semantic means no PASS
+  ---
+  duration_ms: 1.498596
+  type: 'test'
+  ...
+# Subtest: stale semantic review cannot approve changed content
+ok 42 - stale semantic review cannot approve changed content
+  ---
+  duration_ms: 8.911778
+  type: 'test'
+  ...
+# Subtest: missing/duplicate semantic rule fails closed
+ok 43 - missing/duplicate semantic rule fails closed
+  ---
+  duration_ms: 2.282005
+  type: 'test'
+  ...
+# Subtest: weak PDA requests teacher without substitutions
+ok 44 - weak PDA requests teacher without substitutions
+  ---
+  duration_ms: 2.42
+  type: 'test'
+  ...
+# Subtest: constraints corruption and altered decision ID binding fail
+ok 45 - constraints corruption and altered decision ID binding fail
+  ---
+  duration_ms: 2.627201
+  type: 'test'
+  ...
+# Subtest: generation rejects legacy sessions as source
+ok 46 - generation rejects legacy sessions as source
+  ---
+  duration_ms: 5.446615
+  type: 'test'
+  ...
+# Subtest: bounded repair preserves revision 1 and reruns gate
+ok 47 - bounded repair preserves revision 1 and reruns gate
+  ---
+  duration_ms: 10.858663
+  type: 'test'
+  ...
+# Subtest: museum cannot pass with missing explicit circulation requirements even if reviewer overlooks them
+ok 48 - museum cannot pass with missing explicit circulation requirements even if reviewer overlooks them
+  ---
+  duration_ms: 8.432325
+  type: 'test'
+  ...
+# Subtest: authored 5-session architecture covers operations without proportional allocation
+ok 49 - authored 5-session architecture covers operations without proportional allocation
+  ---
+  duration_ms: 3.147767
+  type: 'test'
+  ...
+# Subtest: authored 12-session architecture covers operations without proportional allocation
+ok 50 - authored 12-session architecture covers operations without proportional allocation
+  ---
+  duration_ms: 2.053686
+  type: 'test'
+  ...
+# Subtest: reject stage consumed before its production session even if session inputs omit it
+ok 51 - reject stage consumed before its production session even if session inputs omit it
+  ---
+  duration_ms: 1.74658
+  type: 'test'
+  ...
+# Subtest: live provider refuses execution without explicit shadow environment or in production
+ok 52 - live provider refuses execution without explicit shadow environment or in production
+  ---
+  duration_ms: 0.896719
+  type: 'test'
+  ...
+# Subtest: repair transport error preserves revision one and cannot approve
+ok 53 - repair transport error preserves revision one and cannot approve
+  ---
+  duration_ms: 4.168012
+  type: 'test'
+  ...
+# Subtest: initial provider outage yields recorded unevaluated result with no invented blueprint
+ok 54 - initial provider outage yields recorded unevaluated result with no invented blueprint
+  ---
+  duration_ms: 0.64974
+  type: 'test'
+  ...
+# Subtest: 503 retry bounded with backoff, identical requests and complete attempt telemetry
+ok 55 - 503 retry bounded with backoff, identical requests and complete attempt telemetry
+  ---
+  duration_ms: 7.095446
+  type: 'test'
+  ...
+# Subtest: exhausted 503 is PROVIDER_UNAVAILABLE and never invents output
+ok 56 - exhausted 503 is PROVIDER_UNAVAILABLE and never invents output
+  ---
+  duration_ms: 3.597052
+  type: 'test'
+  ...
+# Subtest: ambiguous network timeout is not replayed
+ok 57 - ambiguous network timeout is not replayed
+  ---
+  duration_ms: 2.281782
+  type: 'test'
+  ...
+# Subtest: authorization failure is not retried or mislabeled pedagogy/unavailable
+ok 58 - authorization failure is not retried or mislabeled pedagogy/unavailable
+  ---
+  duration_ms: 3.352667
+  type: 'test'
+  ...
+# Subtest: generation request constrains source, destination, resource and method without changing contract
+ok 59 - generation request constrains source, destination, resource and method without changing contract
+  ---
+  duration_ms: 0.589327
+  type: 'test'
+  ...
+# Subtest: local evidence packets contain only PDA-owning grade contributions
+ok 60 - local evidence packets contain only PDA-owning grade contributions
+  ---
+  duration_ms: 0.618105
+  type: 'test'
+  ...
+# Subtest: local PDA failure cannot be masked by a global PASS for any cognitive action
+ok 61 - local PDA failure cannot be masked by a global PASS for any cognitive action
+  ---
+  duration_ms: 0.642796
+  type: 'test'
+  ...
+# Subtest: missing local proof cannot approve by operation labels alone
+ok 62 - missing local proof cannot approve by operation labels alone
+  ---
+  duration_ms: 0.339228
+  type: 'test'
+  ...
+# Subtest: provider exhaustion during review retains candidate and consumes no repair revision
+ok 63 - provider exhaustion during review retains candidate and consumes no repair revision
+  ---
+  duration_ms: 6.437364
+  type: 'test'
+  ...
+1..63
+# tests 63
+# suites 0
+# pass 63
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 247.704872

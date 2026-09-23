@@ -1,0 +1,1739 @@
+{
+  "status": "BLOCKED_PROVIDER_UNAVAILABLE",
+  "checkpoint": "9e251fb801a174075ffc5b4d54f7f90f87779a4e",
+  "baseline_complete_expectations": 20,
+  "current_complete_expectations": 2,
+  "fixtures": [
+    {
+      "fixture": "PB-001",
+      "methodology": "proyectos_comunitarios",
+      "before_match": true,
+      "actual": "Error: SHADOW_DISABLED:403",
+      "complete": false,
+      "match": false,
+      "deterministic_failures": [],
+      "semantic_failures": [
+        "BPS-003"
+      ],
+      "evidence_file": "PB-001.json",
+      "review_model": "gemini-3.1-flash-lite"
+    },
+    {
+      "fixture": "PB-002",
+      "methodology": "proyectos_comunitarios",
+      "before_match": true,
+      "actual": "Error: SHADOW_DISABLED:403",
+      "complete": false,
+      "match": false,
+      "deterministic_failures": [],
+      "semantic_failures": [],
+      "evidence_file": "PB-002.json",
+      "review_model": "gemini-3.1-flash-lite"
+    },
+    {
+      "fixture": "PB-003",
+      "methodology": "abp",
+      "before_match": true,
+      "actual": "Error: SHADOW_DISABLED:403",
+      "complete": false,
+      "match": false,
+      "deterministic_failures": [
+        "BPD-008",
+        "BPD-009",
+        "BPD-010"
+      ],
+      "semantic_failures": [],
+      "evidence_file": "PB-003.json",
+      "review_model": "gemini-3.1-flash-lite"
+    },
+    {
+      "fixture": "PB-004",
+      "methodology": "aprendizaje_servicio",
+      "before_match": true,
+      "actual": "Error: SHADOW_DISABLED:403",
+      "complete": false,
+      "match": false,
+      "deterministic_failures": [],
+      "semantic_failures": [],
+      "evidence_file": "PB-004.json",
+      "review_model": "gemini-3.1-flash-lite"
+    },
+    {
+      "fixture": "PB-005",
+      "methodology": "steam",
+      "before_match": true,
+      "actual": "Error: SHADOW_DISABLED:403",
+      "complete": false,
+      "match": false,
+      "deterministic_failures": [
+        "BPD-019"
+      ],
+      "semantic_failures": [],
+      "evidence_file": "PB-005.json",
+      "review_model": "gemini-3.1-flash-lite"
+    },
+    {
+      "fixture": "PB-006",
+      "methodology": "abp",
+      "before_match": true,
+      "actual": "Error: SHADOW_DISABLED:403",
+      "complete": false,
+      "match": false,
+      "deterministic_failures": [
+        "BPD-007"
+      ],
+      "semantic_failures": [],
+      "evidence_file": "PB-006.json",
+      "review_model": "gemini-3.1-flash-lite"
+    },
+    {
+      "fixture": "PB-007",
+      "methodology": "abp",
+      "before_match": false,
+      "actual": "FAIL",
+      "complete": true,
+      "match": true,
+      "deterministic_failures": [],
+      "semantic_failures": [
+        "BPS-004",
+        "BPS-005",
+        "BPS-007",
+        "BPS-008"
+      ],
+      "evidence_file": "PB-007.json",
+      "review_model": "gemini-3.1-flash-lite"
+    },
+    {
+      "fixture": "PB-008",
+      "methodology": "proyectos_comunitarios",
+      "before_match": true,
+      "actual": "Error: SHADOW_DISABLED:403",
+      "complete": false,
+      "match": false,
+      "deterministic_failures": [],
+      "semantic_failures": [],
+      "evidence_file": "PB-008.json",
+      "review_model": "gemini-3.1-flash-lite"
+    },
+    {
+      "fixture": "PB-009",
+      "methodology": "proyectos_comunitarios",
+      "before_match": true,
+      "actual": "Error: SHADOW_DISABLED:403",
+      "complete": false,
+      "match": false,
+      "deterministic_failures": [],
+      "semantic_failures": [],
+      "evidence_file": "PB-009.json",
+      "review_model": "gemini-3.1-flash-lite"
+    },
+    {
+      "fixture": "PB-010",
+      "methodology": "abp",
+      "before_match": true,
+      "actual": "PROVIDER_UNAVAILABLE",
+      "complete": false,
+      "match": false,
+      "deterministic_failures": [],
+      "semantic_failures": [],
+      "evidence_file": "PB-010.json",
+      "review_model": "gemini-3.1-pro-preview"
+    },
+    {
+      "fixture": "PB-011-STEAM-PASS",
+      "methodology": "steam",
+      "before_match": true,
+      "actual": "Error: SHADOW_DISABLED:403",
+      "complete": false,
+      "match": false,
+      "deterministic_failures": [],
+      "semantic_failures": [],
+      "evidence_file": "PB-011-STEAM-PASS.json",
+      "review_model": "gemini-3.1-flash-lite"
+    },
+    {
+      "fixture": "PB-012-SERVICIO-PASS",
+      "methodology": "aprendizaje_servicio",
+      "before_match": true,
+      "actual": "Error: PROVIDER_ERROR:503",
+      "complete": false,
+      "match": false,
+      "deterministic_failures": [],
+      "semantic_failures": [],
+      "evidence_file": "PB-012-SERVICIO-PASS.json",
+      "review_model": "gemini-3.1-flash-lite"
+    },
+    {
+      "fixture": "PB-013-COMUNITARIO-PASS",
+      "methodology": "proyectos_comunitarios",
+      "before_match": true,
+      "actual": "Error: PROVIDER_ERROR:503",
+      "complete": false,
+      "match": false,
+      "deterministic_failures": [],
+      "semantic_failures": [],
+      "evidence_file": "PB-013-COMUNITARIO-PASS.json",
+      "review_model": "gemini-3.1-flash-lite"
+    },
+    {
+      "fixture": "PB-014-UN-GRADO-UNA-SESION",
+      "methodology": "abp",
+      "before_match": true,
+      "actual": "Error: PROVIDER_ERROR:503",
+      "complete": false,
+      "match": false,
+      "deterministic_failures": [],
+      "semantic_failures": [],
+      "evidence_file": "PB-014-UN-GRADO-UNA-SESION.json",
+      "review_model": "gemini-3.1-flash-lite"
+    },
+    {
+      "fixture": "PB-015-SEIS-GRADOS-DOS-SESIONES",
+      "methodology": "proyectos_comunitarios",
+      "before_match": true,
+      "actual": "Error: PROVIDER_ERROR:503",
+      "complete": false,
+      "match": false,
+      "deterministic_failures": [],
+      "semantic_failures": [],
+      "evidence_file": "PB-015-SEIS-GRADOS-DOS-SESIONES.json",
+      "review_model": "gemini-3.1-flash-lite"
+    },
+    {
+      "fixture": "PB-016-LTG-CORE",
+      "methodology": "abp",
+      "before_match": true,
+      "actual": "Error: PROVIDER_ERROR:503",
+      "complete": false,
+      "match": false,
+      "deterministic_failures": [],
+      "semantic_failures": [],
+      "evidence_file": "PB-016-LTG-CORE.json",
+      "review_model": "gemini-3.1-flash-lite"
+    },
+    {
+      "fixture": "PB-017-LTG-SUPPORT",
+      "methodology": "abp",
+      "before_match": true,
+      "actual": "Error: SHADOW_DISABLED:403",
+      "complete": false,
+      "match": false,
+      "deterministic_failures": [],
+      "semantic_failures": [],
+      "evidence_file": "PB-017-LTG-SUPPORT.json",
+      "review_model": "gemini-3.1-flash-lite"
+    },
+    {
+      "fixture": "PB-018-LTG-OPTIONAL",
+      "methodology": "abp",
+      "before_match": true,
+      "actual": "Error: SHADOW_DISABLED:403",
+      "complete": false,
+      "match": false,
+      "deterministic_failures": [],
+      "semantic_failures": [],
+      "evidence_file": "PB-018-LTG-OPTIONAL.json",
+      "review_model": "gemini-3.1-flash-lite"
+    },
+    {
+      "fixture": "PB-019-WEAK",
+      "methodology": "abp",
+      "before_match": true,
+      "actual": "Error: SHADOW_DISABLED:403",
+      "complete": false,
+      "match": false,
+      "deterministic_failures": [],
+      "semantic_failures": [],
+      "evidence_file": "PB-019-WEAK.json",
+      "review_model": "gemini-3.1-flash-lite"
+    },
+    {
+      "fixture": "PB-020-MUSEO-REAL",
+      "methodology": "proyectos_comunitarios",
+      "before_match": false,
+      "actual": "FAIL",
+      "complete": true,
+      "match": true,
+      "deterministic_failures": [
+        "BPD-008",
+        "BPD-009",
+        "BPD-010"
+      ],
+      "semantic_failures": [
+        "BPS-003",
+        "BPS-007",
+        "BPS-008"
+      ],
+      "evidence_file": "PB-020-MUSEO-REAL.json",
+      "review_model": "gemini-3.1-flash-lite"
+    },
+    {
+      "fixture": "PB-021-CINCO-SESIONES",
+      "methodology": "abp",
+      "before_match": true,
+      "actual": "Error: SHADOW_DISABLED:403",
+      "complete": false,
+      "match": false,
+      "deterministic_failures": [],
+      "semantic_failures": [],
+      "evidence_file": "PB-021-CINCO-SESIONES.json",
+      "review_model": "gemini-3.1-flash-lite"
+    },
+    {
+      "fixture": "PB-022-MAS-SESIONES-QUE-OPERACIONES",
+      "methodology": "abp",
+      "before_match": true,
+      "actual": "Error: SHADOW_DISABLED:403",
+      "complete": false,
+      "match": false,
+      "deterministic_failures": [],
+      "semantic_failures": [],
+      "evidence_file": "PB-022-MAS-SESIONES-QUE-OPERACIONES.json",
+      "review_model": "gemini-3.1-flash-lite"
+    }
+  ],
+  "recorded_logical_calls": 41,
+  "recorded_transport_attempts": 59,
+  "recorded_tokens": 51610,
+  "recorded_latency_ms": 216514,
+  "cost": null,
+  "calls": [
+    {
+      "file": "PB-001.json",
+      "task": "REVIEW",
+      "review_focus": "GLOBAL",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+      "input_hash": "662e4788bd1acfb795e4394fc69be26285316a393122892c7626ff10b8c67e4f",
+      "output_hash": null,
+      "usage": null,
+      "cost": null,
+      "latency_ms": 16552,
+      "attempts": [
+        {
+          "attempt": 1,
+          "latency_ms": 16551,
+          "http_status": 403,
+          "provider_status": null,
+          "usage": null,
+          "output_hash": null
+        }
+      ],
+      "completed_review_calls": []
+    },
+    {
+      "file": "PB-002.json",
+      "task": "REVIEW",
+      "review_focus": "GLOBAL",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+      "input_hash": "af3ef9d729aa442b015cae5cce6e00bc0bbd69520c6cc01591ce02d2698168d7",
+      "output_hash": null,
+      "usage": null,
+      "cost": null,
+      "latency_ms": 146,
+      "attempts": [
+        {
+          "attempt": 1,
+          "latency_ms": 144,
+          "http_status": 403,
+          "provider_status": null,
+          "usage": null,
+          "output_hash": null
+        }
+      ],
+      "completed_review_calls": []
+    },
+    {
+      "file": "PB-003.json",
+      "task": "REVIEW",
+      "review_focus": "GLOBAL",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+      "input_hash": "34e6321a4e7ff204e05b7e3e79637b9e9bfa18a8228331847ec90b9f114e3767",
+      "output_hash": null,
+      "usage": null,
+      "cost": null,
+      "latency_ms": 141,
+      "attempts": [
+        {
+          "attempt": 1,
+          "latency_ms": 141,
+          "http_status": 403,
+          "provider_status": null,
+          "usage": null,
+          "output_hash": null
+        }
+      ],
+      "completed_review_calls": []
+    },
+    {
+      "file": "PB-004.json",
+      "task": "REVIEW",
+      "review_focus": "GLOBAL",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+      "input_hash": "d76cb7150963ce554b4bb94b16c9804b8451f763b9e95269428c548dad28f318",
+      "output_hash": null,
+      "usage": null,
+      "cost": null,
+      "latency_ms": 143,
+      "attempts": [
+        {
+          "attempt": 1,
+          "latency_ms": 142,
+          "http_status": 403,
+          "provider_status": null,
+          "usage": null,
+          "output_hash": null
+        }
+      ],
+      "completed_review_calls": []
+    },
+    {
+      "file": "PB-005.json",
+      "task": "REVIEW",
+      "review_focus": "GLOBAL",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+      "input_hash": "b5d99eab8a0d37dcf92e74383e7892dbb8df6f1fde031e5e23c3042b79e37904",
+      "output_hash": null,
+      "usage": null,
+      "cost": null,
+      "latency_ms": 135,
+      "attempts": [
+        {
+          "attempt": 1,
+          "latency_ms": 135,
+          "http_status": 403,
+          "provider_status": null,
+          "usage": null,
+          "output_hash": null
+        }
+      ],
+      "completed_review_calls": []
+    },
+    {
+      "file": "PB-006.json",
+      "task": "REVIEW",
+      "review_focus": "GLOBAL",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+      "input_hash": "000aa4ef59edd13d3673e01b43a76c7875d8d61ddb0678a3ffb54bd53d725fc0",
+      "output_hash": null,
+      "usage": null,
+      "cost": null,
+      "latency_ms": 143,
+      "attempts": [
+        {
+          "attempt": 1,
+          "latency_ms": 143,
+          "http_status": 403,
+          "provider_status": null,
+          "usage": null,
+          "output_hash": null
+        }
+      ],
+      "completed_review_calls": []
+    },
+    {
+      "file": "PB-007-attempt-1790165851856.json",
+      "task": "REVIEW",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+      "input_hash": "8b38933a8ba433f000536bdb86eb302b54240083adeca8fe6bd2a00d1495817f",
+      "output_hash": "2f4fc132e6a72de30c854d6eccba9f124dba95692a5444aaa4a2ec4e30d5d624",
+      "usage": {
+        "promptTokenCount": 6559,
+        "candidatesTokenCount": 1093,
+        "totalTokenCount": 7652,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 6559
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "cost": null,
+      "latency_ms": 12697,
+      "provider_latency_ms": 4695,
+      "finish_reason": "STOP",
+      "attempts": [
+        {
+          "attempt": 1,
+          "latency_ms": 12695,
+          "http_status": 200,
+          "provider_status": null,
+          "usage": {
+            "promptTokenCount": 6559,
+            "candidatesTokenCount": 1093,
+            "totalTokenCount": 7652,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 6559
+              }
+            ],
+            "serviceTier": "standard"
+          },
+          "output_hash": "2f4fc132e6a72de30c854d6eccba9f124dba95692a5444aaa4a2ec4e30d5d624"
+        }
+      ]
+    },
+    {
+      "file": "PB-007-attempt-1790165908978.json",
+      "task": "REVIEW",
+      "provider": "google",
+      "model": "gemini-2.5-pro",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+      "input_hash": "304b95b4e9e796e68073ece3484375d2ab8904b6b2b47dbd1ba363d3c35c461a",
+      "output_hash": null,
+      "usage": null,
+      "cost": null,
+      "latency_ms": 8723,
+      "attempts": [
+        {
+          "attempt": 1,
+          "latency_ms": 8722,
+          "http_status": 502,
+          "provider_status": 404,
+          "usage": null,
+          "output_hash": null
+        }
+      ]
+    },
+    {
+      "file": "PB-007-attempt-1790166009268.json",
+      "task": "REVIEW",
+      "provider": "google",
+      "model": "gemini-3.1-pro-preview",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+      "input_hash": "304b95b4e9e796e68073ece3484375d2ab8904b6b2b47dbd1ba363d3c35c461a",
+      "output_hash": null,
+      "usage": null,
+      "cost": null,
+      "latency_ms": 8649,
+      "attempts": [
+        {
+          "attempt": 1,
+          "latency_ms": 4967,
+          "http_status": 502,
+          "provider_status": 429,
+          "usage": null,
+          "output_hash": null,
+          "backoff_ms": 1000
+        },
+        {
+          "attempt": 2,
+          "latency_ms": 354,
+          "http_status": 502,
+          "provider_status": 429,
+          "usage": null,
+          "output_hash": null,
+          "backoff_ms": 2000
+        },
+        {
+          "attempt": 3,
+          "latency_ms": 324,
+          "http_status": 502,
+          "provider_status": 429,
+          "usage": null,
+          "output_hash": null
+        }
+      ]
+    },
+    {
+      "file": "PB-007.json",
+      "task": "REVIEW",
+      "review_focus": "GLOBAL",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+      "input_hash": "c0d57b9533685def2dc2360823df54a9df18355d80a4c9ec3054ec75991278b8",
+      "output_hash": "eb02a627a2bc9dc47cd1576dc5f22ffb2e023a08dd21ccc1147258989d6b8229",
+      "usage": {
+        "promptTokenCount": 4925,
+        "candidatesTokenCount": 1117,
+        "totalTokenCount": 6042,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 4925
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "cost": null,
+      "latency_ms": 9586,
+      "provider_latency_ms": 4087,
+      "finish_reason": "STOP",
+      "attempts": [
+        {
+          "attempt": 1,
+          "latency_ms": 9585,
+          "http_status": 200,
+          "provider_status": null,
+          "usage": {
+            "promptTokenCount": 4925,
+            "candidatesTokenCount": 1117,
+            "totalTokenCount": 6042,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 4925
+              }
+            ],
+            "serviceTier": "standard"
+          },
+          "output_hash": "eb02a627a2bc9dc47cd1576dc5f22ffb2e023a08dd21ccc1147258989d6b8229"
+        }
+      ]
+    },
+    {
+      "file": "PB-007.json",
+      "task": "REVIEW",
+      "review_focus": "PDA",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+      "input_hash": "f0e6490960860accbf87869fce0889a3983a9254eaba63bdd51d0b53eb9fcf34",
+      "output_hash": "235d9024d61608fe1d90ca9ed78f002217724c902a1c92276c05db333616e83c",
+      "usage": {
+        "promptTokenCount": 2275,
+        "candidatesTokenCount": 328,
+        "totalTokenCount": 2603,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 2275
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "cost": null,
+      "latency_ms": 1669,
+      "provider_latency_ms": 1489,
+      "finish_reason": "STOP",
+      "attempts": [
+        {
+          "attempt": 1,
+          "latency_ms": 1668,
+          "http_status": 200,
+          "provider_status": null,
+          "usage": {
+            "promptTokenCount": 2275,
+            "candidatesTokenCount": 328,
+            "totalTokenCount": 2603,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 2275
+              }
+            ],
+            "serviceTier": "standard"
+          },
+          "output_hash": "235d9024d61608fe1d90ca9ed78f002217724c902a1c92276c05db333616e83c"
+        }
+      ]
+    },
+    {
+      "file": "PB-007.json",
+      "task": "REVIEW",
+      "review_focus": "STAGES",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+      "input_hash": "d06e33b8432c03679a5bc0767b77fb4b60b0d046ee2d7e20afcbcb680be6d736",
+      "output_hash": "9495034f0d2f83a14fe0d281d012f94e203e7e29bbed9c96545c0197d3514407",
+      "usage": {
+        "promptTokenCount": 1571,
+        "candidatesTokenCount": 457,
+        "totalTokenCount": 2028,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1571
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "cost": null,
+      "latency_ms": 4811,
+      "provider_latency_ms": 4600,
+      "finish_reason": "STOP",
+      "attempts": [
+        {
+          "attempt": 1,
+          "latency_ms": 4811,
+          "http_status": 200,
+          "provider_status": null,
+          "usage": {
+            "promptTokenCount": 1571,
+            "candidatesTokenCount": 457,
+            "totalTokenCount": 2028,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 1571
+              }
+            ],
+            "serviceTier": "standard"
+          },
+          "output_hash": "9495034f0d2f83a14fe0d281d012f94e203e7e29bbed9c96545c0197d3514407"
+        }
+      ]
+    },
+    {
+      "file": "PB-007.json",
+      "task": "REVIEW",
+      "review_focus": "METHOD",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+      "input_hash": "435141ccf924fd0375fac62396c91f28f46df4646713ddccbbfab3a20ce42e10",
+      "output_hash": "c8e168ab8eff7b6cccd0e6baeff71e6d6367edec1115f3fbf1662a2bfd11efed",
+      "usage": {
+        "promptTokenCount": 1589,
+        "candidatesTokenCount": 666,
+        "totalTokenCount": 2255,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1589
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "cost": null,
+      "latency_ms": 3831,
+      "provider_latency_ms": 3659,
+      "finish_reason": "STOP",
+      "attempts": [
+        {
+          "attempt": 1,
+          "latency_ms": 3831,
+          "http_status": 200,
+          "provider_status": null,
+          "usage": {
+            "promptTokenCount": 1589,
+            "candidatesTokenCount": 666,
+            "totalTokenCount": 2255,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 1589
+              }
+            ],
+            "serviceTier": "standard"
+          },
+          "output_hash": "c8e168ab8eff7b6cccd0e6baeff71e6d6367edec1115f3fbf1662a2bfd11efed"
+        }
+      ]
+    },
+    {
+      "file": "PB-008.json",
+      "task": "REVIEW",
+      "review_focus": "GLOBAL",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+      "input_hash": "1b183a99343a0552ecfbab362a8e114bbedf95a91692386a08a51d30256c0e8d",
+      "output_hash": null,
+      "usage": null,
+      "cost": null,
+      "latency_ms": 139,
+      "attempts": [
+        {
+          "attempt": 1,
+          "latency_ms": 139,
+          "http_status": 403,
+          "provider_status": null,
+          "usage": null,
+          "output_hash": null
+        }
+      ],
+      "completed_review_calls": []
+    },
+    {
+      "file": "PB-009.json",
+      "task": "REVIEW",
+      "review_focus": "GLOBAL",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+      "input_hash": "4a23aabbe07a618bfaff3157683cab754bde91789c6560c428ec0feece267a39",
+      "output_hash": null,
+      "usage": null,
+      "cost": null,
+      "latency_ms": 156,
+      "attempts": [
+        {
+          "attempt": 1,
+          "latency_ms": 156,
+          "http_status": 403,
+          "provider_status": null,
+          "usage": null,
+          "output_hash": null
+        }
+      ],
+      "completed_review_calls": []
+    },
+    {
+      "file": "PB-010-attempt-1790181750395.json",
+      "task": "REVIEW",
+      "review_focus": "GLOBAL",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+      "input_hash": "950510946ebc56c37dffa3604e447d18469af7a0f5cdc87eff8a19b895ebb60b",
+      "output_hash": null,
+      "usage": null,
+      "cost": null,
+      "latency_ms": 142,
+      "attempts": [
+        {
+          "attempt": 1,
+          "latency_ms": 142,
+          "http_status": 403,
+          "provider_status": null,
+          "usage": null,
+          "output_hash": null
+        }
+      ],
+      "completed_review_calls": []
+    },
+    {
+      "file": "PB-010.json",
+      "task": "REVIEW",
+      "review_focus": "GLOBAL",
+      "provider": "google",
+      "model": "gemini-3.1-pro-preview",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+      "input_hash": "950510946ebc56c37dffa3604e447d18469af7a0f5cdc87eff8a19b895ebb60b",
+      "output_hash": null,
+      "usage": null,
+      "cost": null,
+      "latency_ms": 9901,
+      "attempts": [
+        {
+          "attempt": 1,
+          "latency_ms": 6326,
+          "http_status": 502,
+          "provider_status": 429,
+          "usage": null,
+          "output_hash": null,
+          "backoff_ms": 1000
+        },
+        {
+          "attempt": 2,
+          "latency_ms": 292,
+          "http_status": 502,
+          "provider_status": 429,
+          "usage": null,
+          "output_hash": null,
+          "backoff_ms": 2000
+        },
+        {
+          "attempt": 3,
+          "latency_ms": 279,
+          "http_status": 502,
+          "provider_status": 429,
+          "usage": null,
+          "output_hash": null
+        }
+      ],
+      "completed_review_calls": []
+    },
+    {
+      "file": "PB-011-STEAM-PASS.json",
+      "task": "REVIEW",
+      "review_focus": "GLOBAL",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+      "input_hash": "895d5744563d04f482b4beacb8c86b0a45008ad89adb4d2db61851ad8975fc78",
+      "output_hash": null,
+      "usage": null,
+      "cost": null,
+      "latency_ms": 179,
+      "attempts": [
+        {
+          "attempt": 1,
+          "latency_ms": 178,
+          "http_status": 403,
+          "provider_status": null,
+          "usage": null,
+          "output_hash": null
+        }
+      ],
+      "completed_review_calls": []
+    },
+    {
+      "file": "PB-012-SERVICIO-PASS-attempt-1790181685046.json",
+      "task": "REVIEW",
+      "review_focus": "GLOBAL",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+      "input_hash": "c0d3aaaad4f3760da5ac72819854a6f4b710a982e8247f1f2881c92285e4ffb4",
+      "output_hash": null,
+      "usage": null,
+      "cost": null,
+      "latency_ms": 8026,
+      "attempts": [
+        {
+          "attempt": 1,
+          "latency_ms": 8024,
+          "http_status": 403,
+          "provider_status": null,
+          "usage": null,
+          "output_hash": null
+        }
+      ],
+      "completed_review_calls": []
+    },
+    {
+      "file": "PB-012-SERVICIO-PASS.json",
+      "task": "REVIEW",
+      "review_focus": "GLOBAL",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+      "input_hash": "c0d3aaaad4f3760da5ac72819854a6f4b710a982e8247f1f2881c92285e4ffb4",
+      "output_hash": null,
+      "usage": null,
+      "cost": null,
+      "latency_ms": 29832,
+      "attempts": [
+        {
+          "attempt": 1,
+          "latency_ms": 7914,
+          "http_status": 502,
+          "provider_status": 503,
+          "usage": null,
+          "output_hash": null,
+          "backoff_ms": 1000
+        },
+        {
+          "attempt": 2,
+          "latency_ms": 15415,
+          "http_status": 502,
+          "provider_status": 503,
+          "usage": null,
+          "output_hash": null,
+          "backoff_ms": 2000
+        },
+        {
+          "attempt": 3,
+          "latency_ms": 3499,
+          "http_status": 502,
+          "provider_status": 503,
+          "usage": null,
+          "output_hash": null
+        }
+      ],
+      "completed_review_calls": []
+    },
+    {
+      "file": "PB-013-COMUNITARIO-PASS-attempt-1790181693505.json",
+      "task": "REVIEW",
+      "review_focus": "GLOBAL",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+      "input_hash": "9bbb1d19e8fafcd13bda9d5007d1e4b6b8a95658f6bd703e34bd9901af04866a",
+      "output_hash": null,
+      "usage": null,
+      "cost": null,
+      "latency_ms": 151,
+      "attempts": [
+        {
+          "attempt": 1,
+          "latency_ms": 149,
+          "http_status": 403,
+          "provider_status": null,
+          "usage": null,
+          "output_hash": null
+        }
+      ],
+      "completed_review_calls": []
+    },
+    {
+      "file": "PB-013-COMUNITARIO-PASS.json",
+      "task": "REVIEW",
+      "review_focus": "GLOBAL",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+      "input_hash": "9bbb1d19e8fafcd13bda9d5007d1e4b6b8a95658f6bd703e34bd9901af04866a",
+      "output_hash": null,
+      "usage": null,
+      "cost": null,
+      "latency_ms": 8457,
+      "attempts": [
+        {
+          "attempt": 1,
+          "latency_ms": 1147,
+          "http_status": 502,
+          "provider_status": 503,
+          "usage": null,
+          "output_hash": null,
+          "backoff_ms": 1000
+        },
+        {
+          "attempt": 2,
+          "latency_ms": 3368,
+          "http_status": 502,
+          "provider_status": 503,
+          "usage": null,
+          "output_hash": null,
+          "backoff_ms": 2000
+        },
+        {
+          "attempt": 3,
+          "latency_ms": 936,
+          "http_status": 502,
+          "provider_status": 503,
+          "usage": null,
+          "output_hash": null
+        }
+      ],
+      "completed_review_calls": []
+    },
+    {
+      "file": "PB-014-UN-GRADO-UNA-SESION-attempt-1790181699693.json",
+      "task": "REVIEW",
+      "review_focus": "GLOBAL",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+      "input_hash": "adbe237a4a64d7bf153f9a6bf9fc188491c7c7e05251772ee588501d4a58c7c1",
+      "output_hash": null,
+      "usage": null,
+      "cost": null,
+      "latency_ms": 142,
+      "attempts": [
+        {
+          "attempt": 1,
+          "latency_ms": 141,
+          "http_status": 403,
+          "provider_status": null,
+          "usage": null,
+          "output_hash": null
+        }
+      ],
+      "completed_review_calls": []
+    },
+    {
+      "file": "PB-014-UN-GRADO-UNA-SESION.json",
+      "task": "REVIEW",
+      "review_focus": "GLOBAL",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+      "input_hash": "adbe237a4a64d7bf153f9a6bf9fc188491c7c7e05251772ee588501d4a58c7c1",
+      "output_hash": null,
+      "usage": null,
+      "cost": null,
+      "latency_ms": 6187,
+      "attempts": [
+        {
+          "attempt": 1,
+          "latency_ms": 841,
+          "http_status": 502,
+          "provider_status": 503,
+          "usage": null,
+          "output_hash": null,
+          "backoff_ms": 1000
+        },
+        {
+          "attempt": 2,
+          "latency_ms": 1380,
+          "http_status": 502,
+          "provider_status": 503,
+          "usage": null,
+          "output_hash": null,
+          "backoff_ms": 2000
+        },
+        {
+          "attempt": 3,
+          "latency_ms": 958,
+          "http_status": 502,
+          "provider_status": 503,
+          "usage": null,
+          "output_hash": null
+        }
+      ],
+      "completed_review_calls": []
+    },
+    {
+      "file": "PB-015-SEIS-GRADOS-DOS-SESIONES-attempt-1790181722560.json",
+      "task": "REVIEW",
+      "review_focus": "GLOBAL",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+      "input_hash": "f28efe472c9f433bf74cf1fdf9153c8f824400e60225c8aa1e6375bd0baf3433",
+      "output_hash": null,
+      "usage": null,
+      "cost": null,
+      "latency_ms": 183,
+      "attempts": [
+        {
+          "attempt": 1,
+          "latency_ms": 183,
+          "http_status": 403,
+          "provider_status": null,
+          "usage": null,
+          "output_hash": null
+        }
+      ],
+      "completed_review_calls": []
+    },
+    {
+      "file": "PB-015-SEIS-GRADOS-DOS-SESIONES.json",
+      "task": "REVIEW",
+      "review_focus": "GLOBAL",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+      "input_hash": "f28efe472c9f433bf74cf1fdf9153c8f824400e60225c8aa1e6375bd0baf3433",
+      "output_hash": "3482677d04a62f1b1322786ba78397a7d1670a38e37ef4c80eca582d814937cf",
+      "usage": {
+        "promptTokenCount": 6163,
+        "candidatesTokenCount": 1111,
+        "totalTokenCount": 7274,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 6163
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "cost": null,
+      "latency_ms": 12633,
+      "provider_latency_ms": 12494,
+      "finish_reason": "STOP",
+      "attempts": [
+        {
+          "attempt": 1,
+          "latency_ms": 12630,
+          "http_status": 200,
+          "provider_status": null,
+          "usage": {
+            "promptTokenCount": 6163,
+            "candidatesTokenCount": 1111,
+            "totalTokenCount": 7274,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 6163
+              }
+            ],
+            "serviceTier": "standard"
+          },
+          "output_hash": "3482677d04a62f1b1322786ba78397a7d1670a38e37ef4c80eca582d814937cf"
+        }
+      ]
+    },
+    {
+      "file": "PB-015-SEIS-GRADOS-DOS-SESIONES.json",
+      "task": "REVIEW",
+      "review_focus": "PDA",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+      "input_hash": "5bc668148c221f46fff9d4b66db7bc506ed8be5e05904fa0d9aef17eb37fc80d",
+      "output_hash": null,
+      "usage": null,
+      "cost": null,
+      "latency_ms": 10232,
+      "attempts": [
+        {
+          "attempt": 1,
+          "latency_ms": 1303,
+          "http_status": 502,
+          "provider_status": 503,
+          "usage": null,
+          "output_hash": null,
+          "backoff_ms": 1000
+        },
+        {
+          "attempt": 2,
+          "latency_ms": 1230,
+          "http_status": 502,
+          "provider_status": 503,
+          "usage": null,
+          "output_hash": null,
+          "backoff_ms": 2000
+        },
+        {
+          "attempt": 3,
+          "latency_ms": 4696,
+          "http_status": 502,
+          "provider_status": 503,
+          "usage": null,
+          "output_hash": null
+        }
+      ],
+      "completed_review_calls": [
+        {
+          "task": "REVIEW",
+          "review_focus": "GLOBAL",
+          "provider": "google",
+          "model": "gemini-3.1-flash-lite",
+          "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+          "input_hash": "f28efe472c9f433bf74cf1fdf9153c8f824400e60225c8aa1e6375bd0baf3433",
+          "output_hash": "3482677d04a62f1b1322786ba78397a7d1670a38e37ef4c80eca582d814937cf",
+          "usage": {
+            "promptTokenCount": 6163,
+            "candidatesTokenCount": 1111,
+            "totalTokenCount": 7274,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 6163
+              }
+            ],
+            "serviceTier": "standard"
+          },
+          "cost": null,
+          "latency_ms": 12633,
+          "provider_latency_ms": 12494,
+          "finish_reason": "STOP",
+          "attempts": [
+            {
+              "attempt": 1,
+              "latency_ms": 12630,
+              "http_status": 200,
+              "provider_status": null,
+              "usage": {
+                "promptTokenCount": 6163,
+                "candidatesTokenCount": 1111,
+                "totalTokenCount": 7274,
+                "promptTokensDetails": [
+                  {
+                    "modality": "TEXT",
+                    "tokenCount": 6163
+                  }
+                ],
+                "serviceTier": "standard"
+              },
+              "output_hash": "3482677d04a62f1b1322786ba78397a7d1670a38e37ef4c80eca582d814937cf"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "PB-016-LTG-CORE-attempt-1790181734761.json",
+      "task": "REVIEW",
+      "review_focus": "GLOBAL",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+      "input_hash": "db02e79f8f9344178bab41be3f781bcfcaebb9711dd15b68683711703d0d8ed7",
+      "output_hash": null,
+      "usage": null,
+      "cost": null,
+      "latency_ms": 148,
+      "attempts": [
+        {
+          "attempt": 1,
+          "latency_ms": 148,
+          "http_status": 403,
+          "provider_status": null,
+          "usage": null,
+          "output_hash": null
+        }
+      ],
+      "completed_review_calls": []
+    },
+    {
+      "file": "PB-016-LTG-CORE.json",
+      "task": "REVIEW",
+      "review_focus": "GLOBAL",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+      "input_hash": "db02e79f8f9344178bab41be3f781bcfcaebb9711dd15b68683711703d0d8ed7",
+      "output_hash": null,
+      "usage": null,
+      "cost": null,
+      "latency_ms": 12200,
+      "attempts": [
+        {
+          "attempt": 1,
+          "latency_ms": 1622,
+          "http_status": 502,
+          "provider_status": 503,
+          "usage": null,
+          "output_hash": null,
+          "backoff_ms": 1000
+        },
+        {
+          "attempt": 2,
+          "latency_ms": 1945,
+          "http_status": 502,
+          "provider_status": 503,
+          "usage": null,
+          "output_hash": null,
+          "backoff_ms": 2000
+        },
+        {
+          "attempt": 3,
+          "latency_ms": 5630,
+          "http_status": 502,
+          "provider_status": 503,
+          "usage": null,
+          "output_hash": null
+        }
+      ],
+      "completed_review_calls": []
+    },
+    {
+      "file": "PB-017-LTG-SUPPORT.json",
+      "task": "REVIEW",
+      "review_focus": "GLOBAL",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+      "input_hash": "2b0824b4cffbcdcdc01f71b80511cf9ba64ecf4e0c25e342b87e3f07e20cd4a7",
+      "output_hash": null,
+      "usage": null,
+      "cost": null,
+      "latency_ms": 134,
+      "attempts": [
+        {
+          "attempt": 1,
+          "latency_ms": 134,
+          "http_status": 403,
+          "provider_status": null,
+          "usage": null,
+          "output_hash": null
+        }
+      ],
+      "completed_review_calls": []
+    },
+    {
+      "file": "PB-018-LTG-OPTIONAL.json",
+      "task": "REVIEW",
+      "review_focus": "GLOBAL",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+      "input_hash": "0e6e79f1388e043ce0e1480cd8bd9196fd10ee408ce99f70bb926a711f4da54b",
+      "output_hash": null,
+      "usage": null,
+      "cost": null,
+      "latency_ms": 159,
+      "attempts": [
+        {
+          "attempt": 1,
+          "latency_ms": 159,
+          "http_status": 403,
+          "provider_status": null,
+          "usage": null,
+          "output_hash": null
+        }
+      ],
+      "completed_review_calls": []
+    },
+    {
+      "file": "PB-019-WEAK.json",
+      "task": "REVIEW",
+      "review_focus": "GLOBAL",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+      "input_hash": "678b66109b8be53418dfc5ef08f538187804dc5287f6ac5e5859a9e891b321e8",
+      "output_hash": null,
+      "usage": null,
+      "cost": null,
+      "latency_ms": 147,
+      "attempts": [
+        {
+          "attempt": 1,
+          "latency_ms": 147,
+          "http_status": 403,
+          "provider_status": null,
+          "usage": null,
+          "output_hash": null
+        }
+      ],
+      "completed_review_calls": []
+    },
+    {
+      "file": "PB-020-MUSEO-REAL-attempt-1790165852179.json",
+      "task": "REVIEW",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+      "input_hash": "4fde3d9825ac9bcaf7c45d165e4d3f94b960b1c4cfdea3b36fa674c0616eb3b7",
+      "output_hash": "62cccca660d37416d2dff5c6fb03b697e7214f58f331f727145109c8b9ed4474",
+      "usage": {
+        "promptTokenCount": 7578,
+        "candidatesTokenCount": 1153,
+        "totalTokenCount": 8731,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 7578
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "cost": null,
+      "latency_ms": 12811,
+      "provider_latency_ms": 12587,
+      "finish_reason": "STOP",
+      "attempts": [
+        {
+          "attempt": 1,
+          "latency_ms": 12809,
+          "http_status": 200,
+          "provider_status": null,
+          "usage": {
+            "promptTokenCount": 7578,
+            "candidatesTokenCount": 1153,
+            "totalTokenCount": 8731,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 7578
+              }
+            ],
+            "serviceTier": "standard"
+          },
+          "output_hash": "62cccca660d37416d2dff5c6fb03b697e7214f58f331f727145109c8b9ed4474"
+        }
+      ]
+    },
+    {
+      "file": "PB-020-MUSEO-REAL-attempt-1790165912996.json",
+      "task": "REVIEW",
+      "provider": "google",
+      "model": "gemini-2.5-pro",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+      "input_hash": "dfe8420928822707910179bcf8aa6a10cb7f3d668070b46dbd8bb46754517e66",
+      "output_hash": null,
+      "usage": null,
+      "cost": null,
+      "latency_ms": 321,
+      "attempts": [
+        {
+          "attempt": 1,
+          "latency_ms": 320,
+          "http_status": 502,
+          "provider_status": 404,
+          "usage": null,
+          "output_hash": null
+        }
+      ]
+    },
+    {
+      "file": "PB-020-MUSEO-REAL-attempt-1790166041996.json",
+      "task": "REVIEW",
+      "provider": "google",
+      "model": "gemini-3.1-pro-preview",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+      "input_hash": "dfe8420928822707910179bcf8aa6a10cb7f3d668070b46dbd8bb46754517e66",
+      "output_hash": null,
+      "usage": null,
+      "cost": null,
+      "latency_ms": 4017,
+      "attempts": [
+        {
+          "attempt": 1,
+          "latency_ms": 376,
+          "http_status": 502,
+          "provider_status": 429,
+          "usage": null,
+          "output_hash": null,
+          "backoff_ms": 1000
+        },
+        {
+          "attempt": 2,
+          "latency_ms": 313,
+          "http_status": 502,
+          "provider_status": 429,
+          "usage": null,
+          "output_hash": null,
+          "backoff_ms": 2000
+        },
+        {
+          "attempt": 3,
+          "latency_ms": 321,
+          "http_status": 502,
+          "provider_status": 429,
+          "usage": null,
+          "output_hash": null
+        }
+      ]
+    },
+    {
+      "file": "PB-020-MUSEO-REAL.json",
+      "task": "REVIEW",
+      "review_focus": "GLOBAL",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+      "input_hash": "0dbbea9b2bd15ecf627358e943d494625d6368f6704f498113fdd9a0255c12cd",
+      "output_hash": "64422b805fa2bd933c91b96c17d4b4c30c09dca8b5f0b0cccb2c71d42169aced",
+      "usage": {
+        "promptTokenCount": 5476,
+        "candidatesTokenCount": 1235,
+        "totalTokenCount": 6711,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 5476
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "cost": null,
+      "latency_ms": 13095,
+      "provider_latency_ms": 6331,
+      "finish_reason": "STOP",
+      "attempts": [
+        {
+          "attempt": 1,
+          "latency_ms": 1582,
+          "http_status": 502,
+          "provider_status": 503,
+          "usage": null,
+          "output_hash": null,
+          "backoff_ms": 1000
+        },
+        {
+          "attempt": 2,
+          "latency_ms": 2036,
+          "http_status": 502,
+          "provider_status": 503,
+          "usage": null,
+          "output_hash": null,
+          "backoff_ms": 2000
+        },
+        {
+          "attempt": 3,
+          "latency_ms": 6470,
+          "http_status": 200,
+          "provider_status": null,
+          "usage": {
+            "promptTokenCount": 5476,
+            "candidatesTokenCount": 1235,
+            "totalTokenCount": 6711,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 5476
+              }
+            ],
+            "serviceTier": "standard"
+          },
+          "output_hash": "64422b805fa2bd933c91b96c17d4b4c30c09dca8b5f0b0cccb2c71d42169aced"
+        }
+      ]
+    },
+    {
+      "file": "PB-020-MUSEO-REAL.json",
+      "task": "REVIEW",
+      "review_focus": "PDA",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+      "input_hash": "7c51409498d5c28efcfa0be1860c99cbe08f547e22b752f1e057c50bcf618b6b",
+      "output_hash": "06890c65ba97396483a08728c4ba81bb348bcaaac1fc3cd5fce57e733c2925d7",
+      "usage": {
+        "promptTokenCount": 2283,
+        "candidatesTokenCount": 338,
+        "totalTokenCount": 2621,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 2283
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "cost": null,
+      "latency_ms": 1808,
+      "provider_latency_ms": 1618,
+      "finish_reason": "STOP",
+      "attempts": [
+        {
+          "attempt": 1,
+          "latency_ms": 1808,
+          "http_status": 200,
+          "provider_status": null,
+          "usage": {
+            "promptTokenCount": 2283,
+            "candidatesTokenCount": 338,
+            "totalTokenCount": 2621,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 2283
+              }
+            ],
+            "serviceTier": "standard"
+          },
+          "output_hash": "06890c65ba97396483a08728c4ba81bb348bcaaac1fc3cd5fce57e733c2925d7"
+        }
+      ]
+    },
+    {
+      "file": "PB-020-MUSEO-REAL.json",
+      "task": "REVIEW",
+      "review_focus": "STAGES",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+      "input_hash": "6f477ecf7bfa63a3221801aeb39f80c0227a6a447baf4432481c5b16586ae2ca",
+      "output_hash": "4cac8899ab4a4f6b1d05d03abb99949d33764bf854607e635016c0429d599dcf",
+      "usage": {
+        "promptTokenCount": 2064,
+        "candidatesTokenCount": 469,
+        "totalTokenCount": 2533,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 2064
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "cost": null,
+      "latency_ms": 3816,
+      "provider_latency_ms": 3637,
+      "finish_reason": "STOP",
+      "attempts": [
+        {
+          "attempt": 1,
+          "latency_ms": 3814,
+          "http_status": 200,
+          "provider_status": null,
+          "usage": {
+            "promptTokenCount": 2064,
+            "candidatesTokenCount": 469,
+            "totalTokenCount": 2533,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 2064
+              }
+            ],
+            "serviceTier": "standard"
+          },
+          "output_hash": "4cac8899ab4a4f6b1d05d03abb99949d33764bf854607e635016c0429d599dcf"
+        }
+      ]
+    },
+    {
+      "file": "PB-020-MUSEO-REAL.json",
+      "task": "REVIEW",
+      "review_focus": "METHOD",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+      "input_hash": "36b2fdd66c133748ed977ebd81ab9d7496ae069cc97ceb74be626cee1d6f9b07",
+      "output_hash": "1aa73cdda6f0396d66a5b8467c94af64a92a207d4e662150c0a42bd518242d12",
+      "usage": {
+        "promptTokenCount": 2096,
+        "candidatesTokenCount": 1064,
+        "totalTokenCount": 3160,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 2096
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "cost": null,
+      "latency_ms": 14003,
+      "provider_latency_ms": 13840,
+      "finish_reason": "STOP",
+      "attempts": [
+        {
+          "attempt": 1,
+          "latency_ms": 14003,
+          "http_status": 200,
+          "provider_status": null,
+          "usage": {
+            "promptTokenCount": 2096,
+            "candidatesTokenCount": 1064,
+            "totalTokenCount": 3160,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 2096
+              }
+            ],
+            "serviceTier": "standard"
+          },
+          "output_hash": "1aa73cdda6f0396d66a5b8467c94af64a92a207d4e662150c0a42bd518242d12"
+        }
+      ]
+    },
+    {
+      "file": "PB-021-CINCO-SESIONES.json",
+      "task": "REVIEW",
+      "review_focus": "GLOBAL",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+      "input_hash": "8e16f437930628bfd93b0fedbceb5fabc8582f54f224fb89800e9507778a5f8f",
+      "output_hash": null,
+      "usage": null,
+      "cost": null,
+      "latency_ms": 135,
+      "attempts": [
+        {
+          "attempt": 1,
+          "latency_ms": 134,
+          "http_status": 403,
+          "provider_status": null,
+          "usage": null,
+          "output_hash": null
+        }
+      ],
+      "completed_review_calls": []
+    },
+    {
+      "file": "PB-022-MAS-SESIONES-QUE-OPERACIONES.json",
+      "task": "REVIEW",
+      "review_focus": "GLOBAL",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+      "input_hash": "88101dd0e21b28cc7bc59be51c27970f1df42a999fa66227fd90ae035fdd2919",
+      "output_hash": null,
+      "usage": null,
+      "cost": null,
+      "latency_ms": 134,
+      "attempts": [
+        {
+          "attempt": 1,
+          "latency_ms": 132,
+          "http_status": 403,
+          "provider_status": null,
+          "usage": null,
+          "output_hash": null
+        }
+      ],
+      "completed_review_calls": []
+    }
+  ],
+  "note": "Totals cover persisted calls only. Interrupted batches may have unrecorded provider usage. 403 expiry made no Gemini call. Completed calls inside interrupted semantic reviews are retained where available."
+}
