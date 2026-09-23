@@ -1,0 +1,811 @@
+{
+  "source_file": "round2-generated-positive-1790193176957.json",
+  "source_file_sha256": "f01a9c09b67859ded2f13baab5177b2981aae4aa0d86e7d21a64322ec7347b0c",
+  "status": "REJECTED",
+  "repair_count": 1,
+  "revision_1": 1,
+  "revision_2": 2,
+  "triggering_rules": [
+    "BPD-002",
+    "BPD-007",
+    "BPD-015",
+    "BPD-019",
+    "BPD-TIME"
+  ],
+  "diff": [
+    {
+      "changed_field": "$.revision",
+      "previous_value": 1,
+      "new_value": 2
+    },
+    {
+      "changed_field": "$.pda_analysis",
+      "previous_value": [
+        {
+          "pda_id": "F3-DHC-1-010",
+          "grade": 1,
+          "official_text": "Explica situaciones cotidianas que se presentan en la escuela y la casa, con la intención de proponer acuerdos que generen una mejor convivencia.",
+          "central_cognitive_action": "Explica",
+          "cognitive_interpretation": {
+            "official_text_basis": "Explica situaciones cotidianas... proponer acuerdos",
+            "reasoning": "El alumno de primer grado identifica situaciones de convivencia escolar y expresa mediante dibujos y explicaciones sencillas por qué son necesarios los acuerdos.",
+            "performance_indicators": [
+              "Identifica situaciones cotidianas escolares",
+              "Expresa de forma oral o gráfica el sentido de los acuerdos"
+            ]
+          },
+          "expected_performance": "Explicar mediante dibujos y explicaciones breves situaciones cotidianas y proponer acuerdos básicos.",
+          "observable_evidence_conditions": [
+            "Dibujos explicativos de normas escolares",
+            "Participación en explicaciones breves a compañeros"
+          ],
+          "possible_project_contribution": "Aporta la base gráfica y vivencial de las normas cotidianas de la escuela.",
+          "integration_strength": "DIRECT",
+          "integration_reason": "Se alinea perfectamente con la identificación y exposición de acuerdos escolares cotidianos."
+        },
+        {
+          "pda_id": "F4-DHC-3-001",
+          "grade": 3,
+          "official_text": "Indagación acerca de ideas, conocimientos, prácticas culturales, formas de organización y acuerdos familiares, escolares y comunitarios, para compartir su importancia en la socialización.",
+          "central_cognitive_action": "Indagación",
+          "cognitive_interpretation": {
+            "official_text_basis": "Indaga acerca de ideas... acuerdos... escolares... para compartir su importancia",
+            "reasoning": "El alumno de tercer grado indaga el origen de los acuerdos escolares y guía la estructuración de explicaciones para compartirlas con otros.",
+            "performance_indicators": [
+              "Indaga el origen de acuerdos escolares",
+              "Comparte la importancia de los acuerdos en la socialización"
+            ]
+          },
+          "expected_performance": "Indagar sobre los acuerdos escolares y organizar registros escritos para compartirlos.",
+          "observable_evidence_conditions": [
+            "Registros escritos breves sobre el origen de los acuerdos",
+            "Estructuración de explicaciones para el museo"
+          ],
+          "possible_project_contribution": "Aporta la investigación y el contenido estructurado para las piezas del museo.",
+          "integration_strength": "DIRECT",
+          "integration_reason": "Fundamenta la indagación y la difusión de la importancia de los acuerdos escolares."
+        }
+      ],
+      "new_value": [
+        {
+          "pda_id": "F3-DHC-1-010",
+          "grade": 1,
+          "official_text": "Explica situaciones cotidianas que se presentan en la escuela y la casa, con la intención de proponer acuerdos que generen una mejor convivencia.",
+          "central_cognitive_action": "Explica",
+          "cognitive_interpretation": {
+            "official_text_basis": "Explica situaciones cotidianas... proponer acuerdos",
+            "reasoning": "El alumno de primer grado identifica situaciones de convivencia escolar y expresa mediante dibujos y explicaciones sencillas por qué son necesarios los acuerdos.",
+            "performance_indicators": [
+              "Identifica situaciones cotidianas escolares",
+              "Expresa de forma oral o gráfica el sentido de los acuerdos"
+            ]
+          },
+          "expected_performance": "Explicar mediante dibujos y explicaciones breves situaciones cotidianas y proponer acuerdos básicos.",
+          "observable_evidence_conditions": [
+            "Dibujos explicativos de normas escolares",
+            "Participación en explicaciones breves a compañeros"
+          ],
+          "possible_project_contribution": "Aporta la base gráfica y vivencial de las normas cotidianas de la escuela.",
+          "integration_strength": "DIRECT",
+          "integration_reason": "Se alinea perfectamente con la identificación y exposición de acuerdos escolares cotidianos."
+        },
+        {
+          "pda_id": "F4-DHC-3-001",
+          "grade": 3,
+          "official_text": "Indagación acerca de ideas, conocimientos, prácticas culturales, formas de organización y acuerdos familiares, escolares y comunitarios, para compartir su importancia en la socialización.",
+          "central_cognitive_action": "Indaga",
+          "cognitive_interpretation": {
+            "official_text_basis": "Indaga acerca de ideas... acuerdos... escolares... para compartir su importancia",
+            "reasoning": "El alumno de tercer grado indaga el origen de los acuerdos escolares y guía la estructuración de explicaciones para compartirlas con otros.",
+            "performance_indicators": [
+              "Indaga el origen de acuerdos escolares",
+              "Comparte la importancia de los acuerdos en la socialización"
+            ]
+          },
+          "expected_performance": "Indagar sobre los acuerdos escolares y organizar registros escritos para compartirlos.",
+          "observable_evidence_conditions": [
+            "Registros escritos breves sobre el origen de los acuerdos",
+            "Estructuración de explicaciones para el museo"
+          ],
+          "possible_project_contribution": "Aporta la investigación y el contenido estructurado para las piezas del museo.",
+          "integration_strength": "DIRECT",
+          "integration_reason": "Fundamenta la indagación y la difusión de la importancia de los acuerdos escolares."
+        }
+      ]
+    },
+    {
+      "changed_field": "$.project_stages",
+      "previous_value": [
+        {
+          "stage_id": "stage_01",
+          "order": 1,
+          "purpose": "Identificar el problema de convivencia y el desconocimiento de los acuerdos escolares.",
+          "required_inputs": [
+            "input_context"
+          ],
+          "student_operation": "Reconocer colectivamente las dificultades para convivir y explicar las normas a los compañeros nuevos.",
+          "methodology_operations": [
+            "IDENTIFICACION"
+          ],
+          "expected_output": "Listado inicial de situaciones cotidianas y dudas sobre los acuerdos.",
+          "output_artifact_id": "art_identificacion",
+          "consumed_by": [
+            "stage_02"
+          ],
+          "acceptance_criteria": [
+            "Participación del grupo en el reconocimiento del problema."
+          ],
+          "estimated_minutes": 30,
+          "estimate_rationale": "Tiempo adecuado para problematizar de forma conjunta en sesión multigrado."
+        },
+        {
+          "stage_id": "stage_02",
+          "order": 2,
+          "purpose": "Recuperar experiencias y recuerdos del grupo sobre las prácticas y acuerdos escolares.",
+          "required_inputs": [
+            "art_identificacion"
+          ],
+          "student_operation": "Compartir recuerdos y experiencias sobre por qué existen los acuerdos en la escuela.",
+          "methodology_operations": [
+            "RECUPERACION"
+          ],
+          "expected_output": "Registro de experiencias previas sobre normas escolares.",
+          "output_artifact_id": "art_recuperacion",
+          "consumed_by": [
+            "stage_03"
+          ],
+          "acceptance_criteria": [
+            "Aportación de vivencias por parte de alumnos de primero y tercero."
+          ],
+          "estimated_minutes": 35,
+          "estimate_rationale": "Espacio para la recuperación de vivencias y memoria escolar."
+        },
+        {
+          "stage_id": "stage_03",
+          "order": 3,
+          "purpose": "Planificar las actividades y la ruta del museo itinerante en la escuela.",
+          "required_inputs": [
+            "art_recuperacion"
+          ],
+          "student_operation": "Acordar los pasos, los espacios (aula y patio techado) y las tareas para crear el museo.",
+          "methodology_operations": [
+            "PLANIFICACION"
+          ],
+          "expected_output": "Plan de trabajo y ruta del museo itinerante.",
+          "output_artifact_id": "art_planificacion",
+          "consumed_by": [
+            "stage_04",
+            "stage_05"
+          ],
+          "acceptance_criteria": [
+            "Definición clara de tareas y espacios de exhibición."
+          ],
+          "estimated_minutes": 25,
+          "estimate_rationale": "Organización rápida de las tareas prácticas."
+        },
+        {
+          "stage_id": "stage_04",
+          "order": 4,
+          "purpose": "Acercarse a la información sobre el origen y la importancia de los acuerdos escolares.",
+          "required_inputs": [
+            "art_planificacion"
+          ],
+          "student_operation": "Indagar mediante consulta al docente y análisis de casos escolares sencillos.",
+          "methodology_operations": [
+            "ACERCAMIENTO"
+          ],
+          "expected_output": "Notas e ideas clave sobre el sentido de los acuerdos.",
+          "output_artifact_id": "art_acercamiento",
+          "consumed_by": [
+            "stage_05",
+            "stage_06"
+          ],
+          "acceptance_criteria": [
+            "Identificación de razones de los acuerdos escolares."
+          ],
+          "estimated_minutes": 40,
+          "estimate_rationale": "Tiempo necesario para la indagación guiada."
+        },
+        {
+          "stage_id": "stage_05",
+          "order": 5,
+          "purpose": "Comprender y producir las piezas visuales y escritas del museo.",
+          "required_inputs": [
+            "art_acercamiento"
+          ],
+          "student_operation": "Elaborar dibujos (1°) y textos breves (3°) explicativos utilizando papel reutilizado y colores.",
+          "methodology_operations": [
+            "COMPRENSION_Y_PRODUCCION"
+          ],
+          "expected_output": "Colección de piezas del museo elaboradas.",
+          "output_artifact_id": "art_produccion",
+          "consumed_by": [
+            "stage_06",
+            "stage_07"
+          ],
+          "acceptance_criteria": [
+            "Piezas terminadas con dibujos y textos comprensibles."
+          ],
+          "estimated_minutes": 50,
+          "estimate_rationale": "Producción artística y escrita asistida."
+        },
+        {
+          "stage_id": "stage_06",
+          "order": 6,
+          "purpose": "Reconocer los avances en la elaboración de las piezas y ajustar detalles.",
+          "required_inputs": [
+            "art_produccion"
+          ],
+          "student_operation": "Revisar entre pares la claridad de las piezas producidas y proponer mejoras.",
+          "methodology_operations": [
+            "RECONOCIMIENTO"
+          ],
+          "expected_output": "Piezas revisadas y ajustadas.",
+          "output_artifact_id": "art_reconocimiento",
+          "consumed_by": [
+            "stage_07"
+          ],
+          "acceptance_criteria": [
+            "Retroalimentación constructiva entre alumnos."
+          ],
+          "estimated_minutes": 25,
+          "estimate_rationale": "Revisión breve de la calidad de los productos."
+        },
+        {
+          "stage_id": "stage_07",
+          "order": 7,
+          "purpose": "Concretar la organización y curaduría de las piezas para la exposición.",
+          "required_inputs": [
+            "art_reconocimiento"
+          ],
+          "student_operation": "Organizar y ordenar las piezas en grupos temáticos sobre convivencia y apoyo escolar.",
+          "methodology_operations": [
+            "CONCRECION"
+          ],
+          "expected_output": "Conjunto de piezas ordenadas para el montaje.",
+          "output_artifact_id": "art_concrecion",
+          "consumed_by": [
+            "stage_08"
+          ],
+          "acceptance_criteria": [
+            "Clasificación coherente de las piezas."
+          ],
+          "estimated_minutes": 25,
+          "estimate_rationale": "Organización del material expositivo."
+        },
+        {
+          "stage_id": "stage_08",
+          "order": 8,
+          "purpose": "Integrar el montaje del museo en el primer espacio asignado (aula).",
+          "required_inputs": [
+            "art_concrecion"
+          ],
+          "student_operation": "Montar las piezas sobre mesas en el aula siguiendo la ruta planificada.",
+          "methodology_operations": [
+            "INTEGRACION"
+          ],
+          "expected_output": "Museo montado en el aula.",
+          "output_artifact_id": "art_integracion",
+          "consumed_by": [
+            "stage_09"
+          ],
+          "acceptance_criteria": [
+            "Montaje seguro y ordenado en el aula."
+          ],
+          "estimated_minutes": 40,
+          "estimate_rationale": "Instalación física del mobiliario y piezas."
+        },
+        {
+          "stage_id": "stage_09",
+          "order": 9,
+          "purpose": "Difundir e itinerar el museo hacia el segundo espacio escolar (patio techado).",
+          "required_inputs": [
+            "art_integracion"
+          ],
+          "student_operation": "Explicar las piezas a los compañeros nuevos y trasladar el museo al patio techado.",
+          "methodology_operations": [
+            "DIFUSION"
+          ],
+          "expected_output": "Registro de la itinerancia y explicaciones brindadas.",
+          "output_artifact_id": "art_difusion",
+          "consumed_by": [
+            "stage_10",
+            "stage_11"
+          ],
+          "acceptance_criteria": [
+            "Demostración de movilidad en dos espacios y explicación a audiencia."
+          ],
+          "estimated_minutes": 45,
+          "estimate_rationale": "Desarrollo de la experiencia itinerante y mediación."
+        },
+        {
+          "stage_id": "stage_10",
+          "order": 10,
+          "purpose": "Considerar las dificultades y aciertos durante la itinerancia del museo.",
+          "required_inputs": [
+            "art_difusion"
+          ],
+          "student_operation": "Dialogar sobre lo que funcionó al explicar las normas y qué se puede mejorar.",
+          "methodology_operations": [
+            "CONSIDERACIONES"
+          ],
+          "expected_output": "Notas de reflexión y ajustes finales.",
+          "output_artifact_id": "art_consideraciones",
+          "consumed_by": [
+            "stage_11"
+          ],
+          "acceptance_criteria": [
+            "Participación en la reflexión grupal."
+          ],
+          "estimated_minutes": 25,
+          "estimate_rationale": "Análisis de la experiencia vivida."
+        },
+        {
+          "stage_id": "stage_11",
+          "order": 11,
+          "purpose": "Evaluar los avances logrados en la convivencia y consolidar el resultado terminal.",
+          "required_inputs": [
+            "art_consideraciones"
+          ],
+          "student_operation": "Valorar los aprendizajes sobre los acuerdos escolares y cerrar el proyecto.",
+          "methodology_operations": [
+            "AVANCES"
+          ],
+          "expected_output": "Evidencia final de realización del Museo Itinerante.",
+          "output_artifact_id": "art_terminal",
+          "consumed_by": [
+            "outcome_01"
+          ],
+          "acceptance_criteria": [
+            "Conclusión exitosa del proyecto con evidencia de circulación."
+          ],
+          "estimated_minutes": 35,
+          "estimate_rationale": "Cierre y valoración final del proceso."
+        }
+      ],
+      "new_value": [
+        {
+          "stage_id": "stage_01",
+          "order": 1,
+          "purpose": "Identificar el problema de convivencia y el desconocimiento de los acuerdos escolares.",
+          "required_inputs": [
+            "input_context"
+          ],
+          "student_operation": "Reconocer colectivamente las dificultades para convivir y explicar las normas a los compañeros nuevos mediante diálogo guiado.",
+          "methodology_operations": [
+            "IDENTIFICACION"
+          ],
+          "expected_output": "Listado inicial de situaciones cotidianas y dudas sobre los acuerdos.",
+          "output_artifact_id": "art_identificacion",
+          "consumed_by": [
+            "stage_02"
+          ],
+          "acceptance_criteria": [
+            "Participación del grupo en el reconocimiento del problema."
+          ],
+          "estimated_minutes": 30,
+          "estimate_rationale": "Tiempo adecuado para problematizar de forma conjunta en sesión multigrado."
+        },
+        {
+          "stage_id": "stage_02",
+          "order": 2,
+          "purpose": "Recuperar experiencias y recuerdos del grupo sobre las prácticas y acuerdos escolares.",
+          "required_inputs": [
+            "art_identificacion"
+          ],
+          "student_operation": "Compartir recuerdos y experiencias sobre por qué existen los acuerdos en la escuela.",
+          "methodology_operations": [
+            "RECUPERACION"
+          ],
+          "expected_output": "Registro de experiencias previas sobre normas escolares.",
+          "output_artifact_id": "art_recuperacion",
+          "consumed_by": [
+            "stage_03"
+          ],
+          "acceptance_criteria": [
+            "Aportación de vivencias por parte de alumnos de primero y tercero."
+          ],
+          "estimated_minutes": 35,
+          "estimate_rationale": "Espacio para la recuperación de vivencias y memoria escolar."
+        },
+        {
+          "stage_id": "stage_03",
+          "order": 3,
+          "purpose": "Planificar las actividades y la ruta del museo itinerante en la escuela.",
+          "required_inputs": [
+            "art_recuperacion"
+          ],
+          "student_operation": "Acordar los pasos, los espacios (aula y patio techado) y las tareas para crear el museo.",
+          "methodology_operations": [
+            "PLANIFICACION"
+          ],
+          "expected_output": "Plan de trabajo y ruta del museo itinerante.",
+          "output_artifact_id": "art_planificacion",
+          "consumed_by": [
+            "stage_04"
+          ],
+          "acceptance_criteria": [
+            "Definición clara de tareas y espacios de exhibición."
+          ],
+          "estimated_minutes": 25,
+          "estimate_rationale": "Organización rápida de las tareas prácticas."
+        },
+        {
+          "stage_id": "stage_04",
+          "order": 4,
+          "purpose": "Acercarse a la información sobre el origen y la importancia de los acuerdos escolares.",
+          "required_inputs": [
+            "art_planificacion"
+          ],
+          "student_operation": "Indagar mediante consulta al docente y análisis de casos escolares sencillos.",
+          "methodology_operations": [
+            "ACERCAMIENTO"
+          ],
+          "expected_output": "Notas e ideas clave sobre el sentido de los acuerdos.",
+          "output_artifact_id": "art_acercamiento",
+          "consumed_by": [
+            "stage_05"
+          ],
+          "acceptance_criteria": [
+            "Identificación de razones de los acuerdos escolares."
+          ],
+          "estimated_minutes": 40,
+          "estimate_rationale": "Tiempo necesario para la indagación guiada."
+        },
+        {
+          "stage_id": "stage_05",
+          "order": 5,
+          "purpose": "Comprender y producir las piezas visuales y escritas del museo.",
+          "required_inputs": [
+            "art_acercamiento"
+          ],
+          "student_operation": "Elaborar dibujos (1°) y textos breves (3°) explicativos utilizando papel reutilizado y colores.",
+          "methodology_operations": [
+            "COMPRENSION_Y_PRODUCCION"
+          ],
+          "expected_output": "Colección de piezas del museo elaboradas.",
+          "output_artifact_id": "art_produccion",
+          "consumed_by": [
+            "stage_06"
+          ],
+          "acceptance_criteria": [
+            "Piezas terminadas con dibujos y textos comprensibles."
+          ],
+          "estimated_minutes": 50,
+          "estimate_rationale": "Producción artística y escrita asistida."
+        },
+        {
+          "stage_id": "stage_06",
+          "order": 6,
+          "purpose": "Reconocer los avances en la elaboración de las piezas y ajustar detalles.",
+          "required_inputs": [
+            "art_produccion"
+          ],
+          "student_operation": "Revisar entre pares la claridad de las piezas producidas y proponer mejoras.",
+          "methodology_operations": [
+            "RECONOCIMIENTO"
+          ],
+          "expected_output": "Piezas revisadas y ajustadas.",
+          "output_artifact_id": "art_reconocimiento",
+          "consumed_by": [
+            "stage_07"
+          ],
+          "acceptance_criteria": [
+            "Retroalimentación constructiva entre alumnos."
+          ],
+          "estimated_minutes": 25,
+          "estimate_rationale": "Revisión breve de la calidad de los productos."
+        },
+        {
+          "stage_id": "stage_07",
+          "order": 7,
+          "purpose": "Concretar la organización y curaduría de las piezas para la exposición.",
+          "required_inputs": [
+            "art_reconocimiento"
+          ],
+          "student_operation": "Organizar y ordenar las piezas en grupos temáticos sobre convivencia y apoyo escolar.",
+          "methodology_operations": [
+            "CONCRECION"
+          ],
+          "expected_output": "Conjunto de piezas ordenadas para el montaje.",
+          "output_artifact_id": "art_concrecion",
+          "consumed_by": [
+            "stage_08"
+          ],
+          "acceptance_criteria": [
+            "Clasificación coherente de las piezas."
+          ],
+          "estimated_minutes": 25,
+          "estimate_rationale": "Organización del material expositivo."
+        },
+        {
+          "stage_id": "stage_08",
+          "order": 8,
+          "purpose": "Integrar el montaje del museo en el primer espacio asignado (aula).",
+          "required_inputs": [
+            "art_concrecion"
+          ],
+          "student_operation": "Montar las piezas sobre mesas en el aula siguiendo la ruta planificada.",
+          "methodology_operations": [
+            "INTEGRACION"
+          ],
+          "expected_output": "Museo montado en el aula.",
+          "output_artifact_id": "art_integracion",
+          "consumed_by": [
+            "stage_09"
+          ],
+          "acceptance_criteria": [
+            "Montaje seguro y ordenado en el aula."
+          ],
+          "estimated_minutes": 40,
+          "estimate_rationale": "Instalación física del mobiliario y piezas."
+        },
+        {
+          "stage_id": "stage_09",
+          "order": 9,
+          "purpose": "Difundir e itinerar el museo hacia el segundo espacio escolar (patio techado).",
+          "required_inputs": [
+            "art_integracion"
+          ],
+          "student_operation": "Explicar las piezas a los compañeros nuevos y trasladar el museo al patio techado.",
+          "methodology_operations": [
+            "DIFUSION"
+          ],
+          "expected_output": "Registro de la itinerancia y explicaciones brindadas.",
+          "output_artifact_id": "art_difusion",
+          "consumed_by": [
+            "stage_10"
+          ],
+          "acceptance_criteria": [
+            "Demostración de movilidad en dos espacios y explicación a audiencia."
+          ],
+          "estimated_minutes": 45,
+          "estimate_rationale": "Desarrollo de la experiencia itinerante y mediación."
+        },
+        {
+          "stage_id": "stage_10",
+          "order": 10,
+          "purpose": "Considerar las dificultades y aciertos durante la itinerancia del museo.",
+          "required_inputs": [
+            "art_difusion"
+          ],
+          "student_operation": "Dialogar sobre lo que funcionó al explicar las normas y qué se puede mejorar.",
+          "methodology_operations": [
+            "CONSIDERACIONES"
+          ],
+          "expected_output": "Notas de reflexión y ajustes finales.",
+          "output_artifact_id": "art_consideraciones",
+          "consumed_by": [
+            "stage_11"
+          ],
+          "acceptance_criteria": [
+            "Participación en la reflexión grupal."
+          ],
+          "estimated_minutes": 25,
+          "estimate_rationale": "Análisis de la experiencia vivida."
+        },
+        {
+          "stage_id": "stage_11",
+          "order": 11,
+          "purpose": "Evaluar los avances logrados en la convivencia y consolidar el resultado terminal.",
+          "required_inputs": [
+            "art_consideraciones"
+          ],
+          "student_operation": "Valorar los aprendizajes sobre los acuerdos escolares y cerrar el proyecto.",
+          "methodology_operations": [
+            "AVANCES"
+          ],
+          "expected_output": "Evidencia final de realización del Museo Itinerante.",
+          "output_artifact_id": "art_terminal",
+          "consumed_by": [
+            "outcome_01"
+          ],
+          "acceptance_criteria": [
+            "Conclusión exitosa del proyecto con evidencia de circulación."
+          ],
+          "estimated_minutes": 35,
+          "estimate_rationale": "Cierre y valoración final del proceso."
+        }
+      ]
+    },
+    {
+      "changed_field": "$.session_progression",
+      "previous_value": [
+        {
+          "session_number": 1,
+          "project_state_before": "Inicio del proyecto; el grupo desconoce el origen de sus acuerdos escolares.",
+          "session_project_goal": "Identificar el problema, recuperar experiencias y planificar la ruta del museo itinerante.",
+          "required_learning": [
+            "Reconocimiento de normas de convivencia",
+            "Planificación colaborativa"
+          ],
+          "methodology_operations": [
+            "IDENTIFICACION",
+            "RECUPERACION",
+            "PLANIFICACION",
+            "ACERCAMIENTO"
+          ],
+          "pda_focus": [
+            "F3-DHC-1-010",
+            "F4-DHC-3-001"
+          ],
+          "input_artifact_ids": [
+            "input_context"
+          ],
+          "expected_output_artifact_ids": [
+            "art_planificacion",
+            "art_acercamiento"
+          ],
+          "expected_partial_product": "Plan de trabajo y notas de indagación sobre los acuerdos escolares.",
+          "acceptance_criteria": [
+            "Participación activa en la identificación de acuerdos y planificación de espacios."
+          ],
+          "project_state_after": "Problema identificado, experiencias recuperadas y plan de trabajo establecido para el museo.",
+          "next_session_dependency": 2,
+          "terminal": false
+        },
+        {
+          "session_number": 2,
+          "project_state_before": "Plan establecido y nociones iniciales sobre los acuerdos escolares.",
+          "session_project_goal": "Producir las piezas visuales y escritas, reconocer avances y concretar la organización del museo.",
+          "required_learning": [
+            "Elaboración de representaciones gráficas y textos breves",
+            "Curaduría y organización de piezas"
+          ],
+          "methodology_operations": [
+            "COMPRENSION_Y_PRODUCCION",
+            "RECONOCIMIENTO",
+            "CONCRECION",
+            "INTEGRACION"
+          ],
+          "pda_focus": [
+            "F3-DHC-1-010",
+            "F4-DHC-3-001"
+          ],
+          "input_artifact_ids": [
+            "art_planificacion",
+            "art_acercamiento"
+          ],
+          "expected_output_artifact_ids": [
+            "art_integracion"
+          ],
+          "expected_partial_product": "Colección de piezas elaboradas y museo montado en el aula.",
+          "acceptance_criteria": [
+            "Piezas terminadas con apoyo de dibujos y textos, montadas correctamente en el aula."
+          ],
+          "project_state_after": "Museo montado en el primer espacio escolar listo para iniciar su recorrido.",
+          "next_session_dependency": 3,
+          "terminal": false
+        },
+        {
+          "session_number": 3,
+          "project_state_before": "Museo montado en el aula y listo para su itinerancia.",
+          "session_project_goal": "Difundir el museo trasladándolo al patio techado, realizar consideraciones y evaluar avances.",
+          "required_learning": [
+            "Explicación de acuerdos a compañeros nuevos",
+            "Itinerancia y reflexión final"
+          ],
+          "methodology_operations": [
+            "DIFUSION",
+            "CONSIDERACIONES",
+            "AVANCES"
+          ],
+          "pda_focus": [
+            "F3-DHC-1-010",
+            "F4-DHC-3-001"
+          ],
+          "input_artifact_ids": [
+            "art_integracion"
+          ],
+          "expected_output_artifact_ids": [
+            "art_terminal"
+          ],
+          "expected_partial_product": "Evidencia final de la itinerancia del museo entre el aula y el patio techado.",
+          "acceptance_criteria": [
+            "Demostración de circulación en dos espacios escolares y explicación efectiva a compañeros nuevos."
+          ],
+          "project_state_after": "Proyecto concluido con el Museo Itinerante de Acuerdos Escolares finalizado y evaluado.",
+          "next_session_dependency": null,
+          "terminal": true
+        }
+      ],
+      "new_value": [
+        {
+          "session_number": 1,
+          "project_state_before": "Inicio del proyecto; el grupo desconoce el origen de sus acuerdos escolares.",
+          "session_project_goal": "Identificar el problema, recuperar experiencias, planificar la ruta y acercarse a la indagación de los acuerdos escolares.",
+          "required_learning": [
+            "Reconocimiento de normas de convivencia",
+            "Planificación colaborativa"
+          ],
+          "methodology_operations": [
+            "IDENTIFICACION",
+            "RECUPERACION",
+            "PLANIFICACION",
+            "ACERCAMIENTO"
+          ],
+          "pda_focus": [
+            "F3-DHC-1-010",
+            "F4-DHC-3-001"
+          ],
+          "input_artifact_ids": [
+            "input_context"
+          ],
+          "expected_output_artifact_ids": [
+            "art_acercamiento"
+          ],
+          "expected_partial_product": "Notas de indagación y plan de trabajo sobre los acuerdos escolares.",
+          "acceptance_criteria": [
+            "Participación activa en la identificación de acuerdos y planificación de espacios."
+          ],
+          "project_state_after": "Problema identificado, experiencias recuperadas y plan de trabajo establecido para el museo.",
+          "next_session_dependency": 2,
+          "terminal": false
+        },
+        {
+          "session_number": 2,
+          "project_state_before": "Plan establecido y nociones iniciales sobre los acuerdos escolares.",
+          "session_project_goal": "Producir las piezas visuales y escritas, reconocer avances, concretar la organización y montar el museo en el aula.",
+          "required_learning": [
+            "Elaboración de representaciones gráficas y textos breves",
+            "Curaduría y organización de piezas"
+          ],
+          "methodology_operations": [
+            "COMPRENSION_Y_PRODUCCION",
+            "RECONOCIMIENTO",
+            "CONCRECION",
+            "INTEGRACION"
+          ],
+          "pda_focus": [
+            "F3-DHC-1-010",
+            "F4-DHC-3-001"
+          ],
+          "input_artifact_ids": [
+            "art_acercamiento"
+          ],
+          "expected_output_artifact_ids": [
+            "art_integracion"
+          ],
+          "expected_partial_product": "Colección de piezas elaboradas y museo montado en el aula.",
+          "acceptance_criteria": [
+            "Piezas terminadas con apoyo de dibujos y textos, montadas correctamente en el aula."
+          ],
+          "project_state_after": "Museo montado en el primer espacio escolar listo para iniciar su recorrido.",
+          "next_session_dependency": 3,
+          "terminal": false
+        },
+        {
+          "session_number": 3,
+          "project_state_before": "Museo montado en el aula y listo para su itinerancia.",
+          "session_project_goal": "Difundir el museo trasladándolo al patio techado, realizar consideraciones y evaluar avances.",
+          "required_learning": [
+            "Explicación de acuerdos a compañeros nuevos",
+            "Itinerancia y reflexión final"
+          ],
+          "methodology_operations": [
+            "DIFUSION",
+            "CONSIDERACIONES",
+            "AVANCES"
+          ],
+          "pda_focus": [
+            "F3-DHC-1-010",
+            "F4-DHC-3-001"
+          ],
+          "input_artifact_ids": [
+            "art_integracion"
+          ],
+          "expected_output_artifact_ids": [
+            "art_terminal"
+          ],
+          "expected_partial_product": "Evidencia final de la itinerancia del museo entre el aula y el patio techado.",
+          "acceptance_criteria": [
+            "Demostración de circulación en dos espacios escolares y explicación efectiva a compañeros nuevos."
+          ],
+          "project_state_after": "Proyecto concluido con el Museo Itinerante de Acuerdos Escolares finalizado y evaluado.",
+          "next_session_dependency": null,
+          "terminal": true
+        }
+      ]
+    }
+  ]
+}

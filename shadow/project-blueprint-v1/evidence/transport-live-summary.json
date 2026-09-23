@@ -1,0 +1,329 @@
+{
+  "model": "gemini-3.5-flash-lite",
+  "status": "REJECTED",
+  "repair_count": 1,
+  "logical_calls": 10,
+  "transport_attempts": 10,
+  "tokens": 71888,
+  "latency_ms": 108353,
+  "provider_errors": [],
+  "revisions": [
+    {
+      "revision": 1,
+      "domain_contract": "PASS",
+      "input_hash": "222ba1412d954ec908c5fec36e9cef70b56aacea85c4d9c959af5270e70bda3f",
+      "blueprint_hash": "735fdceddecb3f8108d9636aadbc93c05837b70e33f9a77af75a4071312686fe",
+      "same_hash": true,
+      "deterministic_failures": [
+        "BPD-002",
+        "BPD-007",
+        "BPD-015",
+        "BPD-019",
+        "BPD-TIME"
+      ],
+      "semantic_nonpass": [],
+      "stage_minutes": [
+        {
+          "id": "stage_01",
+          "minutes": 30
+        },
+        {
+          "id": "stage_02",
+          "minutes": 35
+        },
+        {
+          "id": "stage_03",
+          "minutes": 25
+        },
+        {
+          "id": "stage_04",
+          "minutes": 40
+        },
+        {
+          "id": "stage_05",
+          "minutes": 50
+        },
+        {
+          "id": "stage_06",
+          "minutes": 25
+        },
+        {
+          "id": "stage_07",
+          "minutes": 25
+        },
+        {
+          "id": "stage_08",
+          "minutes": 40
+        },
+        {
+          "id": "stage_09",
+          "minutes": 45
+        },
+        {
+          "id": "stage_10",
+          "minutes": 25
+        },
+        {
+          "id": "stage_11",
+          "minutes": 35
+        }
+      ],
+      "session_progression": [
+        {
+          "session_number": 1,
+          "project_state_before": "Inicio del proyecto; el grupo desconoce el origen de sus acuerdos escolares.",
+          "session_project_goal": "Identificar el problema, recuperar experiencias y planificar la ruta del museo itinerante.",
+          "required_learning": [
+            "Reconocimiento de normas de convivencia",
+            "Planificación colaborativa"
+          ],
+          "methodology_operations": [
+            "IDENTIFICACION",
+            "RECUPERACION",
+            "PLANIFICACION",
+            "ACERCAMIENTO"
+          ],
+          "pda_focus": [
+            "F3-DHC-1-010",
+            "F4-DHC-3-001"
+          ],
+          "input_artifact_ids": [
+            "input_context"
+          ],
+          "expected_output_artifact_ids": [
+            "art_planificacion",
+            "art_acercamiento"
+          ],
+          "expected_partial_product": "Plan de trabajo y notas de indagación sobre los acuerdos escolares.",
+          "acceptance_criteria": [
+            "Participación activa en la identificación de acuerdos y planificación de espacios."
+          ],
+          "project_state_after": "Problema identificado, experiencias recuperadas y plan de trabajo establecido para el museo.",
+          "next_session_dependency": 2,
+          "terminal": false
+        },
+        {
+          "session_number": 2,
+          "project_state_before": "Plan establecido y nociones iniciales sobre los acuerdos escolares.",
+          "session_project_goal": "Producir las piezas visuales y escritas, reconocer avances y concretar la organización del museo.",
+          "required_learning": [
+            "Elaboración de representaciones gráficas y textos breves",
+            "Curaduría y organización de piezas"
+          ],
+          "methodology_operations": [
+            "COMPRENSION_Y_PRODUCCION",
+            "RECONOCIMIENTO",
+            "CONCRECION",
+            "INTEGRACION"
+          ],
+          "pda_focus": [
+            "F3-DHC-1-010",
+            "F4-DHC-3-001"
+          ],
+          "input_artifact_ids": [
+            "art_planificacion",
+            "art_acercamiento"
+          ],
+          "expected_output_artifact_ids": [
+            "art_integracion"
+          ],
+          "expected_partial_product": "Colección de piezas elaboradas y museo montado en el aula.",
+          "acceptance_criteria": [
+            "Piezas terminadas con apoyo de dibujos y textos, montadas correctamente en el aula."
+          ],
+          "project_state_after": "Museo montado en el primer espacio escolar listo para iniciar su recorrido.",
+          "next_session_dependency": 3,
+          "terminal": false
+        },
+        {
+          "session_number": 3,
+          "project_state_before": "Museo montado en el aula y listo para su itinerancia.",
+          "session_project_goal": "Difundir el museo trasladándolo al patio techado, realizar consideraciones y evaluar avances.",
+          "required_learning": [
+            "Explicación de acuerdos a compañeros nuevos",
+            "Itinerancia y reflexión final"
+          ],
+          "methodology_operations": [
+            "DIFUSION",
+            "CONSIDERACIONES",
+            "AVANCES"
+          ],
+          "pda_focus": [
+            "F3-DHC-1-010",
+            "F4-DHC-3-001"
+          ],
+          "input_artifact_ids": [
+            "art_integracion"
+          ],
+          "expected_output_artifact_ids": [
+            "art_terminal"
+          ],
+          "expected_partial_product": "Evidencia final de la itinerancia del museo entre el aula y el patio techado.",
+          "acceptance_criteria": [
+            "Demostración de circulación en dos espacios escolares y explicación efectiva a compañeros nuevos."
+          ],
+          "project_state_after": "Proyecto concluido con el Museo Itinerante de Acuerdos Escolares finalizado y evaluado.",
+          "next_session_dependency": null,
+          "terminal": true
+        }
+      ]
+    },
+    {
+      "revision": 2,
+      "domain_contract": "PASS",
+      "input_hash": "ad293e0ca9eb1e1fb3f0b15baab992474a95ca23d7583702329b6832595b3cbe",
+      "blueprint_hash": "653eb9aa7f43f9b467dbe6533e767b2fade2c857e2f80c70ba17f771eeaa9690",
+      "same_hash": true,
+      "deterministic_failures": [
+        "BPD-002",
+        "BPD-015",
+        "BPD-019",
+        "BPD-TIME"
+      ],
+      "semantic_nonpass": [],
+      "stage_minutes": [
+        {
+          "id": "stage_01",
+          "minutes": 30
+        },
+        {
+          "id": "stage_02",
+          "minutes": 35
+        },
+        {
+          "id": "stage_03",
+          "minutes": 25
+        },
+        {
+          "id": "stage_04",
+          "minutes": 40
+        },
+        {
+          "id": "stage_05",
+          "minutes": 50
+        },
+        {
+          "id": "stage_06",
+          "minutes": 25
+        },
+        {
+          "id": "stage_07",
+          "minutes": 25
+        },
+        {
+          "id": "stage_08",
+          "minutes": 40
+        },
+        {
+          "id": "stage_09",
+          "minutes": 45
+        },
+        {
+          "id": "stage_10",
+          "minutes": 25
+        },
+        {
+          "id": "stage_11",
+          "minutes": 35
+        }
+      ],
+      "session_progression": [
+        {
+          "session_number": 1,
+          "project_state_before": "Inicio del proyecto; el grupo desconoce el origen de sus acuerdos escolares.",
+          "session_project_goal": "Identificar el problema, recuperar experiencias, planificar la ruta y acercarse a la indagación de los acuerdos escolares.",
+          "required_learning": [
+            "Reconocimiento de normas de convivencia",
+            "Planificación colaborativa"
+          ],
+          "methodology_operations": [
+            "IDENTIFICACION",
+            "RECUPERACION",
+            "PLANIFICACION",
+            "ACERCAMIENTO"
+          ],
+          "pda_focus": [
+            "F3-DHC-1-010",
+            "F4-DHC-3-001"
+          ],
+          "input_artifact_ids": [
+            "input_context"
+          ],
+          "expected_output_artifact_ids": [
+            "art_acercamiento"
+          ],
+          "expected_partial_product": "Notas de indagación y plan de trabajo sobre los acuerdos escolares.",
+          "acceptance_criteria": [
+            "Participación activa en la identificación de acuerdos y planificación de espacios."
+          ],
+          "project_state_after": "Problema identificado, experiencias recuperadas y plan de trabajo establecido para el museo.",
+          "next_session_dependency": 2,
+          "terminal": false
+        },
+        {
+          "session_number": 2,
+          "project_state_before": "Plan establecido y nociones iniciales sobre los acuerdos escolares.",
+          "session_project_goal": "Producir las piezas visuales y escritas, reconocer avances, concretar la organización y montar el museo en el aula.",
+          "required_learning": [
+            "Elaboración de representaciones gráficas y textos breves",
+            "Curaduría y organización de piezas"
+          ],
+          "methodology_operations": [
+            "COMPRENSION_Y_PRODUCCION",
+            "RECONOCIMIENTO",
+            "CONCRECION",
+            "INTEGRACION"
+          ],
+          "pda_focus": [
+            "F3-DHC-1-010",
+            "F4-DHC-3-001"
+          ],
+          "input_artifact_ids": [
+            "art_acercamiento"
+          ],
+          "expected_output_artifact_ids": [
+            "art_integracion"
+          ],
+          "expected_partial_product": "Colección de piezas elaboradas y museo montado en el aula.",
+          "acceptance_criteria": [
+            "Piezas terminadas con apoyo de dibujos y textos, montadas correctamente en el aula."
+          ],
+          "project_state_after": "Museo montado en el primer espacio escolar listo para iniciar su recorrido.",
+          "next_session_dependency": 3,
+          "terminal": false
+        },
+        {
+          "session_number": 3,
+          "project_state_before": "Museo montado en el aula y listo para su itinerancia.",
+          "session_project_goal": "Difundir el museo trasladándolo al patio techado, realizar consideraciones y evaluar avances.",
+          "required_learning": [
+            "Explicación de acuerdos a compañeros nuevos",
+            "Itinerancia y reflexión final"
+          ],
+          "methodology_operations": [
+            "DIFUSION",
+            "CONSIDERACIONES",
+            "AVANCES"
+          ],
+          "pda_focus": [
+            "F3-DHC-1-010",
+            "F4-DHC-3-001"
+          ],
+          "input_artifact_ids": [
+            "art_integracion"
+          ],
+          "expected_output_artifact_ids": [
+            "art_terminal"
+          ],
+          "expected_partial_product": "Evidencia final de la itinerancia del museo entre el aula y el patio techado.",
+          "acceptance_criteria": [
+            "Demostración de circulación en dos espacios escolares y explicación efectiva a compañeros nuevos."
+          ],
+          "project_state_after": "Proyecto concluido con el Museo Itinerante de Acuerdos Escolares finalizado y evaluado.",
+          "next_session_dependency": null,
+          "terminal": true
+        }
+      ]
+    }
+  ]
+}

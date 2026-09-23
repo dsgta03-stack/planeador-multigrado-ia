@@ -42,16 +42,17 @@ test('repair transport error preserves revision one and cannot approve',async()=
  const {blueprint,...src}=fixture('PB-010');blueprint.session_progression.at(-1).next_session_dependency=99;
  const provider=async task=>{
   if(task==='GENERATE')return {output:blueprint,telemetry:{task}};
-  throw Error('SIMULATED_PROVIDER_UNAVAILABLE');
+  if(task==='REVIEW')return {output:{findings:Object.entries(BPS).map(([rule_id,expected])=>({rule_id,expected,status:'PASS',severity:'CRITICAL',scope:'test-double',observed:'Synthetic review for transport test'}))},telemetry:{task}};
+  const error=Error('SIMULATED_PROVIDER_UNAVAILABLE');error.code='PROVIDER_UNAVAILABLE';throw error;
  };
  const result=await generateShadow(src,{},provider);
- assert.equal(result.status,'NEEDS_REPAIR');assert.equal(result.repair_count,1);
+ assert.equal(result.status,'PROVIDER_UNAVAILABLE');assert.equal(result.repair_count,0);
  assert.equal(result.revisions.length,1);assert.equal(result.revisions[0].blueprint.session_progression.at(-1).next_session_dependency,99);
  assert.equal(result.errors[0].task,'REPAIR');assert.equal(result.approved_blueprint_hash,null);
 });
 test('initial provider outage yields recorded unevaluated result with no invented blueprint',async()=>{
  const {blueprint,...src}=fixture('PB-010');
- const result=await generateShadow(src,{},async()=>{throw Error('SIMULATED_503')});
- assert.equal(result.status,'NEEDS_REPAIR');assert.equal(result.blueprint,null);assert.equal(result.gate,null);
+ const result=await generateShadow(src,{},async()=>{const error=Error('SIMULATED_503');error.code='PROVIDER_UNAVAILABLE';throw error});
+ assert.equal(result.status,'PROVIDER_UNAVAILABLE');assert.equal(result.blueprint,null);assert.equal(result.gate,null);
  assert.equal(result.repair_count,0);assert.equal(result.telemetry.length,1);
 });

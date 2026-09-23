@@ -1,3 +1,4 @@
+import {parseCandidate,redactSecrets} from './provider-output.mjs';
 import { config } from './config.ts';
 // A separate, expiring machine identity. Never accepts Supabase user IDs or writes DB.
 // Deployment has no production route/import and no access to plan_runs in this code.
@@ -20,12 +21,11 @@ Deno.serve(async(req:Request)=>{
   const providerRaw=await response.text();let result:any=null;try{result=JSON.parse(providerRaw)}catch{}
   if(!response.ok){
    const pe=result?.error||{};
-   const safe={code:'PROVIDER_ERROR',provider_status:response.status,provider_error_code:pe.code??null,provider_error_status:pe.status??null,provider_message:String(pe.message||providerRaw||'').slice(0,500),retry_after:response.headers.get('retry-after'),request_id:response.headers.get('x-request-id')||response.headers.get('x-goog-request-id')||null,latency_ms:Date.now()-start};
-   console.warn('[provider-error]',JSON.stringify(safe));
+   const safe={code:'PROVIDER_ERROR',provider_status:response.status,provider_error_code:pe.code??null,provider_error_status:pe.status??null,provider_message:redactSecrets(pe.message||providerRaw||'',[key,token,req.headers.get('authorization')||'']),retry_after:response.headers.get('retry-after'),request_id:response.headers.get('x-request-id')||response.headers.get('x-goog-request-id')||null,latency_ms:Date.now()-start};
    return json(safe,502);
   }
   if(!result)return json({code:'PROVIDER_INVALID_JSON',provider_status:response.status,latency_ms:Date.now()-start},502);
-  const text=result?.candidates?.[0]?.content?.parts?.map((p:any)=>p.text||'').join('')||'';
-  return json({output:JSON.parse(text),provider:'google',model:b.model,latency_ms:Date.now()-start,usage:result.usageMetadata||null,cost:null,finish_reason:result?.candidates?.[0]?.finishReason||null});
+  const parsed=parseCandidate(result,{model:b.model,latency_ms:Date.now()-start,secrets:[key,token,req.headers.get('authorization')||'']});
+  return json(parsed.body,parsed.http_status);
  }catch(e){return json({code:'SHADOW_PROVIDER_ERROR',message:String(e).slice(0,160)},502)}
 });

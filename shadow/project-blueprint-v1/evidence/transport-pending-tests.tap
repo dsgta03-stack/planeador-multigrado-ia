@@ -1,0 +1,10 @@
+✔ repair transport error preserves revision one and cannot approve (10.613232ms)
+✔ initial provider outage yields recorded unevaluated result with no invented blueprint (0.686048ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 95.567802

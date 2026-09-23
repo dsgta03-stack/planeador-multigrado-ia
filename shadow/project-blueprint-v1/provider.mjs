@@ -1,3 +1,4 @@
+import {transportSchema,TRANSPORT_VERSION} from './transport-schema.mjs';
 import {limitShadowRequest} from './request-limiter.mjs';
 import {generationSchema} from './generation-schema.mjs';
 import {REVIEW_SCHEMA,localEvidenceInput,EVIDENCE_INSTRUCTIONS} from './semantic-evidence.mjs';
@@ -37,13 +38,9 @@ export async function callProvider(task,input,{endpoint,token,identity='multipla
   };
   prompt={review_focus:reviewFocus,principle:'Una declaración no constituye evidencia de su propio cumplimiento.',...focuses[reviewFocus]};
  }
- // Gemini 3.5 rejected the large generation response schema with INVALID_ARGUMENT.
- // Keep that complete schema in the prompt and enforce the unchanged local gate.
- // Review requests retain structured output and their effective reviewer version.
- const jsonModeGeneration=task!=='REVIEW'&&model==='gemini-3.5-flash-lite';
- if(jsonModeGeneration){prompt.schema=response_schema;response_schema=null;}
+ if(task!=='REVIEW'){prompt.schema=generationSchema(input);response_schema=transportSchema(input);}
  const start=Date.now(),attempts=[];
- const base={task,review_focus:task==='REVIEW'?reviewFocus:null,reviewer_version:task==='REVIEW'?REVIEWER_VERSION:null,provider:'google',model,prompt_version:PROMPT_VERSION,input_hash:hash({task,system,prompt,response_schema}),output_hash:null,usage:null,cost:null};
+ const base={task,transport_version:task==='REVIEW'?null:TRANSPORT_VERSION,review_focus:task==='REVIEW'?reviewFocus:null,reviewer_version:task==='REVIEW'?REVIEWER_VERSION:null,provider:'google',model,prompt_version:PROMPT_VERSION,input_hash:hash({task,system,prompt,response_schema}),output_hash:null,usage:null,cost:null};
  const body=JSON.stringify({task,prompt_version:PROMPT_VERSION,model,system,prompt,input,...(response_schema?{response_schema}:{})});
  for(let attempt=1;attempt<=3;attempt++){
   let started=Date.now(),response,r;
@@ -59,6 +56,7 @@ export async function callProvider(task,input,{endpoint,token,identity='multipla
    error.code='PROVIDER_UNAVAILABLE';error.telemetry={...base,latency_ms:Date.now()-start,attempts};throw error;
   }
   attempts.push({attempt,started_at:new Date(started).toISOString(),latency_ms:Date.now()-started,http_status:response.status,provider_status:r.provider_status||null,usage:r.usage||null,output_hash:r.output?hash(r.output):null});
+  if(!response.ok)attempts.at(-1).provider_diagnostics=Object.fromEntries(['code','model','provider_status','provider_error_status','provider_message','finish_reason','usage','usageMetadata','raw_candidate_text','text_length','text_truncated','parse_error','parse_error_position','latency_ms'].filter(k=>r[k]!==undefined).map(k=>[k,r[k]]));
   if(response.ok){
    if(task==='REVIEW'&&r.output?.audit_version!=='LOCAL_EVIDENCE_V1')throw Error('SEMANTIC_AUDIT_MISSING');
    return {output:r.output,telemetry:{...base,output_hash:hash(r.output),latency_ms:Date.now()-start,provider_latency_ms:r.latency_ms,usage:r.usage,cost:r.cost,finish_reason:r.finish_reason,attempts}};
@@ -66,6 +64,6 @@ export async function callProvider(task,input,{endpoint,token,identity='multipla
   const unavailable=[429,500,502,503,504].includes(r.provider_status);
   if(unavailable&&attempt<3){const delay=1000*2**(attempt-1);attempts.at(-1).backoff_ms=delay;await sleep(delay);continue}
   const error=Error(`${r.code||'PROVIDER_ERROR'}:${r.provider_status||response.status}`);
-  error.code=unavailable?'PROVIDER_UNAVAILABLE':(r.code||'PROVIDER_ERROR');error.telemetry={...base,latency_ms:Date.now()-start,attempts};throw error;
+  error.code=unavailable?'PROVIDER_UNAVAILABLE':(r.code||'PROVIDER_ERROR');error.telemetry={...base,usage:r.usage||null,finish_reason:r.finish_reason||null,latency_ms:Date.now()-start,attempts};throw error;
  }
 }

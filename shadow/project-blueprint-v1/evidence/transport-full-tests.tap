@@ -1,0 +1,117 @@
+✔ hash changes: grades (4.297411ms)
+✔ hash changes: selected_pda_ids (0.455319ms)
+✔ hash changes: explicit_ltg_selections (0.410211ms)
+✔ hash changes: requested_sessions (0.407547ms)
+✔ hash changes: minutes_per_session (0.42976ms)
+✔ hash changes: original_problem (0.409669ms)
+✔ hash changes: original_context (0.362168ms)
+✔ hash changes: students_by_grade (0.380175ms)
+✔ hash changes: reading_profile (2.94194ms)
+✔ hash changes: writing_profile (0.670625ms)
+✔ hash changes: autonomy_profile (0.578525ms)
+✔ hash changes: connectivity (0.446886ms)
+✔ hash changes: available_resources (0.384171ms)
+✔ hash changes: supports (0.29095ms)
+✔ hash changes: teacher_explicit_constraints (0.272132ms)
+✔ fingerprint stable across metadata and object key ordering (0.387616ms)
+✔ official text changes snapshot hash (0.533417ms)
+✔ methodology unknown has no ABP fallback (0.411042ms)
+✔ accepted recommendation must equal choice (0.357521ms)
+✔ reject BPD-001 (3.193551ms)
+✔ reject BPD-002 (2.98162ms)
+✔ reject BPD-003 (1.697899ms)
+✔ reject BPD-004 (1.919294ms)
+✔ reject BPD-005 (4.327296ms)
+✔ reject BPD-006 (2.186178ms)
+✔ reject BPD-007 (2.415083ms)
+✔ reject BPD-008 (3.02765ms)
+✔ reject BPD-009 (5.573141ms)
+✔ reject BPD-010 (1.92352ms)
+✔ reject BPD-011 (1.22285ms)
+✔ reject BPD-012 (1.862237ms)
+✔ reject BPD-013 (1.77166ms)
+✔ reject BPD-014 (1.788376ms)
+✔ reject BPD-015 (1.292826ms)
+✔ reject BPD-016 (0.936196ms)
+✔ reject BPD-017 (1.367568ms)
+✔ reject BPD-018 (1.993015ms)
+✔ reject BPD-019 (3.181253ms)
+✔ reject BPD-020 (1.370363ms)
+✔ all authored deterministic fixtures (28.06293ms)
+✔ gate does not mutate any input and no semantic means no PASS (1.168097ms)
+✔ stale semantic review cannot approve changed content (1.270783ms)
+✔ missing/duplicate semantic rule fails closed (1.27546ms)
+✔ weak PDA requests teacher without substitutions (1.239465ms)
+✔ constraints corruption and altered decision ID binding fail (0.947082ms)
+✔ generation rejects legacy sessions as source (1.020103ms)
+✔ bounded repair preserves revision 1 and reruns gate (6.55781ms)
+✔ museum cannot pass with missing explicit circulation requirements even if reviewer overlooks them (7.032248ms)
+✔ authored 5-session architecture covers operations without proportional allocation (4.744057ms)
+✔ authored 12-session architecture covers operations without proportional allocation (1.511276ms)
+✔ reject stage consumed before its production session even if session inputs omit it (1.288369ms)
+✔ live provider refuses execution without explicit shadow environment or in production (0.969556ms)
+✖ repair transport error preserves revision one and cannot approve (4.68728ms)
+✖ initial provider outage yields recorded unevaluated result with no invented blueprint (1.03076ms)
+✔ 503 retry bounded with backoff, identical requests and complete attempt telemetry (16033.118031ms)
+✔ exhausted 503 is PROVIDER_UNAVAILABLE and never invents output (24017.575782ms)
+✔ ambiguous network timeout is not replayed (8007.240705ms)
+✔ authorization failure is not retried or mislabeled pedagogy/unavailable (8006.697128ms)
+✔ generation request constrains source, destination, resource and method without changing contract (1.207608ms)
+✔ local evidence packets contain only PDA-owning grade contributions (0.546547ms)
+✔ local PDA failure cannot be masked by a global PASS for any cognitive action (0.54222ms)
+✔ missing local proof cannot approve by operation labels alone (0.379074ms)
+✔ provider exhaustion during review retains candidate and consumes no repair revision (5.78953ms)
+✔ 200 valid JSON parses exactly, with finish reason and usage (7.376343ms)
+✔ 200 invalid JSON is preserved verbatim, never repaired or unavailable (0.468659ms)
+✔ raw diagnostics are bounded and known credentials are redacted (1.243601ms)
+✔ invalid output makes one transport attempt, no Blueprint and no pedagogical repair (10.830103ms)
+✔ transport accepts a valid Blueprint but does not replace full domain or Gate (8.217025ms)
+✔ failed repair transport preserves revision 1 and creates no revision 2 or repair count (1.514861ms)
+ℹ tests 69
+ℹ suites 0
+ℹ pass 67
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 56183.055546
+
+✖ failing tests:
+
+test at shadow/project-blueprint-v1/tests/coverage.test.mjs:41:1
+✖ repair transport error preserves revision one and cannot approve (4.68728ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'PROVIDER_ERROR'
+  - 'NEEDS_REPAIR'
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/555ac411d0a8/multiplan-blueprint/shadow/project-blueprint-v1/tests/coverage.test.mjs:48:9)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'PROVIDER_ERROR',
+    expected: 'NEEDS_REPAIR',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at shadow/project-blueprint-v1/tests/coverage.test.mjs:52:1
+✖ initial provider outage yields recorded unevaluated result with no invented blueprint (1.03076ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'PROVIDER_ERROR'
+  - 'NEEDS_REPAIR'
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/555ac411d0a8/multiplan-blueprint/shadow/project-blueprint-v1/tests/coverage.test.mjs:55:9)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'PROVIDER_ERROR',
+    expected: 'NEEDS_REPAIR',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

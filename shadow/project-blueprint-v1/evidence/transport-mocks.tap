@@ -1,0 +1,14 @@
+✔ 200 valid JSON parses exactly, with finish reason and usage (2.755048ms)
+✔ 200 invalid JSON is preserved verbatim, never repaired or unavailable (0.508109ms)
+✔ raw diagnostics are bounded and known credentials are redacted (0.474788ms)
+✔ invalid output makes one transport attempt, no Blueprint and no pedagogical repair (5.764913ms)
+✔ transport accepts a valid Blueprint but does not replace full domain or Gate (4.852341ms)
+✔ failed repair transport preserves revision 1 and creates no revision 2 or repair count (1.256752ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 94.429695
