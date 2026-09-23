@@ -1,0 +1,131 @@
+{
+  "version": "PEDAGOGICAL-REVIEW-V1.1-SHADOW-CALIBRATION",
+  "purpose": "Casos mínimos reproducibles para calibrar las reglas pedagógicas antes de volverlas gobernantes.",
+  "cases": [
+    {
+      "id": "structural-good",
+      "description": "Dos grados, tiempos exactos, continuidad, contribuciones completas y transversal sin PDA atribuido.",
+      "expected": {"critical_rule_ids": [], "deterministic_status": "PASS"}
+    },
+    {
+      "id": "time-mismatch",
+      "description": "La suma de apertura, momentos y cierre no coincide con total_minutes.",
+      "expected": {"rule_ids": ["TIME-01"], "severity": "CRITICAL"}
+    },
+    {
+      "id": "broken-session-continuity",
+      "description": "Una sesión intermedia no retoma la anterior o no prepara la siguiente.",
+      "expected": {"rule_ids": ["SES-03"], "severity": "CRITICAL"}
+    },
+    {
+      "id": "missing-grade-contribution",
+      "description": "Un grado participante no tiene aportación explícita al proyecto integrado.",
+      "expected": {"rule_ids": ["PRJ-04"], "severity": "CRITICAL"}
+    },
+    {
+      "id": "pda-session-overdeclaration",
+      "description": "La cabecera de una sesión declara todos los PDA seleccionados, pero los momentos ejecutables sólo trazan un subconjunto.",
+      "expected": {"rule_ids": ["PDA-04"], "severity": "CRITICAL", "mode": "DETERMINISTIC-CONTEXT-POSTCHECK"}
+    },
+    {
+      "id": "pda-session-header-mismatch",
+      "description": "La cabecera declara un subconjunto de PDA, pero los momentos ejecutables movilizan otros PDA adicionales.",
+      "expected": {"rule_ids": ["PDA-03"], "severity": "CRITICAL", "mode": "DETERMINISTIC-CONTEXT-POSTCHECK"}
+    },
+    {
+      "id": "deterministic-pass-beats-semantic-fail",
+      "description": "El evaluador semántico intenta marcar FAIL en una regla cuya comprobación determinista autoritativa dio PASS.",
+      "expected": {"semantic_finding_suppressed": true, "calibration_reason": "DETERMINISTIC_PASS"}
+    },
+    {
+      "id": "session-has-concrete-advance",
+      "description": "El modelo afirma que una sesión no avanza el proyecto, pero la estructura contiene evidencia observable y project_advance/product_relation.",
+      "expected": {"rule_id": "SES-01", "semantic_finding_suppressed": true, "calibration_reason": "CONCRETE_ADVANCE_VERIFIED"}
+    },
+    {
+      "id": "artifact-is-observable-evidence",
+      "description": "El modelo llama actividad a una evidencia que en realidad es un artefacto observable, como tarjeta, ficha, dibujo, resumen o mural.",
+      "expected": {"rule_id": "EVD-01", "semantic_finding_suppressed": true, "calibration_reason": "OBSERVABLE_EVIDENCE_VERIFIED"}
+    },
+    {
+      "id": "transversal-with-invented-pda",
+      "description": "Una tarea TRANSVERSAL_PROJECT contiene pda_ids.",
+      "expected": {"rule_ids": ["EVD-05"], "severity": "CRITICAL"}
+    },
+    {
+      "id": "teacher-selection-changed",
+      "description": "La huella teacher_selection_preserved es falsa.",
+      "expected": {"rule_ids": ["PDA-06"], "severity": "CRITICAL"}
+    },
+    {
+      "id": "empty-plan",
+      "description": "No existen sesiones verificables.",
+      "expected": {"rule_ids": ["COH-03"], "not_evaluable": ["TIME-01", "SES-03", "PRJ-04", "EVD-05", "PDA-06"]}
+    },
+    {
+      "id": "pda-argumenta-copy-only",
+      "description": "PDA oficial exige argumentar, pero las acciones sólo copian información y la evidencia no contiene razones.",
+      "expected": {"rule_ids": ["PDA-01"], "severity": "CRITICAL", "mode": "SEMANTIC"}
+    },
+    {
+      "id": "pda-worked-without-evidence",
+      "description": "El PDA se declara trabajado pero no existe evidencia observable de su desempeño.",
+      "expected": {"rule_ids": ["PDA-02"], "severity": "CRITICAL", "mode": "SEMANTIC"}
+    },
+    {
+      "id": "sudden-final-product",
+      "description": "El producto final aparece al cierre sin trayectoria de construcción en sesiones previas.",
+      "expected": {"rule_ids": ["PRJ-05"], "severity": "CRITICAL", "mode": "SEMANTIC"}
+    },
+    {
+      "id": "isolated-activity",
+      "description": "Una producción intermedia no se reutiliza ni habilita un aprendizaje necesario.",
+      "expected": {"rule_ids": ["SES-04"], "severity": "WARNING", "mode": "SEMANTIC"}
+    },
+    {
+      "id": "nominal-methodology",
+      "description": "Los encabezados contienen fases metodológicas, pero las acciones no cumplen su función.",
+      "expected": {"rule_ids": ["MET-01"], "severity": "CRITICAL", "mode": "SEMANTIC"}
+    },
+    {
+      "id": "fake-community-intervention",
+      "description": "Proyectos Comunitarios declara intervención, pero el alumnado sólo reflexiona dentro del aula.",
+      "expected": {"rule_ids": ["MET-06"], "severity": "CRITICAL", "mode": "SEMANTIC"}
+    },
+    {
+      "id": "service-without-service",
+      "description": "Aprendizaje Servicio no incluye una acción de servicio real o realizable ni destinatario coherente.",
+      "expected": {"rule_ids": ["MET-05"], "severity": "CRITICAL", "mode": "SEMANTIC"}
+    },
+    {
+      "id": "parallel-grade-plans",
+      "description": "Cada grado produce un trabajo independiente sin integración en un producto común.",
+      "expected": {"rule_ids": ["PRJ-03", "MG-07"], "severity": "CRITICAL", "mode": "SEMANTIC"}
+    },
+    {
+      "id": "double-direct-attention",
+      "description": "Dos bloques requieren atención directa exclusiva del único docente en el mismo momento.",
+      "expected": {"rule_ids": ["MG-03"], "severity": "CRITICAL"}
+    },
+    {
+      "id": "forced-pda",
+      "description": "El PDA comparte tema con el proyecto, pero no existe acción/evidencia que movilice su desempeño.",
+      "expected": {"rule_ids": ["PDA-05"], "severity": "WARNING", "mode": "SEMANTIC"}
+    },
+    {
+      "id": "ltg-breaks-progression",
+      "description": "Una actividad de LTG es curricularmente pertinente pero interrumpe la etapa actual del proyecto.",
+      "expected": {"rule_ids": ["LTG-02"], "severity": "WARNING", "mode": "SEMANTIC"}
+    },
+    {
+      "id": "semantic-provider-failure",
+      "description": "Falla la revisión semántica; la revisión determinista se conserva y lo semántico queda degradado/no evaluable.",
+      "expected": {"semantic_review": "DEGRADED", "must_not_mutate_plan": true}
+    },
+    {
+      "id": "stale-after-edit",
+      "description": "Después de revisar, cambia contexto, problema, PDA, metodología o plan.",
+      "expected": {"ui_state": "STALE", "requires_rerun": true}
+    }
+  ]
+}

@@ -1,0 +1,229 @@
+{
+  "schema_version": "MULTIPLAN-ROUTE-REGRESSION-MATRIX-V1",
+  "purpose": "Red de seguridad previa a la consolidación de wrappers. No redefine reglas pedagógicas; registra invariantes y rutas que la arquitectura futura debe preservar.",
+  "scope": "preview-only",
+  "production_modified": false,
+  "project_blueprint_dependency": "La consolidación no inicia hasta cerrar ProjectBlueprint V1; esta matriz puede ejecutarse antes y después para comparar paridad.",
+  "global_invariants": [
+    "La selección docente de PDA y contenidos es autoritativa.",
+    "Un grado sin PDA participa como TRANSVERSAL_PROJECT y no recibe PDA, LTG ni criterio curricular ajeno.",
+    "No se muestran como válidas respuestas sin sesiones ejecutables y work_moments cuando la ruta los requiere.",
+    "La metodología elegida por el docente es autoritativa aun cuando difiera de la recomendación.",
+    "El número de sesiones elegido por el docente se conserva.",
+    "El producto común y los aportes por grado conservan coherencia con las sesiones.",
+    "El plan visible final es la fuente del snapshot canónico.",
+    "Reabrir un histórico usa el snapshot final cuando existe y no sobrescribe silenciosamente model_output_json histórico.",
+    "La revisión pedagógica y el DOCX consumen el mismo snapshot canónico.",
+    "Una falla de snapshot/review/export no debe convertir una generación pedagógicamente válida en pérdida de la planeación visible.",
+    "No se modifica producción durante estas pruebas."
+  ],
+  "scenarios": [
+    {
+      "id": "RTE-001",
+      "name": "API sin autenticación",
+      "category": "auth",
+      "input_shape": "POST /api/gemini-plan sin Bearer",
+      "expected_route": "rechazo inmediato",
+      "must_preserve": ["sin llamadas de generación de fallback", "sin plan visible asociado a otro usuario"],
+      "pass_if": ["HTTP 401", "code AUTH_REQUIRED o equivalente explícito"],
+      "automation": "live"
+    },
+    {
+      "id": "RTE-002",
+      "name": "Un solo grado con PDA",
+      "category": "single-grade",
+      "input_shape": "1 grado, PDA oficial seleccionado, 3 sesiones",
+      "expected_route": "ruta single-grade vigente; no aplicar reglas multigrado artificialmente",
+      "must_preserve": ["PDA exacto", "grado exacto", "sesiones elegidas", "metodología elegida", "evidencias trazables"],
+      "pass_if": ["plan ejecutable", "ningún PDA inventado", "conteo de sesiones exacto"],
+      "automation": "live"
+    },
+    {
+      "id": "RTE-003",
+      "name": "Multigrado completo con PDA en todos los grados",
+      "category": "multigrade",
+      "input_shape": "1.º-6.º con al menos un PDA seleccionado por grado",
+      "expected_route": "V6.5 Beta.10 cuando promotion gate aprueba; V6.4 permanece como base/fallback seguro",
+      "must_preserve": ["teacher selection", "Grade-Lock", "Transversal Lock no inventa atribuciones", "trabajo simultáneo real", "máximo de atención directa según regla vigente"],
+      "pass_if": ["plan ejecutable", "todos los grados aparecen en cada momento según estructura", "PDA sólo en su grado oficial"],
+      "automation": "live"
+    },
+    {
+      "id": "RTE-004",
+      "name": "Multigrado 1.º-6.º con cero PDA",
+      "category": "zero-pda",
+      "input_shape": "6 grados activos, selected_pdas vacío",
+      "expected_route": "participación transversal aislada",
+      "must_preserve": ["pda_ids vacíos", "sin LTG ajeno", "sin criterio curricular inventado", "actividades diferenciadas por características del grado"],
+      "pass_if": ["todos los grados TRANSVERSAL_PROJECT", "cero PDA/LTG prestados", "productos vinculados al problema común"],
+      "automation": "live",
+      "baseline_evidence": "tests/teacher-selection-regression.md caso A"
+    },
+    {
+      "id": "RTE-005",
+      "name": "PDA sólo en algunos grados",
+      "category": "mixed-pda",
+      "input_shape": "PDA en 1.º, 2.º y 4.º; 3.º, 5.º y 6.º sin PDA",
+      "expected_route": "grados con PDA conservan trazabilidad; demás grados TRANSVERSAL_PROJECT",
+      "must_preserve": ["sin auto-PDA", "sin préstamo entre grados", "acciones explícitas por grado en bloques mixtos"],
+      "pass_if": ["PDA sólo en grados seleccionados", "grados restantes transversales", "atención directa dentro del límite vigente"],
+      "automation": "live",
+      "baseline_evidence": "tests/teacher-selection-regression.md caso B"
+    },
+    {
+      "id": "RTE-006",
+      "name": "Intento de fuga semántica desde un PDA ajeno",
+      "category": "transversal-lock",
+      "input_shape": "PDA temático sólo en 4.º; problema/contexto no contienen ese tema",
+      "expected_route": "generación transversal aislada + FOREIGN-PDA-ROOT postcheck + un reintento si aplica",
+      "must_preserve": ["conceptos específicos del PDA de 4.º no aparecen en grados transversales salvo que estén en problema/contexto"],
+      "pass_if": ["cero raíces temáticas prohibidas en productos/procedimientos transversales o rechazo seguro"],
+      "automation": "semantic-live",
+      "baseline_evidence": "tests/teacher-selection-regression.md caso C"
+    },
+    {
+      "id": "RTE-007",
+      "name": "Docente elige metodología distinta de la recomendada",
+      "category": "methodology",
+      "input_shape": "recomendador propone A; docente selecciona B",
+      "expected_route": "generar con B",
+      "must_preserve": ["teacher choice authoritative", "etiqueta y fases de B", "sesiones no alteradas"],
+      "pass_if": ["methodology_primary.id == B", "ninguna sustitución silenciosa por A"],
+      "automation": "live"
+    },
+    {
+      "id": "RTE-008",
+      "name": "Beta.10 promotion gate PASS",
+      "category": "engine-routing",
+      "input_shape": "plan base V6.4 válido y candidato Beta.10 promotable",
+      "expected_route": "respuesta visible V6.5 Beta.10",
+      "must_preserve": ["PDA", "grados", "sesiones", "tiempos", "selección docente", "Transversal Lock"],
+      "pass_if": ["x-multiplan-v65-promotion indica promoción", "sessions provienen de transformed_sessions válidas", "promotion_gate.promotable true"],
+      "automation": "live"
+    },
+    {
+      "id": "RTE-009",
+      "name": "Beta.10 no promotable",
+      "category": "engine-routing",
+      "input_shape": "V6.4 ejecutable; Beta.10 falla promotion gate",
+      "expected_route": "mantener V6.4 seguro",
+      "must_preserve": ["no exponer candidato Beta.10 fallido", "no degradar selección curricular"],
+      "pass_if": ["respuesta 200 ejecutable desde V6.4", "header de fallback explícito", "candidato fallido no gobierna"],
+      "automation": "fault-injection"
+    },
+    {
+      "id": "RTE-010",
+      "name": "Falla primaria multigrado y rescate estable",
+      "category": "engine-routing",
+      "input_shape": "ruta V6.4 no produce plan ejecutable",
+      "expected_route": "rescate estable con Grade/Transversal Lock",
+      "must_preserve": ["respuesta ejecutable", "sin fallback inseguro", "auth 401/403 nunca se convierte en retry de generación"],
+      "pass_if": ["rescate estable ejecutable o 502 explícito", "nunca plan incompleto presentado como válido"],
+      "automation": "fault-injection"
+    },
+    {
+      "id": "RTE-011",
+      "name": "Una sola sesión",
+      "category": "session-count",
+      "input_shape": "sesiones=1",
+      "expected_route": "conservar exactamente 1 sesión y representar metodología sin fingir desarrollo inexistente",
+      "must_preserve": ["session_count=1", "tiempo exacto", "acciones reales sostienen la fase; etiquetas solas no bastan"],
+      "pass_if": ["una sesión visible", "sin sesiones añadidas", "review puede advertir insuficiencia semántica sin alterar el plan"],
+      "automation": "live"
+    },
+    {
+      "id": "RTE-012",
+      "name": "Quince o más sesiones",
+      "category": "session-count",
+      "input_shape": "sesiones=15 o más",
+      "expected_route": "preservar conteo y continuidad",
+      "must_preserve": ["sin truncamiento", "orden secuencial", "phase_sequence válida", "snapshot completo", "DOCX completo"],
+      "pass_if": ["conteo exacto de sesiones en plan/snapshot/historial/DOCX", "sin pérdida por límites de payload"],
+      "automation": "live-stress"
+    },
+    {
+      "id": "RTE-013",
+      "name": "Exactitud temporal por sesión",
+      "category": "time",
+      "input_shape": "N sesiones con minutos elegidos por docente",
+      "expected_route": "apertura + momentos + cierre = total por sesión",
+      "must_preserve": ["minutos elegidos", "sin dobles atenciones imposibles"],
+      "pass_if": ["suma exacta en todas las sesiones o finding TIME explícito", "el motor no maquilla inconsistencias"],
+      "automation": "deterministic"
+    },
+    {
+      "id": "RTE-014",
+      "name": "Persistencia de snapshot falla después de generar",
+      "category": "fidelity",
+      "input_shape": "plan final válido + persist-final-plan-snapshot-v1 no disponible",
+      "expected_route": "la generación visible sobrevive; fallo se reporta en metadatos/logs",
+      "must_preserve": ["no perder plan generado", "no sustituirlo por salida interna previa"],
+      "pass_if": ["plan final se devuelve", "x-multiplan-final-snapshot refleja fallo/skipped", "sin corrupción"],
+      "automation": "fault-injection"
+    },
+    {
+      "id": "RTE-015",
+      "name": "Generar y reabrir histórico conserva hash",
+      "category": "fidelity",
+      "input_shape": "plan nuevo con final_output_snapshot y model_output_json histórico distinto",
+      "expected_route": "historial prefiere FINAL_OUTPUT_SNAPSHOT",
+      "must_preserve": ["canonical hash", "metodología", "sesiones", "PDA", "tiempos", "producto"],
+      "pass_if": ["hash nuevo == hash reabierto", "model_output_json histórico original no es sobrescrito silenciosamente"],
+      "automation": "deterministic",
+      "baseline_evidence": "tests/full-cycle-fidelity-v1.mjs"
+    },
+    {
+      "id": "RTE-016",
+      "name": "Plan histórico alterado localmente",
+      "category": "fidelity",
+      "input_shape": "snapshot histórico + cambio no guardado antes de review",
+      "expected_route": "rechazar reutilización de review del snapshot anterior",
+      "must_preserve": ["review keyed por hash/version"],
+      "pass_if": ["HTTP 409", "code HISTORY_SNAPSHOT_MISMATCH"],
+      "automation": "deterministic",
+      "baseline_evidence": "tests/full-cycle-fidelity-v1.mjs"
+    },
+    {
+      "id": "RTE-017",
+      "name": "Revisión del mismo snapshot usa caché",
+      "category": "review",
+      "input_shape": "mismo snapshot y REVIEW_VERSION",
+      "expected_route": "MISS_STORED la primera vez; HIT después",
+      "must_preserve": ["resultado idéntico", "no doble ejecución semántica innecesaria"],
+      "pass_if": ["resultado profundo idéntico", "review execution count no aumenta en HIT"],
+      "automation": "deterministic",
+      "baseline_evidence": "tests/full-cycle-fidelity-v1.mjs"
+    },
+    {
+      "id": "RTE-018",
+      "name": "DOCX nuevo e histórico parten de la misma fuente",
+      "category": "export",
+      "input_shape": "plan recién generado y el mismo plan reabierto desde snapshot",
+      "expected_route": "createMultiplanDocx recibe contenido semánticamente idéntico",
+      "must_preserve": ["PDA", "grados", "metodología", "producto", "sesiones", "tiempos", "recursos"],
+      "pass_if": ["export source hash igual", "archivo DOCX válido en ambos casos", "nombre coherente"],
+      "automation": "deterministic",
+      "baseline_evidence": "tests/full-cycle-fidelity-v1.mjs"
+    },
+    {
+      "id": "RTE-019",
+      "name": "Edición posterior vuelve obsoleta la revisión UI",
+      "category": "workflow-ui",
+      "input_shape": "plan revisado y luego cambio en contexto/problema/PDA/metodología/plan",
+      "expected_route": "estado STALE; paso Revisión deja de estar completo",
+      "must_preserve": ["no presentar review vieja como vigente"],
+      "pass_if": ["workflow muestra revisión pendiente", "se exige nueva revisión para cerrar ruta"],
+      "automation": "browser"
+    },
+    {
+      "id": "RTE-020",
+      "name": "Producto común y aportes por grado",
+      "category": "project-coherence",
+      "input_shape": "proyecto multigrado con 2-6 grados",
+      "expected_route": "un solo proyecto/producto común con contribuciones diferenciadas",
+      "must_preserve": ["no seis proyectos paralelos", "grade_contribution enlaza con acción/evidencia", "sesiones avanzan producto"],
+      "pass_if": ["project final_product único", "cada grado aporta sin perder PDA", "review no depende sólo de palabras globales"],
+      "automation": "deterministic+semantic"
+    }
+  ]
+}
