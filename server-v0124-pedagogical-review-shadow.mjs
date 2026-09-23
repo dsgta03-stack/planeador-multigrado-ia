@@ -4,7 +4,7 @@ import { spawn } from "node:child_process";
 const PORT = Number(process.env.PORT || 3000);
 const CHILD_PORT = Number(process.env.MULTIPLAN_V0124_CHILD_PORT || 6901);
 const CHILD_ORIGIN = `http://127.0.0.1:${CHILD_PORT}`;
-const REVIEW_URL = "https://dvcrwzxznuqongutnifn.supabase.co/functions/v1/plan-review-pedagogical-v1";
+const REVIEW_URL = "https://dvcrwzxznuqongutnifn.supabase.co/functions/v1/plan-review-pedagogical-context-v1";
 
 const child = spawn(process.execPath, ["server-v0123-workflow-guidance.mjs"], {
   env: { ...process.env, PORT: String(CHILD_PORT) },
@@ -78,6 +78,7 @@ async function reviewRoute(req, res) {
       "cache-control": "no-store",
       "x-multiplan-pedagogical-review": response.headers.get("x-multiplan-pedagogical-review") || "PEDAGOGICAL-REVIEW-V1-SHADOW",
       "x-multiplan-review-mode": response.headers.get("x-multiplan-review-mode") || "shadow",
+      "x-multiplan-review-context": response.headers.get("x-multiplan-review-context") || "UNKNOWN",
     });
     res.end(data);
   } catch (error) {
@@ -103,7 +104,7 @@ const REVIEW_UI = String.raw`
   function planReady(){const p=planData();return !!(p&&Object.keys(p).length)}
   function inputSignature(){
     const p=planData();
-    const payload={context:document.getElementById('context')?.value?.trim()||'',problem:document.getElementById('problem')?.value?.trim()||'',method:chosenMethod(),pdas:selectedPdas().map(x=>[x.id,x.grade]).sort(),run_id:p?.run_id||'',engine:p?.engineVersion||'',sessions:(p?.sessions||[]).map(s=>[s.session_number,s.purpose,s.total_minutes])};
+    const payload={context:document.getElementById('context')?.value?.trim()||'',problem:document.getElementById('problem')?.value?.trim()||'',method:chosenMethod(),pdas:selectedPdas().map(x=>[x.id,x.grade]).sort(),run_id:p?.run_id||'',base_run_id:p?.base_run_id||'',engine:p?.engineVersion||'',sessions:(p?.sessions||[]).map(s=>[s.session_number,s.purpose,s.total_minutes])};
     return JSON.stringify(payload);
   }
   function invalidateIfChanged(){
