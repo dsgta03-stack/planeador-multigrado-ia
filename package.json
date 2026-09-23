@@ -10,6 +10,7 @@
   "scripts": {
     "start": "node server-v0124-consolidated-shadow.mjs",
     "test": "node tests/history-fidelity-v1.mjs && node tests/review-cache-fidelity-v1.mjs && node tests/project-coherence-v1.mjs && node tests/docx-export-v1.mjs && node tests/docx-ui-v1.mjs && node tests/full-cycle-fidelity-v1.mjs",
-    "check:v0124": "node --check server-v0124-consolidated-shadow.mjs && node --check lib/v0124/history-fidelity.mjs && node --check lib/v0124/review-cache.mjs && node --check lib/v0124/project-coherence.mjs && node --check lib/v0124/docx-export.mjs && node --check lib/v0124/docx-export-ui.mjs && node --check lib/v0124/ui.mjs && node --check tests/full-cycle-fidelity-v1.mjs"
+    "test:routes": "node tests/route-regression-deterministic-v1.mjs",
+    "check:v0124": "node --check server-v0124-consolidated-shadow.mjs && node --check lib/v0124/history-fidelity.mjs && node --check lib/v0124/review-cache.mjs && node --check lib/v0124/project-coherence.mjs && node --check lib/v0124/docx-export.mjs && node --check lib/v0124/docx-export-ui.mjs && node --check lib/v0124/ui.mjs && node --check tests/full-cycle-fidelity-v1.mjs && node --check tests/route-regression-matrix-v1.mjs && node --check tests/route-deterministic-invariants-v1.mjs && node --check tests/route-regression-deterministic-v1.mjs"
   }
 }
