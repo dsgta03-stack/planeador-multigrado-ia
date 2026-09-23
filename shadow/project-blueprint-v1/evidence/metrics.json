@@ -1,0 +1,1378 @@
+{
+  "generated_at": "2026-09-23T11:53:46.749Z",
+  "fixtures": [
+    {
+      "fixture": "PB-001",
+      "methodology": "proyectos_comunitarios",
+      "expected": {
+        "semantic": [
+          "BPS-003"
+        ]
+      },
+      "actual": "FAIL",
+      "match": true,
+      "blueprint_status": "DRAFT",
+      "deterministic_failures": [],
+      "semantic_failures": [
+        "BPS-003"
+      ],
+      "warnings": 0,
+      "repair_count": 0,
+      "generation_latency_ms": null,
+      "semantic_review_latency_ms": 16845,
+      "semantic_complete": true
+    },
+    {
+      "fixture": "PB-002",
+      "methodology": "proyectos_comunitarios",
+      "expected": {
+        "functional_pass": true
+      },
+      "actual": "PASS",
+      "match": true,
+      "blueprint_status": "DRAFT",
+      "deterministic_failures": [],
+      "semantic_failures": [],
+      "warnings": 0,
+      "repair_count": 0,
+      "generation_latency_ms": null,
+      "semantic_review_latency_ms": 13013,
+      "semantic_complete": true
+    },
+    {
+      "fixture": "PB-003",
+      "methodology": "abp",
+      "expected": {
+        "deterministic": [
+          "BPD-008",
+          "BPD-009",
+          "BPD-010"
+        ]
+      },
+      "actual": "FAIL",
+      "match": true,
+      "blueprint_status": "DRAFT",
+      "deterministic_failures": [
+        "BPD-008",
+        "BPD-009",
+        "BPD-010"
+      ],
+      "semantic_failures": [],
+      "warnings": 0,
+      "repair_count": 0,
+      "generation_latency_ms": null,
+      "semantic_review_latency_ms": 7814,
+      "semantic_complete": true
+    },
+    {
+      "fixture": "PB-004",
+      "methodology": "aprendizaje_servicio",
+      "expected": {
+        "semantic": [
+          "BPS-008"
+        ]
+      },
+      "actual": "FAIL",
+      "match": true,
+      "blueprint_status": "DRAFT",
+      "deterministic_failures": [],
+      "semantic_failures": [
+        "BPS-003",
+        "BPS-008"
+      ],
+      "warnings": 0,
+      "repair_count": 0,
+      "generation_latency_ms": null,
+      "semantic_review_latency_ms": 7254,
+      "semantic_complete": true
+    },
+    {
+      "fixture": "PB-005",
+      "methodology": "steam",
+      "expected": {
+        "deterministic": [
+          "BPD-019"
+        ],
+        "semantic": [
+          "BPS-008"
+        ]
+      },
+      "actual": "FAIL",
+      "match": true,
+      "blueprint_status": "DRAFT",
+      "deterministic_failures": [
+        "BPD-019"
+      ],
+      "semantic_failures": [
+        "BPS-003",
+        "BPS-007",
+        "BPS-008"
+      ],
+      "warnings": 0,
+      "repair_count": 0,
+      "generation_latency_ms": null,
+      "semantic_review_latency_ms": 5750,
+      "semantic_complete": true
+    },
+    {
+      "fixture": "PB-006",
+      "methodology": "abp",
+      "expected": {
+        "deterministic": [
+          "BPD-007"
+        ]
+      },
+      "actual": "FAIL",
+      "match": true,
+      "blueprint_status": "DRAFT",
+      "deterministic_failures": [
+        "BPD-007"
+      ],
+      "semantic_failures": [],
+      "warnings": 0,
+      "repair_count": 0,
+      "generation_latency_ms": null,
+      "semantic_review_latency_ms": 17538,
+      "semantic_complete": true
+    },
+    {
+      "fixture": "PB-007",
+      "methodology": "abp",
+      "expected": {
+        "semantic": [
+          "BPS-004",
+          "BPS-005"
+        ]
+      },
+      "actual": "FAIL",
+      "match": false,
+      "blueprint_status": "DRAFT",
+      "deterministic_failures": [],
+      "semantic_failures": [
+        "BPS-005"
+      ],
+      "warnings": 0,
+      "repair_count": 0,
+      "generation_latency_ms": null,
+      "semantic_review_latency_ms": 22613,
+      "semantic_complete": true
+    },
+    {
+      "fixture": "PB-008",
+      "methodology": "proyectos_comunitarios",
+      "expected": {
+        "semantic": [
+          "BPS-006",
+          "BPS-007"
+        ]
+      },
+      "actual": "FAIL",
+      "match": true,
+      "blueprint_status": "DRAFT",
+      "deterministic_failures": [],
+      "semantic_failures": [
+        "BPS-003",
+        "BPS-006",
+        "BPS-007"
+      ],
+      "warnings": 0,
+      "repair_count": 0,
+      "generation_latency_ms": null,
+      "semantic_review_latency_ms": 5163,
+      "semantic_complete": true
+    },
+    {
+      "fixture": "PB-009",
+      "methodology": "proyectos_comunitarios",
+      "expected": {
+        "semantic": [
+          "BPS-008"
+        ]
+      },
+      "actual": "FAIL",
+      "match": true,
+      "blueprint_status": "DRAFT",
+      "deterministic_failures": [],
+      "semantic_failures": [
+        "BPS-003",
+        "BPS-007",
+        "BPS-008"
+      ],
+      "warnings": 0,
+      "repair_count": 0,
+      "generation_latency_ms": null,
+      "semantic_review_latency_ms": 4547,
+      "semantic_complete": true
+    },
+    {
+      "fixture": "PB-010",
+      "methodology": "abp",
+      "expected": {
+        "pass": true
+      },
+      "actual": "PASS",
+      "match": true,
+      "blueprint_status": "DRAFT",
+      "deterministic_failures": [],
+      "semantic_failures": [],
+      "warnings": 0,
+      "repair_count": 0,
+      "generation_latency_ms": null,
+      "semantic_review_latency_ms": 7354,
+      "semantic_complete": true
+    },
+    {
+      "fixture": "PB-011-STEAM-PASS",
+      "methodology": "steam",
+      "expected": {
+        "pass": true
+      },
+      "actual": "PASS",
+      "match": true,
+      "blueprint_status": "DRAFT",
+      "deterministic_failures": [],
+      "semantic_failures": [],
+      "warnings": 0,
+      "repair_count": 0,
+      "generation_latency_ms": null,
+      "semantic_review_latency_ms": 4449,
+      "semantic_complete": true
+    },
+    {
+      "fixture": "PB-012-SERVICIO-PASS",
+      "methodology": "aprendizaje_servicio",
+      "expected": {
+        "pass": true
+      },
+      "actual": "PASS",
+      "match": true,
+      "blueprint_status": "DRAFT",
+      "deterministic_failures": [],
+      "semantic_failures": [],
+      "warnings": 0,
+      "repair_count": 0,
+      "generation_latency_ms": null,
+      "semantic_review_latency_ms": 18626,
+      "semantic_complete": true
+    },
+    {
+      "fixture": "PB-013-COMUNITARIO-PASS",
+      "methodology": "proyectos_comunitarios",
+      "expected": {
+        "pass": true
+      },
+      "actual": "PASS",
+      "match": true,
+      "blueprint_status": "DRAFT",
+      "deterministic_failures": [],
+      "semantic_failures": [],
+      "warnings": 0,
+      "repair_count": 0,
+      "generation_latency_ms": null,
+      "semantic_review_latency_ms": 7351,
+      "semantic_complete": true
+    },
+    {
+      "fixture": "PB-014-UN-GRADO-UNA-SESION",
+      "methodology": "abp",
+      "expected": {
+        "pass": true
+      },
+      "actual": "PASS",
+      "match": true,
+      "blueprint_status": "DRAFT",
+      "deterministic_failures": [],
+      "semantic_failures": [],
+      "warnings": 0,
+      "repair_count": 0,
+      "generation_latency_ms": null,
+      "semantic_review_latency_ms": 14485,
+      "semantic_complete": true
+    },
+    {
+      "fixture": "PB-015-SEIS-GRADOS-DOS-SESIONES",
+      "methodology": "proyectos_comunitarios",
+      "expected": {
+        "pass": true
+      },
+      "actual": "PASS",
+      "match": true,
+      "blueprint_status": "DRAFT",
+      "deterministic_failures": [],
+      "semantic_failures": [],
+      "warnings": 0,
+      "repair_count": 0,
+      "generation_latency_ms": null,
+      "semantic_review_latency_ms": 3868,
+      "semantic_complete": true
+    },
+    {
+      "fixture": "PB-016-LTG-CORE",
+      "methodology": "abp",
+      "expected": {
+        "deterministic_pass": true
+      },
+      "actual": "PASS",
+      "match": true,
+      "blueprint_status": "DRAFT",
+      "deterministic_failures": [],
+      "semantic_failures": [],
+      "warnings": 0,
+      "repair_count": 0,
+      "generation_latency_ms": null,
+      "semantic_review_latency_ms": 7218,
+      "semantic_complete": true
+    },
+    {
+      "fixture": "PB-017-LTG-SUPPORT",
+      "methodology": "abp",
+      "expected": {
+        "deterministic_pass": true
+      },
+      "actual": "PASS",
+      "match": true,
+      "blueprint_status": "DRAFT",
+      "deterministic_failures": [],
+      "semantic_failures": [],
+      "warnings": 0,
+      "repair_count": 0,
+      "generation_latency_ms": null,
+      "semantic_review_latency_ms": 8499,
+      "semantic_complete": true
+    },
+    {
+      "fixture": "PB-018-LTG-OPTIONAL",
+      "methodology": "abp",
+      "expected": {
+        "deterministic_pass": true
+      },
+      "actual": "PASS",
+      "match": true,
+      "blueprint_status": "DRAFT",
+      "deterministic_failures": [],
+      "semantic_failures": [],
+      "warnings": 0,
+      "repair_count": 0,
+      "generation_latency_ms": null,
+      "semantic_review_latency_ms": 6470,
+      "semantic_complete": true
+    },
+    {
+      "fixture": "PB-019-WEAK",
+      "methodology": "abp",
+      "expected": {
+        "teacher_decision": true
+      },
+      "actual": "NEEDS_TEACHER_DECISION",
+      "match": true,
+      "blueprint_status": "DRAFT",
+      "deterministic_failures": [],
+      "semantic_failures": [],
+      "warnings": 0,
+      "repair_count": 0,
+      "generation_latency_ms": null,
+      "semantic_review_latency_ms": 4443,
+      "semantic_complete": true
+    },
+    {
+      "fixture": "PB-020-MUSEO-REAL",
+      "methodology": "proyectos_comunitarios",
+      "expected": {
+        "semantic": [
+          "BPS-003",
+          "BPS-007",
+          "BPS-008"
+        ],
+        "deterministic": [
+          "BPD-008",
+          "BPD-009",
+          "BPD-010"
+        ]
+      },
+      "actual": "FAIL",
+      "match": false,
+      "blueprint_status": "DRAFT",
+      "deterministic_failures": [
+        "BPD-008",
+        "BPD-009",
+        "BPD-010"
+      ],
+      "semantic_failures": [
+        "BPS-003"
+      ],
+      "warnings": 0,
+      "repair_count": 0,
+      "generation_latency_ms": null,
+      "semantic_review_latency_ms": 8008,
+      "semantic_complete": true
+    },
+    {
+      "fixture": "PB-021-CINCO-SESIONES",
+      "methodology": "abp",
+      "expected": {
+        "pass": true
+      },
+      "actual": "PASS",
+      "match": true,
+      "blueprint_status": "DRAFT",
+      "deterministic_failures": [],
+      "semantic_failures": [],
+      "warnings": 0,
+      "repair_count": 0,
+      "generation_latency_ms": null,
+      "semantic_review_latency_ms": 7144,
+      "semantic_complete": true
+    },
+    {
+      "fixture": "PB-022-MAS-SESIONES-QUE-OPERACIONES",
+      "methodology": "abp",
+      "expected": {
+        "pass": true
+      },
+      "actual": "PASS",
+      "match": true,
+      "blueprint_status": "DRAFT",
+      "deterministic_failures": [],
+      "semantic_failures": [],
+      "warnings": 0,
+      "repair_count": 0,
+      "generation_latency_ms": null,
+      "semantic_review_latency_ms": 5157,
+      "semantic_complete": true
+    }
+  ],
+  "generation_runs": [
+    {
+      "file": "generated-attempt-1-rejected.json",
+      "status": "REJECTED",
+      "methodology": "proyectos_comunitarios",
+      "repair_count": 1,
+      "errors": [],
+      "revisions": [
+        {
+          "revision": 1,
+          "status": "NEEDS_REPAIR",
+          "df": [
+            "BPD-SCHEMA"
+          ],
+          "sf": []
+        },
+        {
+          "revision": 2,
+          "status": "REJECTED",
+          "df": [
+            "BPD-005",
+            "BPD-014",
+            "BPD-018",
+            "BPD-019"
+          ],
+          "sf": []
+        }
+      ]
+    },
+    {
+      "file": "generated-blueprint-attempt-1790164209246.json",
+      "status": "NEEDS_REPAIR",
+      "methodology": "proyectos_comunitarios",
+      "repair_count": 1,
+      "errors": [
+        {
+          "revision": 2,
+          "task": "REPAIR",
+          "error": "Error: PROVIDER_ERROR:503"
+        }
+      ],
+      "revisions": [
+        {
+          "revision": 1,
+          "status": "NEEDS_REPAIR",
+          "df": [
+            "BPD-019"
+          ],
+          "sf": [
+            "BPS-003"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "generated-blueprint.json",
+      "status": "NEEDS_REPAIR",
+      "methodology": "abp",
+      "repair_count": 1,
+      "errors": [
+        {
+          "revision": 2,
+          "task": "REPAIR",
+          "error": "Error: PROVIDER_ERROR:503"
+        }
+      ],
+      "revisions": [
+        {
+          "revision": 1,
+          "status": "NEEDS_REPAIR",
+          "df": [
+            "BPD-008"
+          ],
+          "sf": [
+            "BPS-003"
+          ]
+        }
+      ]
+    }
+  ],
+  "recorded_calls": 35,
+  "recorded_tokens": 207170,
+  "recorded_latency_ms": 319869,
+  "cost": null,
+  "note": "Recorded calls only; early interrupted/failed calls had incomplete telemetry. Cost was not returned by provider. No guessed price.",
+  "telemetry": [
+    {
+      "file": "PB-001.json",
+      "task": "REVIEW",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1",
+      "input_hash": "49b382ef56733a8b33fad9b5d495bbebcc8cd82d272f9c6e989335657c31f831",
+      "output_hash": "ed12a50bd83fc8cb5d77dd8201860dcfeb7718f417c32d3b928280c3b5ceb165",
+      "latency_ms": 16839,
+      "provider_latency_ms": 6005,
+      "usage": {
+        "promptTokenCount": 4916,
+        "candidatesTokenCount": 1153,
+        "totalTokenCount": 6069,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 4916
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "cost": null,
+      "finish_reason": "STOP"
+    },
+    {
+      "file": "PB-002.json",
+      "task": "REVIEW",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1",
+      "input_hash": "dace34e0b3f5e20984f22d7c301fa1995cce914a45ace827cd8e38077bd0d735",
+      "output_hash": "4dd844cca5a53ef332a0c56768c214eee110dbf61296df73344c2d7b6048a46f",
+      "latency_ms": 13006,
+      "provider_latency_ms": 6024,
+      "usage": {
+        "promptTokenCount": 5233,
+        "candidatesTokenCount": 1140,
+        "totalTokenCount": 6373,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 5233
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "cost": null,
+      "finish_reason": "STOP"
+    },
+    {
+      "file": "PB-003.json",
+      "task": "REVIEW",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1",
+      "input_hash": "950de7d53f107823145734a71e90582bf3372a767271b865d5dcbe05eff568e8",
+      "output_hash": "7c0278a11b0b833c9b4c43e0d20b3b683c80ee650982985ff907c249999a0c1c",
+      "latency_ms": 7811,
+      "provider_latency_ms": 7582,
+      "usage": {
+        "promptTokenCount": 4417,
+        "candidatesTokenCount": 1172,
+        "totalTokenCount": 5589,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 4417
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "cost": null,
+      "finish_reason": "STOP"
+    },
+    {
+      "file": "PB-004.json",
+      "task": "REVIEW",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1",
+      "input_hash": "35dff179f2f5adeee062dea0bc60880aaa627b9adccd49970f2ff03e2aa0d651",
+      "output_hash": "f0019b8dbdfb7fb3a78bb24b3713fb3dbd2c949f9af099d65244d21a1bf8fbad",
+      "latency_ms": 7251,
+      "provider_latency_ms": 7070,
+      "usage": {
+        "promptTokenCount": 4680,
+        "candidatesTokenCount": 1134,
+        "totalTokenCount": 5814,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 4680
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "cost": null,
+      "finish_reason": "STOP"
+    },
+    {
+      "file": "PB-005.json",
+      "task": "REVIEW",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1",
+      "input_hash": "0e1de90b22b543d1c8001ae62babd1a97a5270410bd7b7dc7ffab551f5e7a6cc",
+      "output_hash": "20eaef7f8a2d452beeb5abc758d1ab5c046009ad1c435cba5cdc0c23816d3421",
+      "latency_ms": 5748,
+      "provider_latency_ms": 5574,
+      "usage": {
+        "promptTokenCount": 4553,
+        "candidatesTokenCount": 1097,
+        "totalTokenCount": 5650,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 4553
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "cost": null,
+      "finish_reason": "STOP"
+    },
+    {
+      "file": "PB-006.json",
+      "task": "REVIEW",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1",
+      "input_hash": "5e4e8848988af19978a21efd158d377eaea795aa018d63eed1487cc196f945b4",
+      "output_hash": "4ccfc4bb97e23550475e0357fbbf3e0d7c9387962790dc85e2c381f6f9a4b6ed",
+      "latency_ms": 17529,
+      "provider_latency_ms": 10516,
+      "usage": {
+        "promptTokenCount": 4478,
+        "candidatesTokenCount": 1079,
+        "totalTokenCount": 5557,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 4478
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "cost": null,
+      "finish_reason": "STOP"
+    },
+    {
+      "file": "PB-007.json",
+      "task": "REVIEW",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1",
+      "input_hash": "049794e194f65247260b02fe88527dbcccfb7a0e24df5691561f58e892c11056",
+      "output_hash": "3e77d4bfdc197ceebd8b239b9eb66e011f53f65766912978ceba49355e634051",
+      "latency_ms": 22610,
+      "provider_latency_ms": 22447,
+      "usage": {
+        "promptTokenCount": 4367,
+        "candidatesTokenCount": 1112,
+        "totalTokenCount": 5479,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 4367
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "cost": null,
+      "finish_reason": "STOP"
+    },
+    {
+      "file": "PB-008.json",
+      "task": "REVIEW",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1",
+      "input_hash": "7aea358ff57cc700dcbdaeb8441dfff65f52e6cd5d02ee5a573837a0555b5d07",
+      "output_hash": "0c932afde89e0937937d705ce2e75591c83717c48ef0d9abe0da8a6d5ae14ed6",
+      "latency_ms": 5159,
+      "provider_latency_ms": 4928,
+      "usage": {
+        "promptTokenCount": 5563,
+        "candidatesTokenCount": 1132,
+        "totalTokenCount": 6695,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 5563
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "cost": null,
+      "finish_reason": "STOP"
+    },
+    {
+      "file": "PB-009.json",
+      "task": "REVIEW",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1",
+      "input_hash": "5ee23277f83a53ca0497e4064d24c1f2881542ae20fa60e81a8ca4be776de28e",
+      "output_hash": "af4456bb222c905f144c946736b678b0e46a0610680eb94a95b1960ab9264ff4",
+      "latency_ms": 4543,
+      "provider_latency_ms": 4375,
+      "usage": {
+        "promptTokenCount": 5178,
+        "candidatesTokenCount": 1126,
+        "totalTokenCount": 6304,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 5178
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "cost": null,
+      "finish_reason": "STOP"
+    },
+    {
+      "file": "PB-010.json",
+      "task": "REVIEW",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1",
+      "input_hash": "dd51df195eaca220c7069abfe79ec2331901ba367e7b4af932af042918943d76",
+      "output_hash": "9c6767ad6e9898569f245d2e0adac15a81012ec4e3a50ae3ba21032d98d1fe47",
+      "latency_ms": 7352,
+      "provider_latency_ms": 7191,
+      "usage": {
+        "promptTokenCount": 4425,
+        "candidatesTokenCount": 1251,
+        "totalTokenCount": 5676,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 4425
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "cost": null,
+      "finish_reason": "STOP"
+    },
+    {
+      "file": "PB-011-STEAM-PASS-attempt-1790164141331.json",
+      "task": "REVIEW",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1",
+      "input_hash": "56c57423a4741cf4ba2c0727e1c869616730313ee14524155ffd0e266041b192",
+      "output_hash": "2143576bca1a24bd5f9d2c012ea4237c0e3ee8d0c60a367313e97aae138fb165",
+      "latency_ms": 4252,
+      "provider_latency_ms": 4088,
+      "usage": {
+        "promptTokenCount": 4624,
+        "candidatesTokenCount": 1095,
+        "totalTokenCount": 5719,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 4624
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "cost": null,
+      "finish_reason": "STOP"
+    },
+    {
+      "file": "PB-011-STEAM-PASS.json",
+      "task": "REVIEW",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1",
+      "input_hash": "4d0b9a035e27a1d8ed2e06e576d138c7d53c1ea8db44d9d42e0b604435c9f7b1",
+      "output_hash": "fcefc1b119924dfea95410b7418246266c41a0d17c7b66b4123728c2d715b37a",
+      "latency_ms": 4446,
+      "provider_latency_ms": 4223,
+      "usage": {
+        "promptTokenCount": 4685,
+        "candidatesTokenCount": 1119,
+        "totalTokenCount": 5804,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 4685
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "cost": null,
+      "finish_reason": "STOP"
+    },
+    {
+      "file": "PB-012-SERVICIO-PASS-attempt-1790164159958.json",
+      "task": "REVIEW",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1",
+      "input_hash": "3b8f68f434df585fb892f19e6a0eeb0880946dae1425aa14cb7e0d52aa74178a",
+      "output_hash": "db46e62606e9bdebffd9d7f3077a6e226ab1a28be5eb713557331899fa9e7e69",
+      "latency_ms": 10944,
+      "provider_latency_ms": 10781,
+      "usage": {
+        "promptTokenCount": 4702,
+        "candidatesTokenCount": 1184,
+        "totalTokenCount": 5886,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 4702
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "cost": null,
+      "finish_reason": "STOP"
+    },
+    {
+      "file": "PB-012-SERVICIO-PASS.json",
+      "task": "REVIEW",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1",
+      "input_hash": "71c64f3f5356807f275d5c9db146d5339325d28d3a69951ffb9ff29ec4623cfd",
+      "output_hash": "9581e77f56ce59a16acc6428beb0afa1e0a8a22bd473db601348ff62b899b324",
+      "latency_ms": 18624,
+      "provider_latency_ms": 18284,
+      "usage": {
+        "promptTokenCount": 4763,
+        "candidatesTokenCount": 1116,
+        "totalTokenCount": 5879,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 4763
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "cost": null,
+      "finish_reason": "STOP"
+    },
+    {
+      "file": "PB-013-COMUNITARIO-PASS.json",
+      "task": "REVIEW",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1",
+      "input_hash": "5649e6998e5023f0b97159c3e85390e5e90cb9adbc3ea45f2ca0fe02813864a4",
+      "output_hash": "4d6a6dc4f4ff43507d2c85ae5b3125bda4b48bcacc8864e2f82682405415b587",
+      "latency_ms": 7345,
+      "provider_latency_ms": 7142,
+      "usage": {
+        "promptTokenCount": 5289,
+        "candidatesTokenCount": 1125,
+        "totalTokenCount": 6414,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 5289
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "cost": null,
+      "finish_reason": "STOP"
+    },
+    {
+      "file": "PB-014-UN-GRADO-UNA-SESION.json",
+      "task": "REVIEW",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1",
+      "input_hash": "51e05435166176df0c8a0b884f13e4457c41c68e1310453c489aa4ee769dfc51",
+      "output_hash": "c27909f4b20c368cb819476a57467d1fa3e096a848c100a72ccedf6f3dec8edb",
+      "latency_ms": 14483,
+      "provider_latency_ms": 14343,
+      "usage": {
+        "promptTokenCount": 3650,
+        "candidatesTokenCount": 1127,
+        "totalTokenCount": 4777,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 3650
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "cost": null,
+      "finish_reason": "STOP"
+    },
+    {
+      "file": "PB-015-SEIS-GRADOS-DOS-SESIONES.json",
+      "task": "REVIEW",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1",
+      "input_hash": "3986723cfdbf63c57643cc3ce0432b2e1de82e831427c73100c9b93d3faa8143",
+      "output_hash": "88dbfc5e1cdcadafe412e5e7870d2371f4f070f4f25551f4bbf0c5841192a1fc",
+      "latency_ms": 3865,
+      "provider_latency_ms": 3652,
+      "usage": {
+        "promptTokenCount": 5666,
+        "candidatesTokenCount": 1015,
+        "totalTokenCount": 6681,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 5666
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "cost": null,
+      "finish_reason": "STOP"
+    },
+    {
+      "file": "PB-016-LTG-CORE.json",
+      "task": "REVIEW",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1",
+      "input_hash": "cfcf22d6724cd498fb1ef6f5ff0f239583932e95c61aabed03f08c60f539a318",
+      "output_hash": "fa635e9909dc2e51d34e5eb97eae834a02cbfac5dbdeac97054481a14b3a7992",
+      "latency_ms": 7215,
+      "provider_latency_ms": 7043,
+      "usage": {
+        "promptTokenCount": 4663,
+        "candidatesTokenCount": 1233,
+        "totalTokenCount": 5896,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 4663
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "cost": null,
+      "finish_reason": "STOP"
+    },
+    {
+      "file": "PB-017-LTG-SUPPORT.json",
+      "task": "REVIEW",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1",
+      "input_hash": "329b31b948506108659f1dbb58006532f7d4be38b02167c6a189029d199e6dc8",
+      "output_hash": "a061e80156c34321e712002a752a7fdb2642008c0dcf1332750dfac9b1fdab3f",
+      "latency_ms": 8497,
+      "provider_latency_ms": 8326,
+      "usage": {
+        "promptTokenCount": 4714,
+        "candidatesTokenCount": 1118,
+        "totalTokenCount": 5832,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 4714
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "cost": null,
+      "finish_reason": "STOP"
+    },
+    {
+      "file": "PB-018-LTG-OPTIONAL.json",
+      "task": "REVIEW",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1",
+      "input_hash": "cc83a930f42b91235d98676532bde21922baa7ada42c86f6eb0cc420ce35d8c0",
+      "output_hash": "30e63486fad2d8774143637e88b9024d95461c6e3c4483a851971c27a0c33058",
+      "latency_ms": 6467,
+      "provider_latency_ms": 6291,
+      "usage": {
+        "promptTokenCount": 4656,
+        "candidatesTokenCount": 1064,
+        "totalTokenCount": 5720,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 4656
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "cost": null,
+      "finish_reason": "STOP"
+    },
+    {
+      "file": "PB-019-WEAK.json",
+      "task": "REVIEW",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1",
+      "input_hash": "f0bdea3c391039af7243fe5a6fcce5de30e651f836c4c0fd2f5137ea9baf6468",
+      "output_hash": "1e6147abea366d66cc59bfb9592d74333ac3e3ba3757f92892bfb0517186290b",
+      "latency_ms": 4440,
+      "provider_latency_ms": 4264,
+      "usage": {
+        "promptTokenCount": 4413,
+        "candidatesTokenCount": 1118,
+        "totalTokenCount": 5531,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 4413
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "cost": null,
+      "finish_reason": "STOP"
+    },
+    {
+      "file": "PB-020-MUSEO-REAL.json",
+      "task": "REVIEW",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1",
+      "input_hash": "dc456e552036b954e38284820a14b8e1c41042f79ce45a6f6d8c755e31def8df",
+      "output_hash": "2d193f902da804117e4d584e7eb59c4d1cf2a9d05626dd6c1a06b9ca7904d236",
+      "latency_ms": 8006,
+      "provider_latency_ms": 7841,
+      "usage": {
+        "promptTokenCount": 4918,
+        "candidatesTokenCount": 1128,
+        "totalTokenCount": 6046,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 4918
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "cost": null,
+      "finish_reason": "STOP"
+    },
+    {
+      "file": "PB-021-CINCO-SESIONES-attempt-1790164186823.json",
+      "task": "REVIEW",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1",
+      "input_hash": "7376425d9abc2cc4d317eaee690b051e04d5e05d274cbc0c0398e2814a850607",
+      "output_hash": "9d4236420ba736e428668f70397c5a9150d75fc5bba2919c942d5b99a621d977",
+      "latency_ms": 6248,
+      "provider_latency_ms": 6105,
+      "usage": {
+        "promptTokenCount": 4898,
+        "candidatesTokenCount": 1084,
+        "totalTokenCount": 5982,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 4898
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "cost": null,
+      "finish_reason": "STOP"
+    },
+    {
+      "file": "PB-021-CINCO-SESIONES.json",
+      "task": "REVIEW",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1",
+      "input_hash": "03c2f7214c66a6aa79f2ccab0d5758868e6b06e42da99f09828851d9bf019f2a",
+      "output_hash": "81a74c22d27dfca7fa539789374f819456f895addd4b68726b7a13d7a5ef5cf5",
+      "latency_ms": 7141,
+      "provider_latency_ms": 6972,
+      "usage": {
+        "promptTokenCount": 4959,
+        "candidatesTokenCount": 1051,
+        "totalTokenCount": 6010,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 4959
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "cost": null,
+      "finish_reason": "STOP"
+    },
+    {
+      "file": "PB-022-MAS-SESIONES-QUE-OPERACIONES-attempt-1790164191983.json",
+      "task": "REVIEW",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1",
+      "input_hash": "04ea736b1adeba90620635c0d431fb1813521cc5660947381590d29daf9c3f22",
+      "output_hash": "5b0b7978593c521b3c5b9d1681d84efb3513084fd886f9683d527d350e2b51f6",
+      "latency_ms": 4985,
+      "provider_latency_ms": 4821,
+      "usage": {
+        "promptTokenCount": 6829,
+        "candidatesTokenCount": 1202,
+        "totalTokenCount": 8031,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 6829
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "cost": null,
+      "finish_reason": "STOP"
+    },
+    {
+      "file": "PB-022-MAS-SESIONES-QUE-OPERACIONES.json",
+      "task": "REVIEW",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1",
+      "input_hash": "492a4ae08d95ad84ebfc13c1c01beb87ef69bb4644d2ae4f84169d2b182a4e6b",
+      "output_hash": "3d345326e25ceea1b44ef34dd840f649fdf368d107e6b6359a3699b7bd7b9a93",
+      "latency_ms": 5155,
+      "provider_latency_ms": 4908,
+      "usage": {
+        "promptTokenCount": 6890,
+        "candidatesTokenCount": 1046,
+        "totalTokenCount": 7936,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 6890
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "cost": null,
+      "finish_reason": "STOP"
+    },
+    {
+      "file": "generated-attempt-1-rejected.json",
+      "task": "GENERATE",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1",
+      "input_hash": "7a4ad464c91a439f273b6c9960b339dd4b08fdd047974a082e10dbe5e834e52b",
+      "output_hash": "f63cd147ad68bf5e6e7c4d70c54fc9dbcad8cb63c439d28c18b0d95cd75a5a32",
+      "latency_ms": 18692,
+      "provider_latency_ms": 12828,
+      "usage": {
+        "promptTokenCount": 5077,
+        "candidatesTokenCount": 3766,
+        "totalTokenCount": 8843,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 5077
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "cost": null,
+      "finish_reason": "STOP",
+      "repair_count": 0
+    },
+    {
+      "file": "generated-attempt-1-rejected.json",
+      "task": "REPAIR",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1",
+      "input_hash": "0e4fe5cde15ac1988be9982004f2937e5460d9dea37df1112b8b67b3234aad1a",
+      "output_hash": "9275f6a2459394f56eaebc7b94e155ed6ab42b5c600d1bccd10d3d38a960b13a",
+      "latency_ms": 11340,
+      "provider_latency_ms": 11141,
+      "usage": {
+        "promptTokenCount": 7777,
+        "candidatesTokenCount": 3802,
+        "totalTokenCount": 11579,
+        "cachedContentTokenCount": 4043,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 7777
+          }
+        ],
+        "cacheTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 4043
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "cost": null,
+      "finish_reason": "STOP",
+      "repair_count": 1
+    },
+    {
+      "file": "generated-attempt-1-rejected.json",
+      "task": "REVIEW",
+      "error": "Error: PROVIDER_ERROR:503",
+      "repair_count": 1
+    },
+    {
+      "file": "generated-blueprint-attempt-1790164209246.json",
+      "task": "GENERATE",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1",
+      "input_hash": "bf6057808316d3e35968669de72c4572d3eda8c0e4ec102f37fad5a90925ebb7",
+      "output_hash": "7e4be4b286ac06fb63fb470d315eefc7860da969e9c3775cc7fe473a1e8558bf",
+      "latency_ms": 21966,
+      "provider_latency_ms": 15557,
+      "usage": {
+        "promptTokenCount": 5277,
+        "candidatesTokenCount": 4023,
+        "totalTokenCount": 9300,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 5277
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "cost": null,
+      "finish_reason": "STOP",
+      "repair_count": 0
+    },
+    {
+      "file": "generated-blueprint-attempt-1790164209246.json",
+      "task": "REVIEW",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1",
+      "input_hash": "af1f61d816114a92a63ad9cd5bdff38fc407204ade3243afe3d14cb74f8d81af",
+      "output_hash": "f03240d657f31b39e78e6ee12a03bf1b0639ff309aa0bec6d143f063910b9564",
+      "latency_ms": 4918,
+      "provider_latency_ms": 4776,
+      "usage": {
+        "promptTokenCount": 4402,
+        "candidatesTokenCount": 1042,
+        "totalTokenCount": 5444,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 4402
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "cost": null,
+      "finish_reason": "STOP",
+      "repair_count": 0
+    },
+    {
+      "file": "generated-blueprint-attempt-1790164209246.json",
+      "task": "REPAIR",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1",
+      "input_hash": "54fb0114b5519bb2ecdc678f058395439d6c5c75990c3fc4299d9e986e40d116",
+      "output_hash": null,
+      "usage": null,
+      "cost": null,
+      "latency_ms": 720,
+      "error": "Error: PROVIDER_ERROR:503",
+      "repair_count": 1
+    },
+    {
+      "file": "generated-blueprint.json",
+      "task": "GENERATE",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1",
+      "input_hash": "ff7ca1b499dbff36366ba62cc2872f1f7a926aae92c8cdb1fe613c84f63cce3c",
+      "output_hash": "234a8a7e019199b986381b2d02e2bfb6c727b372624a1dca04dfd153ffc44e2c",
+      "latency_ms": 23056,
+      "provider_latency_ms": 17744,
+      "usage": {
+        "promptTokenCount": 5272,
+        "candidatesTokenCount": 3863,
+        "totalTokenCount": 9135,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 5272
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "cost": null,
+      "finish_reason": "STOP",
+      "repair_count": 0
+    },
+    {
+      "file": "generated-blueprint.json",
+      "task": "REVIEW",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1",
+      "input_hash": "09f48853ec1f10b18cf077622b041e49c72962738acd77f212c230c73882f5c3",
+      "output_hash": "c0d32feb2af25009ba495f26d51e90031aba69fb4719f8c7b69c6cec8d79f4b8",
+      "latency_ms": 8132,
+      "provider_latency_ms": 7867,
+      "usage": {
+        "promptTokenCount": 4431,
+        "candidatesTokenCount": 1088,
+        "totalTokenCount": 5519,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 4431
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "cost": null,
+      "finish_reason": "STOP",
+      "repair_count": 0
+    },
+    {
+      "file": "generated-blueprint.json",
+      "task": "REPAIR",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1",
+      "input_hash": "a7d6dfa7458284b3bae63828ee6931bfd5c6d0671c1730d8a19d95f4173802f1",
+      "output_hash": null,
+      "usage": null,
+      "cost": null,
+      "latency_ms": 1084,
+      "error": "Error: PROVIDER_ERROR:503",
+      "repair_count": 1
+    }
+  ]
+}

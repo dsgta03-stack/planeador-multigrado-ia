@@ -1,0 +1,19 @@
+{
+  "kind": "ANONYMIZED_OBSERVED_FAILURE_ADAPTATION",
+  "fixture_id": "PB-020-MUSEO-REAL",
+  "original_observed_case": {
+    "title": "Museo itinerante de la identidad nacional",
+    "requested_sessions": 5,
+    "methodology": "proyectos_comunitarios",
+    "last_phase": "Intervención",
+    "declared_advance": "Exposición abierta a la comunidad",
+    "observed_actions": [
+      "Conducción de la asamblea final de acuerdos.",
+      "Registro de aprendizajes en el cuaderno."
+    ],
+    "next_session_text": "Evaluación final del proyecto.",
+    "legacy_coherence_result": "PASS"
+  },
+  "adaptation": "PB-020 preserves the declared exhibition without producing it, missing circulation, reflection-only intervention and nonexistent next session. It uses three synthetic sessions and public PDA for school agreements; it is not an exact historical input replay. No user identity, school identifier or historical account record is included.",
+  "scope_limit": "The fixture does not independently prove detection of every possible orphan artifact or phase-by-position bug. BPD-007, BPD-015 and separate fixtures cover structural dependencies; BPS-008 must judge authentic operations, not labels."
+}

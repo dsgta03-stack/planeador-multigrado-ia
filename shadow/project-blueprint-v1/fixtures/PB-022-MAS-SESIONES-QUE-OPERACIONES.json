@@ -1,0 +1,875 @@
+{
+  "fixture_version": "BLUEPRINT_FIXTURES_V1",
+  "id": "PB-022-MAS-SESIONES-QUE-OPERACIONES",
+  "description": "Secuencia arquitectónica escrita por propósito, sin repartir fases por índice",
+  "expected": {
+    "pass": true
+  },
+  "input": {
+    "constraints": {
+      "grades": [
+        1,
+        3
+      ],
+      "selected_pda_ids": [
+        "F3-DHC-1-010",
+        "F4-DHC-3-001"
+      ],
+      "explicit_ltg_selections": [],
+      "requested_sessions": 12,
+      "minutes_per_session": 30,
+      "original_problem": "En el grupo desconocemos por qué existen nuestros acuerdos y prácticas escolares; esto dificulta convivir y explicar su importancia a los compañeros nuevos.",
+      "original_context": "Escuela multigrado. Podemos consultar al docente y los recuerdos del grupo sobre prácticas y acuerdos de la escuela. Tenemos aula y patio techado, dos espacios seguros para intercambiar explicaciones con compañeros del mismo grupo. Sin internet, visitas ni participación familiar obligatoria. El alumnado nuevo necesita conocer cómo convivir y dónde pedir apoyo.",
+      "students_by_grade": {
+        "1": 5,
+        "3": 5
+      },
+      "reading_profile": "Lectura inicial en primero; tercero lee textos breves con apoyo.",
+      "writing_profile": "Primero usa dibujos y dictado; tercero registros breves.",
+      "autonomy_profile": "Baja; requiere consignas visuales y apoyo entre pares.",
+      "connectivity": "SIN_INTERNET",
+      "available_resources": [
+        "papel reutilizado",
+        "lápices",
+        "colores",
+        "mesas",
+        "aula",
+        "patio techado"
+      ],
+      "supports": [
+        "modelado docente",
+        "apoyo entre pares"
+      ],
+      "teacher_explicit_constraints": [
+        "Sin salir de la escuela",
+        "No pedir compras"
+      ],
+      "schema_version": "TEACHER_CONSTRAINTS_V1",
+      "constraints_id": "2cb60dfd-81be-4bc8-9698-30efb0ec82db",
+      "created_at": "2026-09-23T11:41:17.082Z",
+      "constraints_hash": "12a57000868a5861e8911c16c6bb463edf60325f6f8aafdc8fba680f6e4f8005"
+    },
+    "curriculum": {
+      "corpus_version_or_provenance": "Supabase official PDA, read-only export 2026-09-23; no user records",
+      "pdas": [
+        {
+          "pda_id": "F3-DHC-1-010",
+          "grade": 1,
+          "field": "De lo Humano y lo Comunitario",
+          "content_official": "Construcción del proyecto de vida.",
+          "pda_official": "Explica situaciones cotidianas que se presentan en la escuela y la casa, con la intención de proponer acuerdos que generen una mejor convivencia.",
+          "verification_status": "Verificado"
+        },
+        {
+          "pda_id": "F4-DHC-3-001",
+          "grade": 3,
+          "field": "De lo Humano y lo Comunitario",
+          "content_official": "La comunidad como el espacio en el que se vive y se encuentra la escuela.",
+          "pda_official": "Indaga acerca de ideas, conocimientos, prácticas culturales, formas de organización y acuerdos familiares, escolares y comunitarios, para compartir su importancia en la socialización.",
+          "verification_status": "Verificado"
+        }
+      ],
+      "ltg": [],
+      "schema_version": "CURRICULUM_SNAPSHOT_V1",
+      "snapshot_id": "b9f80718-8d36-438f-a01f-f4dd0a2a595c",
+      "created_at": "2026-09-23T11:41:17.082Z",
+      "snapshot_hash": "2dd0aee8c51fc86fc10cbe6fb4a81afcba1b03d5a8fa875eb1ec638157449259"
+    },
+    "methodology": {
+      "schema_version": "METHODOLOGY_DECISION_V1",
+      "methodology_decision_id": "6093752e-6afb-4e83-9b5f-c99147ff3724",
+      "recommended_id": null,
+      "selected_id": "abp",
+      "selection_source": "TEACHER",
+      "catalog_version": "METHODOLOGY_CATALOG_V1",
+      "required_operations": [
+        "PRESENTEMOS",
+        "RECOLECTEMOS",
+        "FORMULEMOS_PROBLEMA",
+        "ORGANICEMOS_EXPERIENCIA",
+        "VIVAMOS_EXPERIENCIA",
+        "RESULTADOS_ANALISIS"
+      ]
+    },
+    "blueprint": {
+      "schema_version": "PROJECT_BLUEPRINT_V1",
+      "blueprint_id": "authored-fixture",
+      "revision": 1,
+      "status": "DRAFT",
+      "source": {
+        "constraints_hash": "12a57000868a5861e8911c16c6bb463edf60325f6f8aafdc8fba680f6e4f8005",
+        "curriculum_snapshot_hash": "2dd0aee8c51fc86fc10cbe6fb4a81afcba1b03d5a8fa875eb1ec638157449259",
+        "methodology_decision_id": "6093752e-6afb-4e83-9b5f-c99147ff3724",
+        "methodology_decision_hash": "0c2fa0c13f124bde7af4ecf671b85f29a8e5e58f12f6677ddc99af0b9e30e06a"
+      },
+      "problem_frame": {
+        "original_problem": "En el grupo desconocemos por qué existen nuestros acuerdos y prácticas escolares; esto dificulta convivir y explicar su importancia a los compañeros nuevos.",
+        "pedagogical_focus": "Comprender y comunicar el significado de acuerdos escolares para mejorar convivencia",
+        "context_relevance": "Usa experiencias y espacios disponibles del grupo",
+        "why_project_is_needed": "El grupo nuevo necesita comprender y aplicar acuerdos, no memorizar nombres",
+        "scope": [
+          "Dos acuerdos de convivencia escolar"
+        ],
+        "out_of_scope": [
+          "Investigación externa",
+          "Datos personales"
+        ]
+      },
+      "methodology": {
+        "selected_id": "abp",
+        "catalog_version": "METHODOLOGY_CATALOG_V1",
+        "required_operations": [
+          "PRESENTEMOS",
+          "RECOLECTEMOS",
+          "FORMULEMOS_PROBLEMA",
+          "ORGANICEMOS_EXPERIENCIA",
+          "VIVAMOS_EXPERIENCIA",
+          "RESULTADOS_ANALISIS"
+        ]
+      },
+      "guiding_question": {
+        "question": "¿Cómo podemos explicar y poner en práctica nuestros acuerdos para convivir mejor?",
+        "problem_link": "Responde al desconocimiento de su sentido",
+        "product_link": "El resultado permite a compañeros comprender y aplicar acuerdos",
+        "grade_accessibility": "ALL_GRADES"
+      },
+      "final_outcome": {
+        "outcome_id": "outcome_01",
+        "name": "Propuesta común de acuerdos justificados y probados",
+        "type": "PROPOSAL",
+        "description": "Propuesta común de acuerdos justificados y probados construido con explicaciones y evidencias compartidas, probado en el propio grupo.",
+        "purpose": "Resolver la necesidad de comprensión y uso de acuerdos",
+        "audience_or_beneficiary": "Compañeros nuevos del mismo grupo",
+        "use_or_destination": "Uso escolar y registro final conservado en el aula",
+        "functional_profiles": [],
+        "functional_requirements": [
+          {
+            "requirement_id": "justified_proposal",
+            "criterion": "Propuesta común responde al problema con razones recogidas y prueba en el grupo",
+            "stage_ids": [
+              "explain",
+              "trial",
+              "evaluate"
+            ],
+            "evidence": "Acuerdo explicado, aplicado y revisado por sus efectos"
+          }
+        ],
+        "completion_evidence": [
+          "Registro de consulta, aportes y realización con recepción de compañeros"
+        ],
+        "authenticity_conditions": [
+          "Se realiza con compañeros del grupo en espacios disponibles"
+        ],
+        "required_resources": [
+          {
+            "resource": "papel reutilizado",
+            "essential": true,
+            "alternative": null,
+            "alternative_rationale": null
+          }
+        ]
+      },
+      "pda_analysis": [
+        {
+          "pda_id": "F3-DHC-1-010",
+          "grade": 1,
+          "official_text": "Explica situaciones cotidianas que se presentan en la escuela y la casa, con la intención de proponer acuerdos que generen una mejor convivencia.",
+          "central_cognitive_action": "EXPLICA",
+          "cognitive_interpretation": {
+            "official_text_basis": "Explica situaciones cotidianas que se presentan en la escuela y la casa, con la intención de proponer acuerdos que generen una mejor convivencia.",
+            "reasoning": "El desempeño requiere comprender situaciones/prácticas y explicar su significado o indagar mediante consultas; un dibujo sólo sirve acompañado de explicación y evidencia de consulta.",
+            "performance_indicators": [
+              "Explica un acuerdo con una situación concreta y su utilidad",
+              "Si el PDA pide indagar, registra una consulta y compara testimonios"
+            ]
+          },
+          "expected_performance": "Comprender y comunicar función de acuerdos mediante situación o consulta según PDA completo",
+          "observable_evidence_conditions": [
+            "Explicación oral o registro con fuente y sentido del acuerdo"
+          ],
+          "possible_project_contribution": "Pieza o explicación fundamentada necesaria para la comprensión del grupo",
+          "integration_strength": "DIRECT",
+          "integration_reason": "La aportación desarrolla explícitamente el desempeño del PDA en prácticas escolares"
+        },
+        {
+          "pda_id": "F4-DHC-3-001",
+          "grade": 3,
+          "official_text": "Indaga acerca de ideas, conocimientos, prácticas culturales, formas de organización y acuerdos familiares, escolares y comunitarios, para compartir su importancia en la socialización.",
+          "central_cognitive_action": "INDAGA",
+          "cognitive_interpretation": {
+            "official_text_basis": "Indaga acerca de ideas, conocimientos, prácticas culturales, formas de organización y acuerdos familiares, escolares y comunitarios, para compartir su importancia en la socialización.",
+            "reasoning": "El desempeño requiere comprender situaciones/prácticas y explicar su significado o indagar mediante consultas; un dibujo sólo sirve acompañado de explicación y evidencia de consulta.",
+            "performance_indicators": [
+              "Explica un acuerdo con una situación concreta y su utilidad",
+              "Si el PDA pide indagar, registra una consulta y compara testimonios"
+            ]
+          },
+          "expected_performance": "Comprender y comunicar función de acuerdos mediante situación o consulta según PDA completo",
+          "observable_evidence_conditions": [
+            "Explicación oral o registro con fuente y sentido del acuerdo"
+          ],
+          "possible_project_contribution": "Pieza o explicación fundamentada necesaria para la comprensión del grupo",
+          "integration_strength": "DIRECT",
+          "integration_reason": "La aportación desarrolla explícitamente el desempeño del PDA en prácticas escolares"
+        }
+      ],
+      "grade_contributions": [
+        {
+          "contribution_id": "grade_1",
+          "grade": 1,
+          "curriculum_mode": "PDA_SELECTED",
+          "pda_ids": [
+            "F3-DHC-1-010"
+          ],
+          "learning_role": "Explicar una situación cotidiana y proponer un acuerdo",
+          "project_contribution": "Dibujo con explicación dictada que plantea la situación a investigar",
+          "expected_evidence": "Explicación oral de situación, razón y acuerdo",
+          "complexity_level": "Representación oral y visual con apoyo",
+          "support_need": "Modelado docente y referente visual",
+          "integration_destination": "outcome_01"
+        },
+        {
+          "contribution_id": "grade_3",
+          "grade": 3,
+          "curriculum_mode": "PDA_SELECTED",
+          "pda_ids": [
+            "F4-DHC-3-001"
+          ],
+          "learning_role": "Consultar y contrastar significados de acuerdos",
+          "project_contribution": "Registro de consultas que fundamenta y mejora la explicación del acuerdo",
+          "expected_evidence": "Consulta registrada y comparación de testimonios con explicación de importancia",
+          "complexity_level": "Explicación/registro ajustado a experiencia",
+          "support_need": "Modelado docente y referente visual",
+          "integration_destination": "outcome_01"
+        }
+      ],
+      "project_stages": [
+        {
+          "stage_id": "listen",
+          "order": 1,
+          "purpose": "Escuchar situaciones que necesitan explicación",
+          "required_inputs": [
+            "input_context",
+            "input_curriculum"
+          ],
+          "student_operation": "Compartir una situación escolar concreta y recoger preguntas",
+          "methodology_operations": [
+            "PRESENTEMOS"
+          ],
+          "expected_output": "Registro observable de escuchar situaciones que necesitan explicación",
+          "output_artifact_id": "artifact_listen",
+          "consumed_by": [
+            "recall"
+          ],
+          "acceptance_criteria": [
+            "El registro muestra compartir una situación escolar concreta y recoger preguntas"
+          ],
+          "estimated_minutes": 20,
+          "estimate_rationale": "Dos acuerdos conocidos; apoyo visual, consulta breve y pocos materiales"
+        },
+        {
+          "stage_id": "recall",
+          "order": 2,
+          "purpose": "Recuperar experiencias propias",
+          "required_inputs": [
+            "artifact_listen"
+          ],
+          "student_operation": "Contrastar recuerdos de acuerdos conocidos sin atribuirles causas todavía",
+          "methodology_operations": [
+            "RECOLECTEMOS"
+          ],
+          "expected_output": "Registro observable de recuperar experiencias propias",
+          "output_artifact_id": "artifact_recall",
+          "consumed_by": [
+            "question"
+          ],
+          "acceptance_criteria": [
+            "El registro muestra contrastar recuerdos de acuerdos conocidos sin atribuirles causas todavía"
+          ],
+          "estimated_minutes": 20,
+          "estimate_rationale": "Dos acuerdos conocidos; apoyo visual, consulta breve y pocos materiales"
+        },
+        {
+          "stage_id": "question",
+          "order": 3,
+          "purpose": "Precisar el problema",
+          "required_inputs": [
+            "artifact_recall"
+          ],
+          "student_operation": "Formular una pregunta común acerca de la utilidad de dos acuerdos",
+          "methodology_operations": [
+            "FORMULEMOS_PROBLEMA"
+          ],
+          "expected_output": "Registro observable de precisar el problema",
+          "output_artifact_id": "artifact_question",
+          "consumed_by": [
+            "criteria"
+          ],
+          "acceptance_criteria": [
+            "El registro muestra formular una pregunta común acerca de la utilidad de dos acuerdos"
+          ],
+          "estimated_minutes": 20,
+          "estimate_rationale": "Dos acuerdos conocidos; apoyo visual, consulta breve y pocos materiales"
+        },
+        {
+          "stage_id": "criteria",
+          "order": 4,
+          "purpose": "Organizar la consulta",
+          "required_inputs": [
+            "artifact_question"
+          ],
+          "student_operation": "Definir fuentes escolares accesibles y registro con apoyo visual",
+          "methodology_operations": [
+            "ORGANICEMOS_EXPERIENCIA"
+          ],
+          "expected_output": "Registro observable de organizar la consulta",
+          "output_artifact_id": "artifact_criteria",
+          "consumed_by": [
+            "consult"
+          ],
+          "acceptance_criteria": [
+            "El registro muestra definir fuentes escolares accesibles y registro con apoyo visual"
+          ],
+          "estimated_minutes": 20,
+          "estimate_rationale": "Dos acuerdos conocidos; apoyo visual, consulta breve y pocos materiales"
+        },
+        {
+          "stage_id": "consult",
+          "order": 5,
+          "purpose": "Indagar significados",
+          "required_inputs": [
+            "artifact_criteria"
+          ],
+          "student_operation": "Consultar al docente y al grupo y registrar versiones de los acuerdos",
+          "methodology_operations": [
+            "VIVAMOS_EXPERIENCIA"
+          ],
+          "expected_output": "Registro observable de indagar significados",
+          "output_artifact_id": "artifact_consult",
+          "consumed_by": [
+            "compare"
+          ],
+          "acceptance_criteria": [
+            "El registro muestra consultar al docente y al grupo y registrar versiones de los acuerdos"
+          ],
+          "estimated_minutes": 20,
+          "estimate_rationale": "Dos acuerdos conocidos; apoyo visual, consulta breve y pocos materiales"
+        },
+        {
+          "stage_id": "compare",
+          "order": 6,
+          "purpose": "Contrastar las versiones",
+          "required_inputs": [
+            "artifact_consult"
+          ],
+          "student_operation": "Comparar las razones obtenidas y reconocer diferencias",
+          "methodology_operations": [
+            "VIVAMOS_EXPERIENCIA"
+          ],
+          "expected_output": "Registro observable de contrastar las versiones",
+          "output_artifact_id": "artifact_compare",
+          "consumed_by": [
+            "explain"
+          ],
+          "acceptance_criteria": [
+            "El registro muestra comparar las razones obtenidas y reconocer diferencias"
+          ],
+          "estimated_minutes": 20,
+          "estimate_rationale": "Dos acuerdos conocidos; apoyo visual, consulta breve y pocos materiales"
+        },
+        {
+          "stage_id": "explain",
+          "order": 7,
+          "purpose": "Fundamentar acuerdos",
+          "required_inputs": [
+            "artifact_compare"
+          ],
+          "student_operation": "Construir explicaciones de la relación entre acuerdo, situación y convivencia",
+          "methodology_operations": [
+            "VIVAMOS_EXPERIENCIA"
+          ],
+          "expected_output": "Registro observable de fundamentar acuerdos",
+          "output_artifact_id": "artifact_explain",
+          "consumed_by": [
+            "draft"
+          ],
+          "acceptance_criteria": [
+            "El registro muestra construir explicaciones de la relación entre acuerdo, situación y convivencia"
+          ],
+          "estimated_minutes": 20,
+          "estimate_rationale": "Dos acuerdos conocidos; apoyo visual, consulta breve y pocos materiales"
+        },
+        {
+          "stage_id": "draft",
+          "order": 8,
+          "purpose": "Construir la propuesta común",
+          "required_inputs": [
+            "artifact_explain"
+          ],
+          "student_operation": "Combinar dibujos explicados y registros de consulta en una propuesta de dos acuerdos",
+          "methodology_operations": [
+            "VIVAMOS_EXPERIENCIA"
+          ],
+          "expected_output": "Registro observable de construir la propuesta común",
+          "output_artifact_id": "artifact_draft",
+          "consumed_by": [
+            "trial"
+          ],
+          "acceptance_criteria": [
+            "El registro muestra combinar dibujos explicados y registros de consulta en una propuesta de dos acuerdos"
+          ],
+          "estimated_minutes": 20,
+          "estimate_rationale": "Dos acuerdos conocidos; apoyo visual, consulta breve y pocos materiales"
+        },
+        {
+          "stage_id": "trial",
+          "order": 9,
+          "purpose": "Probar la propuesta",
+          "required_inputs": [
+            "artifact_draft"
+          ],
+          "student_operation": "Aplicar los acuerdos con compañeros del mismo grupo y registrar dificultades",
+          "methodology_operations": [
+            "VIVAMOS_EXPERIENCIA"
+          ],
+          "expected_output": "Registro observable de probar la propuesta",
+          "output_artifact_id": "artifact_trial",
+          "consumed_by": [
+            "revise"
+          ],
+          "acceptance_criteria": [
+            "El registro muestra aplicar los acuerdos con compañeros del mismo grupo y registrar dificultades"
+          ],
+          "estimated_minutes": 20,
+          "estimate_rationale": "Dos acuerdos conocidos; apoyo visual, consulta breve y pocos materiales"
+        },
+        {
+          "stage_id": "revise",
+          "order": 10,
+          "purpose": "Revisar con evidencia",
+          "required_inputs": [
+            "artifact_trial"
+          ],
+          "student_operation": "Ajustar la propuesta según los registros de uso y las dudas recibidas",
+          "methodology_operations": [
+            "RESULTADOS_ANALISIS"
+          ],
+          "expected_output": "Registro observable de revisar con evidencia",
+          "output_artifact_id": "artifact_revise",
+          "consumed_by": [
+            "share"
+          ],
+          "acceptance_criteria": [
+            "El registro muestra ajustar la propuesta según los registros de uso y las dudas recibidas"
+          ],
+          "estimated_minutes": 20,
+          "estimate_rationale": "Dos acuerdos conocidos; apoyo visual, consulta breve y pocos materiales"
+        },
+        {
+          "stage_id": "share",
+          "order": 11,
+          "purpose": "Comunicar las razones",
+          "required_inputs": [
+            "artifact_revise"
+          ],
+          "student_operation": "Explicar a compañeros nuevos la propuesta y contrastar comprensión",
+          "methodology_operations": [
+            "RESULTADOS_ANALISIS"
+          ],
+          "expected_output": "Registro observable de comunicar las razones",
+          "output_artifact_id": "artifact_share",
+          "consumed_by": [
+            "evaluate"
+          ],
+          "acceptance_criteria": [
+            "El registro muestra explicar a compañeros nuevos la propuesta y contrastar comprensión"
+          ],
+          "estimated_minutes": 20,
+          "estimate_rationale": "Dos acuerdos conocidos; apoyo visual, consulta breve y pocos materiales"
+        },
+        {
+          "stage_id": "evaluate",
+          "order": 12,
+          "purpose": "Cerrar y valorar",
+          "required_inputs": [
+            "artifact_share"
+          ],
+          "student_operation": "Conservar propuesta y registro de resultados y explicar qué aprendimos sin anunciar otra sesión",
+          "methodology_operations": [
+            "RESULTADOS_ANALISIS"
+          ],
+          "expected_output": "Registro observable de cerrar y valorar",
+          "output_artifact_id": "artifact_evaluate",
+          "consumed_by": [
+            "outcome_01"
+          ],
+          "acceptance_criteria": [
+            "El registro muestra conservar propuesta y registro de resultados y explicar qué aprendimos sin anunciar otra sesión"
+          ],
+          "estimated_minutes": 20,
+          "estimate_rationale": "Dos acuerdos conocidos; apoyo visual, consulta breve y pocos materiales"
+        }
+      ],
+      "session_progression": [
+        {
+          "session_number": 1,
+          "project_state_before": "Problema contextual disponible",
+          "session_project_goal": "Escuchar situaciones que necesitan explicación",
+          "required_learning": [
+            "Indagar y explicar sentido de acuerdos"
+          ],
+          "methodology_operations": [
+            "PRESENTEMOS"
+          ],
+          "pda_focus": [
+            "F3-DHC-1-010",
+            "F4-DHC-3-001"
+          ],
+          "input_artifact_ids": [
+            "input_context",
+            "input_curriculum"
+          ],
+          "expected_output_artifact_ids": [
+            "artifact_listen"
+          ],
+          "expected_partial_product": "Registro observable de escuchar situaciones que necesitan explicación",
+          "acceptance_criteria": [
+            "El registro muestra compartir una situación escolar concreta y recoger preguntas"
+          ],
+          "project_state_after": "Registro observable de escuchar situaciones que necesitan explicación",
+          "next_session_dependency": 2,
+          "terminal": false
+        },
+        {
+          "session_number": 2,
+          "project_state_before": "Registro observable de escuchar situaciones que necesitan explicación",
+          "session_project_goal": "Recuperar experiencias propias",
+          "required_learning": [
+            "Indagar y explicar sentido de acuerdos"
+          ],
+          "methodology_operations": [
+            "RECOLECTEMOS"
+          ],
+          "pda_focus": [
+            "F3-DHC-1-010",
+            "F4-DHC-3-001"
+          ],
+          "input_artifact_ids": [
+            "artifact_listen"
+          ],
+          "expected_output_artifact_ids": [
+            "artifact_recall"
+          ],
+          "expected_partial_product": "Registro observable de recuperar experiencias propias",
+          "acceptance_criteria": [
+            "El registro muestra contrastar recuerdos de acuerdos conocidos sin atribuirles causas todavía"
+          ],
+          "project_state_after": "Registro observable de recuperar experiencias propias",
+          "next_session_dependency": 3,
+          "terminal": false
+        },
+        {
+          "session_number": 3,
+          "project_state_before": "Registro observable de recuperar experiencias propias",
+          "session_project_goal": "Precisar el problema",
+          "required_learning": [
+            "Indagar y explicar sentido de acuerdos"
+          ],
+          "methodology_operations": [
+            "FORMULEMOS_PROBLEMA"
+          ],
+          "pda_focus": [
+            "F3-DHC-1-010",
+            "F4-DHC-3-001"
+          ],
+          "input_artifact_ids": [
+            "artifact_recall"
+          ],
+          "expected_output_artifact_ids": [
+            "artifact_question"
+          ],
+          "expected_partial_product": "Registro observable de precisar el problema",
+          "acceptance_criteria": [
+            "El registro muestra formular una pregunta común acerca de la utilidad de dos acuerdos"
+          ],
+          "project_state_after": "Registro observable de precisar el problema",
+          "next_session_dependency": 4,
+          "terminal": false
+        },
+        {
+          "session_number": 4,
+          "project_state_before": "Registro observable de precisar el problema",
+          "session_project_goal": "Organizar la consulta",
+          "required_learning": [
+            "Indagar y explicar sentido de acuerdos"
+          ],
+          "methodology_operations": [
+            "ORGANICEMOS_EXPERIENCIA"
+          ],
+          "pda_focus": [
+            "F3-DHC-1-010",
+            "F4-DHC-3-001"
+          ],
+          "input_artifact_ids": [
+            "artifact_question"
+          ],
+          "expected_output_artifact_ids": [
+            "artifact_criteria"
+          ],
+          "expected_partial_product": "Registro observable de organizar la consulta",
+          "acceptance_criteria": [
+            "El registro muestra definir fuentes escolares accesibles y registro con apoyo visual"
+          ],
+          "project_state_after": "Registro observable de organizar la consulta",
+          "next_session_dependency": 5,
+          "terminal": false
+        },
+        {
+          "session_number": 5,
+          "project_state_before": "Registro observable de organizar la consulta",
+          "session_project_goal": "Indagar significados",
+          "required_learning": [
+            "Indagar y explicar sentido de acuerdos"
+          ],
+          "methodology_operations": [
+            "VIVAMOS_EXPERIENCIA"
+          ],
+          "pda_focus": [
+            "F3-DHC-1-010",
+            "F4-DHC-3-001"
+          ],
+          "input_artifact_ids": [
+            "artifact_criteria"
+          ],
+          "expected_output_artifact_ids": [
+            "artifact_consult"
+          ],
+          "expected_partial_product": "Registro observable de indagar significados",
+          "acceptance_criteria": [
+            "El registro muestra consultar al docente y al grupo y registrar versiones de los acuerdos"
+          ],
+          "project_state_after": "Registro observable de indagar significados",
+          "next_session_dependency": 6,
+          "terminal": false
+        },
+        {
+          "session_number": 6,
+          "project_state_before": "Registro observable de indagar significados",
+          "session_project_goal": "Contrastar las versiones",
+          "required_learning": [
+            "Indagar y explicar sentido de acuerdos"
+          ],
+          "methodology_operations": [
+            "VIVAMOS_EXPERIENCIA"
+          ],
+          "pda_focus": [
+            "F3-DHC-1-010",
+            "F4-DHC-3-001"
+          ],
+          "input_artifact_ids": [
+            "artifact_consult"
+          ],
+          "expected_output_artifact_ids": [
+            "artifact_compare"
+          ],
+          "expected_partial_product": "Registro observable de contrastar las versiones",
+          "acceptance_criteria": [
+            "El registro muestra comparar las razones obtenidas y reconocer diferencias"
+          ],
+          "project_state_after": "Registro observable de contrastar las versiones",
+          "next_session_dependency": 7,
+          "terminal": false
+        },
+        {
+          "session_number": 7,
+          "project_state_before": "Registro observable de contrastar las versiones",
+          "session_project_goal": "Fundamentar acuerdos",
+          "required_learning": [
+            "Indagar y explicar sentido de acuerdos"
+          ],
+          "methodology_operations": [
+            "VIVAMOS_EXPERIENCIA"
+          ],
+          "pda_focus": [
+            "F3-DHC-1-010",
+            "F4-DHC-3-001"
+          ],
+          "input_artifact_ids": [
+            "artifact_compare"
+          ],
+          "expected_output_artifact_ids": [
+            "artifact_explain"
+          ],
+          "expected_partial_product": "Registro observable de fundamentar acuerdos",
+          "acceptance_criteria": [
+            "El registro muestra construir explicaciones de la relación entre acuerdo, situación y convivencia"
+          ],
+          "project_state_after": "Registro observable de fundamentar acuerdos",
+          "next_session_dependency": 8,
+          "terminal": false
+        },
+        {
+          "session_number": 8,
+          "project_state_before": "Registro observable de fundamentar acuerdos",
+          "session_project_goal": "Construir la propuesta común",
+          "required_learning": [
+            "Indagar y explicar sentido de acuerdos"
+          ],
+          "methodology_operations": [
+            "VIVAMOS_EXPERIENCIA"
+          ],
+          "pda_focus": [
+            "F3-DHC-1-010",
+            "F4-DHC-3-001"
+          ],
+          "input_artifact_ids": [
+            "artifact_explain"
+          ],
+          "expected_output_artifact_ids": [
+            "artifact_draft"
+          ],
+          "expected_partial_product": "Registro observable de construir la propuesta común",
+          "acceptance_criteria": [
+            "El registro muestra combinar dibujos explicados y registros de consulta en una propuesta de dos acuerdos"
+          ],
+          "project_state_after": "Registro observable de construir la propuesta común",
+          "next_session_dependency": 9,
+          "terminal": false
+        },
+        {
+          "session_number": 9,
+          "project_state_before": "Registro observable de construir la propuesta común",
+          "session_project_goal": "Probar la propuesta",
+          "required_learning": [
+            "Indagar y explicar sentido de acuerdos"
+          ],
+          "methodology_operations": [
+            "VIVAMOS_EXPERIENCIA"
+          ],
+          "pda_focus": [
+            "F3-DHC-1-010",
+            "F4-DHC-3-001"
+          ],
+          "input_artifact_ids": [
+            "artifact_draft"
+          ],
+          "expected_output_artifact_ids": [
+            "artifact_trial"
+          ],
+          "expected_partial_product": "Registro observable de probar la propuesta",
+          "acceptance_criteria": [
+            "El registro muestra aplicar los acuerdos con compañeros del mismo grupo y registrar dificultades"
+          ],
+          "project_state_after": "Registro observable de probar la propuesta",
+          "next_session_dependency": 10,
+          "terminal": false
+        },
+        {
+          "session_number": 10,
+          "project_state_before": "Registro observable de probar la propuesta",
+          "session_project_goal": "Revisar con evidencia",
+          "required_learning": [
+            "Indagar y explicar sentido de acuerdos"
+          ],
+          "methodology_operations": [
+            "RESULTADOS_ANALISIS"
+          ],
+          "pda_focus": [
+            "F3-DHC-1-010",
+            "F4-DHC-3-001"
+          ],
+          "input_artifact_ids": [
+            "artifact_trial"
+          ],
+          "expected_output_artifact_ids": [
+            "artifact_revise"
+          ],
+          "expected_partial_product": "Registro observable de revisar con evidencia",
+          "acceptance_criteria": [
+            "El registro muestra ajustar la propuesta según los registros de uso y las dudas recibidas"
+          ],
+          "project_state_after": "Registro observable de revisar con evidencia",
+          "next_session_dependency": 11,
+          "terminal": false
+        },
+        {
+          "session_number": 11,
+          "project_state_before": "Registro observable de revisar con evidencia",
+          "session_project_goal": "Comunicar las razones",
+          "required_learning": [
+            "Indagar y explicar sentido de acuerdos"
+          ],
+          "methodology_operations": [
+            "RESULTADOS_ANALISIS"
+          ],
+          "pda_focus": [
+            "F3-DHC-1-010",
+            "F4-DHC-3-001"
+          ],
+          "input_artifact_ids": [
+            "artifact_revise"
+          ],
+          "expected_output_artifact_ids": [
+            "artifact_share"
+          ],
+          "expected_partial_product": "Registro observable de comunicar las razones",
+          "acceptance_criteria": [
+            "El registro muestra explicar a compañeros nuevos la propuesta y contrastar comprensión"
+          ],
+          "project_state_after": "Registro observable de comunicar las razones",
+          "next_session_dependency": 12,
+          "terminal": false
+        },
+        {
+          "session_number": 12,
+          "project_state_before": "Registro observable de comunicar las razones",
+          "session_project_goal": "Cerrar y valorar",
+          "required_learning": [
+            "Indagar y explicar sentido de acuerdos"
+          ],
+          "methodology_operations": [
+            "RESULTADOS_ANALISIS"
+          ],
+          "pda_focus": [
+            "F3-DHC-1-010",
+            "F4-DHC-3-001"
+          ],
+          "input_artifact_ids": [
+            "artifact_share"
+          ],
+          "expected_output_artifact_ids": [
+            "artifact_evaluate"
+          ],
+          "expected_partial_product": "Registro observable de cerrar y valorar",
+          "acceptance_criteria": [
+            "El registro muestra conservar propuesta y registro de resultados y explicar qué aprendimos sin anunciar otra sesión"
+          ],
+          "project_state_after": "Registro observable de cerrar y valorar",
+          "next_session_dependency": null,
+          "terminal": true
+        }
+      ],
+      "ltg_strategy": {
+        "mode": "NONE",
+        "selections": [],
+        "reason": "El contexto permite consultar experiencias del propio grupo; LTG no es obligatorio"
+      },
+      "feasibility": {
+        "requested_sessions": 12,
+        "minutes_per_session": 30,
+        "total_available_minutes": 360,
+        "complexity": "LOW",
+        "resource_feasibility": "PASS",
+        "time_feasibility": "PASS",
+        "multigrade_feasibility": "PASS",
+        "risks": [
+          "La consulta requiere modelado y dictado en primero"
+        ],
+        "assumptions": [
+          "Se trabajan sólo dos acuerdos conocidos y dos espacios cercanos"
+        ]
+      },
+      "gate_result": null
+    }
+  }
+}

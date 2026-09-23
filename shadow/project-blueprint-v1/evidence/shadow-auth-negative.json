@@ -1,0 +1,4 @@
+{
+  "unauthenticated_shadow_http_status": 401,
+  "body": "{\"code\":\"SHADOW_AUTH_REQUIRED\"}"
+}

@@ -1,0 +1,1682 @@
+{
+  "sources": {
+    "constraints": {
+      "grades": [
+        1,
+        3
+      ],
+      "selected_pda_ids": [
+        "F3-DHC-1-010",
+        "F4-DHC-3-001"
+      ],
+      "explicit_ltg_selections": [],
+      "requested_sessions": 3,
+      "minutes_per_session": 90,
+      "original_problem": "En el grupo desconocemos por qué existen nuestros acuerdos y prácticas escolares; esto dificulta convivir y explicar su importancia a los compañeros nuevos.",
+      "original_context": "Escuela multigrado. Podemos consultar al docente y los recuerdos del grupo sobre prácticas y acuerdos de la escuela. Tenemos aula y patio techado, dos espacios seguros para intercambiar explicaciones con compañeros del mismo grupo. Sin internet, visitas ni participación familiar obligatoria. El alumnado nuevo necesita conocer cómo convivir y dónde pedir apoyo.",
+      "students_by_grade": {
+        "1": 5,
+        "3": 5
+      },
+      "reading_profile": "Lectura inicial en primero; tercero lee textos breves con apoyo.",
+      "writing_profile": "Primero usa dibujos y dictado; tercero registros breves.",
+      "autonomy_profile": "Baja; requiere consignas visuales y apoyo entre pares.",
+      "connectivity": "SIN_INTERNET",
+      "available_resources": [
+        "papel reutilizado",
+        "lápices",
+        "colores",
+        "mesas",
+        "aula",
+        "patio techado"
+      ],
+      "supports": [
+        "modelado docente",
+        "apoyo entre pares"
+      ],
+      "teacher_explicit_constraints": [
+        "Sin salir de la escuela",
+        "No pedir compras"
+      ],
+      "schema_version": "TEACHER_CONSTRAINTS_V1",
+      "constraints_id": "b990420c-fa6b-48b2-9741-e0b72e23cb87",
+      "created_at": "2026-09-23T11:49:36.953Z",
+      "constraints_hash": "231186405b12537fc00f9cb7d644bb98e7c79b2cc9eb7cae401aecc399c5400a"
+    },
+    "curriculum": {
+      "corpus_version_or_provenance": "Supabase official PDA, read-only export 2026-09-23; no user records",
+      "pdas": [
+        {
+          "pda_id": "F3-DHC-1-010",
+          "grade": 1,
+          "field": "De lo Humano y lo Comunitario",
+          "content_official": "Construcción del proyecto de vida.",
+          "pda_official": "Explica situaciones cotidianas que se presentan en la escuela y la casa, con la intención de proponer acuerdos que generen una mejor convivencia.",
+          "verification_status": "Verificado"
+        },
+        {
+          "pda_id": "F4-DHC-3-001",
+          "grade": 3,
+          "field": "De lo Humano y lo Comunitario",
+          "content_official": "La comunidad como el espacio en el que se vive y se encuentra la escuela.",
+          "pda_official": "Indaga acerca de ideas, conocimientos, prácticas culturales, formas de organización y acuerdos familiares, escolares y comunitarios, para compartir su importancia en la socialización.",
+          "verification_status": "Verificado"
+        }
+      ],
+      "ltg": [],
+      "schema_version": "CURRICULUM_SNAPSHOT_V1",
+      "snapshot_id": "6c2f9625-431d-439b-8343-cd948fe3aa5c",
+      "created_at": "2026-09-23T11:49:36.955Z",
+      "snapshot_hash": "2dd0aee8c51fc86fc10cbe6fb4a81afcba1b03d5a8fa875eb1ec638157449259"
+    },
+    "methodology": {
+      "schema_version": "METHODOLOGY_DECISION_V1",
+      "methodology_decision_id": "e99c1a0d-6e13-428d-b137-b463b7c9895d",
+      "recommended_id": null,
+      "selected_id": "abp",
+      "selection_source": "TEACHER",
+      "catalog_version": "METHODOLOGY_CATALOG_V1",
+      "required_operations": [
+        "PRESENTEMOS",
+        "RECOLECTEMOS",
+        "FORMULEMOS_PROBLEMA",
+        "ORGANICEMOS_EXPERIENCIA",
+        "VIVAMOS_EXPERIENCIA",
+        "RESULTADOS_ANALISIS"
+      ]
+    }
+  },
+  "mode": "SHADOW",
+  "status": "NEEDS_REPAIR",
+  "blueprint": {
+    "schema_version": "PROJECT_BLUEPRINT_V1",
+    "blueprint_id": "dfc35cfa-638f-45aa-9618-97d03ab226d7",
+    "revision": 1,
+    "status": "DRAFT",
+    "source": {
+      "constraints_hash": "231186405b12537fc00f9cb7d644bb98e7c79b2cc9eb7cae401aecc399c5400a",
+      "curriculum_snapshot_hash": "2dd0aee8c51fc86fc10cbe6fb4a81afcba1b03d5a8fa875eb1ec638157449259",
+      "methodology_decision_id": "e99c1a0d-6e13-428d-b137-b463b7c9895d",
+      "methodology_decision_hash": "d3233aea28aee36d615b885e609e5ee08b491b0e0f8f1280706b85e30995de4e"
+    },
+    "problem_frame": {
+      "original_problem": "En el grupo desconocemos por qué existen nuestros acuerdos y prácticas escolares; esto dificulta convivir y explicar su importancia a los compañeros nuevos.",
+      "pedagogical_focus": "Construcción de convivencia escolar mediante la indagación y socialización de acuerdos.",
+      "context_relevance": "Escuela multigrado con necesidad de integrar a alumnos nuevos mediante el conocimiento de normas compartidas.",
+      "why_project_is_needed": "Permite que los estudiantes comprendan el origen de sus normas y las comuniquen, fortaleciendo el sentido de pertenencia.",
+      "scope": [
+        "Identificación de acuerdos escolares actuales",
+        "Indagación sobre el origen de las prácticas",
+        "Creación de un museo itinerante de la convivencia"
+      ],
+      "out_of_scope": [
+        "Modificación de reglamentos oficiales",
+        "Salidas fuera del recinto escolar",
+        "Participación de familias"
+      ]
+    },
+    "methodology": {
+      "selected_id": "abp",
+      "catalog_version": "METHODOLOGY_CATALOG_V1",
+      "required_operations": [
+        "PRESENTEMOS",
+        "RECOLECTEMOS",
+        "FORMULEMOS_PROBLEMA",
+        "ORGANICEMOS_EXPERIENCIA",
+        "VIVAMOS_EXPERIENCIA",
+        "RESULTADOS_ANALISIS"
+      ]
+    },
+    "guiding_question": {
+      "question": "¿Cómo podemos explicar a los nuevos compañeros por qué nuestra escuela tiene acuerdos y cómo nos ayudan a convivir mejor?",
+      "problem_link": "Desconocimiento de la razón de ser de las normas escolares.",
+      "product_link": "Museo itinerante de la convivencia escolar.",
+      "grade_accessibility": "ALL_GRADES"
+    },
+    "final_outcome": {
+      "outcome_id": "OUT_MUSEO_CONVIVENCIA",
+      "name": "Museo Itinerante de la Convivencia",
+      "type": "MUSEUM",
+      "description": "Exposición de carteles y objetos simbólicos que explican los acuerdos escolares, diseñada para rotar entre el aula y el patio techado.",
+      "purpose": "Socializar la importancia de las normas escolares con los nuevos integrantes del grupo.",
+      "audience_or_beneficiary": "Compañeros nuevos y comunidad escolar del grupo.",
+      "use_or_destination": "Espacios comunes de la escuela (aula y patio).",
+      "functional_profiles": [
+        "MUSEUM",
+        "ITINERANT"
+      ],
+      "functional_requirements": [
+        {
+          "requirement_id": "MUSEUM",
+          "criterion": "Las piezas deben explicar claramente el acuerdo escolar representado.",
+          "stage_ids": [
+            "STAGE_04"
+          ],
+          "evidence": "Fichas explicativas junto a cada objeto o dibujo."
+        },
+        {
+          "requirement_id": "ITINERANT",
+          "criterion": "El museo debe ser fácil de trasladar y montar en dos espacios distintos.",
+          "stage_ids": [
+            "STAGE_05"
+          ],
+          "evidence": "Registro fotográfico o bitácora de la instalación en aula y patio."
+        }
+      ],
+      "completion_evidence": [
+        "Museo montado en dos espacios",
+        "Explicaciones orales de los alumnos"
+      ],
+      "authenticity_conditions": [
+        "Uso de materiales del entorno",
+        "Explicación basada en la experiencia real del grupo"
+      ],
+      "required_resources": [
+        {
+          "resource": "papel reutilizado",
+          "essential": true,
+          "alternative": null,
+          "alternative_rationale": null
+        },
+        {
+          "resource": "lápices",
+          "essential": true,
+          "alternative": null,
+          "alternative_rationale": null
+        },
+        {
+          "resource": "colores",
+          "essential": true,
+          "alternative": null,
+          "alternative_rationale": null
+        }
+      ]
+    },
+    "pda_analysis": [
+      {
+        "pda_id": "F3-DHC-1-010",
+        "grade": 1,
+        "official_text": "Explica situaciones cotidianas que se presentan en la escuela y la casa, con la intención de proponer acuerdos que generen una mejor convivencia.",
+        "central_cognitive_action": "EXPLICA",
+        "cognitive_interpretation": {
+          "official_text_basis": "Situaciones cotidianas y acuerdos de convivencia.",
+          "reasoning": "El alumno debe identificar qué ocurre en su entorno escolar y por qué es necesario normarlo.",
+          "performance_indicators": [
+            "Identifica situaciones de convivencia",
+            "Propone acuerdos básicos"
+          ]
+        },
+        "expected_performance": "El alumno describe por qué un acuerdo ayuda a convivir mejor.",
+        "observable_evidence_conditions": [
+          "Dibujos explicativos",
+          "Participación en la exposición"
+        ],
+        "possible_project_contribution": "Aporta la base de los acuerdos a exponer.",
+        "integration_strength": "DIRECT",
+        "integration_reason": "El proyecto se centra en la explicación de acuerdos escolares."
+      },
+      {
+        "pda_id": "F4-DHC-3-001",
+        "grade": 3,
+        "official_text": "Indaga acerca de ideas, conocimientos, prácticas culturales, formas de organización y acuerdos familiares, escolares y comunitarios, para compartir su importancia en la socialización.",
+        "central_cognitive_action": "INDAGA",
+        "cognitive_interpretation": {
+          "official_text_basis": "Indagación de acuerdos escolares.",
+          "reasoning": "El alumno de tercer grado investiga el origen y propósito de las normas.",
+          "performance_indicators": [
+            "Indaga sobre acuerdos",
+            "Comparte importancia de normas"
+          ]
+        },
+        "expected_performance": "El alumno explica la importancia de los acuerdos escolares.",
+        "observable_evidence_conditions": [
+          "Registro de indagación",
+          "Explicación oral"
+        ],
+        "possible_project_contribution": "Lidera la investigación sobre el origen de las prácticas.",
+        "integration_strength": "DIRECT",
+        "integration_reason": "El proyecto requiere indagar y compartir la importancia de los acuerdos."
+      }
+    ],
+    "grade_contributions": [
+      {
+        "contribution_id": "CONT_G1",
+        "grade": 1,
+        "curriculum_mode": "PDA_SELECTED",
+        "pda_ids": [
+          "F3-DHC-1-010"
+        ],
+        "learning_role": "Ilustrador y explicador de acuerdos",
+        "project_contribution": "Representación visual de los acuerdos.",
+        "expected_evidence": "Dibujos de acuerdos escolares.",
+        "complexity_level": "Baja",
+        "support_need": "Modelado docente",
+        "integration_destination": "OUT_MUSEO_CONVIVENCIA"
+      },
+      {
+        "contribution_id": "CONT_G3",
+        "grade": 3,
+        "curriculum_mode": "PDA_SELECTED",
+        "pda_ids": [
+          "F4-DHC-3-001"
+        ],
+        "learning_role": "Investigador y guía del museo",
+        "project_contribution": "Indagación sobre el origen de las normas.",
+        "expected_evidence": "Registro escrito de la importancia de los acuerdos.",
+        "complexity_level": "Media",
+        "support_need": "Apoyo entre pares",
+        "integration_destination": "OUT_MUSEO_CONVIVENCIA"
+      }
+    ],
+    "project_stages": [
+      {
+        "stage_id": "STAGE_01",
+        "order": 1,
+        "purpose": "Identificar el problema de convivencia.",
+        "required_inputs": [
+          "input_context"
+        ],
+        "student_operation": "Dialogar sobre las dificultades de convivencia.",
+        "methodology_operations": [
+          "PRESENTEMOS",
+          "RECOLECTEMOS"
+        ],
+        "expected_output": "Lista de acuerdos escolares actuales.",
+        "output_artifact_id": "ART_LISTA_ACUERDOS",
+        "consumed_by": [
+          "STAGE_02"
+        ],
+        "acceptance_criteria": [
+          "Identificación de al menos 3 acuerdos"
+        ],
+        "estimated_minutes": 90,
+        "estimate_rationale": "Tiempo necesario para diálogo grupal y registro inicial."
+      },
+      {
+        "stage_id": "STAGE_02",
+        "order": 2,
+        "purpose": "Indagar el origen de los acuerdos.",
+        "required_inputs": [
+          "ART_LISTA_ACUERDOS"
+        ],
+        "student_operation": "Investigar por qué existen los acuerdos.",
+        "methodology_operations": [
+          "FORMULEMOS_PROBLEMA"
+        ],
+        "expected_output": "Notas sobre el origen de los acuerdos.",
+        "output_artifact_id": "ART_NOTAS_INDAGACION",
+        "consumed_by": [
+          "STAGE_03"
+        ],
+        "acceptance_criteria": [
+          "Explicación clara de la utilidad de los acuerdos"
+        ],
+        "estimated_minutes": 90,
+        "estimate_rationale": "Tiempo para indagar y sintetizar información."
+      },
+      {
+        "stage_id": "STAGE_03",
+        "order": 3,
+        "purpose": "Diseñar y montar el museo.",
+        "required_inputs": [
+          "ART_NOTAS_INDAGACION"
+        ],
+        "student_operation": "Crear piezas para el museo y organizar la ruta.",
+        "methodology_operations": [
+          "ORGANICEMOS_EXPERIENCIA",
+          "VIVAMOS_EXPERIENCIA",
+          "RESULTADOS_ANALISIS"
+        ],
+        "expected_output": "Museo montado y evaluado.",
+        "output_artifact_id": "ART_MUSEO_FINAL",
+        "consumed_by": [
+          "OUT_MUSEO_CONVIVENCIA"
+        ],
+        "acceptance_criteria": [
+          "Museo funcional en dos espacios",
+          "Explicación de los alumnos"
+        ],
+        "estimated_minutes": 90,
+        "estimate_rationale": "Tiempo para producción artística y montaje."
+      }
+    ],
+    "session_progression": [
+      {
+        "session_number": 1,
+        "project_state_before": "Inicio",
+        "session_project_goal": "Identificar acuerdos y problemas de convivencia.",
+        "required_learning": [
+          "F3-DHC-1-010",
+          "F4-DHC-3-001"
+        ],
+        "methodology_operations": [
+          "PRESENTEMOS",
+          "RECOLECTEMOS"
+        ],
+        "pda_focus": [
+          "F3-DHC-1-010",
+          "F4-DHC-3-001"
+        ],
+        "input_artifact_ids": [
+          "input_context"
+        ],
+        "expected_output_artifact_ids": [
+          "ART_LISTA_ACUERDOS"
+        ],
+        "expected_partial_product": "Lista de acuerdos escolares.",
+        "acceptance_criteria": [
+          "Participación de todos los alumnos"
+        ],
+        "project_state_after": "Acuerdos identificados",
+        "next_session_dependency": 2,
+        "terminal": false
+      },
+      {
+        "session_number": 2,
+        "project_state_before": "Acuerdos identificados",
+        "session_project_goal": "Indagar el origen y propósito de los acuerdos.",
+        "required_learning": [
+          "F4-DHC-3-001"
+        ],
+        "methodology_operations": [
+          "FORMULEMOS_PROBLEMA"
+        ],
+        "pda_focus": [
+          "F4-DHC-3-001"
+        ],
+        "input_artifact_ids": [
+          "ART_LISTA_ACUERDOS"
+        ],
+        "expected_output_artifact_ids": [
+          "ART_NOTAS_INDAGACION"
+        ],
+        "expected_partial_product": "Notas de indagación.",
+        "acceptance_criteria": [
+          "Registro de la importancia de los acuerdos"
+        ],
+        "project_state_after": "Indagación completada",
+        "next_session_dependency": 3,
+        "terminal": false
+      },
+      {
+        "session_number": 3,
+        "project_state_before": "Indagación completada",
+        "session_project_goal": "Montar el museo itinerante.",
+        "required_learning": [
+          "F3-DHC-1-010",
+          "F4-DHC-3-001"
+        ],
+        "methodology_operations": [
+          "ORGANICEMOS_EXPERIENCIA",
+          "VIVAMOS_EXPERIENCIA",
+          "RESULTADOS_ANALISIS"
+        ],
+        "pda_focus": [
+          "F3-DHC-1-010",
+          "F4-DHC-3-001"
+        ],
+        "input_artifact_ids": [
+          "ART_NOTAS_INDAGACION"
+        ],
+        "expected_output_artifact_ids": [
+          "ART_MUSEO_FINAL"
+        ],
+        "expected_partial_product": "Museo itinerante de la convivencia.",
+        "acceptance_criteria": [
+          "Museo montado y explicado"
+        ],
+        "project_state_after": "Proyecto finalizado",
+        "next_session_dependency": null,
+        "terminal": true
+      }
+    ],
+    "ltg_strategy": {
+      "mode": "NONE",
+      "selections": [],
+      "reason": "No se seleccionaron LTG adicionales por ser un proyecto de aula enfocado en la convivencia inmediata."
+    },
+    "feasibility": {
+      "requested_sessions": 3,
+      "minutes_per_session": 90,
+      "total_available_minutes": 270,
+      "complexity": "LOW",
+      "resource_feasibility": "PASS",
+      "time_feasibility": "PASS",
+      "multigrade_feasibility": "PASS",
+      "risks": [
+        "Dificultad de los alumnos de primer grado para registrar por escrito"
+      ],
+      "assumptions": [
+        "El docente apoyará el registro escrito de los alumnos de primer grado"
+      ]
+    },
+    "gate_result": null
+  },
+  "gate": {
+    "gate_version": "BLUEPRINT_GATE_V1",
+    "status": "FAIL",
+    "critical_count": 2,
+    "warning_count": 0,
+    "deterministic_findings": [
+      {
+        "rule_id": "BPD-SCHEMA",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "TeacherConstraintsV1",
+        "observed": "Contrato válido",
+        "expected": "Contrato completo, tipado y sin campos desconocidos"
+      },
+      {
+        "rule_id": "BPD-SCHEMA",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "CurriculumSnapshotV1",
+        "observed": "Contrato válido",
+        "expected": "Contrato completo, tipado y sin campos desconocidos"
+      },
+      {
+        "rule_id": "BPD-SCHEMA",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "MethodologyDecisionV1",
+        "observed": "Contrato válido",
+        "expected": "Contrato completo, tipado y sin campos desconocidos"
+      },
+      {
+        "rule_id": "BPD-SCHEMA",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "ProjectBlueprintV1",
+        "observed": "Contrato válido",
+        "expected": "Contrato completo, tipado y sin campos desconocidos"
+      },
+      {
+        "rule_id": "BPD-001",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "pda_analysis",
+        "observed": "F3-DHC-1-010,F4-DHC-3-001,F3-DHC-1-010,F4-DHC-3-001,F3-DHC-1-010,F4-DHC-3-001,F4-DHC-3-001,F3-DHC-1-010,F4-DHC-3-001",
+        "expected": "Una fila por PDA seleccionado; sólo IDs autorizados existentes, sin duplicados"
+      },
+      {
+        "rule_id": "BPD-002",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "pda_analysis/grade_contributions",
+        "observed": "Correspondencia de grados y texto oficial",
+        "expected": "Grado y texto exactos del corpus verificado"
+      },
+      {
+        "rule_id": "BPD-003",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "grade_contributions",
+        "observed": "1,3",
+        "expected": "Todos los grados y PDA con aportación autorizada; IDs de aportación únicos"
+      },
+      {
+        "rule_id": "BPD-004",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "grade_contributions",
+        "observed": "Modos curriculares revisados",
+        "expected": "Transversal sin PDA atribuido; grados con selección mantienen aporte curricular"
+      },
+      {
+        "rule_id": "BPD-005",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "final_outcome",
+        "observed": "Un objeto final y destinos",
+        "expected": "Exactamente un resultado final y todas las aportaciones dirigidas a él"
+      },
+      {
+        "rule_id": "BPD-006",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "project_stages",
+        "observed": "Entradas/operación/salida",
+        "expected": "Cada etapa tiene cadena explícita y orden único"
+      },
+      {
+        "rule_id": "BPD-007",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "project_stages.consumed_by",
+        "observed": "Destinos y enlaces recíprocos",
+        "expected": "Todo parcial tiene consumidor posterior real o integración al resultado"
+      },
+      {
+        "rule_id": "BPD-008",
+        "severity": "CRITICAL",
+        "status": "FAIL",
+        "scope": "dependencies",
+        "observed": "Etapas/sesiones referidas",
+        "expected": "Dependencias existentes, posteriores y sin ciclos"
+      },
+      {
+        "rule_id": "BPD-009",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "session_progression.last.terminal",
+        "observed": "true",
+        "expected": "true"
+      },
+      {
+        "rule_id": "BPD-010",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "session_progression.last.next_session_dependency",
+        "observed": "null",
+        "expected": "null"
+      },
+      {
+        "rule_id": "BPD-011",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "session_progression",
+        "observed": "Terminalidad y encadenamiento",
+        "expected": "Sólo última terminal; cada sesión intermedia enlaza la siguiente"
+      },
+      {
+        "rule_id": "BPD-012",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "session_progression.length",
+        "observed": "3",
+        "expected": "3"
+      },
+      {
+        "rule_id": "BPD-013",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "numbering",
+        "observed": "Orden de sesiones y etapas",
+        "expected": "Numeración continua desde 1"
+      },
+      {
+        "rule_id": "BPD-014",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "output_artifact_id",
+        "observed": "Unicidad de artefactos",
+        "expected": "IDs únicos distintos de inputs externos y resultado"
+      },
+      {
+        "rule_id": "BPD-015",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "artifact_inputs",
+        "observed": "Procedencia y producción única",
+        "expected": "Inputs anteriores; etapas dependientes en la misma sesión o posteriores al productor; cada artefacto producido una vez"
+      },
+      {
+        "rule_id": "BPD-016",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "methodology",
+        "observed": "Catálogo y operaciones",
+        "expected": "Una decisión del catálogo versionado, sin alteraciones"
+      },
+      {
+        "rule_id": "BPD-017",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "methodology.selected_id",
+        "observed": "abp",
+        "expected": "abp"
+      },
+      {
+        "rule_id": "BPD-018",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "final_outcome.required_resources",
+        "observed": "Recursos/alternativas",
+        "expected": "Recursos autorizados o alternativa autorizada justificada; equivalencia se revisa semánticamente"
+      },
+      {
+        "rule_id": "BPD-019",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "methodology_operations",
+        "observed": "Cobertura en etapas/progresión",
+        "expected": "Operaciones completas y vinculadas al artefacto de etapa, sin reparto por índice"
+      },
+      {
+        "rule_id": "BPD-020",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "source",
+        "observed": "Hashes y problemática",
+        "expected": "Fuentes íntegramente vinculadas; problemática original exacta"
+      },
+      {
+        "rule_id": "BPD-TIME",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "feasibility",
+        "observed": "Estimaciones por etapa/sesión",
+        "expected": "Estimaciones positivas justificadas dentro de cada sesión; BPS-010 juzga realismo"
+      },
+      {
+        "rule_id": "BPD-LTG",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "ltg_strategy",
+        "observed": "LTG y decisiones explícitas",
+        "expected": "Trazabilidad verificada y respeto a selección explícita"
+      }
+    ],
+    "semantic_findings": [
+      {
+        "rule_id": "BPS-001",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "Problem, purpose, and outcome",
+        "observed": "The problem of unknown school rules is directly addressed by the purpose of socializing them, resulting in an itinerant museum.",
+        "expected": "Clear link between problem, purpose, and outcome."
+      },
+      {
+        "rule_id": "BPS-002",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "Guiding question",
+        "observed": "The question is accessible to both 1st and 3rd grades and drives the project.",
+        "expected": "Question must be accessible to all involved grades."
+      },
+      {
+        "rule_id": "BPS-003",
+        "severity": "CRITICAL",
+        "status": "FAIL",
+        "scope": "final_outcome.functional_requirements",
+        "observed": "Necessary profile requirements missing: [{\"profile\":\"MUSEUM\",\"missing\":[\"pieces\",\"selection_criteria\",\"organization\",\"piece_explanation\",\"mounting\",\"audience_or_route\",\"mediation\"]},{\"profile\":\"ITINERANT\",\"missing\":[\"movement\",\"at_least_two_viable_spaces_or_audiences\",\"relocation_or_reinstallation\",\"circulation_evidence\"]}]",
+        "expected": "El resultado cumple su semántica funcional, incluso atributos implícitos; no basta declarar requisitos."
+      },
+      {
+        "rule_id": "BPS-004",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "PDA development",
+        "observed": "1st grade explains situations (F3-DHC-1-010) and 3rd grade investigates (F4-DHC-3-001) as core project operations.",
+        "expected": "Full PDA development."
+      },
+      {
+        "rule_id": "BPS-005",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "Evidence vs Cognitive performance",
+        "observed": "Evidence (drawings, oral explanations, research notes) matches the cognitive actions of explaining and investigating.",
+        "expected": "Evidence must align with cognitive performance."
+      },
+      {
+        "rule_id": "BPS-006",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "Common project",
+        "observed": "Both grades contribute to the same final product (Museum) with interdependent roles (illustrator vs researcher).",
+        "expected": "Interdependent contributions to a single project."
+      },
+      {
+        "rule_id": "BPS-007",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "Progression and artifacts",
+        "observed": "Each stage produces a specific artifact (List, Notes, Museum) with defined operations.",
+        "expected": "Each stage must have operation, artifact, and evidence."
+      },
+      {
+        "rule_id": "BPS-008",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "Methodology operations",
+        "observed": "Operations (Presentemos, Recolectemos, etc.) are applied to the construction of the museum, not just reflection.",
+        "expected": "Authentic methodology application."
+      },
+      {
+        "rule_id": "BPS-009",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "Complexity and support",
+        "observed": "Complexity is adjusted for 1st grade (drawings) and 3rd grade (notes) with teacher modeling.",
+        "expected": "Appropriate complexity and support."
+      },
+      {
+        "rule_id": "BPS-010",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "Temporal feasibility",
+        "observed": "3 sessions of 90 minutes are sufficient for the defined scope and complexity.",
+        "expected": "Feasibility based on complexity and stages."
+      },
+      {
+        "rule_id": "BPS-011",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "Grade transversality",
+        "observed": "Grades work on their respective PDAs without inheriting requirements from each other.",
+        "expected": "No inheritance of foreign PDA requirements."
+      },
+      {
+        "rule_id": "BPS-012",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "LTG",
+        "observed": "No LTG selected; justified by the focus on immediate school context.",
+        "expected": "Pertinent LTG or justified absence."
+      }
+    ],
+    "evaluated_blueprint_hash": "a3e9eb043dc2de51d17c70dfdfcdc241e3a270b71a4c9e1358e7c0519483279f",
+    "source_hash": "25f49c39e4cb69c8834a209d552ecbea4974cec3a99cc22d4c921b2780a1f2eb"
+  },
+  "approved_blueprint_hash": null,
+  "revisions": [
+    {
+      "revision": 1,
+      "label": "FAIL",
+      "status": "NEEDS_REPAIR",
+      "blueprint": {
+        "schema_version": "PROJECT_BLUEPRINT_V1",
+        "blueprint_id": "dfc35cfa-638f-45aa-9618-97d03ab226d7",
+        "revision": 1,
+        "status": "DRAFT",
+        "source": {
+          "constraints_hash": "231186405b12537fc00f9cb7d644bb98e7c79b2cc9eb7cae401aecc399c5400a",
+          "curriculum_snapshot_hash": "2dd0aee8c51fc86fc10cbe6fb4a81afcba1b03d5a8fa875eb1ec638157449259",
+          "methodology_decision_id": "e99c1a0d-6e13-428d-b137-b463b7c9895d",
+          "methodology_decision_hash": "d3233aea28aee36d615b885e609e5ee08b491b0e0f8f1280706b85e30995de4e"
+        },
+        "problem_frame": {
+          "original_problem": "En el grupo desconocemos por qué existen nuestros acuerdos y prácticas escolares; esto dificulta convivir y explicar su importancia a los compañeros nuevos.",
+          "pedagogical_focus": "Construcción de convivencia escolar mediante la indagación y socialización de acuerdos.",
+          "context_relevance": "Escuela multigrado con necesidad de integrar a alumnos nuevos mediante el conocimiento de normas compartidas.",
+          "why_project_is_needed": "Permite que los estudiantes comprendan el origen de sus normas y las comuniquen, fortaleciendo el sentido de pertenencia.",
+          "scope": [
+            "Identificación de acuerdos escolares actuales",
+            "Indagación sobre el origen de las prácticas",
+            "Creación de un museo itinerante de la convivencia"
+          ],
+          "out_of_scope": [
+            "Modificación de reglamentos oficiales",
+            "Salidas fuera del recinto escolar",
+            "Participación de familias"
+          ]
+        },
+        "methodology": {
+          "selected_id": "abp",
+          "catalog_version": "METHODOLOGY_CATALOG_V1",
+          "required_operations": [
+            "PRESENTEMOS",
+            "RECOLECTEMOS",
+            "FORMULEMOS_PROBLEMA",
+            "ORGANICEMOS_EXPERIENCIA",
+            "VIVAMOS_EXPERIENCIA",
+            "RESULTADOS_ANALISIS"
+          ]
+        },
+        "guiding_question": {
+          "question": "¿Cómo podemos explicar a los nuevos compañeros por qué nuestra escuela tiene acuerdos y cómo nos ayudan a convivir mejor?",
+          "problem_link": "Desconocimiento de la razón de ser de las normas escolares.",
+          "product_link": "Museo itinerante de la convivencia escolar.",
+          "grade_accessibility": "ALL_GRADES"
+        },
+        "final_outcome": {
+          "outcome_id": "OUT_MUSEO_CONVIVENCIA",
+          "name": "Museo Itinerante de la Convivencia",
+          "type": "MUSEUM",
+          "description": "Exposición de carteles y objetos simbólicos que explican los acuerdos escolares, diseñada para rotar entre el aula y el patio techado.",
+          "purpose": "Socializar la importancia de las normas escolares con los nuevos integrantes del grupo.",
+          "audience_or_beneficiary": "Compañeros nuevos y comunidad escolar del grupo.",
+          "use_or_destination": "Espacios comunes de la escuela (aula y patio).",
+          "functional_profiles": [
+            "MUSEUM",
+            "ITINERANT"
+          ],
+          "functional_requirements": [
+            {
+              "requirement_id": "MUSEUM",
+              "criterion": "Las piezas deben explicar claramente el acuerdo escolar representado.",
+              "stage_ids": [
+                "STAGE_04"
+              ],
+              "evidence": "Fichas explicativas junto a cada objeto o dibujo."
+            },
+            {
+              "requirement_id": "ITINERANT",
+              "criterion": "El museo debe ser fácil de trasladar y montar en dos espacios distintos.",
+              "stage_ids": [
+                "STAGE_05"
+              ],
+              "evidence": "Registro fotográfico o bitácora de la instalación en aula y patio."
+            }
+          ],
+          "completion_evidence": [
+            "Museo montado en dos espacios",
+            "Explicaciones orales de los alumnos"
+          ],
+          "authenticity_conditions": [
+            "Uso de materiales del entorno",
+            "Explicación basada en la experiencia real del grupo"
+          ],
+          "required_resources": [
+            {
+              "resource": "papel reutilizado",
+              "essential": true,
+              "alternative": null,
+              "alternative_rationale": null
+            },
+            {
+              "resource": "lápices",
+              "essential": true,
+              "alternative": null,
+              "alternative_rationale": null
+            },
+            {
+              "resource": "colores",
+              "essential": true,
+              "alternative": null,
+              "alternative_rationale": null
+            }
+          ]
+        },
+        "pda_analysis": [
+          {
+            "pda_id": "F3-DHC-1-010",
+            "grade": 1,
+            "official_text": "Explica situaciones cotidianas que se presentan en la escuela y la casa, con la intención de proponer acuerdos que generen una mejor convivencia.",
+            "central_cognitive_action": "EXPLICA",
+            "cognitive_interpretation": {
+              "official_text_basis": "Situaciones cotidianas y acuerdos de convivencia.",
+              "reasoning": "El alumno debe identificar qué ocurre en su entorno escolar y por qué es necesario normarlo.",
+              "performance_indicators": [
+                "Identifica situaciones de convivencia",
+                "Propone acuerdos básicos"
+              ]
+            },
+            "expected_performance": "El alumno describe por qué un acuerdo ayuda a convivir mejor.",
+            "observable_evidence_conditions": [
+              "Dibujos explicativos",
+              "Participación en la exposición"
+            ],
+            "possible_project_contribution": "Aporta la base de los acuerdos a exponer.",
+            "integration_strength": "DIRECT",
+            "integration_reason": "El proyecto se centra en la explicación de acuerdos escolares."
+          },
+          {
+            "pda_id": "F4-DHC-3-001",
+            "grade": 3,
+            "official_text": "Indaga acerca de ideas, conocimientos, prácticas culturales, formas de organización y acuerdos familiares, escolares y comunitarios, para compartir su importancia en la socialización.",
+            "central_cognitive_action": "INDAGA",
+            "cognitive_interpretation": {
+              "official_text_basis": "Indagación de acuerdos escolares.",
+              "reasoning": "El alumno de tercer grado investiga el origen y propósito de las normas.",
+              "performance_indicators": [
+                "Indaga sobre acuerdos",
+                "Comparte importancia de normas"
+              ]
+            },
+            "expected_performance": "El alumno explica la importancia de los acuerdos escolares.",
+            "observable_evidence_conditions": [
+              "Registro de indagación",
+              "Explicación oral"
+            ],
+            "possible_project_contribution": "Lidera la investigación sobre el origen de las prácticas.",
+            "integration_strength": "DIRECT",
+            "integration_reason": "El proyecto requiere indagar y compartir la importancia de los acuerdos."
+          }
+        ],
+        "grade_contributions": [
+          {
+            "contribution_id": "CONT_G1",
+            "grade": 1,
+            "curriculum_mode": "PDA_SELECTED",
+            "pda_ids": [
+              "F3-DHC-1-010"
+            ],
+            "learning_role": "Ilustrador y explicador de acuerdos",
+            "project_contribution": "Representación visual de los acuerdos.",
+            "expected_evidence": "Dibujos de acuerdos escolares.",
+            "complexity_level": "Baja",
+            "support_need": "Modelado docente",
+            "integration_destination": "OUT_MUSEO_CONVIVENCIA"
+          },
+          {
+            "contribution_id": "CONT_G3",
+            "grade": 3,
+            "curriculum_mode": "PDA_SELECTED",
+            "pda_ids": [
+              "F4-DHC-3-001"
+            ],
+            "learning_role": "Investigador y guía del museo",
+            "project_contribution": "Indagación sobre el origen de las normas.",
+            "expected_evidence": "Registro escrito de la importancia de los acuerdos.",
+            "complexity_level": "Media",
+            "support_need": "Apoyo entre pares",
+            "integration_destination": "OUT_MUSEO_CONVIVENCIA"
+          }
+        ],
+        "project_stages": [
+          {
+            "stage_id": "STAGE_01",
+            "order": 1,
+            "purpose": "Identificar el problema de convivencia.",
+            "required_inputs": [
+              "input_context"
+            ],
+            "student_operation": "Dialogar sobre las dificultades de convivencia.",
+            "methodology_operations": [
+              "PRESENTEMOS",
+              "RECOLECTEMOS"
+            ],
+            "expected_output": "Lista de acuerdos escolares actuales.",
+            "output_artifact_id": "ART_LISTA_ACUERDOS",
+            "consumed_by": [
+              "STAGE_02"
+            ],
+            "acceptance_criteria": [
+              "Identificación de al menos 3 acuerdos"
+            ],
+            "estimated_minutes": 90,
+            "estimate_rationale": "Tiempo necesario para diálogo grupal y registro inicial."
+          },
+          {
+            "stage_id": "STAGE_02",
+            "order": 2,
+            "purpose": "Indagar el origen de los acuerdos.",
+            "required_inputs": [
+              "ART_LISTA_ACUERDOS"
+            ],
+            "student_operation": "Investigar por qué existen los acuerdos.",
+            "methodology_operations": [
+              "FORMULEMOS_PROBLEMA"
+            ],
+            "expected_output": "Notas sobre el origen de los acuerdos.",
+            "output_artifact_id": "ART_NOTAS_INDAGACION",
+            "consumed_by": [
+              "STAGE_03"
+            ],
+            "acceptance_criteria": [
+              "Explicación clara de la utilidad de los acuerdos"
+            ],
+            "estimated_minutes": 90,
+            "estimate_rationale": "Tiempo para indagar y sintetizar información."
+          },
+          {
+            "stage_id": "STAGE_03",
+            "order": 3,
+            "purpose": "Diseñar y montar el museo.",
+            "required_inputs": [
+              "ART_NOTAS_INDAGACION"
+            ],
+            "student_operation": "Crear piezas para el museo y organizar la ruta.",
+            "methodology_operations": [
+              "ORGANICEMOS_EXPERIENCIA",
+              "VIVAMOS_EXPERIENCIA",
+              "RESULTADOS_ANALISIS"
+            ],
+            "expected_output": "Museo montado y evaluado.",
+            "output_artifact_id": "ART_MUSEO_FINAL",
+            "consumed_by": [
+              "OUT_MUSEO_CONVIVENCIA"
+            ],
+            "acceptance_criteria": [
+              "Museo funcional en dos espacios",
+              "Explicación de los alumnos"
+            ],
+            "estimated_minutes": 90,
+            "estimate_rationale": "Tiempo para producción artística y montaje."
+          }
+        ],
+        "session_progression": [
+          {
+            "session_number": 1,
+            "project_state_before": "Inicio",
+            "session_project_goal": "Identificar acuerdos y problemas de convivencia.",
+            "required_learning": [
+              "F3-DHC-1-010",
+              "F4-DHC-3-001"
+            ],
+            "methodology_operations": [
+              "PRESENTEMOS",
+              "RECOLECTEMOS"
+            ],
+            "pda_focus": [
+              "F3-DHC-1-010",
+              "F4-DHC-3-001"
+            ],
+            "input_artifact_ids": [
+              "input_context"
+            ],
+            "expected_output_artifact_ids": [
+              "ART_LISTA_ACUERDOS"
+            ],
+            "expected_partial_product": "Lista de acuerdos escolares.",
+            "acceptance_criteria": [
+              "Participación de todos los alumnos"
+            ],
+            "project_state_after": "Acuerdos identificados",
+            "next_session_dependency": 2,
+            "terminal": false
+          },
+          {
+            "session_number": 2,
+            "project_state_before": "Acuerdos identificados",
+            "session_project_goal": "Indagar el origen y propósito de los acuerdos.",
+            "required_learning": [
+              "F4-DHC-3-001"
+            ],
+            "methodology_operations": [
+              "FORMULEMOS_PROBLEMA"
+            ],
+            "pda_focus": [
+              "F4-DHC-3-001"
+            ],
+            "input_artifact_ids": [
+              "ART_LISTA_ACUERDOS"
+            ],
+            "expected_output_artifact_ids": [
+              "ART_NOTAS_INDAGACION"
+            ],
+            "expected_partial_product": "Notas de indagación.",
+            "acceptance_criteria": [
+              "Registro de la importancia de los acuerdos"
+            ],
+            "project_state_after": "Indagación completada",
+            "next_session_dependency": 3,
+            "terminal": false
+          },
+          {
+            "session_number": 3,
+            "project_state_before": "Indagación completada",
+            "session_project_goal": "Montar el museo itinerante.",
+            "required_learning": [
+              "F3-DHC-1-010",
+              "F4-DHC-3-001"
+            ],
+            "methodology_operations": [
+              "ORGANICEMOS_EXPERIENCIA",
+              "VIVAMOS_EXPERIENCIA",
+              "RESULTADOS_ANALISIS"
+            ],
+            "pda_focus": [
+              "F3-DHC-1-010",
+              "F4-DHC-3-001"
+            ],
+            "input_artifact_ids": [
+              "ART_NOTAS_INDAGACION"
+            ],
+            "expected_output_artifact_ids": [
+              "ART_MUSEO_FINAL"
+            ],
+            "expected_partial_product": "Museo itinerante de la convivencia.",
+            "acceptance_criteria": [
+              "Museo montado y explicado"
+            ],
+            "project_state_after": "Proyecto finalizado",
+            "next_session_dependency": null,
+            "terminal": true
+          }
+        ],
+        "ltg_strategy": {
+          "mode": "NONE",
+          "selections": [],
+          "reason": "No se seleccionaron LTG adicionales por ser un proyecto de aula enfocado en la convivencia inmediata."
+        },
+        "feasibility": {
+          "requested_sessions": 3,
+          "minutes_per_session": 90,
+          "total_available_minutes": 270,
+          "complexity": "LOW",
+          "resource_feasibility": "PASS",
+          "time_feasibility": "PASS",
+          "multigrade_feasibility": "PASS",
+          "risks": [
+            "Dificultad de los alumnos de primer grado para registrar por escrito"
+          ],
+          "assumptions": [
+            "El docente apoyará el registro escrito de los alumnos de primer grado"
+          ]
+        },
+        "gate_result": null
+      },
+      "gate": {
+        "gate_version": "BLUEPRINT_GATE_V1",
+        "status": "FAIL",
+        "critical_count": 2,
+        "warning_count": 0,
+        "deterministic_findings": [
+          {
+            "rule_id": "BPD-SCHEMA",
+            "severity": "CRITICAL",
+            "status": "PASS",
+            "scope": "TeacherConstraintsV1",
+            "observed": "Contrato válido",
+            "expected": "Contrato completo, tipado y sin campos desconocidos"
+          },
+          {
+            "rule_id": "BPD-SCHEMA",
+            "severity": "CRITICAL",
+            "status": "PASS",
+            "scope": "CurriculumSnapshotV1",
+            "observed": "Contrato válido",
+            "expected": "Contrato completo, tipado y sin campos desconocidos"
+          },
+          {
+            "rule_id": "BPD-SCHEMA",
+            "severity": "CRITICAL",
+            "status": "PASS",
+            "scope": "MethodologyDecisionV1",
+            "observed": "Contrato válido",
+            "expected": "Contrato completo, tipado y sin campos desconocidos"
+          },
+          {
+            "rule_id": "BPD-SCHEMA",
+            "severity": "CRITICAL",
+            "status": "PASS",
+            "scope": "ProjectBlueprintV1",
+            "observed": "Contrato válido",
+            "expected": "Contrato completo, tipado y sin campos desconocidos"
+          },
+          {
+            "rule_id": "BPD-001",
+            "severity": "CRITICAL",
+            "status": "PASS",
+            "scope": "pda_analysis",
+            "observed": "F3-DHC-1-010,F4-DHC-3-001,F3-DHC-1-010,F4-DHC-3-001,F3-DHC-1-010,F4-DHC-3-001,F4-DHC-3-001,F3-DHC-1-010,F4-DHC-3-001",
+            "expected": "Una fila por PDA seleccionado; sólo IDs autorizados existentes, sin duplicados"
+          },
+          {
+            "rule_id": "BPD-002",
+            "severity": "CRITICAL",
+            "status": "PASS",
+            "scope": "pda_analysis/grade_contributions",
+            "observed": "Correspondencia de grados y texto oficial",
+            "expected": "Grado y texto exactos del corpus verificado"
+          },
+          {
+            "rule_id": "BPD-003",
+            "severity": "CRITICAL",
+            "status": "PASS",
+            "scope": "grade_contributions",
+            "observed": "1,3",
+            "expected": "Todos los grados y PDA con aportación autorizada; IDs de aportación únicos"
+          },
+          {
+            "rule_id": "BPD-004",
+            "severity": "CRITICAL",
+            "status": "PASS",
+            "scope": "grade_contributions",
+            "observed": "Modos curriculares revisados",
+            "expected": "Transversal sin PDA atribuido; grados con selección mantienen aporte curricular"
+          },
+          {
+            "rule_id": "BPD-005",
+            "severity": "CRITICAL",
+            "status": "PASS",
+            "scope": "final_outcome",
+            "observed": "Un objeto final y destinos",
+            "expected": "Exactamente un resultado final y todas las aportaciones dirigidas a él"
+          },
+          {
+            "rule_id": "BPD-006",
+            "severity": "CRITICAL",
+            "status": "PASS",
+            "scope": "project_stages",
+            "observed": "Entradas/operación/salida",
+            "expected": "Cada etapa tiene cadena explícita y orden único"
+          },
+          {
+            "rule_id": "BPD-007",
+            "severity": "CRITICAL",
+            "status": "PASS",
+            "scope": "project_stages.consumed_by",
+            "observed": "Destinos y enlaces recíprocos",
+            "expected": "Todo parcial tiene consumidor posterior real o integración al resultado"
+          },
+          {
+            "rule_id": "BPD-008",
+            "severity": "CRITICAL",
+            "status": "FAIL",
+            "scope": "dependencies",
+            "observed": "Etapas/sesiones referidas",
+            "expected": "Dependencias existentes, posteriores y sin ciclos"
+          },
+          {
+            "rule_id": "BPD-009",
+            "severity": "CRITICAL",
+            "status": "PASS",
+            "scope": "session_progression.last.terminal",
+            "observed": "true",
+            "expected": "true"
+          },
+          {
+            "rule_id": "BPD-010",
+            "severity": "CRITICAL",
+            "status": "PASS",
+            "scope": "session_progression.last.next_session_dependency",
+            "observed": "null",
+            "expected": "null"
+          },
+          {
+            "rule_id": "BPD-011",
+            "severity": "CRITICAL",
+            "status": "PASS",
+            "scope": "session_progression",
+            "observed": "Terminalidad y encadenamiento",
+            "expected": "Sólo última terminal; cada sesión intermedia enlaza la siguiente"
+          },
+          {
+            "rule_id": "BPD-012",
+            "severity": "CRITICAL",
+            "status": "PASS",
+            "scope": "session_progression.length",
+            "observed": "3",
+            "expected": "3"
+          },
+          {
+            "rule_id": "BPD-013",
+            "severity": "CRITICAL",
+            "status": "PASS",
+            "scope": "numbering",
+            "observed": "Orden de sesiones y etapas",
+            "expected": "Numeración continua desde 1"
+          },
+          {
+            "rule_id": "BPD-014",
+            "severity": "CRITICAL",
+            "status": "PASS",
+            "scope": "output_artifact_id",
+            "observed": "Unicidad de artefactos",
+            "expected": "IDs únicos distintos de inputs externos y resultado"
+          },
+          {
+            "rule_id": "BPD-015",
+            "severity": "CRITICAL",
+            "status": "PASS",
+            "scope": "artifact_inputs",
+            "observed": "Procedencia y producción única",
+            "expected": "Inputs anteriores; etapas dependientes en la misma sesión o posteriores al productor; cada artefacto producido una vez"
+          },
+          {
+            "rule_id": "BPD-016",
+            "severity": "CRITICAL",
+            "status": "PASS",
+            "scope": "methodology",
+            "observed": "Catálogo y operaciones",
+            "expected": "Una decisión del catálogo versionado, sin alteraciones"
+          },
+          {
+            "rule_id": "BPD-017",
+            "severity": "CRITICAL",
+            "status": "PASS",
+            "scope": "methodology.selected_id",
+            "observed": "abp",
+            "expected": "abp"
+          },
+          {
+            "rule_id": "BPD-018",
+            "severity": "CRITICAL",
+            "status": "PASS",
+            "scope": "final_outcome.required_resources",
+            "observed": "Recursos/alternativas",
+            "expected": "Recursos autorizados o alternativa autorizada justificada; equivalencia se revisa semánticamente"
+          },
+          {
+            "rule_id": "BPD-019",
+            "severity": "CRITICAL",
+            "status": "PASS",
+            "scope": "methodology_operations",
+            "observed": "Cobertura en etapas/progresión",
+            "expected": "Operaciones completas y vinculadas al artefacto de etapa, sin reparto por índice"
+          },
+          {
+            "rule_id": "BPD-020",
+            "severity": "CRITICAL",
+            "status": "PASS",
+            "scope": "source",
+            "observed": "Hashes y problemática",
+            "expected": "Fuentes íntegramente vinculadas; problemática original exacta"
+          },
+          {
+            "rule_id": "BPD-TIME",
+            "severity": "CRITICAL",
+            "status": "PASS",
+            "scope": "feasibility",
+            "observed": "Estimaciones por etapa/sesión",
+            "expected": "Estimaciones positivas justificadas dentro de cada sesión; BPS-010 juzga realismo"
+          },
+          {
+            "rule_id": "BPD-LTG",
+            "severity": "CRITICAL",
+            "status": "PASS",
+            "scope": "ltg_strategy",
+            "observed": "LTG y decisiones explícitas",
+            "expected": "Trazabilidad verificada y respeto a selección explícita"
+          }
+        ],
+        "semantic_findings": [
+          {
+            "rule_id": "BPS-001",
+            "severity": "CRITICAL",
+            "status": "PASS",
+            "scope": "Problem, purpose, and outcome",
+            "observed": "The problem of unknown school rules is directly addressed by the purpose of socializing them, resulting in an itinerant museum.",
+            "expected": "Clear link between problem, purpose, and outcome."
+          },
+          {
+            "rule_id": "BPS-002",
+            "severity": "CRITICAL",
+            "status": "PASS",
+            "scope": "Guiding question",
+            "observed": "The question is accessible to both 1st and 3rd grades and drives the project.",
+            "expected": "Question must be accessible to all involved grades."
+          },
+          {
+            "rule_id": "BPS-003",
+            "severity": "CRITICAL",
+            "status": "FAIL",
+            "scope": "final_outcome.functional_requirements",
+            "observed": "Necessary profile requirements missing: [{\"profile\":\"MUSEUM\",\"missing\":[\"pieces\",\"selection_criteria\",\"organization\",\"piece_explanation\",\"mounting\",\"audience_or_route\",\"mediation\"]},{\"profile\":\"ITINERANT\",\"missing\":[\"movement\",\"at_least_two_viable_spaces_or_audiences\",\"relocation_or_reinstallation\",\"circulation_evidence\"]}]",
+            "expected": "El resultado cumple su semántica funcional, incluso atributos implícitos; no basta declarar requisitos."
+          },
+          {
+            "rule_id": "BPS-004",
+            "severity": "CRITICAL",
+            "status": "PASS",
+            "scope": "PDA development",
+            "observed": "1st grade explains situations (F3-DHC-1-010) and 3rd grade investigates (F4-DHC-3-001) as core project operations.",
+            "expected": "Full PDA development."
+          },
+          {
+            "rule_id": "BPS-005",
+            "severity": "CRITICAL",
+            "status": "PASS",
+            "scope": "Evidence vs Cognitive performance",
+            "observed": "Evidence (drawings, oral explanations, research notes) matches the cognitive actions of explaining and investigating.",
+            "expected": "Evidence must align with cognitive performance."
+          },
+          {
+            "rule_id": "BPS-006",
+            "severity": "CRITICAL",
+            "status": "PASS",
+            "scope": "Common project",
+            "observed": "Both grades contribute to the same final product (Museum) with interdependent roles (illustrator vs researcher).",
+            "expected": "Interdependent contributions to a single project."
+          },
+          {
+            "rule_id": "BPS-007",
+            "severity": "CRITICAL",
+            "status": "PASS",
+            "scope": "Progression and artifacts",
+            "observed": "Each stage produces a specific artifact (List, Notes, Museum) with defined operations.",
+            "expected": "Each stage must have operation, artifact, and evidence."
+          },
+          {
+            "rule_id": "BPS-008",
+            "severity": "CRITICAL",
+            "status": "PASS",
+            "scope": "Methodology operations",
+            "observed": "Operations (Presentemos, Recolectemos, etc.) are applied to the construction of the museum, not just reflection.",
+            "expected": "Authentic methodology application."
+          },
+          {
+            "rule_id": "BPS-009",
+            "severity": "CRITICAL",
+            "status": "PASS",
+            "scope": "Complexity and support",
+            "observed": "Complexity is adjusted for 1st grade (drawings) and 3rd grade (notes) with teacher modeling.",
+            "expected": "Appropriate complexity and support."
+          },
+          {
+            "rule_id": "BPS-010",
+            "severity": "CRITICAL",
+            "status": "PASS",
+            "scope": "Temporal feasibility",
+            "observed": "3 sessions of 90 minutes are sufficient for the defined scope and complexity.",
+            "expected": "Feasibility based on complexity and stages."
+          },
+          {
+            "rule_id": "BPS-011",
+            "severity": "CRITICAL",
+            "status": "PASS",
+            "scope": "Grade transversality",
+            "observed": "Grades work on their respective PDAs without inheriting requirements from each other.",
+            "expected": "No inheritance of foreign PDA requirements."
+          },
+          {
+            "rule_id": "BPS-012",
+            "severity": "CRITICAL",
+            "status": "PASS",
+            "scope": "LTG",
+            "observed": "No LTG selected; justified by the focus on immediate school context.",
+            "expected": "Pertinent LTG or justified absence."
+          }
+        ],
+        "evaluated_blueprint_hash": "a3e9eb043dc2de51d17c70dfdfcdc241e3a270b71a4c9e1358e7c0519483279f",
+        "source_hash": "25f49c39e4cb69c8834a209d552ecbea4974cec3a99cc22d4c921b2780a1f2eb"
+      },
+      "semantic": {
+        "input_hash": "0170967d4055dd6f88226f560da13358072a2a3bcc80c45ecbc6354ee31ba51a",
+        "findings": [
+          {
+            "rule_id": "BPS-001",
+            "severity": "CRITICAL",
+            "status": "PASS",
+            "scope": "Problem, purpose, and outcome",
+            "observed": "The problem of unknown school rules is directly addressed by the purpose of socializing them, resulting in an itinerant museum.",
+            "expected": "Clear link between problem, purpose, and outcome."
+          },
+          {
+            "rule_id": "BPS-002",
+            "severity": "CRITICAL",
+            "status": "PASS",
+            "scope": "Guiding question",
+            "observed": "The question is accessible to both 1st and 3rd grades and drives the project.",
+            "expected": "Question must be accessible to all involved grades."
+          },
+          {
+            "rule_id": "BPS-003",
+            "severity": "CRITICAL",
+            "status": "PASS",
+            "scope": "Functional outcome (Museum/Itinerant)",
+            "observed": "The project defines a museum with pieces and explanation, and explicitly plans for circulation between two viable spaces (classroom and patio).",
+            "expected": "Compliance with functional profile requirements."
+          },
+          {
+            "rule_id": "BPS-004",
+            "severity": "CRITICAL",
+            "status": "PASS",
+            "scope": "PDA development",
+            "observed": "1st grade explains situations (F3-DHC-1-010) and 3rd grade investigates (F4-DHC-3-001) as core project operations.",
+            "expected": "Full PDA development."
+          },
+          {
+            "rule_id": "BPS-005",
+            "severity": "CRITICAL",
+            "status": "PASS",
+            "scope": "Evidence vs Cognitive performance",
+            "observed": "Evidence (drawings, oral explanations, research notes) matches the cognitive actions of explaining and investigating.",
+            "expected": "Evidence must align with cognitive performance."
+          },
+          {
+            "rule_id": "BPS-006",
+            "severity": "CRITICAL",
+            "status": "PASS",
+            "scope": "Common project",
+            "observed": "Both grades contribute to the same final product (Museum) with interdependent roles (illustrator vs researcher).",
+            "expected": "Interdependent contributions to a single project."
+          },
+          {
+            "rule_id": "BPS-007",
+            "severity": "CRITICAL",
+            "status": "PASS",
+            "scope": "Progression and artifacts",
+            "observed": "Each stage produces a specific artifact (List, Notes, Museum) with defined operations.",
+            "expected": "Each stage must have operation, artifact, and evidence."
+          },
+          {
+            "rule_id": "BPS-008",
+            "severity": "CRITICAL",
+            "status": "PASS",
+            "scope": "Methodology operations",
+            "observed": "Operations (Presentemos, Recolectemos, etc.) are applied to the construction of the museum, not just reflection.",
+            "expected": "Authentic methodology application."
+          },
+          {
+            "rule_id": "BPS-009",
+            "severity": "CRITICAL",
+            "status": "PASS",
+            "scope": "Complexity and support",
+            "observed": "Complexity is adjusted for 1st grade (drawings) and 3rd grade (notes) with teacher modeling.",
+            "expected": "Appropriate complexity and support."
+          },
+          {
+            "rule_id": "BPS-010",
+            "severity": "CRITICAL",
+            "status": "PASS",
+            "scope": "Temporal feasibility",
+            "observed": "3 sessions of 90 minutes are sufficient for the defined scope and complexity.",
+            "expected": "Feasibility based on complexity and stages."
+          },
+          {
+            "rule_id": "BPS-011",
+            "severity": "CRITICAL",
+            "status": "PASS",
+            "scope": "Grade transversality",
+            "observed": "Grades work on their respective PDAs without inheriting requirements from each other.",
+            "expected": "No inheritance of foreign PDA requirements."
+          },
+          {
+            "rule_id": "BPS-012",
+            "severity": "CRITICAL",
+            "status": "PASS",
+            "scope": "LTG",
+            "observed": "No LTG selected; justified by the focus on immediate school context.",
+            "expected": "Pertinent LTG or justified absence."
+          }
+        ],
+        "telemetry": {
+          "task": "REVIEW",
+          "provider": "google",
+          "model": "gemini-3.1-flash-lite",
+          "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1",
+          "input_hash": "09f48853ec1f10b18cf077622b041e49c72962738acd77f212c230c73882f5c3",
+          "output_hash": "c0d32feb2af25009ba495f26d51e90031aba69fb4719f8c7b69c6cec8d79f4b8",
+          "latency_ms": 8132,
+          "provider_latency_ms": 7867,
+          "usage": {
+            "promptTokenCount": 4431,
+            "candidatesTokenCount": 1088,
+            "totalTokenCount": 5519,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 4431
+              }
+            ],
+            "serviceTier": "standard"
+          },
+          "cost": null,
+          "finish_reason": "STOP"
+        }
+      },
+      "functional_diagnostics": [
+        {
+          "profile": "MUSEUM",
+          "missing": [
+            "pieces",
+            "selection_criteria",
+            "organization",
+            "piece_explanation",
+            "mounting",
+            "audience_or_route",
+            "mediation"
+          ]
+        },
+        {
+          "profile": "ITINERANT",
+          "missing": [
+            "movement",
+            "at_least_two_viable_spaces_or_audiences",
+            "relocation_or_reinstallation",
+            "circulation_evidence"
+          ]
+        }
+      ],
+      "diff": [],
+      "triggering_rules": []
+    }
+  ],
+  "telemetry": [
+    {
+      "task": "GENERATE",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1",
+      "input_hash": "ff7ca1b499dbff36366ba62cc2872f1f7a926aae92c8cdb1fe613c84f63cce3c",
+      "output_hash": "234a8a7e019199b986381b2d02e2bfb6c727b372624a1dca04dfd153ffc44e2c",
+      "latency_ms": 23056,
+      "provider_latency_ms": 17744,
+      "usage": {
+        "promptTokenCount": 5272,
+        "candidatesTokenCount": 3863,
+        "totalTokenCount": 9135,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 5272
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "cost": null,
+      "finish_reason": "STOP",
+      "repair_count": 0
+    },
+    {
+      "task": "REVIEW",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1",
+      "input_hash": "09f48853ec1f10b18cf077622b041e49c72962738acd77f212c230c73882f5c3",
+      "output_hash": "c0d32feb2af25009ba495f26d51e90031aba69fb4719f8c7b69c6cec8d79f4b8",
+      "latency_ms": 8132,
+      "provider_latency_ms": 7867,
+      "usage": {
+        "promptTokenCount": 4431,
+        "candidatesTokenCount": 1088,
+        "totalTokenCount": 5519,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 4431
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "cost": null,
+      "finish_reason": "STOP",
+      "repair_count": 0
+    },
+    {
+      "task": "REPAIR",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1",
+      "input_hash": "a7d6dfa7458284b3bae63828ee6931bfd5c6d0671c1730d8a19d95f4173802f1",
+      "output_hash": null,
+      "usage": null,
+      "cost": null,
+      "latency_ms": 1084,
+      "error": "Error: PROVIDER_ERROR:503",
+      "repair_count": 1
+    }
+  ],
+  "errors": [
+    {
+      "revision": 2,
+      "task": "REPAIR",
+      "error": "Error: PROVIDER_ERROR:503"
+    }
+  ],
+  "repair_count": 1
+}

@@ -1,0 +1,12 @@
+{
+  "kind": "OBSERVED_TRANSPORT_FAILURE_WITH_INCOMPLETE_PERSISTENCE",
+  "operation": "Community generation using generator_revision 2, before transport-error preservation fix",
+  "observed_error": "PROVIDER_ERROR:503",
+  "observed_exit_code": 1,
+  "saved_blueprint": false,
+  "input_hash": null,
+  "output_hash": null,
+  "token_usage": null,
+  "cost": null,
+  "note": "No lost output or telemetry was reconstructed. Later generation failures preserve preceding revisions and error telemetry. Earlier auto-review-interrupted calls also have no complete recorded telemetry and are excluded from measured totals."
+}

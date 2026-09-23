@@ -32,7 +32,7 @@ export function blueprintGate(input,semantic=null){
  add('BPD-013',sessions.every((s,i)=>s.session_number===i+1)&&stages.every((s,i)=>s.order===i+1),'numbering','Orden de sesiones y etapas','Numeración continua desde 1');
  add('BPD-014',artifacts.size===stages.length&&!artifacts.has(outcome)&&stages.every(s=>!external.has(s.output_artifact_id)),'output_artifact_id','Unicidad de artefactos','IDs únicos distintos de inputs externos y resultado');
  const produced=new Map();for(const s of sessions)for(const id of s.expected_output_artifact_ids){if(!produced.has(id))produced.set(id,[]);produced.get(id).push(s.session_number)}
- add('BPD-015',stages.every(s=>s.required_inputs.every(id=>external.has(id)||artifacts.has(id)&&artifacts.get(id).order<s.order))&&sessions.every(s=>s.input_artifact_ids.every(id=>external.has(id)||produced.has(id)&&produced.get(id).length===1&&produced.get(id)[0]<s.session_number)&&s.expected_output_artifact_ids.every(id=>artifacts.has(id)))&&stages.every(s=>produced.get(s.output_artifact_id)?.length===1),'artifact_inputs','Procedencia y producción única','Inputs anteriores; cada artefacto de etapa producido una vez en la progresión');
+ add('BPD-015',stages.every(s=>s.required_inputs.every(id=>external.has(id)||artifacts.has(id)&&artifacts.get(id).order<s.order&&produced.get(id)?.[0]<=produced.get(s.output_artifact_id)?.[0]))&&sessions.every(s=>s.input_artifact_ids.every(id=>external.has(id)||produced.has(id)&&produced.get(id).length===1&&produced.get(id)[0]<s.session_number)&&s.expected_output_artifact_ids.every(id=>artifacts.has(id)))&&stages.every(s=>produced.get(s.output_artifact_id)?.length===1),'artifact_inputs','Procedencia y producción única','Inputs anteriores; etapas dependientes en la misma sesión o posteriores al productor; cada artefacto producido una vez');
  add('BPD-016',!!CATALOG[b.methodology.selected_id]&&b.methodology.catalog_version===CATALOG_VERSION&&m.catalog_version===CATALOG_VERSION&&eq(m.required_operations,CATALOG[m.selected_id]),'methodology','Catálogo y operaciones','Una decisión del catálogo versionado, sin alteraciones');
  add('BPD-017',b.methodology.selected_id===m.selected_id&&eq(b.methodology.required_operations,m.required_operations)&&(m.selection_source!=='TEACHER_ACCEPTED_RECOMMENDATION'||m.recommended_id===m.selected_id),'methodology.selected_id',b.methodology.selected_id,m.selected_id);
  add('BPD-018',b.final_outcome.required_resources.every(r=>c.available_resources.includes(r.resource)||r.alternative!==null&&c.available_resources.includes(r.alternative)&&!!r.alternative_rationale),'final_outcome.required_resources','Recursos/alternativas','Recursos autorizados o alternativa autorizada justificada; equivalencia se revisa semánticamente');
@@ -54,6 +54,13 @@ export function blueprintGate(input,semantic=null){
    if(rows.length!==1||schemaErrors(rows[0],schemaFor('BlueprintGateV1').properties.semantic_findings.items).length)sem.push({rule_id,severity:'CRITICAL',status:'NOT_EVALUABLE',scope:'blueprint',observed:'Regla ausente, duplicada o inválida',expected:BPS[rule_id]});
    else sem.push({...rows[0],severity:'CRITICAL'});
   }
+ }
+ // Missing explicit profile requirements prove incompleteness even if an AI
+ // reviewer overlooks them. Presence alone never proves functional adequacy.
+ const missing=functionalDiagnostics(b);
+ if(missing.length){
+  const index=sem.findIndex(x=>x.rule_id==='BPS-003');
+  sem[index]={rule_id:'BPS-003',severity:'CRITICAL',status:'FAIL',scope:'final_outcome.functional_requirements',observed:'Necessary profile requirements missing: '+JSON.stringify(missing),expected:BPS['BPS-003']};
  }
  return finish(input,findings,sem,weak);
 }

@@ -1,0 +1,462 @@
+{
+  "id": "PB-008",
+  "expected": {
+    "semantic": [
+      "BPS-006",
+      "BPS-007"
+    ]
+  },
+  "actual": "FAIL",
+  "match": true,
+  "deterministic_failures": [],
+  "semantic_failures": [
+    "BPS-003",
+    "BPS-006",
+    "BPS-007"
+  ],
+  "warnings": 0,
+  "repair_count": 0,
+  "generation_latency_ms": null,
+  "semantic_review_latency_ms": 5163,
+  "semantic": {
+    "input_hash": "54938400ad6d925d7868c89a04ae02da2fdb602a436b9234ad19ca5681dd08ac",
+    "findings": [
+      {
+        "rule_id": "BPS-001",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "problem_frame, guiding_question, final_outcome",
+        "observed": "El problema de convivencia, la pregunta guía y el museo itinerante están alineados en torno a la comprensión de acuerdos escolares.",
+        "expected": "Vinculación lógica entre problema, propósito y resultado."
+      },
+      {
+        "rule_id": "BPS-002",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "guiding_question",
+        "observed": "La pregunta es accesible para todos los grados y responde a la necesidad de explicar acuerdos.",
+        "expected": "Pregunta accesible a todos los grados."
+      },
+      {
+        "rule_id": "BPS-003",
+        "severity": "CRITICAL",
+        "status": "FAIL",
+        "scope": "final_outcome, functional_requirements",
+        "observed": "El proyecto se define como itinerante pero no especifica el movimiento real entre espacios, limitándose a una declaración de requisitos sin operación de traslado.",
+        "expected": "Cumplimiento semántico funcional con evidencia de movimiento entre al menos dos espacios."
+      },
+      {
+        "rule_id": "BPS-004",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "pda_analysis",
+        "observed": "Los PDA seleccionados se abordan mediante la explicación y consulta de acuerdos escolares.",
+        "expected": "Desarrollo del PDA completo."
+      },
+      {
+        "rule_id": "BPS-005",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "pda_analysis, completion_evidence",
+        "observed": "La evidencia solicitada (registro de consulta y explicaciones) corresponde a la acción cognitiva de explicar e indagar.",
+        "expected": "Evidencia alineada al desempeño cognitivo del PDA."
+      },
+      {
+        "rule_id": "BPS-006",
+        "severity": "CRITICAL",
+        "status": "FAIL",
+        "scope": "grade_contributions",
+        "observed": "Se declara explícitamente que cada grado realiza un proyecto independiente sin intercambio ni interdependencia.",
+        "expected": "Proyecto común con aportaciones interdependientes."
+      },
+      {
+        "rule_id": "BPS-007",
+        "severity": "CRITICAL",
+        "status": "FAIL",
+        "scope": "project_stages",
+        "observed": "La etapa de aplicación indica que los productos se reúnen al final sin relación ni función compartida, fallando en la integración progresiva.",
+        "expected": "Progresión que produce el resultado con operación y evidencia en cada avance."
+      },
+      {
+        "rule_id": "BPS-008",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "project_stages",
+        "observed": "Las operaciones metodológicas (identificación, indagación, aplicación) son coherentes con la metodología de proyectos comunitarios.",
+        "expected": "Operaciones auténticas de la metodología."
+      },
+      {
+        "rule_id": "BPS-009",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "feasibility",
+        "observed": "La complejidad es baja y se ajusta a los perfiles de autonomía y lectura del grupo multigrado.",
+        "expected": "Complejidad y apoyos adecuados."
+      },
+      {
+        "rule_id": "BPS-010",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "feasibility",
+        "observed": "La distribución de 270 minutos totales es factible para las tres etapas propuestas.",
+        "expected": "Factibilidad temporal por etapas."
+      },
+      {
+        "rule_id": "BPS-011",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "grade_contributions",
+        "observed": "Los grados sin PDA asignado actúan como apoyo sin heredar exigencias curriculares ajenas.",
+        "expected": "Sin herencia de contenidos o exigencias ajenas."
+      },
+      {
+        "rule_id": "BPS-012",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "ltg_strategy",
+        "observed": "La ausencia de LTG está justificada por el contexto de consulta de experiencias propias del grupo.",
+        "expected": "LTG pertinente o justificación de su ausencia."
+      }
+    ],
+    "telemetry": {
+      "task": "REVIEW",
+      "provider": "google",
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1",
+      "input_hash": "7aea358ff57cc700dcbdaeb8441dfff65f52e6cd5d02ee5a573837a0555b5d07",
+      "output_hash": "0c932afde89e0937937d705ce2e75591c83717c48ef0d9abe0da8a6d5ae14ed6",
+      "latency_ms": 5159,
+      "provider_latency_ms": 4928,
+      "usage": {
+        "promptTokenCount": 5563,
+        "candidatesTokenCount": 1132,
+        "totalTokenCount": 6695,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 5563
+          }
+        ],
+        "serviceTier": "standard"
+      },
+      "cost": null,
+      "finish_reason": "STOP"
+    }
+  },
+  "gate": {
+    "gate_version": "BLUEPRINT_GATE_V1",
+    "status": "FAIL",
+    "critical_count": 3,
+    "warning_count": 0,
+    "deterministic_findings": [
+      {
+        "rule_id": "BPD-SCHEMA",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "TeacherConstraintsV1",
+        "observed": "Contrato válido",
+        "expected": "Contrato completo, tipado y sin campos desconocidos"
+      },
+      {
+        "rule_id": "BPD-SCHEMA",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "CurriculumSnapshotV1",
+        "observed": "Contrato válido",
+        "expected": "Contrato completo, tipado y sin campos desconocidos"
+      },
+      {
+        "rule_id": "BPD-SCHEMA",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "MethodologyDecisionV1",
+        "observed": "Contrato válido",
+        "expected": "Contrato completo, tipado y sin campos desconocidos"
+      },
+      {
+        "rule_id": "BPD-SCHEMA",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "ProjectBlueprintV1",
+        "observed": "Contrato válido",
+        "expected": "Contrato completo, tipado y sin campos desconocidos"
+      },
+      {
+        "rule_id": "BPD-001",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "pda_analysis",
+        "observed": "F3-DHC-1-010,F4-DHC-3-001,F3-DHC-1-010,F4-DHC-3-001,F3-DHC-1-010,F4-DHC-3-001,F3-DHC-1-010,F4-DHC-3-001,F3-DHC-1-010,F4-DHC-3-001",
+        "expected": "Una fila por PDA seleccionado; sólo IDs autorizados existentes, sin duplicados"
+      },
+      {
+        "rule_id": "BPD-002",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "pda_analysis/grade_contributions",
+        "observed": "Correspondencia de grados y texto oficial",
+        "expected": "Grado y texto exactos del corpus verificado"
+      },
+      {
+        "rule_id": "BPD-003",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "grade_contributions",
+        "observed": "1,2,3,4,5,6",
+        "expected": "Todos los grados y PDA con aportación autorizada; IDs de aportación únicos"
+      },
+      {
+        "rule_id": "BPD-004",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "grade_contributions",
+        "observed": "Modos curriculares revisados",
+        "expected": "Transversal sin PDA atribuido; grados con selección mantienen aporte curricular"
+      },
+      {
+        "rule_id": "BPD-005",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "final_outcome",
+        "observed": "Un objeto final y destinos",
+        "expected": "Exactamente un resultado final y todas las aportaciones dirigidas a él"
+      },
+      {
+        "rule_id": "BPD-006",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "project_stages",
+        "observed": "Entradas/operación/salida",
+        "expected": "Cada etapa tiene cadena explícita y orden único"
+      },
+      {
+        "rule_id": "BPD-007",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "project_stages.consumed_by",
+        "observed": "Destinos y enlaces recíprocos",
+        "expected": "Todo parcial tiene consumidor posterior real o integración al resultado"
+      },
+      {
+        "rule_id": "BPD-008",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "dependencies",
+        "observed": "Etapas/sesiones referidas",
+        "expected": "Dependencias existentes, posteriores y sin ciclos"
+      },
+      {
+        "rule_id": "BPD-009",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "session_progression.last.terminal",
+        "observed": "true",
+        "expected": "true"
+      },
+      {
+        "rule_id": "BPD-010",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "session_progression.last.next_session_dependency",
+        "observed": "null",
+        "expected": "null"
+      },
+      {
+        "rule_id": "BPD-011",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "session_progression",
+        "observed": "Terminalidad y encadenamiento",
+        "expected": "Sólo última terminal; cada sesión intermedia enlaza la siguiente"
+      },
+      {
+        "rule_id": "BPD-012",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "session_progression.length",
+        "observed": "3",
+        "expected": "3"
+      },
+      {
+        "rule_id": "BPD-013",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "numbering",
+        "observed": "Orden de sesiones y etapas",
+        "expected": "Numeración continua desde 1"
+      },
+      {
+        "rule_id": "BPD-014",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "output_artifact_id",
+        "observed": "Unicidad de artefactos",
+        "expected": "IDs únicos distintos de inputs externos y resultado"
+      },
+      {
+        "rule_id": "BPD-015",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "artifact_inputs",
+        "observed": "Procedencia y producción única",
+        "expected": "Inputs anteriores; cada artefacto de etapa producido una vez en la progresión"
+      },
+      {
+        "rule_id": "BPD-016",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "methodology",
+        "observed": "Catálogo y operaciones",
+        "expected": "Una decisión del catálogo versionado, sin alteraciones"
+      },
+      {
+        "rule_id": "BPD-017",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "methodology.selected_id",
+        "observed": "proyectos_comunitarios",
+        "expected": "proyectos_comunitarios"
+      },
+      {
+        "rule_id": "BPD-018",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "final_outcome.required_resources",
+        "observed": "Recursos/alternativas",
+        "expected": "Recursos autorizados o alternativa autorizada justificada; equivalencia se revisa semánticamente"
+      },
+      {
+        "rule_id": "BPD-019",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "methodology_operations",
+        "observed": "Cobertura en etapas/progresión",
+        "expected": "Operaciones completas y vinculadas al artefacto de etapa, sin reparto por índice"
+      },
+      {
+        "rule_id": "BPD-020",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "source",
+        "observed": "Hashes y problemática",
+        "expected": "Fuentes íntegramente vinculadas; problemática original exacta"
+      },
+      {
+        "rule_id": "BPD-TIME",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "feasibility",
+        "observed": "Estimaciones por etapa/sesión",
+        "expected": "Estimaciones positivas justificadas dentro de cada sesión; BPS-010 juzga realismo"
+      },
+      {
+        "rule_id": "BPD-LTG",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "ltg_strategy",
+        "observed": "LTG y decisiones explícitas",
+        "expected": "Trazabilidad verificada y respeto a selección explícita"
+      }
+    ],
+    "semantic_findings": [
+      {
+        "rule_id": "BPS-001",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "problem_frame, guiding_question, final_outcome",
+        "observed": "El problema de convivencia, la pregunta guía y el museo itinerante están alineados en torno a la comprensión de acuerdos escolares.",
+        "expected": "Vinculación lógica entre problema, propósito y resultado."
+      },
+      {
+        "rule_id": "BPS-002",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "guiding_question",
+        "observed": "La pregunta es accesible para todos los grados y responde a la necesidad de explicar acuerdos.",
+        "expected": "Pregunta accesible a todos los grados."
+      },
+      {
+        "rule_id": "BPS-003",
+        "severity": "CRITICAL",
+        "status": "FAIL",
+        "scope": "final_outcome, functional_requirements",
+        "observed": "El proyecto se define como itinerante pero no especifica el movimiento real entre espacios, limitándose a una declaración de requisitos sin operación de traslado.",
+        "expected": "Cumplimiento semántico funcional con evidencia de movimiento entre al menos dos espacios."
+      },
+      {
+        "rule_id": "BPS-004",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "pda_analysis",
+        "observed": "Los PDA seleccionados se abordan mediante la explicación y consulta de acuerdos escolares.",
+        "expected": "Desarrollo del PDA completo."
+      },
+      {
+        "rule_id": "BPS-005",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "pda_analysis, completion_evidence",
+        "observed": "La evidencia solicitada (registro de consulta y explicaciones) corresponde a la acción cognitiva de explicar e indagar.",
+        "expected": "Evidencia alineada al desempeño cognitivo del PDA."
+      },
+      {
+        "rule_id": "BPS-006",
+        "severity": "CRITICAL",
+        "status": "FAIL",
+        "scope": "grade_contributions",
+        "observed": "Se declara explícitamente que cada grado realiza un proyecto independiente sin intercambio ni interdependencia.",
+        "expected": "Proyecto común con aportaciones interdependientes."
+      },
+      {
+        "rule_id": "BPS-007",
+        "severity": "CRITICAL",
+        "status": "FAIL",
+        "scope": "project_stages",
+        "observed": "La etapa de aplicación indica que los productos se reúnen al final sin relación ni función compartida, fallando en la integración progresiva.",
+        "expected": "Progresión que produce el resultado con operación y evidencia en cada avance."
+      },
+      {
+        "rule_id": "BPS-008",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "project_stages",
+        "observed": "Las operaciones metodológicas (identificación, indagación, aplicación) son coherentes con la metodología de proyectos comunitarios.",
+        "expected": "Operaciones auténticas de la metodología."
+      },
+      {
+        "rule_id": "BPS-009",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "feasibility",
+        "observed": "La complejidad es baja y se ajusta a los perfiles de autonomía y lectura del grupo multigrado.",
+        "expected": "Complejidad y apoyos adecuados."
+      },
+      {
+        "rule_id": "BPS-010",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "feasibility",
+        "observed": "La distribución de 270 minutos totales es factible para las tres etapas propuestas.",
+        "expected": "Factibilidad temporal por etapas."
+      },
+      {
+        "rule_id": "BPS-011",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "grade_contributions",
+        "observed": "Los grados sin PDA asignado actúan como apoyo sin heredar exigencias curriculares ajenas.",
+        "expected": "Sin herencia de contenidos o exigencias ajenas."
+      },
+      {
+        "rule_id": "BPS-012",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "ltg_strategy",
+        "observed": "La ausencia de LTG está justificada por el contexto de consulta de experiencias propias del grupo.",
+        "expected": "LTG pertinente o justificación de su ausencia."
+      }
+    ],
+    "evaluated_blueprint_hash": "a5ebbf0b281af3926e0e9d05a60c34d8385dd2f32335d31d57a68d9df2018a2b",
+    "source_hash": "e87e2a6026f5aca6786f33719ff16d880f3ed5ad004dce06a4650a49762b566b"
+  }
+}

@@ -17,18 +17,24 @@ export function assertApproved(envelope){
 export async function generateShadow(sources,options={},provider=callProvider){
  if(Object.keys(sources).sort().join(',')!=='constraints,curriculum,methodology')throw Error('ONLY_SOURCE_ARTIFACTS_ALLOWED_NO_LEGACY_PLAN');
  for(const [name,key] of [['TeacherConstraintsV1','constraints'],['CurriculumSnapshotV1','curriculum'],['MethodologyDecisionV1','methodology']])assertContract(name,sources[key]);
- const frozen=deepFreeze(structuredClone(sources)),revisions=[],telemetry=[];const id=randomUUID();
+ const frozen=deepFreeze(structuredClone(sources)),revisions=[],telemetry=[],errors=[];const id=randomUUID();let repairCount=0;
  for(let revision=1;revision<=2;revision++){
   const previous=revisions.at(-1);
   const repair=previous?{previous_blueprint:previous.blueprint,triggering_rules:[...previous.gate.deterministic_findings,...previous.gate.semantic_findings].filter(x=>x.status!=='PASS'),instruction:'Repara sólo el Blueprint. Conserva decisiones docentes, texto oficial, método y fuentes. No añadas frases para aparentar PASS.'}:null;
-  const r=await provider(revision===1?'GENERATE':'REPAIR',frozen,{...options,repair});telemetry.push({...r.telemetry,repair_count:revision-1});
+  repairCount=revision-1;
+  let r;try{r=await provider(revision===1?'GENERATE':'REPAIR',frozen,{...options,repair})}catch(e){
+   errors.push({revision,task:revision===1?'GENERATE':'REPAIR',error:String(e)});
+   telemetry.push({...e.telemetry,task:revision===1?'GENERATE':'REPAIR',error:String(e),repair_count:repairCount});
+   break; // Preserve prior revisions; transport failure is not a pedagogical rejection.
+  }
+  telemetry.push({...r.telemetry,repair_count:revision-1});
   const raw=structuredClone(r.output);
   // Envelope IDs are assigned by the orchestrator, never pedagogy or source fields.
   const b={...raw,blueprint_id:id,revision,status:'DRAFT',gate_result:null};
   const input={...frozen,blueprint:b};let gate=blueprintGate(input),semantic=null;
   // Full gate is rerun after semantic review. Invalid schema is never sent for review.
   if(!gate.deterministic_findings.some(x=>x.rule_id==='BPD-SCHEMA'&&x.status==='FAIL')){
-   try{semantic=await reviewBlueprint(input,options,provider);telemetry.push({...semantic.telemetry,repair_count:revision-1})}catch(e){telemetry.push({task:'REVIEW',error:String(e),repair_count:revision-1})}
+   try{semantic=await reviewBlueprint(input,options,provider);telemetry.push({...semantic.telemetry,repair_count:revision-1})}catch(e){telemetry.push({...e.telemetry,task:'REVIEW',error:String(e),repair_count:revision-1})}
    gate=blueprintGate(input,semantic);
   }
   const status=gate.status==='PASS'?'APPROVED':b.pda_analysis?.some(x=>['WEAK','INCOMPATIBLE'].includes(x.integration_strength))?'NEEDS_TEACHER_DECISION':revision===1?'NEEDS_REPAIR':gate.status==='NOT_EVALUABLE'?'NEEDS_REPAIR':'REJECTED';
@@ -38,5 +44,5 @@ export async function generateShadow(sources,options={},provider=callProvider){
  const final=revisions.at(-1);
  // Keep the evaluated DRAFT bytes immutable. Approval is an external envelope;
  // do not mutate the candidate to set gate_result/status after hashing/reviewing.
- return deepFreeze({mode:'SHADOW',status:final.status,blueprint:final.blueprint,gate:final.gate,approved_blueprint_hash:final.status==='APPROVED'?hash(final.blueprint):null,revisions,telemetry,repair_count:revisions.length-1});
+ return deepFreeze({mode:'SHADOW',status:errors.length?'NEEDS_REPAIR':final.status,blueprint:final?.blueprint||null,gate:final?.gate||null,approved_blueprint_hash:!errors.length&&final?.status==='APPROVED'?hash(final.blueprint):null,revisions,telemetry,errors,repair_count:repairCount});
 }
