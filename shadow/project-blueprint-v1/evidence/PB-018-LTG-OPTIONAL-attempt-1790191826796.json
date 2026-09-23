@@ -1,0 +1,28 @@
+{
+  "id": "PB-018-LTG-OPTIONAL",
+  "error": "Error: SHADOW_DISABLED:403",
+  "telemetry": {
+    "task": "REVIEW",
+    "review_focus": "GLOBAL",
+    "provider": "google",
+    "model": "gemini-3.1-flash-lite",
+    "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+    "input_hash": "0e6e79f1388e043ce0e1480cd8bd9196fd10ee408ce99f70bb926a711f4da54b",
+    "output_hash": null,
+    "usage": null,
+    "cost": null,
+    "latency_ms": 159,
+    "attempts": [
+      {
+        "attempt": 1,
+        "latency_ms": 159,
+        "http_status": 403,
+        "provider_status": null,
+        "usage": null,
+        "output_hash": null
+      }
+    ],
+    "completed_review_calls": []
+  },
+  "match": false
+}

@@ -1,0 +1,46 @@
+{
+  "id": "PB-013-COMUNITARIO-PASS",
+  "error": "Error: PROVIDER_ERROR:503",
+  "telemetry": {
+    "task": "REVIEW",
+    "review_focus": "GLOBAL",
+    "provider": "google",
+    "model": "gemini-3.1-flash-lite",
+    "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+    "input_hash": "9bbb1d19e8fafcd13bda9d5007d1e4b6b8a95658f6bd703e34bd9901af04866a",
+    "output_hash": null,
+    "usage": null,
+    "cost": null,
+    "latency_ms": 8457,
+    "attempts": [
+      {
+        "attempt": 1,
+        "latency_ms": 1147,
+        "http_status": 502,
+        "provider_status": 503,
+        "usage": null,
+        "output_hash": null,
+        "backoff_ms": 1000
+      },
+      {
+        "attempt": 2,
+        "latency_ms": 3368,
+        "http_status": 502,
+        "provider_status": 503,
+        "usage": null,
+        "output_hash": null,
+        "backoff_ms": 2000
+      },
+      {
+        "attempt": 3,
+        "latency_ms": 936,
+        "http_status": 502,
+        "provider_status": 503,
+        "usage": null,
+        "output_hash": null
+      }
+    ],
+    "completed_review_calls": []
+  },
+  "match": false
+}

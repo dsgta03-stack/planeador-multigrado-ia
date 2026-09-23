@@ -1,0 +1,138 @@
+{
+  "case": "positive",
+  "sources": {
+    "constraints": {
+      "grades": [
+        1,
+        3
+      ],
+      "selected_pda_ids": [
+        "F3-DHC-1-010",
+        "F4-DHC-3-001"
+      ],
+      "explicit_ltg_selections": [],
+      "requested_sessions": 3,
+      "minutes_per_session": 90,
+      "original_problem": "En el grupo desconocemos por qué existen nuestros acuerdos y prácticas escolares; esto dificulta convivir y explicar su importancia a los compañeros nuevos.",
+      "original_context": "Escuela multigrado. Podemos consultar al docente y los recuerdos del grupo sobre prácticas y acuerdos de la escuela. Tenemos aula y patio techado, dos espacios seguros para intercambiar explicaciones con compañeros del mismo grupo. Sin internet, visitas ni participación familiar obligatoria. El alumnado nuevo necesita conocer cómo convivir y dónde pedir apoyo.",
+      "students_by_grade": {
+        "1": 5,
+        "3": 5
+      },
+      "reading_profile": "Lectura inicial en primero; tercero lee textos breves con apoyo.",
+      "writing_profile": "Primero usa dibujos y dictado; tercero registros breves.",
+      "autonomy_profile": "Baja; requiere consignas visuales y apoyo entre pares.",
+      "connectivity": "SIN_INTERNET",
+      "available_resources": [
+        "papel reutilizado",
+        "lápices",
+        "colores",
+        "mesas",
+        "aula",
+        "patio techado"
+      ],
+      "supports": [
+        "modelado docente",
+        "apoyo entre pares"
+      ],
+      "teacher_explicit_constraints": [
+        "Sin salir de la escuela",
+        "No pedir compras"
+      ],
+      "schema_version": "TEACHER_CONSTRAINTS_V1",
+      "constraints_id": "431739c9-0671-4f5e-bcf7-76e4066291d0",
+      "created_at": "2026-09-23T19:33:57.269Z",
+      "constraints_hash": "231186405b12537fc00f9cb7d644bb98e7c79b2cc9eb7cae401aecc399c5400a"
+    },
+    "curriculum": {
+      "corpus_version_or_provenance": "Supabase official PDA, read-only export 2026-09-23; no user records",
+      "pdas": [
+        {
+          "pda_id": "F3-DHC-1-010",
+          "grade": 1,
+          "field": "De lo Humano y lo Comunitario",
+          "content_official": "Construcción del proyecto de vida.",
+          "pda_official": "Explica situaciones cotidianas que se presentan en la escuela y la casa, con la intención de proponer acuerdos que generen una mejor convivencia.",
+          "verification_status": "Verificado"
+        },
+        {
+          "pda_id": "F4-DHC-3-001",
+          "grade": 3,
+          "field": "De lo Humano y lo Comunitario",
+          "content_official": "La comunidad como el espacio en el que se vive y se encuentra la escuela.",
+          "pda_official": "Indaga acerca de ideas, conocimientos, prácticas culturales, formas de organización y acuerdos familiares, escolares y comunitarios, para compartir su importancia en la socialización.",
+          "verification_status": "Verificado"
+        }
+      ],
+      "ltg": [],
+      "schema_version": "CURRICULUM_SNAPSHOT_V1",
+      "snapshot_id": "819bcf00-e089-42d8-91fc-68b5c95172c4",
+      "created_at": "2026-09-23T19:33:57.269Z",
+      "snapshot_hash": "2dd0aee8c51fc86fc10cbe6fb4a81afcba1b03d5a8fa875eb1ec638157449259"
+    },
+    "methodology": {
+      "schema_version": "METHODOLOGY_DECISION_V1",
+      "methodology_decision_id": "529c3869-dda1-4ba8-b150-e626f8ea7daf",
+      "recommended_id": null,
+      "selected_id": "proyectos_comunitarios",
+      "selection_source": "TEACHER",
+      "catalog_version": "METHODOLOGY_CATALOG_V1",
+      "required_operations": [
+        "IDENTIFICACION",
+        "RECUPERACION",
+        "PLANIFICACION",
+        "ACERCAMIENTO",
+        "COMPRENSION_Y_PRODUCCION",
+        "RECONOCIMIENTO",
+        "CONCRECION",
+        "INTEGRACION",
+        "DIFUSION",
+        "CONSIDERACIONES",
+        "AVANCES"
+      ]
+    }
+  },
+  "mode": "SHADOW",
+  "status": "NEEDS_REPAIR",
+  "blueprint": null,
+  "gate": null,
+  "approved_blueprint_hash": null,
+  "revisions": [],
+  "telemetry": [
+    {
+      "task": "GENERATE",
+      "review_focus": null,
+      "reviewer_version": null,
+      "provider": "google",
+      "model": "gemini-3.5-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+      "input_hash": "3ce1d9047040b282c4edadabf5de40d89a20270057de9a3ae92d75aa8ba8e2af",
+      "output_hash": null,
+      "usage": null,
+      "cost": null,
+      "latency_ms": 7895,
+      "attempts": [
+        {
+          "attempt": 1,
+          "started_at": "2026-09-23T19:33:57.272Z",
+          "latency_ms": 7894,
+          "http_status": 502,
+          "provider_status": 400,
+          "usage": null,
+          "output_hash": null
+        }
+      ],
+      "error": "Error: PROVIDER_ERROR:400",
+      "repair_count": 0
+    }
+  ],
+  "errors": [
+    {
+      "revision": 1,
+      "task": "GENERATE",
+      "error": "Error: PROVIDER_ERROR:400",
+      "code": "PROVIDER_ERROR"
+    }
+  ],
+  "repair_count": 0
+}

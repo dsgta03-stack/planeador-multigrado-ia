@@ -1,0 +1,869 @@
+{
+  "id": "PB-005",
+  "expected": {
+    "deterministic": [
+      "BPD-019"
+    ],
+    "semantic": [
+      "BPS-008"
+    ]
+  },
+  "semantic_complete": true,
+  "actual": "FAIL",
+  "match": true,
+  "deterministic_failures": [
+    "BPD-019"
+  ],
+  "semantic_failures": [
+    "BPS-004",
+    "BPS-005",
+    "BPS-007",
+    "BPS-008"
+  ],
+  "warnings": 0,
+  "repair_count": 0,
+  "generation_latency_ms": null,
+  "semantic_review_latency_ms": 33639,
+  "semantic": {
+    "input_hash": "6e630931e8060d3021ceafedac4359417d6cc49ddcbbbc99a1b978d71268165c",
+    "findings": [
+      {
+        "rule_id": "BPS-001",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "problem_frame.original_problem, guiding_question.question, final_outcome.outcome_01",
+        "observed": "El problema aborda el desconocimiento de los acuerdos, la pregunta guía indaga cómo explicarlos y ponerlos en práctica, y el resultado final consiste en una indagación compartida con pruebas sobre dichos acuerdos.",
+        "expected": "Problema, propósito y resultado deben estar vinculados de forma coherente."
+      },
+      {
+        "rule_id": "BPS-002",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "guiding_question.question, constraints.grades",
+        "observed": "La pregunta guía '¿Cómo podemos explicar y poner en práctica nuestros acuerdos para convivir mejor?' es accesible tanto para primero como para tercero con los apoyos descritos.",
+        "expected": "La pregunta sostiene el proyecto y es accesible a todos los grados implicados."
+      },
+      {
+        "rule_id": "BPS-003",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "final_outcome.outcome_01, functional_requirements",
+        "observed": "El resultado funcional INVESTIGATION cumple con todos sus requisitos funcionales especificados en el blueprint y su evidencia asociada.",
+        "expected": "El resultado cumple su semántica funcional, incluyendo atributos implícitos y requisitos obligatorios."
+      },
+      {
+        "rule_id": "BPS-006",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "grade_contributions, project_stages",
+        "observed": "Los grados participan de forma interdependiente: primero aporta la situación y explicación básica y tercero aporta el registro de consultas para fundamentar un único resultado común.",
+        "expected": "Existe un proyecto común construido con aportaciones interdependientes, no proyectos paralelos."
+      },
+      {
+        "rule_id": "BPS-009",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "grade_contributions, feasibility",
+        "observed": "Se consideran adecuadamente los perfiles de autonomía baja y los apoyos necesarios (modelado docente, apoyo entre pares, registros breves y dictado).",
+        "expected": "La complejidad, autonomía y apoyos deben ser adecuados a los grados y perfiles del alumnado."
+      },
+      {
+        "rule_id": "BPS-010",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "feasibility, session_progression, project_stages",
+        "observed": "Se programan 3 sesiones de 90 minutos (270 minutos totales), lo cual es factible y suficiente para las etapas planteadas dada la complejidad baja.",
+        "expected": "Factibilidad temporal adecuada por complejidad y etapas, sin depender de la simple multiplicación arbitraria."
+      },
+      {
+        "rule_id": "BPS-011",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "constraints.grades, pda_analysis",
+        "observed": "No hay grados transversales ajenos; sólo participan los grados 1 y 3 con sus respectivos PDA seleccionados.",
+        "expected": "Los grados transversales no heredan contenidos ni exigencias de PDA ajenos."
+      },
+      {
+        "rule_id": "BPS-012",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "ltg_strategy",
+        "observed": "Se justifica adecuadamente la ausencia de LTG indicando que el contexto permite consultar experiencias del propio grupo y que no es obligatorio.",
+        "expected": "LTG pertinente, autorizado y al servicio del mismo proyecto; sin LTG puede ser PASS justificado."
+      },
+      {
+        "rule_id": "BPS-004",
+        "severity": "CRITICAL",
+        "status": "FAIL",
+        "scope": "pda_checks",
+        "observed": "[{\"pda_id\":\"F3-DHC-1-010\",\"grade\":1,\"contribution_ids\":[\"grade_1\"],\"stage_ids\":[\"investigate\"],\"operation_quote\":\"Copiar información dada sin preguntas, consulta, comparación ni indagación.\",\"artifact_ids\":[\"shared_explanations\"],\"evidence_reason\":\"El desempeño exige explicar situaciones cotidianas y proponer acuerdos, pero la operación de la etapa de investigación indica que se copia información dada sin indagación ni explicación fundamentada.\",\"bps004\":\"FAIL\",\"bps005\":\"FAIL\"},{\"pda_id\":\"F4-DHC-3-001\",\"grade\":3,\"contribution_ids\":[\"grade_3\"],\"stage_ids\":[\"investigate\"],\"operation_quote\":\"Copiar información dada sin preguntas, consulta, comparación ni indagación.\",\"artifact_ids\":[\"shared_explanations\"],\"evidence_reason\":\"El PDA requiere indagar acerca de ideas, conocimientos y prácticas, pero la operación real omite toda consulta, comparación e indagación, limitándose a copiar.\",\"bps004\":\"FAIL\",\"bps005\":\"FAIL\"}]",
+        "expected": "El PDA completo se desarrolla mediante su aportación, sin reducirlo a coincidencia temática."
+      },
+      {
+        "rule_id": "BPS-005",
+        "severity": "CRITICAL",
+        "status": "FAIL",
+        "scope": "pda_checks",
+        "observed": "[{\"pda_id\":\"F3-DHC-1-010\",\"grade\":1,\"contribution_ids\":[\"grade_1\"],\"stage_ids\":[\"investigate\"],\"operation_quote\":\"Copiar información dada sin preguntas, consulta, comparación ni indagación.\",\"artifact_ids\":[\"shared_explanations\"],\"evidence_reason\":\"El desempeño exige explicar situaciones cotidianas y proponer acuerdos, pero la operación de la etapa de investigación indica que se copia información dada sin indagación ni explicación fundamentada.\",\"bps004\":\"FAIL\",\"bps005\":\"FAIL\"},{\"pda_id\":\"F4-DHC-3-001\",\"grade\":3,\"contribution_ids\":[\"grade_3\"],\"stage_ids\":[\"investigate\"],\"operation_quote\":\"Copiar información dada sin preguntas, consulta, comparación ni indagación.\",\"artifact_ids\":[\"shared_explanations\"],\"evidence_reason\":\"El PDA requiere indagar acerca de ideas, conocimientos y prácticas, pero la operación real omite toda consulta, comparación e indagación, limitándose a copiar.\",\"bps004\":\"FAIL\",\"bps005\":\"FAIL\"}]",
+        "expected": "La evidencia corresponde al desempeño cognitivo del PDA completo."
+      },
+      {
+        "rule_id": "BPS-007",
+        "severity": "CRITICAL",
+        "status": "FAIL",
+        "scope": "stage_checks",
+        "observed": "[{\"stage_id\":\"frame\",\"operation_quote\":\"Identificar juntos situaciones de convivencia que desconocemos, recuperar recuerdos, formular preguntas y acordar qué explicaciones necesita el grupo nuevo. Seleccionar prácticas y criterios: utilidad, respeto y posibilidad de representarlas sin datos personales.\",\"artifact_id\":\"questions\",\"criteria_quote\":\"Las preguntas responden a la necesidad expresada\",\"consumed_by\":[\"investigate\"],\"outcome_link\":\"Se establecen preguntas y criterios compartidos que sirven como insumo para guiar la siguiente etapa de indagación y contraste.\",\"bps007\":\"PASS\"},{\"stage_id\":\"investigate\",\"operation_quote\":\"Copiar información dada sin preguntas, consulta, comparación ni indagación.\",\"artifact_id\":\"shared_explanations\",\"criteria_quote\":\"Las explicaciones usan consulta y acuerdos, no sólo decoración\",\"consumed_by\":[\"apply\"],\"outcome_link\":\"La operacion declarada contradice las expectativas de indagacion y consulta exigidas por el producto esperado.\",\"bps007\":\"FAIL\"},{\"stage_id\":\"apply\",\"operation_quote\":\"Presentar y aplicar las conclusiones de la indagación mediante una prueba de los acuerdos con el propio grupo; contrastar con los testimonios registrados, registrar resultados y explicar qué cambió en nuestras ideas.\",\"artifact_id\":\"completion\",\"criteria_quote\":\"Existe evidencia de realización con destinatarios del grupo y valoración\",\"consumed_by\":[\"outcome_01\"],\"outcome_link\":\"Se presenta y aplica el resultado con los compañeros del grupo, generando un registro de aplicacion y valoracion final.\",\"bps007\":\"PASS\"}]",
+        "expected": "La progresión produce el resultado y cada avance tiene operación, artefacto y evidencia."
+      },
+      {
+        "rule_id": "BPS-008",
+        "severity": "CRITICAL",
+        "status": "FAIL",
+        "scope": "methodology_checks",
+        "observed": "[{\"operation_id\":\"INTRODUCCION_PROBLEMATIZACION\",\"stage_ids\":[\"frame\"],\"operation_quote\":\"Identificar juntos situaciones de convivencia que desconocemos, recuperar recuerdos, formular preguntas y acordar qué explicaciones necesita el grupo nuevo.\",\"artifact_ids\":[\"questions\"],\"evidence_reason\":\"Se formula la problematización en la etapa frame mediante la identificación conjunta y preguntas acordadas.\",\"bps008\":\"PASS\"},{\"operation_id\":\"DISENO_Y_DESARROLLO_INDAGACION\",\"stage_ids\":[],\"operation_quote\":\"Copiar información dada sin preguntas, consulta, comparación ni indagación.\",\"artifact_ids\":[],\"evidence_reason\":\"La etapa investigate declara explícitamente que se copia información sin consulta ni indagación, por lo que la operación requerida no se realiza.\",\"bps008\":\"FAIL\"},{\"operation_id\":\"ORGANIZACION_DE_RESPUESTAS\",\"stage_ids\":[],\"operation_quote\":\"Copiar información dada sin preguntas, consulta, comparación ni indagación.\",\"artifact_ids\":[],\"evidence_reason\":\"No hay evidencia ni operación asociada para organizar respuestas o datos durante el desarrollo del proyecto.\",\"bps008\":\"FAIL\"},{\"operation_id\":\"PRESENTACION_Y_APLICACION\",\"stage_ids\":[\"apply\"],\"operation_quote\":\"Presentar y aplicar las conclusiones de la indagación mediante una prueba de los acuerdos con el propio grupo\",\"artifact_ids\":[\"completion\"],\"evidence_reason\":\"Se realiza la aplicación y presentación mediante una prueba de los acuerdos con el propio grupo en la etapa apply.\",\"bps008\":\"PASS\"},{\"operation_id\":\"METACOGNICION\",\"stage_ids\":[\"apply\"],\"operation_quote\":\"registrar resultados y explicar qué cambió en nuestras ideas.\",\"artifact_ids\":[\"completion\"],\"evidence_reason\":\"Se incluye la reflexión sobre los cambios en las ideas y la valoración del resultado común dentro de la etapa apply.\",\"bps008\":\"PASS\"}]",
+        "expected": "Las operaciones realizan auténticamente la metodología; reflexión no sustituye servicio, intervención o indagación."
+      }
+    ],
+    "audit": {
+      "audit_version": "LOCAL_EVIDENCE_V1",
+      "findings": [
+        {
+          "rule_id": "BPS-001",
+          "severity": "CRITICAL",
+          "status": "PASS",
+          "scope": "problem_frame.original_problem, guiding_question.question, final_outcome.outcome_01",
+          "observed": "El problema aborda el desconocimiento de los acuerdos, la pregunta guía indaga cómo explicarlos y ponerlos en práctica, y el resultado final consiste en una indagación compartida con pruebas sobre dichos acuerdos.",
+          "expected": "Problema, propósito y resultado deben estar vinculados de forma coherente."
+        },
+        {
+          "rule_id": "BPS-002",
+          "severity": "CRITICAL",
+          "status": "PASS",
+          "scope": "guiding_question.question, constraints.grades",
+          "observed": "La pregunta guía '¿Cómo podemos explicar y poner en práctica nuestros acuerdos para convivir mejor?' es accesible tanto para primero como para tercero con los apoyos descritos.",
+          "expected": "La pregunta sostiene el proyecto y es accesible a todos los grados implicados."
+        },
+        {
+          "rule_id": "BPS-003",
+          "severity": "CRITICAL",
+          "status": "PASS",
+          "scope": "final_outcome.outcome_01, functional_requirements",
+          "observed": "El resultado funcional INVESTIGATION cumple con todos sus requisitos funcionales especificados en el blueprint y su evidencia asociada.",
+          "expected": "El resultado cumple su semántica funcional, incluyendo atributos implícitos y requisitos obligatorios."
+        },
+        {
+          "rule_id": "BPS-004",
+          "severity": "CRITICAL",
+          "status": "PASS",
+          "scope": "pda_analysis, grade_contributions",
+          "observed": "Los PDA (F3-DHC-1-010 y F4-DHC-3-001) se desarrollan mediante aportaciones concretas donde primero explica situaciones y tercero indaga y contrasta significados.",
+          "expected": "El PDA completo se desarrolla mediante su aportación sin reducirlo a coincidencia temática."
+        },
+        {
+          "rule_id": "BPS-005",
+          "severity": "CRITICAL",
+          "status": "PASS",
+          "scope": "grade_contributions, project_stages.investigate, project_stages.apply",
+          "observed": "La evidencia esperada (explicación oral, consulta registrada y comparación) corresponde directamente al desempeño cognitivo de los PDA seleccionados.",
+          "expected": "La evidencia debe corresponder al desempeño cognitivo exacto del PDA completo."
+        },
+        {
+          "rule_id": "BPS-006",
+          "severity": "CRITICAL",
+          "status": "PASS",
+          "scope": "grade_contributions, project_stages",
+          "observed": "Los grados participan de forma interdependiente: primero aporta la situación y explicación básica y tercero aporta el registro de consultas para fundamentar un único resultado común.",
+          "expected": "Existe un proyecto común construido con aportaciones interdependientes, no proyectos paralelos."
+        },
+        {
+          "rule_id": "BPS-007",
+          "severity": "CRITICAL",
+          "status": "FAIL",
+          "scope": "project_stages.investigate",
+          "observed": "En la etapa 'investigate', la operación estudiantil declarada dice literalmente: 'Copiar información dada sin preguntas, consulta, comparación ni indagación.', contradiciendo totalmente el propósito de la indagación y las operaciones metodológicas requeridas.",
+          "expected": "La progresión debe producir el resultado y cada avance debe tener una operación, artefacto y evidencia coherentes y válidas."
+        },
+        {
+          "rule_id": "BPS-008",
+          "severity": "CRITICAL",
+          "status": "FAIL",
+          "scope": "project_stages.investigate",
+          "observed": "La operación estudiantil en la etapa 'investigate' explícitamente excluye la indagación y la consulta ('Copiar información dada sin preguntas, consulta, comparación ni indagación'), fallando en la realización auténtica de la metodología.",
+          "expected": "Las operaciones deben realizar auténticamente la metodología sin recurrir a prácticas pasivas o contradictorias."
+        },
+        {
+          "rule_id": "BPS-009",
+          "severity": "CRITICAL",
+          "status": "PASS",
+          "scope": "grade_contributions, feasibility",
+          "observed": "Se consideran adecuadamente los perfiles de autonomía baja y los apoyos necesarios (modelado docente, apoyo entre pares, registros breves y dictado).",
+          "expected": "La complejidad, autonomía y apoyos deben ser adecuados a los grados y perfiles del alumnado."
+        },
+        {
+          "rule_id": "BPS-010",
+          "severity": "CRITICAL",
+          "status": "PASS",
+          "scope": "feasibility, session_progression, project_stages",
+          "observed": "Se programan 3 sesiones de 90 minutos (270 minutos totales), lo cual es factible y suficiente para las etapas planteadas dada la complejidad baja.",
+          "expected": "Factibilidad temporal adecuada por complejidad y etapas, sin depender de la simple multiplicación arbitraria."
+        },
+        {
+          "rule_id": "BPS-011",
+          "severity": "CRITICAL",
+          "status": "PASS",
+          "scope": "constraints.grades, pda_analysis",
+          "observed": "No hay grados transversales ajenos; sólo participan los grados 1 y 3 con sus respectivos PDA seleccionados.",
+          "expected": "Los grados transversales no heredan contenidos ni exigencias de PDA ajenos."
+        },
+        {
+          "rule_id": "BPS-012",
+          "severity": "CRITICAL",
+          "status": "PASS",
+          "scope": "ltg_strategy",
+          "observed": "Se justifica adecuadamente la ausencia de LTG indicando que el contexto permite consultar experiencias del propio grupo y que no es obligatorio.",
+          "expected": "LTG pertinente, autorizado y al servicio del mismo proyecto; sin LTG puede ser PASS justificado."
+        }
+      ],
+      "pda_checks": [
+        {
+          "pda_id": "F3-DHC-1-010",
+          "grade": 1,
+          "contribution_ids": [
+            "grade_1"
+          ],
+          "stage_ids": [
+            "investigate"
+          ],
+          "operation_quote": "Copiar información dada sin preguntas, consulta, comparación ni indagación.",
+          "artifact_ids": [
+            "shared_explanations"
+          ],
+          "evidence_reason": "El desempeño exige explicar situaciones cotidianas y proponer acuerdos, pero la operación de la etapa de investigación indica que se copia información dada sin indagación ni explicación fundamentada.",
+          "bps004": "FAIL",
+          "bps005": "FAIL"
+        },
+        {
+          "pda_id": "F4-DHC-3-001",
+          "grade": 3,
+          "contribution_ids": [
+            "grade_3"
+          ],
+          "stage_ids": [
+            "investigate"
+          ],
+          "operation_quote": "Copiar información dada sin preguntas, consulta, comparación ni indagación.",
+          "artifact_ids": [
+            "shared_explanations"
+          ],
+          "evidence_reason": "El PDA requiere indagar acerca de ideas, conocimientos y prácticas, pero la operación real omite toda consulta, comparación e indagación, limitándose a copiar.",
+          "bps004": "FAIL",
+          "bps005": "FAIL"
+        }
+      ],
+      "stage_checks": [
+        {
+          "stage_id": "frame",
+          "operation_quote": "Identificar juntos situaciones de convivencia que desconocemos, recuperar recuerdos, formular preguntas y acordar qué explicaciones necesita el grupo nuevo. Seleccionar prácticas y criterios: utilidad, respeto y posibilidad de representarlas sin datos personales.",
+          "artifact_id": "questions",
+          "criteria_quote": "Las preguntas responden a la necesidad expresada",
+          "consumed_by": [
+            "investigate"
+          ],
+          "outcome_link": "Se establecen preguntas y criterios compartidos que sirven como insumo para guiar la siguiente etapa de indagación y contraste.",
+          "bps007": "PASS"
+        },
+        {
+          "stage_id": "investigate",
+          "operation_quote": "Copiar información dada sin preguntas, consulta, comparación ni indagación.",
+          "artifact_id": "shared_explanations",
+          "criteria_quote": "Las explicaciones usan consulta y acuerdos, no sólo decoración",
+          "consumed_by": [
+            "apply"
+          ],
+          "outcome_link": "La operacion declarada contradice las expectativas de indagacion y consulta exigidas por el producto esperado.",
+          "bps007": "FAIL"
+        },
+        {
+          "stage_id": "apply",
+          "operation_quote": "Presentar y aplicar las conclusiones de la indagación mediante una prueba de los acuerdos con el propio grupo; contrastar con los testimonios registrados, registrar resultados y explicar qué cambió en nuestras ideas.",
+          "artifact_id": "completion",
+          "criteria_quote": "Existe evidencia de realización con destinatarios del grupo y valoración",
+          "consumed_by": [
+            "outcome_01"
+          ],
+          "outcome_link": "Se presenta y aplica el resultado con los compañeros del grupo, generando un registro de aplicacion y valoracion final.",
+          "bps007": "PASS"
+        }
+      ],
+      "methodology_checks": [
+        {
+          "operation_id": "INTRODUCCION_PROBLEMATIZACION",
+          "stage_ids": [
+            "frame"
+          ],
+          "operation_quote": "Identificar juntos situaciones de convivencia que desconocemos, recuperar recuerdos, formular preguntas y acordar qué explicaciones necesita el grupo nuevo.",
+          "artifact_ids": [
+            "questions"
+          ],
+          "evidence_reason": "Se formula la problematización en la etapa frame mediante la identificación conjunta y preguntas acordadas.",
+          "bps008": "PASS"
+        },
+        {
+          "operation_id": "DISENO_Y_DESARROLLO_INDAGACION",
+          "stage_ids": [],
+          "operation_quote": "Copiar información dada sin preguntas, consulta, comparación ni indagación.",
+          "artifact_ids": [],
+          "evidence_reason": "La etapa investigate declara explícitamente que se copia información sin consulta ni indagación, por lo que la operación requerida no se realiza.",
+          "bps008": "FAIL"
+        },
+        {
+          "operation_id": "ORGANIZACION_DE_RESPUESTAS",
+          "stage_ids": [],
+          "operation_quote": "Copiar información dada sin preguntas, consulta, comparación ni indagación.",
+          "artifact_ids": [],
+          "evidence_reason": "No hay evidencia ni operación asociada para organizar respuestas o datos durante el desarrollo del proyecto.",
+          "bps008": "FAIL"
+        },
+        {
+          "operation_id": "PRESENTACION_Y_APLICACION",
+          "stage_ids": [
+            "apply"
+          ],
+          "operation_quote": "Presentar y aplicar las conclusiones de la indagación mediante una prueba de los acuerdos con el propio grupo",
+          "artifact_ids": [
+            "completion"
+          ],
+          "evidence_reason": "Se realiza la aplicación y presentación mediante una prueba de los acuerdos con el propio grupo en la etapa apply.",
+          "bps008": "PASS"
+        },
+        {
+          "operation_id": "METACOGNICION",
+          "stage_ids": [
+            "apply"
+          ],
+          "operation_quote": "registrar resultados y explicar qué cambió en nuestras ideas.",
+          "artifact_ids": [
+            "completion"
+          ],
+          "evidence_reason": "Se incluye la reflexión sobre los cambios en las ideas y la valoración del resultado común dentro de la etapa apply.",
+          "bps008": "PASS"
+        }
+      ]
+    },
+    "telemetry": {
+      "task": "REVIEW",
+      "provider": "google",
+      "model": "gemini-3.5-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+      "input_hash": "6e630931e8060d3021ceafedac4359417d6cc49ddcbbbc99a1b978d71268165c",
+      "output_hash": "663ac1b5e3f70126b730dd3aa57c5c74c115d06e2729bf0a1ae07f1cb74a6aaf",
+      "latency_ms": 33635,
+      "calls": [
+        {
+          "task": "REVIEW",
+          "review_focus": "GLOBAL",
+          "provider": "google",
+          "model": "gemini-3.5-flash-lite",
+          "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+          "input_hash": "b5d99eab8a0d37dcf92e74383e7892dbb8df6f1fde031e5e23c3042b79e37904",
+          "output_hash": "9d81577c1eb71f8f45c39196150f6eee59f06f689300dc391f83e32def01ee77",
+          "usage": {
+            "promptTokenCount": 5111,
+            "candidatesTokenCount": 1468,
+            "totalTokenCount": 6579,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 5111
+              }
+            ],
+            "serviceTier": "standard"
+          },
+          "cost": null,
+          "latency_ms": 15248,
+          "provider_latency_ms": 5036,
+          "finish_reason": "STOP",
+          "attempts": [
+            {
+              "attempt": 1,
+              "started_at": "2026-09-23T19:16:41.225Z",
+              "latency_ms": 9969,
+              "http_status": 200,
+              "provider_status": null,
+              "usage": {
+                "promptTokenCount": 5111,
+                "candidatesTokenCount": 1468,
+                "totalTokenCount": 6579,
+                "promptTokensDetails": [
+                  {
+                    "modality": "TEXT",
+                    "tokenCount": 5111
+                  }
+                ],
+                "serviceTier": "standard"
+              },
+              "output_hash": "9d81577c1eb71f8f45c39196150f6eee59f06f689300dc391f83e32def01ee77"
+            }
+          ]
+        },
+        {
+          "task": "REVIEW",
+          "review_focus": "PDA",
+          "provider": "google",
+          "model": "gemini-3.5-flash-lite",
+          "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+          "input_hash": "f4fbe5700599fa6a1fe23c967810799a36cae57d6d91abafba259af24017e62f",
+          "output_hash": "1c126a5e28734a1815565033290b35b46293af467aa91724ccb349ee9b196925",
+          "usage": {
+            "promptTokenCount": 2220,
+            "candidatesTokenCount": 381,
+            "totalTokenCount": 2601,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 2220
+              }
+            ],
+            "serviceTier": "standard"
+          },
+          "cost": null,
+          "latency_ms": 1811,
+          "provider_latency_ms": 1661,
+          "finish_reason": "STOP",
+          "attempts": [
+            {
+              "attempt": 1,
+              "started_at": "2026-09-23T19:16:51.195Z",
+              "latency_ms": 1810,
+              "http_status": 200,
+              "provider_status": null,
+              "usage": {
+                "promptTokenCount": 2220,
+                "candidatesTokenCount": 381,
+                "totalTokenCount": 2601,
+                "promptTokensDetails": [
+                  {
+                    "modality": "TEXT",
+                    "tokenCount": 2220
+                  }
+                ],
+                "serviceTier": "standard"
+              },
+              "output_hash": "1c126a5e28734a1815565033290b35b46293af467aa91724ccb349ee9b196925"
+            }
+          ]
+        },
+        {
+          "task": "REVIEW",
+          "review_focus": "STAGES",
+          "provider": "google",
+          "model": "gemini-3.5-flash-lite",
+          "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+          "input_hash": "f112f4be7fb02891b4d0f979ee7769060c54477781508b0ff316b76583afa21e",
+          "output_hash": "0c0b594a73ee405e5d807268ec833c408ecca1fd4b3b74e76eab420caa1d347e",
+          "usage": {
+            "promptTokenCount": 1726,
+            "candidatesTokenCount": 451,
+            "totalTokenCount": 2177,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 1726
+              }
+            ],
+            "serviceTier": "standard"
+          },
+          "cost": null,
+          "latency_ms": 12724,
+          "provider_latency_ms": 1859,
+          "finish_reason": "STOP",
+          "attempts": [
+            {
+              "attempt": 1,
+              "started_at": "2026-09-23T19:16:59.198Z",
+              "latency_ms": 6532,
+              "http_status": 200,
+              "provider_status": null,
+              "usage": {
+                "promptTokenCount": 1726,
+                "candidatesTokenCount": 451,
+                "totalTokenCount": 2177,
+                "promptTokensDetails": [
+                  {
+                    "modality": "TEXT",
+                    "tokenCount": 1726
+                  }
+                ],
+                "serviceTier": "standard"
+              },
+              "output_hash": "0c0b594a73ee405e5d807268ec833c408ecca1fd4b3b74e76eab420caa1d347e"
+            }
+          ]
+        },
+        {
+          "task": "REVIEW",
+          "review_focus": "METHOD",
+          "provider": "google",
+          "model": "gemini-3.5-flash-lite",
+          "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+          "input_hash": "6304056489e13684e1894e5a5a61cafe2d1f778028f14cdf4c29b8c6d2bcb639",
+          "output_hash": "7dd7f7a8a0267e83f255c9c7e14ac2f31e9f8eeec0e3367bd68386f9e4f40397",
+          "usage": {
+            "promptTokenCount": 1752,
+            "candidatesTokenCount": 604,
+            "totalTokenCount": 2356,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 1752
+              }
+            ],
+            "serviceTier": "standard"
+          },
+          "cost": null,
+          "latency_ms": 3852,
+          "provider_latency_ms": 2234,
+          "finish_reason": "STOP",
+          "attempts": [
+            {
+              "attempt": 1,
+              "started_at": "2026-09-23T19:17:07.199Z",
+              "latency_ms": 2382,
+              "http_status": 200,
+              "provider_status": null,
+              "usage": {
+                "promptTokenCount": 1752,
+                "candidatesTokenCount": 604,
+                "totalTokenCount": 2356,
+                "promptTokensDetails": [
+                  {
+                    "modality": "TEXT",
+                    "tokenCount": 1752
+                  }
+                ],
+                "serviceTier": "standard"
+              },
+              "output_hash": "7dd7f7a8a0267e83f255c9c7e14ac2f31e9f8eeec0e3367bd68386f9e4f40397"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "gate": {
+    "gate_version": "BLUEPRINT_GATE_V1",
+    "status": "FAIL",
+    "critical_count": 5,
+    "warning_count": 0,
+    "deterministic_findings": [
+      {
+        "rule_id": "BPD-SCHEMA",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "TeacherConstraintsV1",
+        "observed": "Contrato válido",
+        "expected": "Contrato completo, tipado y sin campos desconocidos"
+      },
+      {
+        "rule_id": "BPD-SCHEMA",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "CurriculumSnapshotV1",
+        "observed": "Contrato válido",
+        "expected": "Contrato completo, tipado y sin campos desconocidos"
+      },
+      {
+        "rule_id": "BPD-SCHEMA",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "MethodologyDecisionV1",
+        "observed": "Contrato válido",
+        "expected": "Contrato completo, tipado y sin campos desconocidos"
+      },
+      {
+        "rule_id": "BPD-SCHEMA",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "ProjectBlueprintV1",
+        "observed": "Contrato válido",
+        "expected": "Contrato completo, tipado y sin campos desconocidos"
+      },
+      {
+        "rule_id": "BPD-001",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "pda_analysis",
+        "observed": "F3-DHC-1-010,F4-DHC-3-001,F3-DHC-1-010,F4-DHC-3-001,F3-DHC-1-010,F4-DHC-3-001,F3-DHC-1-010,F4-DHC-3-001,F3-DHC-1-010,F4-DHC-3-001",
+        "expected": "Una fila por PDA seleccionado; sólo IDs autorizados existentes, sin duplicados"
+      },
+      {
+        "rule_id": "BPD-002",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "pda_analysis/grade_contributions",
+        "observed": "Correspondencia de grados y texto oficial",
+        "expected": "Grado y texto exactos del corpus verificado"
+      },
+      {
+        "rule_id": "BPD-003",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "grade_contributions",
+        "observed": "1,3",
+        "expected": "Todos los grados y PDA con aportación autorizada; IDs de aportación únicos"
+      },
+      {
+        "rule_id": "BPD-004",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "grade_contributions",
+        "observed": "Modos curriculares revisados",
+        "expected": "Transversal sin PDA atribuido; grados con selección mantienen aporte curricular"
+      },
+      {
+        "rule_id": "BPD-005",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "final_outcome",
+        "observed": "Un objeto final y destinos",
+        "expected": "Exactamente un resultado final y todas las aportaciones dirigidas a él"
+      },
+      {
+        "rule_id": "BPD-006",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "project_stages",
+        "observed": "Entradas/operación/salida",
+        "expected": "Cada etapa tiene cadena explícita y orden único"
+      },
+      {
+        "rule_id": "BPD-007",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "project_stages.consumed_by",
+        "observed": "Destinos y enlaces recíprocos",
+        "expected": "Todo parcial tiene consumidor posterior real o integración al resultado"
+      },
+      {
+        "rule_id": "BPD-008",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "dependencies",
+        "observed": "Etapas/sesiones referidas",
+        "expected": "Dependencias existentes, posteriores y sin ciclos"
+      },
+      {
+        "rule_id": "BPD-009",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "session_progression.last.terminal",
+        "observed": "true",
+        "expected": "true"
+      },
+      {
+        "rule_id": "BPD-010",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "session_progression.last.next_session_dependency",
+        "observed": "null",
+        "expected": "null"
+      },
+      {
+        "rule_id": "BPD-011",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "session_progression",
+        "observed": "Terminalidad y encadenamiento",
+        "expected": "Sólo última terminal; cada sesión intermedia enlaza la siguiente"
+      },
+      {
+        "rule_id": "BPD-012",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "session_progression.length",
+        "observed": "3",
+        "expected": "3"
+      },
+      {
+        "rule_id": "BPD-013",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "numbering",
+        "observed": "Orden de sesiones y etapas",
+        "expected": "Numeración continua desde 1"
+      },
+      {
+        "rule_id": "BPD-014",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "output_artifact_id",
+        "observed": "Unicidad de artefactos",
+        "expected": "IDs únicos distintos de inputs externos y resultado"
+      },
+      {
+        "rule_id": "BPD-015",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "artifact_inputs",
+        "observed": "Procedencia y producción única",
+        "expected": "Inputs anteriores; etapas dependientes en la misma sesión o posteriores al productor; cada artefacto producido una vez"
+      },
+      {
+        "rule_id": "BPD-016",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "methodology",
+        "observed": "Catálogo y operaciones",
+        "expected": "Una decisión del catálogo versionado, sin alteraciones"
+      },
+      {
+        "rule_id": "BPD-017",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "methodology.selected_id",
+        "observed": "steam",
+        "expected": "steam"
+      },
+      {
+        "rule_id": "BPD-018",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "final_outcome.required_resources",
+        "observed": "Recursos/alternativas",
+        "expected": "Recursos autorizados o alternativa autorizada justificada; equivalencia se revisa semánticamente"
+      },
+      {
+        "rule_id": "BPD-019",
+        "severity": "CRITICAL",
+        "status": "FAIL",
+        "scope": "methodology_operations",
+        "observed": "Cobertura en etapas/progresión",
+        "expected": "Operaciones completas y vinculadas al artefacto de etapa, sin reparto por índice"
+      },
+      {
+        "rule_id": "BPD-020",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "source",
+        "observed": "Hashes y problemática",
+        "expected": "Fuentes íntegramente vinculadas; problemática original exacta"
+      },
+      {
+        "rule_id": "BPD-TIME",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "feasibility",
+        "observed": "Estimaciones por etapa/sesión",
+        "expected": "Estimaciones positivas justificadas dentro de cada sesión; BPS-010 juzga realismo"
+      },
+      {
+        "rule_id": "BPD-LTG",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "ltg_strategy",
+        "observed": "LTG y decisiones explícitas",
+        "expected": "Trazabilidad verificada y respeto a selección explícita"
+      }
+    ],
+    "semantic_findings": [
+      {
+        "rule_id": "BPS-001",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "problem_frame.original_problem, guiding_question.question, final_outcome.outcome_01",
+        "observed": "El problema aborda el desconocimiento de los acuerdos, la pregunta guía indaga cómo explicarlos y ponerlos en práctica, y el resultado final consiste en una indagación compartida con pruebas sobre dichos acuerdos.",
+        "expected": "Problema, propósito y resultado deben estar vinculados de forma coherente."
+      },
+      {
+        "rule_id": "BPS-002",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "guiding_question.question, constraints.grades",
+        "observed": "La pregunta guía '¿Cómo podemos explicar y poner en práctica nuestros acuerdos para convivir mejor?' es accesible tanto para primero como para tercero con los apoyos descritos.",
+        "expected": "La pregunta sostiene el proyecto y es accesible a todos los grados implicados."
+      },
+      {
+        "rule_id": "BPS-003",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "final_outcome.outcome_01, functional_requirements",
+        "observed": "El resultado funcional INVESTIGATION cumple con todos sus requisitos funcionales especificados en el blueprint y su evidencia asociada.",
+        "expected": "El resultado cumple su semántica funcional, incluyendo atributos implícitos y requisitos obligatorios."
+      },
+      {
+        "rule_id": "BPS-004",
+        "severity": "CRITICAL",
+        "status": "FAIL",
+        "scope": "pda_checks",
+        "observed": "[{\"pda_id\":\"F3-DHC-1-010\",\"grade\":1,\"contribution_ids\":[\"grade_1\"],\"stage_ids\":[\"investigate\"],\"operation_quote\":\"Copiar información dada sin preguntas, consulta, comparación ni indagación.\",\"artifact_ids\":[\"shared_explanations\"],\"evidence_reason\":\"El desempeño exige explicar situaciones cotidianas y proponer acuerdos, pero la operación de la etapa de investigación indica que se copia información dada sin indagación ni explicación fundamentada.\",\"bps004\":\"FAIL\",\"bps005\":\"FAIL\"},{\"pda_id\":\"F4-DHC-3-001\",\"grade\":3,\"contribution_ids\":[\"grade_3\"],\"stage_ids\":[\"investigate\"],\"operation_quote\":\"Copiar información dada sin preguntas, consulta, comparación ni indagación.\",\"artifact_ids\":[\"shared_explanations\"],\"evidence_reason\":\"El PDA requiere indagar acerca de ideas, conocimientos y prácticas, pero la operación real omite toda consulta, comparación e indagación, limitándose a copiar.\",\"bps004\":\"FAIL\",\"bps005\":\"FAIL\"}]",
+        "expected": "El PDA completo se desarrolla mediante su aportación, sin reducirlo a coincidencia temática."
+      },
+      {
+        "rule_id": "BPS-005",
+        "severity": "CRITICAL",
+        "status": "FAIL",
+        "scope": "pda_checks",
+        "observed": "[{\"pda_id\":\"F3-DHC-1-010\",\"grade\":1,\"contribution_ids\":[\"grade_1\"],\"stage_ids\":[\"investigate\"],\"operation_quote\":\"Copiar información dada sin preguntas, consulta, comparación ni indagación.\",\"artifact_ids\":[\"shared_explanations\"],\"evidence_reason\":\"El desempeño exige explicar situaciones cotidianas y proponer acuerdos, pero la operación de la etapa de investigación indica que se copia información dada sin indagación ni explicación fundamentada.\",\"bps004\":\"FAIL\",\"bps005\":\"FAIL\"},{\"pda_id\":\"F4-DHC-3-001\",\"grade\":3,\"contribution_ids\":[\"grade_3\"],\"stage_ids\":[\"investigate\"],\"operation_quote\":\"Copiar información dada sin preguntas, consulta, comparación ni indagación.\",\"artifact_ids\":[\"shared_explanations\"],\"evidence_reason\":\"El PDA requiere indagar acerca de ideas, conocimientos y prácticas, pero la operación real omite toda consulta, comparación e indagación, limitándose a copiar.\",\"bps004\":\"FAIL\",\"bps005\":\"FAIL\"}]",
+        "expected": "La evidencia corresponde al desempeño cognitivo del PDA completo."
+      },
+      {
+        "rule_id": "BPS-006",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "grade_contributions, project_stages",
+        "observed": "Los grados participan de forma interdependiente: primero aporta la situación y explicación básica y tercero aporta el registro de consultas para fundamentar un único resultado común.",
+        "expected": "Existe un proyecto común construido con aportaciones interdependientes, no proyectos paralelos."
+      },
+      {
+        "rule_id": "BPS-007",
+        "severity": "CRITICAL",
+        "status": "FAIL",
+        "scope": "stage_checks",
+        "observed": "[{\"stage_id\":\"frame\",\"operation_quote\":\"Identificar juntos situaciones de convivencia que desconocemos, recuperar recuerdos, formular preguntas y acordar qué explicaciones necesita el grupo nuevo. Seleccionar prácticas y criterios: utilidad, respeto y posibilidad de representarlas sin datos personales.\",\"artifact_id\":\"questions\",\"criteria_quote\":\"Las preguntas responden a la necesidad expresada\",\"consumed_by\":[\"investigate\"],\"outcome_link\":\"Se establecen preguntas y criterios compartidos que sirven como insumo para guiar la siguiente etapa de indagación y contraste.\",\"bps007\":\"PASS\"},{\"stage_id\":\"investigate\",\"operation_quote\":\"Copiar información dada sin preguntas, consulta, comparación ni indagación.\",\"artifact_id\":\"shared_explanations\",\"criteria_quote\":\"Las explicaciones usan consulta y acuerdos, no sólo decoración\",\"consumed_by\":[\"apply\"],\"outcome_link\":\"La operacion declarada contradice las expectativas de indagacion y consulta exigidas por el producto esperado.\",\"bps007\":\"FAIL\"},{\"stage_id\":\"apply\",\"operation_quote\":\"Presentar y aplicar las conclusiones de la indagación mediante una prueba de los acuerdos con el propio grupo; contrastar con los testimonios registrados, registrar resultados y explicar qué cambió en nuestras ideas.\",\"artifact_id\":\"completion\",\"criteria_quote\":\"Existe evidencia de realización con destinatarios del grupo y valoración\",\"consumed_by\":[\"outcome_01\"],\"outcome_link\":\"Se presenta y aplica el resultado con los compañeros del grupo, generando un registro de aplicacion y valoracion final.\",\"bps007\":\"PASS\"}]",
+        "expected": "La progresión produce el resultado y cada avance tiene operación, artefacto y evidencia."
+      },
+      {
+        "rule_id": "BPS-008",
+        "severity": "CRITICAL",
+        "status": "FAIL",
+        "scope": "methodology_checks",
+        "observed": "[{\"operation_id\":\"INTRODUCCION_PROBLEMATIZACION\",\"stage_ids\":[\"frame\"],\"operation_quote\":\"Identificar juntos situaciones de convivencia que desconocemos, recuperar recuerdos, formular preguntas y acordar qué explicaciones necesita el grupo nuevo.\",\"artifact_ids\":[\"questions\"],\"evidence_reason\":\"Se formula la problematización en la etapa frame mediante la identificación conjunta y preguntas acordadas.\",\"bps008\":\"PASS\"},{\"operation_id\":\"DISENO_Y_DESARROLLO_INDAGACION\",\"stage_ids\":[],\"operation_quote\":\"Copiar información dada sin preguntas, consulta, comparación ni indagación.\",\"artifact_ids\":[],\"evidence_reason\":\"La etapa investigate declara explícitamente que se copia información sin consulta ni indagación, por lo que la operación requerida no se realiza.\",\"bps008\":\"FAIL\"},{\"operation_id\":\"ORGANIZACION_DE_RESPUESTAS\",\"stage_ids\":[],\"operation_quote\":\"Copiar información dada sin preguntas, consulta, comparación ni indagación.\",\"artifact_ids\":[],\"evidence_reason\":\"No hay evidencia ni operación asociada para organizar respuestas o datos durante el desarrollo del proyecto.\",\"bps008\":\"FAIL\"},{\"operation_id\":\"PRESENTACION_Y_APLICACION\",\"stage_ids\":[\"apply\"],\"operation_quote\":\"Presentar y aplicar las conclusiones de la indagación mediante una prueba de los acuerdos con el propio grupo\",\"artifact_ids\":[\"completion\"],\"evidence_reason\":\"Se realiza la aplicación y presentación mediante una prueba de los acuerdos con el propio grupo en la etapa apply.\",\"bps008\":\"PASS\"},{\"operation_id\":\"METACOGNICION\",\"stage_ids\":[\"apply\"],\"operation_quote\":\"registrar resultados y explicar qué cambió en nuestras ideas.\",\"artifact_ids\":[\"completion\"],\"evidence_reason\":\"Se incluye la reflexión sobre los cambios en las ideas y la valoración del resultado común dentro de la etapa apply.\",\"bps008\":\"PASS\"}]",
+        "expected": "Las operaciones realizan auténticamente la metodología; reflexión no sustituye servicio, intervención o indagación."
+      },
+      {
+        "rule_id": "BPS-009",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "grade_contributions, feasibility",
+        "observed": "Se consideran adecuadamente los perfiles de autonomía baja y los apoyos necesarios (modelado docente, apoyo entre pares, registros breves y dictado).",
+        "expected": "La complejidad, autonomía y apoyos deben ser adecuados a los grados y perfiles del alumnado."
+      },
+      {
+        "rule_id": "BPS-010",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "feasibility, session_progression, project_stages",
+        "observed": "Se programan 3 sesiones de 90 minutos (270 minutos totales), lo cual es factible y suficiente para las etapas planteadas dada la complejidad baja.",
+        "expected": "Factibilidad temporal adecuada por complejidad y etapas, sin depender de la simple multiplicación arbitraria."
+      },
+      {
+        "rule_id": "BPS-011",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "constraints.grades, pda_analysis",
+        "observed": "No hay grados transversales ajenos; sólo participan los grados 1 y 3 con sus respectivos PDA seleccionados.",
+        "expected": "Los grados transversales no heredan contenidos ni exigencias de PDA ajenos."
+      },
+      {
+        "rule_id": "BPS-012",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "ltg_strategy",
+        "observed": "Se justifica adecuadamente la ausencia de LTG indicando que el contexto permite consultar experiencias del propio grupo y que no es obligatorio.",
+        "expected": "LTG pertinente, autorizado y al servicio del mismo proyecto; sin LTG puede ser PASS justificado."
+      }
+    ],
+    "evaluated_blueprint_hash": "3bf4d72ae607538bac413952a338bd39c85d8549007618fdd13314db88f6dbc8",
+    "source_hash": "46fcd9e72ff1fd8752928e2efe8c381399cc038deee5a2aea8600ec163932de9"
+  }
+}

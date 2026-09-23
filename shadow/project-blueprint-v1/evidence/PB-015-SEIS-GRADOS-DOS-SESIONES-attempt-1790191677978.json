@@ -1,0 +1,93 @@
+{
+  "id": "PB-015-SEIS-GRADOS-DOS-SESIONES",
+  "error": "Error: PROVIDER_ERROR:503",
+  "telemetry": {
+    "task": "REVIEW",
+    "review_focus": "PDA",
+    "provider": "google",
+    "model": "gemini-3.1-flash-lite",
+    "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+    "input_hash": "5bc668148c221f46fff9d4b66db7bc506ed8be5e05904fa0d9aef17eb37fc80d",
+    "output_hash": null,
+    "usage": null,
+    "cost": null,
+    "latency_ms": 10232,
+    "attempts": [
+      {
+        "attempt": 1,
+        "latency_ms": 1303,
+        "http_status": 502,
+        "provider_status": 503,
+        "usage": null,
+        "output_hash": null,
+        "backoff_ms": 1000
+      },
+      {
+        "attempt": 2,
+        "latency_ms": 1230,
+        "http_status": 502,
+        "provider_status": 503,
+        "usage": null,
+        "output_hash": null,
+        "backoff_ms": 2000
+      },
+      {
+        "attempt": 3,
+        "latency_ms": 4696,
+        "http_status": 502,
+        "provider_status": 503,
+        "usage": null,
+        "output_hash": null
+      }
+    ],
+    "completed_review_calls": [
+      {
+        "task": "REVIEW",
+        "review_focus": "GLOBAL",
+        "provider": "google",
+        "model": "gemini-3.1-flash-lite",
+        "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+        "input_hash": "f28efe472c9f433bf74cf1fdf9153c8f824400e60225c8aa1e6375bd0baf3433",
+        "output_hash": "3482677d04a62f1b1322786ba78397a7d1670a38e37ef4c80eca582d814937cf",
+        "usage": {
+          "promptTokenCount": 6163,
+          "candidatesTokenCount": 1111,
+          "totalTokenCount": 7274,
+          "promptTokensDetails": [
+            {
+              "modality": "TEXT",
+              "tokenCount": 6163
+            }
+          ],
+          "serviceTier": "standard"
+        },
+        "cost": null,
+        "latency_ms": 12633,
+        "provider_latency_ms": 12494,
+        "finish_reason": "STOP",
+        "attempts": [
+          {
+            "attempt": 1,
+            "latency_ms": 12630,
+            "http_status": 200,
+            "provider_status": null,
+            "usage": {
+              "promptTokenCount": 6163,
+              "candidatesTokenCount": 1111,
+              "totalTokenCount": 7274,
+              "promptTokensDetails": [
+                {
+                  "modality": "TEXT",
+                  "tokenCount": 6163
+                }
+              ],
+              "serviceTier": "standard"
+            },
+            "output_hash": "3482677d04a62f1b1322786ba78397a7d1670a38e37ef4c80eca582d814937cf"
+          }
+        ]
+      }
+    ]
+  },
+  "match": false
+}

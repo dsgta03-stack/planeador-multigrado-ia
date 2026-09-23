@@ -1,28 +1,952 @@
 {
   "id": "PB-008",
-  "error": "Error: SHADOW_DISABLED:403",
-  "telemetry": {
-    "task": "REVIEW",
-    "review_focus": "GLOBAL",
-    "provider": "google",
-    "model": "gemini-3.1-flash-lite",
-    "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
-    "input_hash": "1b183a99343a0552ecfbab362a8e114bbedf95a91692386a08a51d30256c0e8d",
-    "output_hash": null,
-    "usage": null,
-    "cost": null,
-    "latency_ms": 139,
-    "attempts": [
+  "expected": {
+    "semantic": [
+      "BPS-006",
+      "BPS-007"
+    ]
+  },
+  "semantic_complete": true,
+  "actual": "FAIL",
+  "match": true,
+  "deterministic_failures": [],
+  "semantic_failures": [
+    "BPS-001",
+    "BPS-003",
+    "BPS-004",
+    "BPS-005",
+    "BPS-006",
+    "BPS-007",
+    "BPS-008"
+  ],
+  "warnings": 0,
+  "repair_count": 0,
+  "generation_latency_ms": null,
+  "semantic_review_latency_ms": 38744,
+  "semantic": {
+    "input_hash": "54938400ad6d925d7868c89a04ae02da2fdb602a436b9234ad19ca5681dd08ac",
+    "findings": [
       {
-        "attempt": 1,
-        "latency_ms": 139,
-        "http_status": 403,
-        "provider_status": null,
-        "usage": null,
-        "output_hash": null
+        "rule_id": "BPS-001",
+        "severity": "CRITICAL",
+        "status": "FAIL",
+        "scope": "blueprint.project_stages",
+        "observed": "La etapa 2 de student_operation declara explícitamente: 'Cada grado construye su proyecto independiente, sin pregunta común ni intercambio.' y la etapa 3 declara 'Colocar los seis productos juntos al final sin relación ni función compartida.', rompiendo el vínculo entre problema, propósito y resultado integrado.",
+        "expected": "Problema, propósito y resultado deben estar rigurosamente vinculados mediante un proyecto común con aportaciones interdependientes."
+      },
+      {
+        "rule_id": "BPS-002",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "blueprint.guiding_question",
+        "observed": "La pregunta guía '¿Cómo podemos explicar y poner en práctica nuestros acuerdos para convivir mejor?' es accesible a todos los grados de la escuela multigrado.",
+        "expected": "La pregunta sostiene el proyecto y es accesible a todos los grados."
+      },
+      {
+        "rule_id": "BPS-003",
+        "severity": "CRITICAL",
+        "status": "FAIL",
+        "scope": "blueprint.final_outcome",
+        "observed": "El resultado es un museo itinerante (tipo MUSEUM e ITINERANT) pero la etapa 3 indica que se colocan 'seis productos juntos al final sin relación ni función compartida', faltando la circulación viable y la cohesión funcional del museo itinerante.",
+        "expected": "El resultado cumple su semántica funcional, incluyendo atributos implícitos como la circulación viable en museos itinerantes."
+      },
+      {
+        "rule_id": "BPS-006",
+        "severity": "CRITICAL",
+        "status": "FAIL",
+        "scope": "blueprint.project_stages",
+        "observed": "En la etapa 2 se explicita 'sin pregunta común ni intercambio' y en la etapa 3 'seis productos sólo reunidos al final', lo cual contradice la existencia de un proyecto común construido con aportaciones interdependientes.",
+        "expected": "Existe un proyecto común construido con aportaciones interdependientes, no proyectos paralelos."
+      },
+      {
+        "rule_id": "BPS-009",
+        "severity": "WARNING",
+        "status": "PASS",
+        "scope": "blueprint.feasibility",
+        "observed": "La complejidad, autonomía y apoyos (modelado docente, apoyos entre pares) son adecuados a los grados y perfiles de la escuela multigrado.",
+        "expected": "Complejidad, autonomía y apoyos adecuados a los grados y perfiles."
+      },
+      {
+        "rule_id": "BPS-010",
+        "severity": "WARNING",
+        "status": "PASS",
+        "scope": "blueprint.feasibility",
+        "observed": "La factibilidad temporal por complejidad y etapas está bien dimensionada con 270 minutos totales repartidos en 3 sesiones de 90 minutos.",
+        "expected": "Factibilidad temporal por complejidad y etapas, no sólo multiplicación de minutos."
+      },
+      {
+        "rule_id": "BPS-011",
+        "severity": "WARNING",
+        "status": "PASS",
+        "scope": "blueprint.grade_contributions",
+        "observed": "Los grados transversales tienen roles de apoyo desde la experiencia común sin heredar contenidos ni exigencias de PDA ajenos.",
+        "expected": "Los grados transversales no heredan contenidos ni exigencias de PDA ajenos."
+      },
+      {
+        "rule_id": "BPS-012",
+        "severity": "WARNING",
+        "status": "PASS",
+        "scope": "blueprint.ltg_strategy",
+        "observed": "El uso de LTG está definido como MODE NONE con un PASS justificado ya que el contexto permite consultar experiencias del propio grupo y el LTG no es obligatorio.",
+        "expected": "LTG pertinente, autorizado y al servicio del mismo proyecto; sin LTG puede ser PASS justificado."
+      },
+      {
+        "rule_id": "BPS-004",
+        "severity": "CRITICAL",
+        "status": "FAIL",
+        "scope": "pda_checks",
+        "observed": "[{\"pda_id\":\"F3-DHC-1-010\",\"grade\":1,\"contribution_ids\":[\"grade_1\"],\"stage_ids\":[\"investigate\"],\"operation_quote\":\"Cada grado construye su proyecto independiente, sin pregunta común ni intercambio.\",\"artifact_ids\":[\"shared_explanations\"],\"evidence_reason\":\"La operacion descrita indica que cada grado construye su proyecto de forma independiente sin realizar la explicacion de situaciones cotidianas ni la propuesta de acuerdos requeridas para el grado 1.\",\"bps004\":\"FAIL\",\"bps005\":\"FAIL\"},{\"pda_id\":\"F4-DHC-3-001\",\"grade\":3,\"contribution_ids\":[\"grade_3\"],\"stage_ids\":[\"investigate\"],\"operation_quote\":\"Cada grado construye su proyecto independiente, sin pregunta común ni intercambio.\",\"artifact_ids\":[\"shared_explanations\"],\"evidence_reason\":\"La operacion indica un trabajo independiente sin consulta ni contrastacion de significados y acuerdos familiares, escolares o comunitarios requeridos por el PDA de grado 3.\",\"bps004\":\"FAIL\",\"bps005\":\"FAIL\"}]",
+        "expected": "El PDA completo se desarrolla mediante su aportación, sin reducirlo a coincidencia temática."
+      },
+      {
+        "rule_id": "BPS-005",
+        "severity": "CRITICAL",
+        "status": "FAIL",
+        "scope": "pda_checks",
+        "observed": "[{\"pda_id\":\"F3-DHC-1-010\",\"grade\":1,\"contribution_ids\":[\"grade_1\"],\"stage_ids\":[\"investigate\"],\"operation_quote\":\"Cada grado construye su proyecto independiente, sin pregunta común ni intercambio.\",\"artifact_ids\":[\"shared_explanations\"],\"evidence_reason\":\"La operacion descrita indica que cada grado construye su proyecto de forma independiente sin realizar la explicacion de situaciones cotidianas ni la propuesta de acuerdos requeridas para el grado 1.\",\"bps004\":\"FAIL\",\"bps005\":\"FAIL\"},{\"pda_id\":\"F4-DHC-3-001\",\"grade\":3,\"contribution_ids\":[\"grade_3\"],\"stage_ids\":[\"investigate\"],\"operation_quote\":\"Cada grado construye su proyecto independiente, sin pregunta común ni intercambio.\",\"artifact_ids\":[\"shared_explanations\"],\"evidence_reason\":\"La operacion indica un trabajo independiente sin consulta ni contrastacion de significados y acuerdos familiares, escolares o comunitarios requeridos por el PDA de grado 3.\",\"bps004\":\"FAIL\",\"bps005\":\"FAIL\"}]",
+        "expected": "La evidencia corresponde al desempeño cognitivo del PDA completo."
+      },
+      {
+        "rule_id": "BPS-007",
+        "severity": "CRITICAL",
+        "status": "FAIL",
+        "scope": "stage_checks",
+        "observed": "[{\"stage_id\":\"frame\",\"operation_quote\":\"Identificar juntos situaciones de convivencia que desconocemos, recuperar recuerdos, formular preguntas y acordar qué explicaciones necesita el grupo nuevo. Seleccionar prácticas y criterios: utilidad, respeto y posibilidad de representarlas sin datos personales.\",\"artifact_id\":\"questions\",\"criteria_quote\":\"Las preguntas responden a la necesidad expresada\",\"consumed_by\":[\"investigate\"],\"outcome_link\":\"Se formulan preguntas y se seleccionan criterios de utilidad y respeto para guiar las explicaciones posteriores.\",\"bps007\":\"PASS\"},{\"stage_id\":\"investigate\",\"operation_quote\":\"Cada grado construye su proyecto independiente, sin pregunta común ni intercambio.\",\"artifact_id\":\"shared_explanations\",\"criteria_quote\":\"Las explicaciones usan consulta y acuerdos, no sólo decoración\",\"consumed_by\":[\"apply\"],\"outcome_link\":\"La operación declara proyectos independientes sin intercambio, contradiciendo la expectativa de explicaciones y piezas contrastadas compartidas.\",\"bps007\":\"FAIL\"},{\"stage_id\":\"apply\",\"operation_quote\":\"Colocar los seis productos juntos al final sin relación ni función compartida.\",\"artifact_id\":\"completion\",\"criteria_quote\":\"Existe evidencia de realización con destinatarios del grupo y valoración\",\"consumed_by\":[\"outcome_01\"],\"outcome_link\":\"Simplemente colocar productos juntos sin relación ni función compartida no constituye un museo itinerante integrado ni evidencia la circulación y montaje requeridos.\",\"bps007\":\"FAIL\"}]",
+        "expected": "La progresión produce el resultado y cada avance tiene operación, artefacto y evidencia."
+      },
+      {
+        "rule_id": "BPS-008",
+        "severity": "CRITICAL",
+        "status": "FAIL",
+        "scope": "methodology_checks",
+        "observed": "[{\"operation_id\":\"IDENTIFICACION\",\"stage_ids\":[\"frame\"],\"operation_quote\":\"Identificar juntos situaciones de convivencia que desconocemos, recuperar recuerdos, formular preguntas y acordar qué explicaciones necesita el grupo nuevo.\",\"artifact_ids\":[\"questions\"],\"evidence_reason\":\"Se identifican situaciones de convivencia y se formulan preguntas conjuntamente.\",\"bps008\":\"PASS\"},{\"operation_id\":\"RECUPERACION\",\"stage_ids\":[\"frame\"],\"operation_quote\":\"Identificar juntos situaciones de convivencia que desconocemos, recuperar recuerdos, formular preguntas y acordar qué explicaciones necesita el grupo nuevo.\",\"artifact_ids\":[\"questions\"],\"evidence_reason\":\"Se recuperan recuerdos para formular las preguntas iniciales.\",\"bps008\":\"PASS\"},{\"operation_id\":\"PLANIFICACION\",\"stage_ids\":[\"frame\"],\"operation_quote\":\"Seleccionar prácticas y criterios: utilidad, respeto y posibilidad de representarlas sin datos personales.\",\"artifact_ids\":[\"questions\"],\"evidence_reason\":\"Se seleccionan criterios y prácticas a seguir.\",\"bps008\":\"PASS\"},{\"operation_id\":\"ACERCAMIENTO\",\"stage_ids\":[\"investigate\"],\"operation_quote\":\"Cada grado construye su proyecto independiente, sin pregunta común ni intercambio.\",\"artifact_ids\":[\"shared_explanations\"],\"evidence_reason\":\"Se construyen productos independientes sin una aproximación colaborativa real.\",\"bps008\":\"FAIL\"},{\"operation_id\":\"COMPRENSION_Y_PRODUCCION\",\"stage_ids\":[\"investigate\"],\"operation_quote\":\"Cada grado construye su proyecto independiente, sin pregunta común ni intercambio.\",\"artifact_ids\":[\"shared_explanations\"],\"evidence_reason\":\"Se elaboran explicaciones aisladas sin un marco común comprobable.\",\"bps008\":\"FAIL\"},{\"operation_id\":\"RECONOCIMIENTO\",\"stage_ids\":[\"investigate\"],\"operation_quote\":\"Cada grado construye su proyecto independiente, sin pregunta común ni intercambio.\",\"artifact_ids\":[\"shared_explanations\"],\"evidence_reason\":\"No hay reconocimiento o contraste integrado entre los distintos grados.\",\"bps008\":\"FAIL\"},{\"operation_id\":\"CONCRECION\",\"stage_ids\":[\"investigate\"],\"operation_quote\":\"Cada grado construye su proyecto independiente, sin pregunta común ni intercambio.\",\"artifact_ids\":[\"shared_explanations\"],\"evidence_reason\":\"La concreción resulta fragmentada y separada.\",\"bps008\":\"FAIL\"},{\"operation_id\":\"INTEGRACION\",\"stage_ids\":[\"apply\"],\"operation_quote\":\"Colocar los seis productos juntos al final sin relación ni función compartida.\",\"artifact_ids\":[\"completion\"],\"evidence_reason\":\"Los productos sólo se reúnen al final sin integración funcional real.\",\"bps008\":\"FAIL\"},{\"operation_id\":\"DIFUSION\",\"stage_ids\":[\"apply\"],\"operation_quote\":\"Colocar los seis productos juntos al final sin relación ni función compartida.\",\"artifact_ids\":[\"completion\"],\"evidence_reason\":\"No se realiza difusión o comunicación integrada efectiva a los destinatarios.\",\"bps008\":\"FAIL\"},{\"operation_id\":\"CONSIDERACIONES\",\"stage_ids\":[\"apply\"],\"operation_quote\":\"Colocar los seis productos juntos al final sin relación ni función compartida.\",\"artifact_ids\":[\"completion\"],\"evidence_reason\":\"No hay valoración integrada del resultado común al no existir cohesión.\",\"bps008\":\"FAIL\"},{\"operation_id\":\"AVANCES\",\"stage_ids\":[\"apply\"],\"operation_quote\":\"Colocar los seis productos juntos al final sin relación ni función compartida.\",\"artifact_ids\":[\"completion\"],\"evidence_reason\":\"No se demuestra un avance operativo integrado válido.\",\"bps008\":\"FAIL\"}]",
+        "expected": "Las operaciones realizan auténticamente la metodología; reflexión no sustituye servicio, intervención o indagación."
       }
     ],
-    "completed_review_calls": []
+    "audit": {
+      "audit_version": "LOCAL_EVIDENCE_V1",
+      "findings": [
+        {
+          "rule_id": "BPS-001",
+          "severity": "CRITICAL",
+          "status": "FAIL",
+          "scope": "blueprint.project_stages",
+          "observed": "La etapa 2 de student_operation declara explícitamente: 'Cada grado construye su proyecto independiente, sin pregunta común ni intercambio.' y la etapa 3 declara 'Colocar los seis productos juntos al final sin relación ni función compartida.', rompiendo el vínculo entre problema, propósito y resultado integrado.",
+          "expected": "Problema, propósito y resultado deben estar rigurosamente vinculados mediante un proyecto común con aportaciones interdependientes."
+        },
+        {
+          "rule_id": "BPS-002",
+          "severity": "CRITICAL",
+          "status": "PASS",
+          "scope": "blueprint.guiding_question",
+          "observed": "La pregunta guía '¿Cómo podemos explicar y poner en práctica nuestros acuerdos para convivir mejor?' es accesible a todos los grados de la escuela multigrado.",
+          "expected": "La pregunta sostiene el proyecto y es accesible a todos los grados."
+        },
+        {
+          "rule_id": "BPS-003",
+          "severity": "CRITICAL",
+          "status": "FAIL",
+          "scope": "blueprint.final_outcome",
+          "observed": "El resultado es un museo itinerante (tipo MUSEUM e ITINERANT) pero la etapa 3 indica que se colocan 'seis productos juntos al final sin relación ni función compartida', faltando la circulación viable y la cohesión funcional del museo itinerante.",
+          "expected": "El resultado cumple su semántica funcional, incluyendo atributos implícitos como la circulación viable en museos itinerantes."
+        },
+        {
+          "rule_id": "BPS-004",
+          "severity": "CRITICAL",
+          "status": "FAIL",
+          "scope": "blueprint.grade_contributions",
+          "observed": "Cada grado contributions declara explícitamente: 'Proyecto independiente del grado X sin usar aportes de otros', reduciendo el PDA a proyectos paralelos y aislados.",
+          "expected": "El PDA completo se desarrolla mediante su aportación, sin reducirlo a coincidencia temática."
+        },
+        {
+          "rule_id": "BPS-005",
+          "severity": "CRITICAL",
+          "status": "FAIL",
+          "scope": "blueprint.pda_analysis",
+          "observed": "La evidencia esperada y la operación en la etapa 2 fallan en conectar con el desempeño cognitivo del PDA completo de indagar y explicar, delegando en productos independientes sin articulación.",
+          "expected": "La evidencia corresponde al desempeño cognitivo del PDA completo."
+        },
+        {
+          "rule_id": "BPS-006",
+          "severity": "CRITICAL",
+          "status": "FAIL",
+          "scope": "blueprint.project_stages",
+          "observed": "En la etapa 2 se explicita 'sin pregunta común ni intercambio' y en la etapa 3 'seis productos sólo reunidos al final', lo cual contradice la existencia de un proyecto común construido con aportaciones interdependientes.",
+          "expected": "Existe un proyecto común construido con aportaciones interdependientes, no proyectos paralelos."
+        },
+        {
+          "rule_id": "BPS-007",
+          "severity": "CRITICAL",
+          "status": "FAIL",
+          "scope": "blueprint.project_stages",
+          "observed": "La progresión de la etapa 2 y 3 contradice el resultado final esperado al operar de forma independiente y desconectada, incumpliendo la progresión operativa hacia el artefacto final.",
+          "expected": "La progresión produce el resultado y cada avance tiene operación, artefacto y evidencia."
+        },
+        {
+          "rule_id": "BPS-008",
+          "severity": "CRITICAL",
+          "status": "FAIL",
+          "scope": "blueprint.project_stages",
+          "observed": "Las operaciones metodológicas se listan en el catálogo pero las acciones en la etapa 2 y 3 no realizan auténticamente las operaciones de integración y difusión al tratarse de productos aislados reunidos al final.",
+          "expected": "Las operaciones realizan auténticamente la metodología; reflexión no sustituye servicio, intervención o indagación."
+        },
+        {
+          "rule_id": "BPS-009",
+          "severity": "WARNING",
+          "status": "PASS",
+          "scope": "blueprint.feasibility",
+          "observed": "La complejidad, autonomía y apoyos (modelado docente, apoyos entre pares) son adecuados a los grados y perfiles de la escuela multigrado.",
+          "expected": "Complejidad, autonomía y apoyos adecuados a los grados y perfiles."
+        },
+        {
+          "rule_id": "BPS-010",
+          "severity": "WARNING",
+          "status": "PASS",
+          "scope": "blueprint.feasibility",
+          "observed": "La factibilidad temporal por complejidad y etapas está bien dimensionada con 270 minutos totales repartidos en 3 sesiones de 90 minutos.",
+          "expected": "Factibilidad temporal por complejidad y etapas, no sólo multiplicación de minutos."
+        },
+        {
+          "rule_id": "BPS-011",
+          "severity": "WARNING",
+          "status": "PASS",
+          "scope": "blueprint.grade_contributions",
+          "observed": "Los grados transversales tienen roles de apoyo desde la experiencia común sin heredar contenidos ni exigencias de PDA ajenos.",
+          "expected": "Los grados transversales no heredan contenidos ni exigencias de PDA ajenos."
+        },
+        {
+          "rule_id": "BPS-012",
+          "severity": "WARNING",
+          "status": "PASS",
+          "scope": "blueprint.ltg_strategy",
+          "observed": "El uso de LTG está definido como MODE NONE con un PASS justificado ya que el contexto permite consultar experiencias del propio grupo y el LTG no es obligatorio.",
+          "expected": "LTG pertinente, autorizado y al servicio del mismo proyecto; sin LTG puede ser PASS justificado."
+        }
+      ],
+      "pda_checks": [
+        {
+          "pda_id": "F3-DHC-1-010",
+          "grade": 1,
+          "contribution_ids": [
+            "grade_1"
+          ],
+          "stage_ids": [
+            "investigate"
+          ],
+          "operation_quote": "Cada grado construye su proyecto independiente, sin pregunta común ni intercambio.",
+          "artifact_ids": [
+            "shared_explanations"
+          ],
+          "evidence_reason": "La operacion descrita indica que cada grado construye su proyecto de forma independiente sin realizar la explicacion de situaciones cotidianas ni la propuesta de acuerdos requeridas para el grado 1.",
+          "bps004": "FAIL",
+          "bps005": "FAIL"
+        },
+        {
+          "pda_id": "F4-DHC-3-001",
+          "grade": 3,
+          "contribution_ids": [
+            "grade_3"
+          ],
+          "stage_ids": [
+            "investigate"
+          ],
+          "operation_quote": "Cada grado construye su proyecto independiente, sin pregunta común ni intercambio.",
+          "artifact_ids": [
+            "shared_explanations"
+          ],
+          "evidence_reason": "La operacion indica un trabajo independiente sin consulta ni contrastacion de significados y acuerdos familiares, escolares o comunitarios requeridos por el PDA de grado 3.",
+          "bps004": "FAIL",
+          "bps005": "FAIL"
+        }
+      ],
+      "stage_checks": [
+        {
+          "stage_id": "frame",
+          "operation_quote": "Identificar juntos situaciones de convivencia que desconocemos, recuperar recuerdos, formular preguntas y acordar qué explicaciones necesita el grupo nuevo. Seleccionar prácticas y criterios: utilidad, respeto y posibilidad de representarlas sin datos personales.",
+          "artifact_id": "questions",
+          "criteria_quote": "Las preguntas responden a la necesidad expresada",
+          "consumed_by": [
+            "investigate"
+          ],
+          "outcome_link": "Se formulan preguntas y se seleccionan criterios de utilidad y respeto para guiar las explicaciones posteriores.",
+          "bps007": "PASS"
+        },
+        {
+          "stage_id": "investigate",
+          "operation_quote": "Cada grado construye su proyecto independiente, sin pregunta común ni intercambio.",
+          "artifact_id": "shared_explanations",
+          "criteria_quote": "Las explicaciones usan consulta y acuerdos, no sólo decoración",
+          "consumed_by": [
+            "apply"
+          ],
+          "outcome_link": "La operación declara proyectos independientes sin intercambio, contradiciendo la expectativa de explicaciones y piezas contrastadas compartidas.",
+          "bps007": "FAIL"
+        },
+        {
+          "stage_id": "apply",
+          "operation_quote": "Colocar los seis productos juntos al final sin relación ni función compartida.",
+          "artifact_id": "completion",
+          "criteria_quote": "Existe evidencia de realización con destinatarios del grupo y valoración",
+          "consumed_by": [
+            "outcome_01"
+          ],
+          "outcome_link": "Simplemente colocar productos juntos sin relación ni función compartida no constituye un museo itinerante integrado ni evidencia la circulación y montaje requeridos.",
+          "bps007": "FAIL"
+        }
+      ],
+      "methodology_checks": [
+        {
+          "operation_id": "IDENTIFICACION",
+          "stage_ids": [
+            "frame"
+          ],
+          "operation_quote": "Identificar juntos situaciones de convivencia que desconocemos, recuperar recuerdos, formular preguntas y acordar qué explicaciones necesita el grupo nuevo.",
+          "artifact_ids": [
+            "questions"
+          ],
+          "evidence_reason": "Se identifican situaciones de convivencia y se formulan preguntas conjuntamente.",
+          "bps008": "PASS"
+        },
+        {
+          "operation_id": "RECUPERACION",
+          "stage_ids": [
+            "frame"
+          ],
+          "operation_quote": "Identificar juntos situaciones de convivencia que desconocemos, recuperar recuerdos, formular preguntas y acordar qué explicaciones necesita el grupo nuevo.",
+          "artifact_ids": [
+            "questions"
+          ],
+          "evidence_reason": "Se recuperan recuerdos para formular las preguntas iniciales.",
+          "bps008": "PASS"
+        },
+        {
+          "operation_id": "PLANIFICACION",
+          "stage_ids": [
+            "frame"
+          ],
+          "operation_quote": "Seleccionar prácticas y criterios: utilidad, respeto y posibilidad de representarlas sin datos personales.",
+          "artifact_ids": [
+            "questions"
+          ],
+          "evidence_reason": "Se seleccionan criterios y prácticas a seguir.",
+          "bps008": "PASS"
+        },
+        {
+          "operation_id": "ACERCAMIENTO",
+          "stage_ids": [
+            "investigate"
+          ],
+          "operation_quote": "Cada grado construye su proyecto independiente, sin pregunta común ni intercambio.",
+          "artifact_ids": [
+            "shared_explanations"
+          ],
+          "evidence_reason": "Se construyen productos independientes sin una aproximación colaborativa real.",
+          "bps008": "FAIL"
+        },
+        {
+          "operation_id": "COMPRENSION_Y_PRODUCCION",
+          "stage_ids": [
+            "investigate"
+          ],
+          "operation_quote": "Cada grado construye su proyecto independiente, sin pregunta común ni intercambio.",
+          "artifact_ids": [
+            "shared_explanations"
+          ],
+          "evidence_reason": "Se elaboran explicaciones aisladas sin un marco común comprobable.",
+          "bps008": "FAIL"
+        },
+        {
+          "operation_id": "RECONOCIMIENTO",
+          "stage_ids": [
+            "investigate"
+          ],
+          "operation_quote": "Cada grado construye su proyecto independiente, sin pregunta común ni intercambio.",
+          "artifact_ids": [
+            "shared_explanations"
+          ],
+          "evidence_reason": "No hay reconocimiento o contraste integrado entre los distintos grados.",
+          "bps008": "FAIL"
+        },
+        {
+          "operation_id": "CONCRECION",
+          "stage_ids": [
+            "investigate"
+          ],
+          "operation_quote": "Cada grado construye su proyecto independiente, sin pregunta común ni intercambio.",
+          "artifact_ids": [
+            "shared_explanations"
+          ],
+          "evidence_reason": "La concreción resulta fragmentada y separada.",
+          "bps008": "FAIL"
+        },
+        {
+          "operation_id": "INTEGRACION",
+          "stage_ids": [
+            "apply"
+          ],
+          "operation_quote": "Colocar los seis productos juntos al final sin relación ni función compartida.",
+          "artifact_ids": [
+            "completion"
+          ],
+          "evidence_reason": "Los productos sólo se reúnen al final sin integración funcional real.",
+          "bps008": "FAIL"
+        },
+        {
+          "operation_id": "DIFUSION",
+          "stage_ids": [
+            "apply"
+          ],
+          "operation_quote": "Colocar los seis productos juntos al final sin relación ni función compartida.",
+          "artifact_ids": [
+            "completion"
+          ],
+          "evidence_reason": "No se realiza difusión o comunicación integrada efectiva a los destinatarios.",
+          "bps008": "FAIL"
+        },
+        {
+          "operation_id": "CONSIDERACIONES",
+          "stage_ids": [
+            "apply"
+          ],
+          "operation_quote": "Colocar los seis productos juntos al final sin relación ni función compartida.",
+          "artifact_ids": [
+            "completion"
+          ],
+          "evidence_reason": "No hay valoración integrada del resultado común al no existir cohesión.",
+          "bps008": "FAIL"
+        },
+        {
+          "operation_id": "AVANCES",
+          "stage_ids": [
+            "apply"
+          ],
+          "operation_quote": "Colocar los seis productos juntos al final sin relación ni función compartida.",
+          "artifact_ids": [
+            "completion"
+          ],
+          "evidence_reason": "No se demuestra un avance operativo integrado válido.",
+          "bps008": "FAIL"
+        }
+      ]
+    },
+    "telemetry": {
+      "task": "REVIEW",
+      "provider": "google",
+      "model": "gemini-3.5-flash-lite",
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+      "input_hash": "54938400ad6d925d7868c89a04ae02da2fdb602a436b9234ad19ca5681dd08ac",
+      "output_hash": "2f4d4d3a2abc034399f4468872b288c38c92470d70abeba609fc91ed0f8f43d5",
+      "latency_ms": 38739,
+      "calls": [
+        {
+          "task": "REVIEW",
+          "review_focus": "GLOBAL",
+          "reviewer_version": "LOCAL_EVIDENCE_V1_LITERAL_QUOTES_R2",
+          "provider": "google",
+          "model": "gemini-3.5-flash-lite",
+          "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+          "input_hash": "cbcd0d1e1c2ad24d8eba1d2d90311d3c461c50c9628d0cac0bb78a7a14f608d4",
+          "output_hash": "53b191d5197d84cbb18ed67fff1acc6bb0be071664ac683845541c9bba16eeb5",
+          "usage": {
+            "promptTokenCount": 6245,
+            "candidatesTokenCount": 1102,
+            "totalTokenCount": 7347,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 6245
+              }
+            ],
+            "serviceTier": "standard"
+          },
+          "cost": null,
+          "latency_ms": 13523,
+          "provider_latency_ms": 4046,
+          "finish_reason": "STOP",
+          "attempts": [
+            {
+              "attempt": 1,
+              "started_at": "2026-09-23T19:23:35.215Z",
+              "latency_ms": 8702,
+              "http_status": 200,
+              "provider_status": null,
+              "usage": {
+                "promptTokenCount": 6245,
+                "candidatesTokenCount": 1102,
+                "totalTokenCount": 7347,
+                "promptTokensDetails": [
+                  {
+                    "modality": "TEXT",
+                    "tokenCount": 6245
+                  }
+                ],
+                "serviceTier": "standard"
+              },
+              "output_hash": "53b191d5197d84cbb18ed67fff1acc6bb0be071664ac683845541c9bba16eeb5"
+            }
+          ]
+        },
+        {
+          "task": "REVIEW",
+          "review_focus": "PDA",
+          "reviewer_version": "LOCAL_EVIDENCE_V1_LITERAL_QUOTES_R2",
+          "provider": "google",
+          "model": "gemini-3.5-flash-lite",
+          "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+          "input_hash": "95ad86f0932aaeed5e0212a6d62a0f6ded82a7396ad1fcdcce634d2a3e47950a",
+          "output_hash": "2e39fd3cefec3041e44faf307b2360a79db4ba3c4f5371fb5c6570e781fdbe2f",
+          "usage": {
+            "promptTokenCount": 2334,
+            "candidatesTokenCount": 383,
+            "totalTokenCount": 2717,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 2334
+              }
+            ],
+            "serviceTier": "standard"
+          },
+          "cost": null,
+          "latency_ms": 1703,
+          "provider_latency_ms": 1541,
+          "finish_reason": "STOP",
+          "attempts": [
+            {
+              "attempt": 1,
+              "started_at": "2026-09-23T19:23:43.918Z",
+              "latency_ms": 1703,
+              "http_status": 200,
+              "provider_status": null,
+              "usage": {
+                "promptTokenCount": 2334,
+                "candidatesTokenCount": 383,
+                "totalTokenCount": 2717,
+                "promptTokensDetails": [
+                  {
+                    "modality": "TEXT",
+                    "tokenCount": 2334
+                  }
+                ],
+                "serviceTier": "standard"
+              },
+              "output_hash": "2e39fd3cefec3041e44faf307b2360a79db4ba3c4f5371fb5c6570e781fdbe2f"
+            }
+          ]
+        },
+        {
+          "task": "REVIEW",
+          "review_focus": "STAGES",
+          "reviewer_version": "LOCAL_EVIDENCE_V1_LITERAL_QUOTES_R2",
+          "provider": "google",
+          "model": "gemini-3.5-flash-lite",
+          "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+          "input_hash": "07421c25668beceb7c5a107aa6876b61293fae4d9acc856be69b5ca071b62b25",
+          "output_hash": "b454544bc70544635dff241cc56b9888ed2c8ae32c4b42ba3933b09b388c5d5e",
+          "usage": {
+            "promptTokenCount": 2386,
+            "candidatesTokenCount": 446,
+            "totalTokenCount": 2832,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 2386
+              }
+            ],
+            "serviceTier": "standard"
+          },
+          "cost": null,
+          "latency_ms": 13756,
+          "provider_latency_ms": 2083,
+          "finish_reason": "STOP",
+          "attempts": [
+            {
+              "attempt": 1,
+              "started_at": "2026-09-23T19:23:51.918Z",
+              "latency_ms": 7460,
+              "http_status": 200,
+              "provider_status": null,
+              "usage": {
+                "promptTokenCount": 2386,
+                "candidatesTokenCount": 446,
+                "totalTokenCount": 2832,
+                "promptTokensDetails": [
+                  {
+                    "modality": "TEXT",
+                    "tokenCount": 2386
+                  }
+                ],
+                "serviceTier": "standard"
+              },
+              "output_hash": "b454544bc70544635dff241cc56b9888ed2c8ae32c4b42ba3933b09b388c5d5e"
+            }
+          ]
+        },
+        {
+          "task": "REVIEW",
+          "review_focus": "METHOD",
+          "reviewer_version": "LOCAL_EVIDENCE_V1_LITERAL_QUOTES_R2",
+          "provider": "google",
+          "model": "gemini-3.5-flash-lite",
+          "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+          "input_hash": "7b26fbee28bc1cb86e35b82077c4b7477c949d38dec13932433b852e0d86d485",
+          "output_hash": "1bd5a9dcb1ceddb903b21d1414749c54fc83b0856c8bed36f19c811bc0e6fdb1",
+          "usage": {
+            "promptTokenCount": 2418,
+            "candidatesTokenCount": 1220,
+            "totalTokenCount": 3638,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 2418
+              }
+            ],
+            "serviceTier": "standard"
+          },
+          "cost": null,
+          "latency_ms": 9757,
+          "provider_latency_ms": 9093,
+          "finish_reason": "STOP",
+          "attempts": [
+            {
+              "attempt": 1,
+              "started_at": "2026-09-23T19:23:59.918Z",
+              "latency_ms": 9217,
+              "http_status": 200,
+              "provider_status": null,
+              "usage": {
+                "promptTokenCount": 2418,
+                "candidatesTokenCount": 1220,
+                "totalTokenCount": 3638,
+                "promptTokensDetails": [
+                  {
+                    "modality": "TEXT",
+                    "tokenCount": 2418
+                  }
+                ],
+                "serviceTier": "standard"
+              },
+              "output_hash": "1bd5a9dcb1ceddb903b21d1414749c54fc83b0856c8bed36f19c811bc0e6fdb1"
+            }
+          ]
+        }
+      ]
+    }
   },
-  "match": false
+  "gate": {
+    "gate_version": "BLUEPRINT_GATE_V1",
+    "status": "FAIL",
+    "critical_count": 7,
+    "warning_count": 0,
+    "deterministic_findings": [
+      {
+        "rule_id": "BPD-SCHEMA",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "TeacherConstraintsV1",
+        "observed": "Contrato válido",
+        "expected": "Contrato completo, tipado y sin campos desconocidos"
+      },
+      {
+        "rule_id": "BPD-SCHEMA",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "CurriculumSnapshotV1",
+        "observed": "Contrato válido",
+        "expected": "Contrato completo, tipado y sin campos desconocidos"
+      },
+      {
+        "rule_id": "BPD-SCHEMA",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "MethodologyDecisionV1",
+        "observed": "Contrato válido",
+        "expected": "Contrato completo, tipado y sin campos desconocidos"
+      },
+      {
+        "rule_id": "BPD-SCHEMA",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "ProjectBlueprintV1",
+        "observed": "Contrato válido",
+        "expected": "Contrato completo, tipado y sin campos desconocidos"
+      },
+      {
+        "rule_id": "BPD-001",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "pda_analysis",
+        "observed": "F3-DHC-1-010,F4-DHC-3-001,F3-DHC-1-010,F4-DHC-3-001,F3-DHC-1-010,F4-DHC-3-001,F3-DHC-1-010,F4-DHC-3-001,F3-DHC-1-010,F4-DHC-3-001",
+        "expected": "Una fila por PDA seleccionado; sólo IDs autorizados existentes, sin duplicados"
+      },
+      {
+        "rule_id": "BPD-002",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "pda_analysis/grade_contributions",
+        "observed": "Correspondencia de grados y texto oficial",
+        "expected": "Grado y texto exactos del corpus verificado"
+      },
+      {
+        "rule_id": "BPD-003",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "grade_contributions",
+        "observed": "1,2,3,4,5,6",
+        "expected": "Todos los grados y PDA con aportación autorizada; IDs de aportación únicos"
+      },
+      {
+        "rule_id": "BPD-004",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "grade_contributions",
+        "observed": "Modos curriculares revisados",
+        "expected": "Transversal sin PDA atribuido; grados con selección mantienen aporte curricular"
+      },
+      {
+        "rule_id": "BPD-005",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "final_outcome",
+        "observed": "Un objeto final y destinos",
+        "expected": "Exactamente un resultado final y todas las aportaciones dirigidas a él"
+      },
+      {
+        "rule_id": "BPD-006",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "project_stages",
+        "observed": "Entradas/operación/salida",
+        "expected": "Cada etapa tiene cadena explícita y orden único"
+      },
+      {
+        "rule_id": "BPD-007",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "project_stages.consumed_by",
+        "observed": "Destinos y enlaces recíprocos",
+        "expected": "Todo parcial tiene consumidor posterior real o integración al resultado"
+      },
+      {
+        "rule_id": "BPD-008",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "dependencies",
+        "observed": "Etapas/sesiones referidas",
+        "expected": "Dependencias existentes, posteriores y sin ciclos"
+      },
+      {
+        "rule_id": "BPD-009",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "session_progression.last.terminal",
+        "observed": "true",
+        "expected": "true"
+      },
+      {
+        "rule_id": "BPD-010",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "session_progression.last.next_session_dependency",
+        "observed": "null",
+        "expected": "null"
+      },
+      {
+        "rule_id": "BPD-011",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "session_progression",
+        "observed": "Terminalidad y encadenamiento",
+        "expected": "Sólo última terminal; cada sesión intermedia enlaza la siguiente"
+      },
+      {
+        "rule_id": "BPD-012",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "session_progression.length",
+        "observed": "3",
+        "expected": "3"
+      },
+      {
+        "rule_id": "BPD-013",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "numbering",
+        "observed": "Orden de sesiones y etapas",
+        "expected": "Numeración continua desde 1"
+      },
+      {
+        "rule_id": "BPD-014",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "output_artifact_id",
+        "observed": "Unicidad de artefactos",
+        "expected": "IDs únicos distintos de inputs externos y resultado"
+      },
+      {
+        "rule_id": "BPD-015",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "artifact_inputs",
+        "observed": "Procedencia y producción única",
+        "expected": "Inputs anteriores; etapas dependientes en la misma sesión o posteriores al productor; cada artefacto producido una vez"
+      },
+      {
+        "rule_id": "BPD-016",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "methodology",
+        "observed": "Catálogo y operaciones",
+        "expected": "Una decisión del catálogo versionado, sin alteraciones"
+      },
+      {
+        "rule_id": "BPD-017",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "methodology.selected_id",
+        "observed": "proyectos_comunitarios",
+        "expected": "proyectos_comunitarios"
+      },
+      {
+        "rule_id": "BPD-018",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "final_outcome.required_resources",
+        "observed": "Recursos/alternativas",
+        "expected": "Recursos autorizados o alternativa autorizada justificada; equivalencia se revisa semánticamente"
+      },
+      {
+        "rule_id": "BPD-019",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "methodology_operations",
+        "observed": "Cobertura en etapas/progresión",
+        "expected": "Operaciones completas y vinculadas al artefacto de etapa, sin reparto por índice"
+      },
+      {
+        "rule_id": "BPD-020",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "source",
+        "observed": "Hashes y problemática",
+        "expected": "Fuentes íntegramente vinculadas; problemática original exacta"
+      },
+      {
+        "rule_id": "BPD-TIME",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "feasibility",
+        "observed": "Estimaciones por etapa/sesión",
+        "expected": "Estimaciones positivas justificadas dentro de cada sesión; BPS-010 juzga realismo"
+      },
+      {
+        "rule_id": "BPD-LTG",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "ltg_strategy",
+        "observed": "LTG y decisiones explícitas",
+        "expected": "Trazabilidad verificada y respeto a selección explícita"
+      }
+    ],
+    "semantic_findings": [
+      {
+        "rule_id": "BPS-001",
+        "severity": "CRITICAL",
+        "status": "FAIL",
+        "scope": "blueprint.project_stages",
+        "observed": "La etapa 2 de student_operation declara explícitamente: 'Cada grado construye su proyecto independiente, sin pregunta común ni intercambio.' y la etapa 3 declara 'Colocar los seis productos juntos al final sin relación ni función compartida.', rompiendo el vínculo entre problema, propósito y resultado integrado.",
+        "expected": "Problema, propósito y resultado deben estar rigurosamente vinculados mediante un proyecto común con aportaciones interdependientes."
+      },
+      {
+        "rule_id": "BPS-002",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "blueprint.guiding_question",
+        "observed": "La pregunta guía '¿Cómo podemos explicar y poner en práctica nuestros acuerdos para convivir mejor?' es accesible a todos los grados de la escuela multigrado.",
+        "expected": "La pregunta sostiene el proyecto y es accesible a todos los grados."
+      },
+      {
+        "rule_id": "BPS-003",
+        "severity": "CRITICAL",
+        "status": "FAIL",
+        "scope": "blueprint.final_outcome",
+        "observed": "El resultado es un museo itinerante (tipo MUSEUM e ITINERANT) pero la etapa 3 indica que se colocan 'seis productos juntos al final sin relación ni función compartida', faltando la circulación viable y la cohesión funcional del museo itinerante.",
+        "expected": "El resultado cumple su semántica funcional, incluyendo atributos implícitos como la circulación viable en museos itinerantes."
+      },
+      {
+        "rule_id": "BPS-004",
+        "severity": "CRITICAL",
+        "status": "FAIL",
+        "scope": "pda_checks",
+        "observed": "[{\"pda_id\":\"F3-DHC-1-010\",\"grade\":1,\"contribution_ids\":[\"grade_1\"],\"stage_ids\":[\"investigate\"],\"operation_quote\":\"Cada grado construye su proyecto independiente, sin pregunta común ni intercambio.\",\"artifact_ids\":[\"shared_explanations\"],\"evidence_reason\":\"La operacion descrita indica que cada grado construye su proyecto de forma independiente sin realizar la explicacion de situaciones cotidianas ni la propuesta de acuerdos requeridas para el grado 1.\",\"bps004\":\"FAIL\",\"bps005\":\"FAIL\"},{\"pda_id\":\"F4-DHC-3-001\",\"grade\":3,\"contribution_ids\":[\"grade_3\"],\"stage_ids\":[\"investigate\"],\"operation_quote\":\"Cada grado construye su proyecto independiente, sin pregunta común ni intercambio.\",\"artifact_ids\":[\"shared_explanations\"],\"evidence_reason\":\"La operacion indica un trabajo independiente sin consulta ni contrastacion de significados y acuerdos familiares, escolares o comunitarios requeridos por el PDA de grado 3.\",\"bps004\":\"FAIL\",\"bps005\":\"FAIL\"}]",
+        "expected": "El PDA completo se desarrolla mediante su aportación, sin reducirlo a coincidencia temática."
+      },
+      {
+        "rule_id": "BPS-005",
+        "severity": "CRITICAL",
+        "status": "FAIL",
+        "scope": "pda_checks",
+        "observed": "[{\"pda_id\":\"F3-DHC-1-010\",\"grade\":1,\"contribution_ids\":[\"grade_1\"],\"stage_ids\":[\"investigate\"],\"operation_quote\":\"Cada grado construye su proyecto independiente, sin pregunta común ni intercambio.\",\"artifact_ids\":[\"shared_explanations\"],\"evidence_reason\":\"La operacion descrita indica que cada grado construye su proyecto de forma independiente sin realizar la explicacion de situaciones cotidianas ni la propuesta de acuerdos requeridas para el grado 1.\",\"bps004\":\"FAIL\",\"bps005\":\"FAIL\"},{\"pda_id\":\"F4-DHC-3-001\",\"grade\":3,\"contribution_ids\":[\"grade_3\"],\"stage_ids\":[\"investigate\"],\"operation_quote\":\"Cada grado construye su proyecto independiente, sin pregunta común ni intercambio.\",\"artifact_ids\":[\"shared_explanations\"],\"evidence_reason\":\"La operacion indica un trabajo independiente sin consulta ni contrastacion de significados y acuerdos familiares, escolares o comunitarios requeridos por el PDA de grado 3.\",\"bps004\":\"FAIL\",\"bps005\":\"FAIL\"}]",
+        "expected": "La evidencia corresponde al desempeño cognitivo del PDA completo."
+      },
+      {
+        "rule_id": "BPS-006",
+        "severity": "CRITICAL",
+        "status": "FAIL",
+        "scope": "blueprint.project_stages",
+        "observed": "En la etapa 2 se explicita 'sin pregunta común ni intercambio' y en la etapa 3 'seis productos sólo reunidos al final', lo cual contradice la existencia de un proyecto común construido con aportaciones interdependientes.",
+        "expected": "Existe un proyecto común construido con aportaciones interdependientes, no proyectos paralelos."
+      },
+      {
+        "rule_id": "BPS-007",
+        "severity": "CRITICAL",
+        "status": "FAIL",
+        "scope": "stage_checks",
+        "observed": "[{\"stage_id\":\"frame\",\"operation_quote\":\"Identificar juntos situaciones de convivencia que desconocemos, recuperar recuerdos, formular preguntas y acordar qué explicaciones necesita el grupo nuevo. Seleccionar prácticas y criterios: utilidad, respeto y posibilidad de representarlas sin datos personales.\",\"artifact_id\":\"questions\",\"criteria_quote\":\"Las preguntas responden a la necesidad expresada\",\"consumed_by\":[\"investigate\"],\"outcome_link\":\"Se formulan preguntas y se seleccionan criterios de utilidad y respeto para guiar las explicaciones posteriores.\",\"bps007\":\"PASS\"},{\"stage_id\":\"investigate\",\"operation_quote\":\"Cada grado construye su proyecto independiente, sin pregunta común ni intercambio.\",\"artifact_id\":\"shared_explanations\",\"criteria_quote\":\"Las explicaciones usan consulta y acuerdos, no sólo decoración\",\"consumed_by\":[\"apply\"],\"outcome_link\":\"La operación declara proyectos independientes sin intercambio, contradiciendo la expectativa de explicaciones y piezas contrastadas compartidas.\",\"bps007\":\"FAIL\"},{\"stage_id\":\"apply\",\"operation_quote\":\"Colocar los seis productos juntos al final sin relación ni función compartida.\",\"artifact_id\":\"completion\",\"criteria_quote\":\"Existe evidencia de realización con destinatarios del grupo y valoración\",\"consumed_by\":[\"outcome_01\"],\"outcome_link\":\"Simplemente colocar productos juntos sin relación ni función compartida no constituye un museo itinerante integrado ni evidencia la circulación y montaje requeridos.\",\"bps007\":\"FAIL\"}]",
+        "expected": "La progresión produce el resultado y cada avance tiene operación, artefacto y evidencia."
+      },
+      {
+        "rule_id": "BPS-008",
+        "severity": "CRITICAL",
+        "status": "FAIL",
+        "scope": "methodology_checks",
+        "observed": "[{\"operation_id\":\"IDENTIFICACION\",\"stage_ids\":[\"frame\"],\"operation_quote\":\"Identificar juntos situaciones de convivencia que desconocemos, recuperar recuerdos, formular preguntas y acordar qué explicaciones necesita el grupo nuevo.\",\"artifact_ids\":[\"questions\"],\"evidence_reason\":\"Se identifican situaciones de convivencia y se formulan preguntas conjuntamente.\",\"bps008\":\"PASS\"},{\"operation_id\":\"RECUPERACION\",\"stage_ids\":[\"frame\"],\"operation_quote\":\"Identificar juntos situaciones de convivencia que desconocemos, recuperar recuerdos, formular preguntas y acordar qué explicaciones necesita el grupo nuevo.\",\"artifact_ids\":[\"questions\"],\"evidence_reason\":\"Se recuperan recuerdos para formular las preguntas iniciales.\",\"bps008\":\"PASS\"},{\"operation_id\":\"PLANIFICACION\",\"stage_ids\":[\"frame\"],\"operation_quote\":\"Seleccionar prácticas y criterios: utilidad, respeto y posibilidad de representarlas sin datos personales.\",\"artifact_ids\":[\"questions\"],\"evidence_reason\":\"Se seleccionan criterios y prácticas a seguir.\",\"bps008\":\"PASS\"},{\"operation_id\":\"ACERCAMIENTO\",\"stage_ids\":[\"investigate\"],\"operation_quote\":\"Cada grado construye su proyecto independiente, sin pregunta común ni intercambio.\",\"artifact_ids\":[\"shared_explanations\"],\"evidence_reason\":\"Se construyen productos independientes sin una aproximación colaborativa real.\",\"bps008\":\"FAIL\"},{\"operation_id\":\"COMPRENSION_Y_PRODUCCION\",\"stage_ids\":[\"investigate\"],\"operation_quote\":\"Cada grado construye su proyecto independiente, sin pregunta común ni intercambio.\",\"artifact_ids\":[\"shared_explanations\"],\"evidence_reason\":\"Se elaboran explicaciones aisladas sin un marco común comprobable.\",\"bps008\":\"FAIL\"},{\"operation_id\":\"RECONOCIMIENTO\",\"stage_ids\":[\"investigate\"],\"operation_quote\":\"Cada grado construye su proyecto independiente, sin pregunta común ni intercambio.\",\"artifact_ids\":[\"shared_explanations\"],\"evidence_reason\":\"No hay reconocimiento o contraste integrado entre los distintos grados.\",\"bps008\":\"FAIL\"},{\"operation_id\":\"CONCRECION\",\"stage_ids\":[\"investigate\"],\"operation_quote\":\"Cada grado construye su proyecto independiente, sin pregunta común ni intercambio.\",\"artifact_ids\":[\"shared_explanations\"],\"evidence_reason\":\"La concreción resulta fragmentada y separada.\",\"bps008\":\"FAIL\"},{\"operation_id\":\"INTEGRACION\",\"stage_ids\":[\"apply\"],\"operation_quote\":\"Colocar los seis productos juntos al final sin relación ni función compartida.\",\"artifact_ids\":[\"completion\"],\"evidence_reason\":\"Los productos sólo se reúnen al final sin integración funcional real.\",\"bps008\":\"FAIL\"},{\"operation_id\":\"DIFUSION\",\"stage_ids\":[\"apply\"],\"operation_quote\":\"Colocar los seis productos juntos al final sin relación ni función compartida.\",\"artifact_ids\":[\"completion\"],\"evidence_reason\":\"No se realiza difusión o comunicación integrada efectiva a los destinatarios.\",\"bps008\":\"FAIL\"},{\"operation_id\":\"CONSIDERACIONES\",\"stage_ids\":[\"apply\"],\"operation_quote\":\"Colocar los seis productos juntos al final sin relación ni función compartida.\",\"artifact_ids\":[\"completion\"],\"evidence_reason\":\"No hay valoración integrada del resultado común al no existir cohesión.\",\"bps008\":\"FAIL\"},{\"operation_id\":\"AVANCES\",\"stage_ids\":[\"apply\"],\"operation_quote\":\"Colocar los seis productos juntos al final sin relación ni función compartida.\",\"artifact_ids\":[\"completion\"],\"evidence_reason\":\"No se demuestra un avance operativo integrado válido.\",\"bps008\":\"FAIL\"}]",
+        "expected": "Las operaciones realizan auténticamente la metodología; reflexión no sustituye servicio, intervención o indagación."
+      },
+      {
+        "rule_id": "BPS-009",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "blueprint.feasibility",
+        "observed": "La complejidad, autonomía y apoyos (modelado docente, apoyos entre pares) son adecuados a los grados y perfiles de la escuela multigrado.",
+        "expected": "Complejidad, autonomía y apoyos adecuados a los grados y perfiles."
+      },
+      {
+        "rule_id": "BPS-010",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "blueprint.feasibility",
+        "observed": "La factibilidad temporal por complejidad y etapas está bien dimensionada con 270 minutos totales repartidos en 3 sesiones de 90 minutos.",
+        "expected": "Factibilidad temporal por complejidad y etapas, no sólo multiplicación de minutos."
+      },
+      {
+        "rule_id": "BPS-011",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "blueprint.grade_contributions",
+        "observed": "Los grados transversales tienen roles de apoyo desde la experiencia común sin heredar contenidos ni exigencias de PDA ajenos.",
+        "expected": "Los grados transversales no heredan contenidos ni exigencias de PDA ajenos."
+      },
+      {
+        "rule_id": "BPS-012",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "blueprint.ltg_strategy",
+        "observed": "El uso de LTG está definido como MODE NONE con un PASS justificado ya que el contexto permite consultar experiencias del propio grupo y el LTG no es obligatorio.",
+        "expected": "LTG pertinente, autorizado y al servicio del mismo proyecto; sin LTG puede ser PASS justificado."
+      }
+    ],
+    "evaluated_blueprint_hash": "a5ebbf0b281af3926e0e9d05a60c34d8385dd2f32335d31d57a68d9df2018a2b",
+    "source_hash": "e87e2a6026f5aca6786f33719ff16d880f3ed5ad004dce06a4650a49762b566b"
+  }
 }

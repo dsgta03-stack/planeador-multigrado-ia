@@ -3,13 +3,17 @@ import {sources} from './fixtures/build.mjs';
 import {makeConstraints} from './contracts.mjs';
 import {generateShadow} from './shadow.mjs';
 import {blueprintGate} from './gate.mjs';
+import {REVIEWER_VERSION} from './provider.mjs';
 const read=p=>JSON.parse(readFileSync(new URL(p,import.meta.url)));
+const options=JSON.parse(readFileSync(process.env.MULTIPLAN_SHADOW_AUTH_FILE));
+if(!process.env.MULTIPLAN_SHADOW_MODEL)throw Error('EXPLICIT_SHADOW_MODEL_REQUIRED');
+options.model=process.env.MULTIPLAN_SHADOW_MODEL;
 // Generation starts only after the entire current suite has matching, complete reviews.
 for(const file of readdirSync(new URL('./fixtures/',import.meta.url)).filter(x=>/^PB-.*\.json$/.test(x))){
  const fixture=read('./fixtures/'+file),e=read('./evidence/'+file),g=blueprintGate(fixture.input,e.semantic);
  if(!e.match||e.error||g.semantic_findings.length!==12||g.semantic_findings.some(x=>x.status==='NOT_EVALUABLE'))throw Error('FIXTURE_SUITE_NOT_READY:'+file);
+ if(e.semantic.telemetry.calls?.length!==4||e.semantic.telemetry.calls.some(c=>c.model!==options.model||c.reviewer_version!==REVIEWER_VERSION))throw Error('FIXTURE_SUITE_NOT_HOMOGENEOUS:'+file);
 }
-const options=JSON.parse(readFileSync(process.env.MULTIPLAN_SHADOW_AUTH_FILE));
 const mode=process.argv[2]||'positive';
 let src=sources({method:'proyectos_comunitarios'});
 if(mode==='adversarial'){

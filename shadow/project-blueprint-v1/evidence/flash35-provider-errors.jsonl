@@ -1,0 +1,3 @@
+{"at":"2026-09-23T19:19:01.657Z","code":"PROVIDER_ERROR","provider_status":400,"provider_error_code":400,"provider_error_status":"INVALID_ARGUMENT","provider_message":"Request contains an invalid argument.","retry_after":null,"request_id":null,"latency_ms":600}
+{"at":"2026-09-23T19:34:05.165Z","code":"PROVIDER_ERROR","provider_status":400,"provider_error_code":400,"provider_error_status":"INVALID_ARGUMENT","provider_message":"Request contains an invalid argument.","retry_after":null,"request_id":null,"latency_ms":601}
+{"at":"2026-09-23T19:35:19.624Z","code":"SHADOW_PROVIDER_ERROR","message":"SyntaxError: Expected double-quoted property name in JSON at position 25894 (line 635 column 5)"}

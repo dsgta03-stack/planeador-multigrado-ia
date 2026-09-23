@@ -1,0 +1,28 @@
+{
+  "id": "PB-021-CINCO-SESIONES",
+  "error": "Error: SHADOW_DISABLED:403",
+  "telemetry": {
+    "task": "REVIEW",
+    "review_focus": "GLOBAL",
+    "provider": "google",
+    "model": "gemini-3.1-flash-lite",
+    "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+    "input_hash": "8e16f437930628bfd93b0fedbceb5fabc8582f54f224fb89800e9507778a5f8f",
+    "output_hash": null,
+    "usage": null,
+    "cost": null,
+    "latency_ms": 135,
+    "attempts": [
+      {
+        "attempt": 1,
+        "latency_ms": 134,
+        "http_status": 403,
+        "provider_status": null,
+        "usage": null,
+        "output_hash": null
+      }
+    ],
+    "completed_review_calls": []
+  },
+  "match": false
+}

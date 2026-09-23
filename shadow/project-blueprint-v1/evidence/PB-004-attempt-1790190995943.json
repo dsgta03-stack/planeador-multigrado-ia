@@ -1,0 +1,28 @@
+{
+  "id": "PB-004",
+  "error": "Error: SHADOW_DISABLED:403",
+  "telemetry": {
+    "task": "REVIEW",
+    "review_focus": "GLOBAL",
+    "provider": "google",
+    "model": "gemini-3.1-flash-lite",
+    "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+    "input_hash": "d76cb7150963ce554b4bb94b16c9804b8451f763b9e95269428c548dad28f318",
+    "output_hash": null,
+    "usage": null,
+    "cost": null,
+    "latency_ms": 143,
+    "attempts": [
+      {
+        "attempt": 1,
+        "latency_ms": 142,
+        "http_status": 403,
+        "provider_status": null,
+        "usage": null,
+        "output_hash": null
+      }
+    ],
+    "completed_review_calls": []
+  },
+  "match": false
+}
