@@ -14,6 +14,8 @@ const CORS = {
 const json = (body: unknown, status = 200) => new Response(JSON.stringify(body), { status, headers: { ...CORS, "content-type": "application/json; charset=utf-8" } });
 const strings = (x: unknown) => [...new Set((Array.isArray(x) ? x : []).map(v => String(v || "").trim()).filter(Boolean))].sort();
 const sameSet = (a: string[], b: string[]) => a.length === b.length && a.every((v, i) => v === b[i]);
+const norm = (v: unknown) => String(v ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/\s+/g, " ").trim();
+const safeText = (v: unknown, max = 900) => String(v ?? "").trim().slice(0, max);
 
 function planPdaIds(plan: any) {
   const ids: string[] = [];
@@ -40,23 +42,32 @@ function actualSessionPdas(session: any) {
   return strings(ids);
 }
 
-function pda04Findings(plan: any, authoritativeIds: string[]) {
-  if (authoritativeIds.length < 2 || !Array.isArray(plan?.sessions) || plan.sessions.length < 2) return [];
+function pdaTraceFindings(plan: any, authoritativeIds: string[]) {
+  if (!Array.isArray(plan?.sessions) || !plan.sessions.length) return [];
   const findings: any[] = [];
   for (const s of plan.sessions) {
     const declared = strings(s?.pda_ids);
     const actual = actualSessionPdas(s);
-    if (sameSet(declared, authoritativeIds) && actual.length && !sameSet(actual, authoritativeIds)) {
+    if (!actual.length || sameSet(declared, actual)) continue;
+    const n = Number(s?.session_number) || null;
+    if (authoritativeIds.length > 1 && sameSet(declared, authoritativeIds) && !sameSet(actual, authoritativeIds)) {
       findings.push({
-        rule_id: "PDA-04",
-        severity: "CRITICAL",
-        status: "FAIL",
-        scope: { session_number: Number(s?.session_number) || null },
-        failure: `La sesión declara los ${authoritativeIds.length} PDA seleccionados, pero sus actividades trazables sólo movilizan ${actual.length}.`,
+        rule_id: "PDA-04", severity: "CRITICAL", status: "FAIL", scope: { session_number: n },
+        failure: `La sesión declara los ${declared.length} PDA seleccionados, pero sus actividades trazables sólo movilizan ${actual.length}.`,
         pedagogical_reason: "No deben marcarse automáticamente todos los PDA como trabajados en todas las sesiones.",
         expected_behavior: "Declarar por sesión únicamente los PDA realmente movilizados; los demás deben quedar en desarrollo o no movilizados.",
         observed_evidence: `PDA declarados: ${declared.join(", ")}. PDA presentes en momentos de trabajo: ${actual.join(", ")}.`,
         recommendation: "Ajustar la trazabilidad de la sesión sin cambiar la selección curricular del docente.",
+        source: "DETERMINISTIC-CONTEXT-POSTCHECK",
+      });
+    } else {
+      findings.push({
+        rule_id: "PDA-03", severity: "CRITICAL", status: "FAIL", scope: { session_number: n },
+        failure: "Los PDA declarados en la cabecera de la sesión no coinciden con los PDA realmente movilizados en sus momentos de trabajo.",
+        pedagogical_reason: "La trazabilidad por sesión debe distinguir con fidelidad qué PDA se trabajan, se desarrollan o no se movilizan.",
+        expected_behavior: "La declaración de PDA de la sesión debe corresponder con las actividades y evidencias ejecutables.",
+        observed_evidence: `PDA declarados: ${declared.join(", ") || "ninguno"}. PDA presentes en momentos de trabajo: ${actual.join(", ")}.`,
+        recommendation: "Corregir la trazabilidad de la sesión sin alterar la selección curricular general del docente.",
         source: "DETERMINISTIC-CONTEXT-POSTCHECK",
       });
     }
@@ -64,9 +75,157 @@ function pda04Findings(plan: any, authoritativeIds: string[]) {
   return findings;
 }
 
-function mergePostchecks(core: any, extra: any[], contextSource: string) {
+function methodologySession(plan: any, sessionNumber: number) {
+  return (plan?.methodology_engine?.sessions || []).find((x: any) => Number(x?.session_number) === sessionNumber) || null;
+}
+
+function matchingRows(plan: any, scope: any) {
+  const out: any[] = [];
+  const n = Number(scope?.session_number || 0);
+  const g = Number(scope?.grade || 0);
+  const pda = String(scope?.pda_id || "").trim();
+  const sessions = (plan?.sessions || []).filter((s: any) => !n || Number(s?.session_number) === n);
+  for (const s of sessions) {
+    for (const m of s?.work_moments || []) {
+      const directPdas = strings(m?.direct_teacher_pda_ids);
+      const directGrades = (m?.direct_teacher_grades || []).map(Number);
+      if ((!pda || directPdas.includes(pda)) && (!g || directGrades.includes(g))) {
+        if (m?.direct_teacher_action) out.push({ kind: "direct", action: safeText(m.direct_teacher_action), evidence: "", grades: directGrades, pda_ids: directPdas });
+      }
+      for (const b of m?.other_blocks || []) {
+        const ids = strings(b?.pda_ids), grades = (b?.grades || []).map(Number);
+        if ((!pda || ids.includes(pda)) && (!g || grades.includes(g))) out.push({ kind: "block", action: safeText(b?.activity || b?.action || b?.task), evidence: safeText(b?.evidence), grades, pda_ids: ids });
+      }
+      for (const t of m?.grade_tasks || []) {
+        const ids = strings(t?.pda_ids), grade = Number(t?.grade || 0);
+        if ((!pda || ids.includes(pda)) && (!g || grade === g)) out.push({ kind: "task", action: safeText(t?.action), evidence: safeText(t?.evidence), grades: grade ? [grade] : [], pda_ids: ids });
+      }
+    }
+  }
+  return out;
+}
+
+function isObservableEvidence(value: unknown) {
+  const v = norm(value);
+  if (!v) return false;
+  const artifact = /(tarjeta|ficha|dibujo|resumen|registro|linea del tiempo|mapa|mural|texto|ensayo|album|cuadro|reporte|guion|lista|boceto|presentacion|exposicion|relato|grafica|tabla|modelo|cartel|infografia|bitacora|portafolio)/;
+  if (artifact.test(v)) return true;
+  if (/^(participacion|observacion|actividad|trabajo realizado|asistencia|escucho|escucha)$/.test(v)) return false;
+  return v.length >= 18 && !/^(participacion en|observacion directa|actividad de|trabajo en)/.test(v);
+}
+
+function hasObservableEvidence(plan: any, scope: any) {
+  const rows = matchingRows(plan, scope);
+  if (rows.some(r => isObservableEvidence(r.evidence))) return true;
+  const pda = String(scope?.pda_id || "").trim();
+  if (pda) {
+    const ev = (plan?.evaluation || []).find((x: any) => String(x?.pda_id || "") === pda);
+    if (ev && isObservableEvidence(ev?.evidence)) return true;
+  }
+  return false;
+}
+
+function sessionHasConcreteAdvance(plan: any, sessionNumber: number) {
+  const scope = { session_number: sessionNumber };
+  const rows = matchingRows(plan, scope);
+  const hasEvidence = rows.some(r => isObservableEvidence(r.evidence));
+  const meta = methodologySession(plan, sessionNumber);
+  const hasAdvance = !!safeText(meta?.project_advance || meta?.product_relation, 300);
+  return hasEvidence && hasAdvance;
+}
+
+function pdaObservedEvidence(plan: any, scope: any, officialRows: any[]) {
+  const pda = String(scope?.pda_id || "").trim();
+  const official = officialRows.find((x: any) => String(x?.pda_id || "") === pda);
+  const rows = matchingRows(plan, scope);
+  const action = rows.map(r => r.action).find(Boolean) || "";
+  const evidence = rows.map(r => r.evidence).find(Boolean) || "";
+  const parts = [];
+  if (official?.pda_official) parts.push(`PDA oficial: "${safeText(official.pda_official, 420)}"`);
+  if (action) parts.push(`Acción ejecutable: "${action}"`);
+  if (evidence) parts.push(`Evidencia: "${evidence}"`);
+  return parts.join(". ");
+}
+
+function multigradeObservedEvidence(plan: any, sessionNumber: number) {
+  const s = (plan?.sessions || []).find((x: any) => Number(x?.session_number) === sessionNumber);
+  if (!s) return "";
+  for (const m of s?.work_moments || []) {
+    for (const b of m?.other_blocks || []) {
+      const grades = (b?.grades || []).map(Number).filter(Number.isInteger);
+      const action = safeText(b?.activity || b?.action || b?.task, 500);
+      if (grades.length > 1 && action) return `Grados ${grades.join(", ")}: "${action}"`;
+    }
+  }
+  return "";
+}
+
+function calibratedSummary(findings: any[]) {
+  const by = (prefixes: string[], ok: string) => {
+    const rows = findings.filter((x: any) => prefixes.some(p => String(x?.rule_id || "").startsWith(p)));
+    if (!rows.length) return ok;
+    return rows.slice(0, 2).map((x: any) => `${x.rule_id}: ${safeText(x.failure, 180)}`).join(" | ");
+  };
+  return {
+    project: by(["PRJ-", "SES-", "COH-"], "Sin hallazgos críticos de trayectoria/progresión en las reglas evaluadas."),
+    pda_alignment: by(["PDA-", "EVD-"], "Sin hallazgos críticos de alineación PDA-evidencia en las reglas evaluadas."),
+    methodology: by(["MET-"], "Sin hallazgos metodológicos críticos en las reglas evaluadas."),
+    multigrade: by(["MG-"], "Sin hallazgos críticos de organización multigrado en las reglas evaluadas."),
+    time: by(["TIME-"], "Sin hallazgos críticos de tiempo en las reglas evaluadas."),
+  };
+}
+
+function mergeAndCalibrate(core: any, plan: any, traceFindings: any[], contextSource: string, officialRows: any[]) {
   if (!core || typeof core !== "object") return core;
-  const rows = [...(Array.isArray(core.findings) ? core.findings : []), ...extra];
+  if (!core.rule_results || typeof core.rule_results !== "object") core.rule_results = {};
+
+  const traceByRule = new Map<string, any[]>();
+  for (const f of traceFindings) {
+    if (!traceByRule.has(f.rule_id)) traceByRule.set(f.rule_id, []);
+    traceByRule.get(f.rule_id)!.push(f);
+  }
+  core.rule_results["PDA-04"] = traceByRule.has("PDA-04")
+    ? { status: "FAIL", detail: "Se detectó sobredeclaración de todos los PDA respecto de las actividades trazables." }
+    : { status: "PASS", detail: "No se detectó sobredeclaración automática de todos los PDA." };
+  core.rule_results["PDA-03"] = traceByRule.has("PDA-03")
+    ? { status: "FAIL", detail: "La declaración de PDA por sesión no coincide con sus momentos de trabajo." }
+    : { status: "PASS", detail: "La declaración de PDA por sesión coincide con los PDA trazables en las sesiones evaluadas." };
+
+  const authoritative = new Set(["TIME-01", "SES-03", "PRJ-04", "EVD-05", "PDA-06", "PDA-04", "PDA-03"]);
+  const suppressed: any[] = [];
+  const kept: any[] = [];
+  for (const row of Array.isArray(core.findings) ? core.findings : []) {
+    const rule = String(row?.rule_id || "");
+    const source = String(row?.source || "");
+    if (source === "SEMANTIC" && authoritative.has(rule) && core.rule_results?.[rule]?.status === "PASS") {
+      suppressed.push({ rule_id: rule, reason: "DETERMINISTIC_PASS", scope: row?.scope || {} });
+      continue;
+    }
+    if (source === "SEMANTIC" && rule === "SES-01" && sessionHasConcreteAdvance(plan, Number(row?.scope?.session_number || 0))) {
+      suppressed.push({ rule_id: rule, reason: "CONCRETE_ADVANCE_VERIFIED", scope: row?.scope || {} });
+      continue;
+    }
+    if (source === "SEMANTIC" && rule === "EVD-01" && hasObservableEvidence(plan, row?.scope || {})) {
+      suppressed.push({ rule_id: rule, reason: "OBSERVABLE_EVIDENCE_VERIFIED", scope: row?.scope || {} });
+      continue;
+    }
+    const next = { ...row };
+    if (source === "SEMANTIC" && rule === "PDA-01") {
+      const evidence = pdaObservedEvidence(plan, row?.scope || {}, officialRows);
+      if (evidence) next.observed_evidence = evidence;
+    }
+    if (source === "SEMANTIC" && rule === "MG-01") {
+      const evidence = multigradeObservedEvidence(plan, Number(row?.scope?.session_number || 0));
+      if (evidence) {
+        next.failure = "Varios grados comparten una misma tarea ejecutable sin diferenciación visible de complejidad, apoyo, producto o responsabilidad en ese bloque.";
+        next.observed_evidence = evidence;
+        next.recommendation = "Diferenciar la tarea por grado de acuerdo con los PDA y después integrar las aportaciones al proyecto común.";
+      }
+    }
+    kept.push(next);
+  }
+
+  const rows = [...kept, ...traceFindings];
   const seen = new Set<string>();
   core.findings = rows.filter((x: any) => {
     const key = `${x?.rule_id || ""}|${x?.scope?.session_number || ""}|${x?.scope?.grade || ""}|${x?.scope?.pda_id || ""}`;
@@ -74,14 +233,24 @@ function mergePostchecks(core: any, extra: any[], contextSource: string) {
     seen.add(key);
     return true;
   });
-  if (!core.rule_results || typeof core.rule_results !== "object") core.rule_results = {};
-  if (extra.length) core.rule_results["PDA-04"] = { status: "FAIL", detail: "La declaración de PDA por sesión excede los PDA trazables en sus actividades." };
-  else if (!("PDA-04" in core.rule_results)) core.rule_results["PDA-04"] = { status: "PASS", detail: "No se detectó sobredeclaración estructural de PDA por sesión." };
+
   core.critical_count = core.findings.filter((x: any) => x?.severity === "CRITICAL").length;
   core.warning_count = core.findings.filter((x: any) => x?.severity === "WARNING").length;
   core.status = core.critical_count ? "BLOCKED" : core.warning_count ? "NEEDS_ADJUSTMENT" : (core.semantic_review?.status === "DEGRADED" ? "NEEDS_ADJUSTMENT" : "PEDAGOGICALLY_COHERENT");
-  core.score = Math.max(0, Math.min(Number(core.score ?? 100), 100 - core.critical_count * 15 - core.warning_count * 4));
+  core.score = Math.max(0, 100 - core.critical_count * 15 - core.warning_count * 4);
+  if (core.semantic_review?.status === "DEGRADED") core.score = Math.min(core.score, 79);
+
+  const notEvaluable = strings(core.not_evaluable_rules).filter((id: string) => core.rule_results?.[id]?.status !== "PASS" && core.rule_results?.[id]?.status !== "FAIL");
+  core.not_evaluable_rules = notEvaluable;
+  core.not_evaluable_count = notEvaluable.length;
+  core.raw_semantic_summary = core.summary || {};
+  core.summary = calibratedSummary(core.findings);
   core.review_context_source = contextSource;
+  core.calibration = {
+    version: "PEDAGOGICAL-REVIEW-V1.1-SHADOW-CALIBRATION",
+    suppressed_semantic_findings: suppressed,
+    deterministic_trace_rules: ["PDA-03", "PDA-04"],
+  };
   return core;
 }
 
@@ -125,11 +294,7 @@ Deno.serve(async req => {
       requested_sessions: Number(baseInput?.sesiones ?? body?.requested_sessions ?? plan?.requestedSessions ?? 0) || null,
       minutes_per_session: Number(baseInput?.minutos ?? body?.minutes_per_session ?? plan?.minutesPerSession ?? 0) || null,
       selected_pdas: officialRows.length ? officialRows.map(row => ({
-        id: row.pda_id,
-        grade: Number(row.grade) || null,
-        field: row.field,
-        content: row.content_official,
-        text: row.pda_official,
+        id: row.pda_id, grade: Number(row.grade) || null, field: row.field, content: row.content_official, text: row.pda_official,
       })) : (Array.isArray(body?.selected_pdas) ? body.selected_pdas : []),
       review_context_source: contextSource,
     };
@@ -144,7 +309,9 @@ Deno.serve(async req => {
     if (!response.ok) return new Response(raw, { status: response.status, headers: { ...CORS, "content-type": response.headers.get("content-type") || "application/json; charset=utf-8" } });
     let core: any;
     try { core = JSON.parse(raw); } catch { return json({ code: "PEDAGOGICAL_REVIEW_INVALID_CORE_RESPONSE" }, 502); }
-    const merged = mergePostchecks(core, pda04Findings(plan, authoritativeIds), contextSource);
+
+    const trace = pdaTraceFindings(plan, authoritativeIds);
+    const merged = mergeAndCalibrate(core, plan, trace, contextSource, officialRows);
     return new Response(JSON.stringify(merged), {
       status: 200,
       headers: {
@@ -152,7 +319,7 @@ Deno.serve(async req => {
         "content-type": "application/json; charset=utf-8",
         "x-multiplan-pedagogical-review": response.headers.get("x-multiplan-pedagogical-review") || "PEDAGOGICAL-REVIEW-V1-SHADOW",
         "x-multiplan-review-context": baseInput ? "OWNED_BASE_RUN" : "FALLBACK",
-        "x-multiplan-review-postcheck": "PDA-04-V1",
+        "x-multiplan-review-postcheck": "PEDAGOGICAL-V1.1-CALIBRATED",
       },
     });
   } catch (error) {
