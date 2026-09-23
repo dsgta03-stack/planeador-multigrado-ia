@@ -1,29 +1,63 @@
 import assert from "node:assert/strict";
-import { createHash } from "node:crypto";
+import { Readable } from "node:stream";
+import { REVIEW_VERSION, reviewWithCache } from "../lib/v0124/review-cache.mjs";
 
-const REVIEW_VERSION = "PEDAGOGICAL-REVIEW-V1.1-SHADOW-CALIBRATION";
-function canonical(value) {
-  if (value === null || typeof value !== "object") return JSON.stringify(value);
-  if (Array.isArray(value)) return `[${value.map(canonical).join(",")}]`;
-  return `{${Object.keys(value).sort().map(k => `${JSON.stringify(k)}:${canonical(value[k])}`).join(",")}}`;
-}
-function hash(value) { return createHash("sha256").update(canonical(value)).digest("hex"); }
-function cacheHit(cache, plan, reviewVersion = REVIEW_VERSION) {
-  return !!(cache && cache.review_version === reviewVersion && cache.snapshot_hash === hash(plan) && cache.result);
-}
-
-const visible = { run_id: "11111111-1111-4111-8111-111111111111", title: "Proyecto", sessions: [{ session_number: 1, purpose: "Explorar" }], methodology_engine: { methodology_primary: { id: "abp" } } };
-const sameDifferentKeyOrder = { methodology_engine: { methodology_primary: { id: "abp" } }, sessions: [{ purpose: "Explorar", session_number: 1 }], title: "Proyecto", run_id: "11111111-1111-4111-8111-111111111111" };
-assert.equal(hash(visible), hash(sameDifferentKeyOrder), "El hash canónico debe ignorar el orden de llaves");
-
+const plan = { run_id: "11111111-1111-4111-8111-111111111111", sessions: [{ session_number: 1 }] };
 const reviewResult = { status: "BLOCKED", score: 55, critical_count: 3, findings: [{ rule_id: "PDA-01" }] };
-const cache = { review_version: REVIEW_VERSION, snapshot_hash: hash(visible), result: reviewResult };
-assert.equal(cacheHit(cache, sameDifferentKeyOrder), true);
-assert.deepEqual(cache.result, reviewResult, "Un HIT debe devolver exactamente el resultado almacenado");
 
-const changed = structuredClone(visible); changed.sessions[0].purpose = "Investigar";
-assert.notEqual(hash(changed), hash(visible));
-assert.equal(cacheHit(cache, changed), false, "Cambiar el plan debe invalidar el cache");
-assert.equal(cacheHit(cache, visible, "PEDAGOGICAL-REVIEW-V1.2"), false, "Cambiar la versión del revisor debe invalidar el cache");
+function helpers() {
+  return {
+    bearer: req => req.headers.authorization || "",
+    readBody: req => new Promise((resolve, reject) => { let raw = ""; req.on("data", c => raw += c); req.on("end", () => resolve(raw)); req.on("error", reject); }),
+    json: (res, status, body, extra = {}) => { res.writeHead(status, { "content-type": "application/json", ...extra }); res.end(JSON.stringify(body)); },
+    copyHeaders: (response, names = []) => { const out = { "content-type": response.headers.get("content-type") || "application/json" }; for (const name of names) { const value = response.headers.get(name); if (value) out[name] = value; } return out; },
+  };
+}
+function request(body, auth = "Bearer test") { const req = Readable.from([JSON.stringify(body)]); req.headers = { authorization: auth }; return req; }
+function responseCapture() { let status = 0, headers = {}, body = ""; return { res: { writeHead: (s, h) => { status = s; headers = h; }, end: x => { body = String(x || ""); } }, get: () => ({ status, headers, body }) }; }
 
-console.log(JSON.stringify({ ok: true, tests: 5, reviewVersion: REVIEW_VERSION, snapshotHash: hash(visible) }));
+let calls = [];
+globalThis.fetch = async (url, options = {}) => {
+  calls.push(String(url));
+  if (String(url).includes("pedagogical-review-cache-v1")) {
+    const payload = JSON.parse(options.body);
+    if (payload.action === "get") return new Response(JSON.stringify({ hit: false }), { status: 200, headers: { "content-type": "application/json" } });
+    return new Response(JSON.stringify({ ok: true, review_version: REVIEW_VERSION, snapshot_hash: "abc" }), { status: 200, headers: { "content-type": "application/json" } });
+  }
+  if (String(url).includes("plan-review-pedagogical-context-v1")) return new Response(JSON.stringify(reviewResult), { status: 200, headers: { "content-type": "application/json", "x-multiplan-review-postcheck": "V1.1" } });
+  throw new Error(`Unexpected URL ${url}`);
+};
+let cap = responseCapture();
+await reviewWithCache(request({ plan }), cap.res, helpers());
+let out = cap.get();
+assert.equal(out.status, 200);
+assert.deepEqual(JSON.parse(out.body), reviewResult);
+assert.equal(out.headers["x-multiplan-review-cache"], "MISS_STORED");
+assert.equal(calls.length, 3);
+
+calls = [];
+globalThis.fetch = async url => {
+  calls.push(String(url));
+  return new Response(JSON.stringify({ hit: true, result: reviewResult, review_version: REVIEW_VERSION, snapshot_hash: "abc" }), { status: 200, headers: { "content-type": "application/json" } });
+};
+cap = responseCapture();
+await reviewWithCache(request({ plan }), cap.res, helpers());
+out = cap.get();
+assert.equal(out.status, 200);
+assert.deepEqual(JSON.parse(out.body), reviewResult);
+assert.equal(out.headers["x-multiplan-review-cache"], "HIT");
+assert.equal(calls.length, 1, "Un HIT no debe volver a ejecutar el revisor semántico");
+
+calls = [];
+globalThis.fetch = async url => new Response(JSON.stringify({ code: "SNAPSHOT_HASH_MISMATCH", plan_hash: "nuevo", snapshot_hash: "guardado" }), { status: 409, headers: { "content-type": "application/json" } });
+cap = responseCapture();
+await reviewWithCache(request({ plan }), cap.res, helpers());
+out = cap.get();
+assert.equal(out.status, 409);
+assert.equal(JSON.parse(out.body).code, "HISTORY_SNAPSHOT_MISMATCH");
+
+cap = responseCapture();
+await reviewWithCache(request({ plan }, ""), cap.res, helpers());
+assert.equal(cap.get().status, 401);
+
+console.log(JSON.stringify({ ok: true, tests: 4, reviewVersion: REVIEW_VERSION }));
