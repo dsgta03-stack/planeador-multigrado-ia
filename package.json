@@ -4,5 +4,9 @@
   "private": true,
   "type": "module",
   "engines": { "node": ">=22" },
-  "scripts": { "start": "node server-v0124-consolidated-shadow.mjs" }
+  "scripts": {
+    "start": "node server-v0124-consolidated-shadow.mjs",
+    "test": "node tests/history-fidelity-v1.mjs && node tests/review-cache-fidelity-v1.mjs",
+    "check:v0124": "node --check server-v0124-consolidated-shadow.mjs && node --check lib/v0124/history-fidelity.mjs && node --check lib/v0124/review-cache.mjs && node --check lib/v0124/ui.mjs"
+  }
 }
