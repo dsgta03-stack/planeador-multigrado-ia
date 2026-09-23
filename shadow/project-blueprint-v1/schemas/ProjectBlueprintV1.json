@@ -1,0 +1,1022 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:multiplan:shadow:ProjectBlueprintV1",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "PROJECT_BLUEPRINT_V1"
+    },
+    "blueprint_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "DRAFT",
+        "NEEDS_REPAIR",
+        "NEEDS_TEACHER_DECISION",
+        "APPROVED",
+        "REJECTED"
+      ]
+    },
+    "source": {
+      "type": "object",
+      "properties": {
+        "constraints_hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "curriculum_snapshot_hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "methodology_decision_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "methodology_decision_hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "required": [
+        "constraints_hash",
+        "curriculum_snapshot_hash",
+        "methodology_decision_id",
+        "methodology_decision_hash"
+      ],
+      "additionalProperties": false
+    },
+    "problem_frame": {
+      "type": "object",
+      "properties": {
+        "original_problem": {
+          "type": "string",
+          "minLength": 1
+        },
+        "pedagogical_focus": {
+          "type": "string",
+          "minLength": 1
+        },
+        "context_relevance": {
+          "type": "string",
+          "minLength": 1
+        },
+        "why_project_is_needed": {
+          "type": "string",
+          "minLength": 1
+        },
+        "scope": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1
+        },
+        "out_of_scope": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 0
+        }
+      },
+      "required": [
+        "original_problem",
+        "pedagogical_focus",
+        "context_relevance",
+        "why_project_is_needed",
+        "scope",
+        "out_of_scope"
+      ],
+      "additionalProperties": false
+    },
+    "methodology": {
+      "type": "object",
+      "properties": {
+        "selected_id": {
+          "type": "string",
+          "enum": [
+            "abp",
+            "steam",
+            "aprendizaje_servicio",
+            "proyectos_comunitarios"
+          ]
+        },
+        "catalog_version": {
+          "const": "METHODOLOGY_CATALOG_V1"
+        },
+        "required_operations": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "selected_id",
+        "catalog_version",
+        "required_operations"
+      ],
+      "additionalProperties": false
+    },
+    "guiding_question": {
+      "type": "object",
+      "properties": {
+        "question": {
+          "type": "string",
+          "minLength": 1
+        },
+        "problem_link": {
+          "type": "string",
+          "minLength": 1
+        },
+        "product_link": {
+          "type": "string",
+          "minLength": 1
+        },
+        "grade_accessibility": {
+          "type": "string",
+          "enum": [
+            "ALL_GRADES"
+          ]
+        }
+      },
+      "required": [
+        "question",
+        "problem_link",
+        "product_link",
+        "grade_accessibility"
+      ],
+      "additionalProperties": false
+    },
+    "final_outcome": {
+      "type": "object",
+      "properties": {
+        "outcome_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "MATERIAL_PRODUCT",
+            "EXHIBITION",
+            "MUSEUM",
+            "CAMPAIGN",
+            "INVESTIGATION",
+            "PROPOSAL",
+            "PROTOTYPE",
+            "SERVICE",
+            "INTERVENTION",
+            "COMMUNICATION",
+            "COLLECTIVE_DOCUMENT",
+            "TRANSFORMATION",
+            "OTHER"
+          ]
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "purpose": {
+          "type": "string",
+          "minLength": 1
+        },
+        "audience_or_beneficiary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "use_or_destination": {
+          "type": "string",
+          "minLength": 1
+        },
+        "functional_profiles": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "functional_requirements": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "requirement_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "criterion": {
+                "type": "string",
+                "minLength": 1
+              },
+              "stage_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 1,
+                "uniqueItems": true
+              },
+              "evidence": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "requirement_id",
+              "criterion",
+              "stage_ids",
+              "evidence"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1
+        },
+        "completion_evidence": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1
+        },
+        "authenticity_conditions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1
+        },
+        "required_resources": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "resource": {
+                "type": "string",
+                "minLength": 1
+              },
+              "essential": {
+                "type": "boolean"
+              },
+              "alternative": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "alternative_rationale": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "resource",
+              "essential",
+              "alternative",
+              "alternative_rationale"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 0
+        }
+      },
+      "required": [
+        "outcome_id",
+        "name",
+        "type",
+        "description",
+        "purpose",
+        "audience_or_beneficiary",
+        "use_or_destination",
+        "functional_profiles",
+        "functional_requirements",
+        "completion_evidence",
+        "authenticity_conditions",
+        "required_resources"
+      ],
+      "additionalProperties": false
+    },
+    "pda_analysis": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "pda_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "grade": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 6
+          },
+          "official_text": {
+            "type": "string",
+            "minLength": 1
+          },
+          "central_cognitive_action": {
+            "type": "string",
+            "minLength": 1
+          },
+          "cognitive_interpretation": {
+            "type": "object",
+            "properties": {
+              "official_text_basis": {
+                "type": "string",
+                "minLength": 1
+              },
+              "reasoning": {
+                "type": "string",
+                "minLength": 1
+              },
+              "performance_indicators": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 1
+              }
+            },
+            "required": [
+              "official_text_basis",
+              "reasoning",
+              "performance_indicators"
+            ],
+            "additionalProperties": false
+          },
+          "expected_performance": {
+            "type": "string",
+            "minLength": 1
+          },
+          "observable_evidence_conditions": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1
+          },
+          "possible_project_contribution": {
+            "type": "string",
+            "minLength": 1
+          },
+          "integration_strength": {
+            "type": "string",
+            "enum": [
+              "DIRECT",
+              "VIABLE_WITH_SPECIFIC_CONTRIBUTION",
+              "SECONDARY",
+              "WEAK",
+              "INCOMPATIBLE"
+            ]
+          },
+          "integration_reason": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "pda_id",
+          "grade",
+          "official_text",
+          "central_cognitive_action",
+          "cognitive_interpretation",
+          "expected_performance",
+          "observable_evidence_conditions",
+          "possible_project_contribution",
+          "integration_strength",
+          "integration_reason"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0
+    },
+    "grade_contributions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "contribution_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "grade": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 6
+          },
+          "curriculum_mode": {
+            "type": "string",
+            "enum": [
+              "PDA_SELECTED",
+              "TRANSVERSAL_PROJECT"
+            ]
+          },
+          "pda_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 0,
+            "uniqueItems": true
+          },
+          "learning_role": {
+            "type": "string",
+            "minLength": 1
+          },
+          "project_contribution": {
+            "type": "string",
+            "minLength": 1
+          },
+          "expected_evidence": {
+            "type": "string",
+            "minLength": 1
+          },
+          "complexity_level": {
+            "type": "string",
+            "minLength": 1
+          },
+          "support_need": {
+            "type": "string",
+            "minLength": 1
+          },
+          "integration_destination": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "contribution_id",
+          "grade",
+          "curriculum_mode",
+          "pda_ids",
+          "learning_role",
+          "project_contribution",
+          "expected_evidence",
+          "complexity_level",
+          "support_need",
+          "integration_destination"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
+    "project_stages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "stage_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "order": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "purpose": {
+            "type": "string",
+            "minLength": 1
+          },
+          "required_inputs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          },
+          "student_operation": {
+            "type": "string",
+            "minLength": 1
+          },
+          "methodology_operations": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 0,
+            "uniqueItems": true
+          },
+          "expected_output": {
+            "type": "string",
+            "minLength": 1
+          },
+          "output_artifact_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "consumed_by": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          },
+          "acceptance_criteria": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1
+          },
+          "estimated_minutes": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "estimate_rationale": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "stage_id",
+          "order",
+          "purpose",
+          "required_inputs",
+          "student_operation",
+          "methodology_operations",
+          "expected_output",
+          "output_artifact_id",
+          "consumed_by",
+          "acceptance_criteria",
+          "estimated_minutes",
+          "estimate_rationale"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
+    "session_progression": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "session_number": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "project_state_before": {
+            "type": "string",
+            "minLength": 1
+          },
+          "session_project_goal": {
+            "type": "string",
+            "minLength": 1
+          },
+          "required_learning": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1
+          },
+          "methodology_operations": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 0,
+            "uniqueItems": true
+          },
+          "pda_focus": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 0,
+            "uniqueItems": true
+          },
+          "input_artifact_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          },
+          "expected_output_artifact_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          },
+          "expected_partial_product": {
+            "type": "string",
+            "minLength": 1
+          },
+          "acceptance_criteria": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1
+          },
+          "project_state_after": {
+            "type": "string",
+            "minLength": 1
+          },
+          "next_session_dependency": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "terminal": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "session_number",
+          "project_state_before",
+          "session_project_goal",
+          "required_learning",
+          "methodology_operations",
+          "pda_focus",
+          "input_artifact_ids",
+          "expected_output_artifact_ids",
+          "expected_partial_product",
+          "acceptance_criteria",
+          "project_state_after",
+          "next_session_dependency",
+          "terminal"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
+    "ltg_strategy": {
+      "type": "object",
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": [
+            "CORE",
+            "SUPPORT",
+            "OPTIONAL",
+            "NONE"
+          ]
+        },
+        "selections": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "project_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "role": {
+                "type": "string",
+                "enum": [
+                  "CORE",
+                  "SUPPORT",
+                  "OPTIONAL"
+                ]
+              },
+              "pda_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 1,
+                "uniqueItems": true
+              },
+              "activity_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 0,
+                "uniqueItems": true
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "project_id",
+              "role",
+              "pda_ids",
+              "activity_ids",
+              "reason"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 0
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "mode",
+        "selections",
+        "reason"
+      ],
+      "additionalProperties": false
+    },
+    "feasibility": {
+      "type": "object",
+      "properties": {
+        "requested_sessions": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "minutes_per_session": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "total_available_minutes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "complexity": {
+          "type": "string",
+          "enum": [
+            "LOW",
+            "MEDIUM",
+            "HIGH"
+          ]
+        },
+        "resource_feasibility": {
+          "type": "string",
+          "enum": [
+            "PASS",
+            "FAIL",
+            "UNKNOWN"
+          ]
+        },
+        "time_feasibility": {
+          "type": "string",
+          "enum": [
+            "PASS",
+            "FAIL",
+            "UNKNOWN"
+          ]
+        },
+        "multigrade_feasibility": {
+          "type": "string",
+          "enum": [
+            "PASS",
+            "FAIL",
+            "UNKNOWN"
+          ]
+        },
+        "risks": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 0
+        },
+        "assumptions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 0
+        }
+      },
+      "required": [
+        "requested_sessions",
+        "minutes_per_session",
+        "total_available_minutes",
+        "complexity",
+        "resource_feasibility",
+        "time_feasibility",
+        "multigrade_feasibility",
+        "risks",
+        "assumptions"
+      ],
+      "additionalProperties": false
+    },
+    "gate_result": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "gate_version": {
+              "const": "BLUEPRINT_GATE_V1"
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "PASS",
+                "FAIL",
+                "NOT_EVALUABLE",
+                "NEEDS_TEACHER_DECISION"
+              ]
+            },
+            "critical_count": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "warning_count": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "deterministic_findings": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "rule_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "severity": {
+                    "type": "string",
+                    "enum": [
+                      "CRITICAL",
+                      "WARNING"
+                    ]
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "PASS",
+                      "FAIL",
+                      "NOT_EVALUABLE"
+                    ]
+                  },
+                  "scope": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "observed": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "expected": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "rule_id",
+                  "severity",
+                  "status",
+                  "scope",
+                  "observed",
+                  "expected"
+                ],
+                "additionalProperties": false
+              },
+              "minItems": 0
+            },
+            "semantic_findings": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "rule_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "severity": {
+                    "type": "string",
+                    "enum": [
+                      "CRITICAL",
+                      "WARNING"
+                    ]
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "PASS",
+                      "FAIL",
+                      "NOT_EVALUABLE"
+                    ]
+                  },
+                  "scope": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "observed": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "expected": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "rule_id",
+                  "severity",
+                  "status",
+                  "scope",
+                  "observed",
+                  "expected"
+                ],
+                "additionalProperties": false
+              },
+              "minItems": 0
+            },
+            "evaluated_blueprint_hash": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            "source_hash": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          },
+          "required": [
+            "gate_version",
+            "status",
+            "critical_count",
+            "warning_count",
+            "deterministic_findings",
+            "semantic_findings",
+            "evaluated_blueprint_hash",
+            "source_hash"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "required": [
+    "schema_version",
+    "blueprint_id",
+    "revision",
+    "status",
+    "source",
+    "problem_frame",
+    "methodology",
+    "guiding_question",
+    "final_outcome",
+    "pda_analysis",
+    "grade_contributions",
+    "project_stages",
+    "session_progression",
+    "ltg_strategy",
+    "feasibility",
+    "gate_result"
+  ],
+  "additionalProperties": false
+}

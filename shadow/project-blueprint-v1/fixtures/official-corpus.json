@@ -1,0 +1,53 @@
+{
+  "provenance": "Supabase official PDA, read-only export 2026-09-23; no user records",
+  "pdas": [
+    {
+      "pda_id": "F3-DHC-1-010",
+      "grade": 1,
+      "field": "De lo Humano y lo Comunitario",
+      "content_official": "Construcción del proyecto de vida.",
+      "pda_official": "Explica situaciones cotidianas que se presentan en la escuela y la casa, con la intención de proponer acuerdos que generen una mejor convivencia.",
+      "verification_status": "Verificado"
+    },
+    {
+      "pda_id": "F3-DHC-2-023",
+      "grade": 2,
+      "field": "De lo Humano y lo Comunitario",
+      "content_official": "Sentido de comunidad y satisfacción de necesidades humanas.",
+      "pda_official": "Reconoce ideas, conocimientos, prácticas culturales y formas de organización, para explicar el significado que tienen en su familia y comunidad.",
+      "verification_status": "Verificado"
+    },
+    {
+      "pda_id": "F4-DHC-3-001",
+      "grade": 3,
+      "field": "De lo Humano y lo Comunitario",
+      "content_official": "La comunidad como el espacio en el que se vive y se encuentra la escuela.",
+      "pda_official": "Indaga acerca de ideas, conocimientos, prácticas culturales, formas de organización y acuerdos familiares, escolares y comunitarios, para compartir su importancia en la socialización.",
+      "verification_status": "Verificado"
+    },
+    {
+      "pda_id": "F4-DHC-4-001",
+      "grade": 4,
+      "field": "De lo Humano y lo Comunitario",
+      "content_official": "La comunidad como el espacio en el que se vive y se encuentra la escuela.",
+      "pda_official": "Reconoce ideas, conocimientos, prácticas culturales y formas de organización, para explicar el significado que tienen en su familia, escuela y comunidad.",
+      "verification_status": "Verificado"
+    },
+    {
+      "pda_id": "F5-ENS-5-003",
+      "grade": 5,
+      "field": "Ética, Naturaleza y Sociedades",
+      "content_official": "Valoración de la biodiversidad en el territorio donde se ubica la localidad, entidad, México y el mundo, valores y acciones sustentables.",
+      "pda_official": "Indaga cómo y por qué está desapareciendo la biodiversidad, incluyendo los cambios del clima global y sus riesgos para la vida.",
+      "verification_status": "Verificado"
+    },
+    {
+      "pda_id": "F5-DHC-6-005",
+      "grade": 6,
+      "field": "De lo Humano y lo Comunitario",
+      "content_official": "La escuela como ventana hacia el futuro.",
+      "pda_official": "Indaga sobre experiencias de estudio y comunidades de práctica, para ampliar sus horizontes de formación.",
+      "verification_status": "Verificado"
+    }
+  ]
+}

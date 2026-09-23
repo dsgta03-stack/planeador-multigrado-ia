@@ -1,0 +1,144 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:multiplan:shadow:BlueprintGateV1",
+  "type": "object",
+  "properties": {
+    "gate_version": {
+      "const": "BLUEPRINT_GATE_V1"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "PASS",
+        "FAIL",
+        "NOT_EVALUABLE",
+        "NEEDS_TEACHER_DECISION"
+      ]
+    },
+    "critical_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "warning_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "deterministic_findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "rule_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "CRITICAL",
+              "WARNING"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PASS",
+              "FAIL",
+              "NOT_EVALUABLE"
+            ]
+          },
+          "scope": {
+            "type": "string",
+            "minLength": 1
+          },
+          "observed": {
+            "type": "string",
+            "minLength": 1
+          },
+          "expected": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "rule_id",
+          "severity",
+          "status",
+          "scope",
+          "observed",
+          "expected"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0
+    },
+    "semantic_findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "rule_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "CRITICAL",
+              "WARNING"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PASS",
+              "FAIL",
+              "NOT_EVALUABLE"
+            ]
+          },
+          "scope": {
+            "type": "string",
+            "minLength": 1
+          },
+          "observed": {
+            "type": "string",
+            "minLength": 1
+          },
+          "expected": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "rule_id",
+          "severity",
+          "status",
+          "scope",
+          "observed",
+          "expected"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0
+    },
+    "evaluated_blueprint_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "source_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  },
+  "required": [
+    "gate_version",
+    "status",
+    "critical_count",
+    "warning_count",
+    "deterministic_findings",
+    "semantic_findings",
+    "evaluated_blueprint_hash",
+    "source_hash"
+  ],
+  "additionalProperties": false
+}
