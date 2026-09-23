@@ -1,0 +1,444 @@
+{
+  "source_commit": "014eff32d12c8406b3b568ae791f1d26ccbb8d67",
+  "fixtures": [
+    {
+      "fixture": "PB-001",
+      "methodology": "proyectos_comunitarios",
+      "expected": {
+        "semantic": [
+          "BPS-003"
+        ]
+      },
+      "actual": "FAIL",
+      "match": true,
+      "blueprint_status": "DRAFT",
+      "deterministic_failures": [],
+      "semantic_failures": [
+        "BPS-003"
+      ],
+      "warnings": 0,
+      "repair_count": 0,
+      "generation_latency_ms": null,
+      "semantic_review_latency_ms": 16845,
+      "semantic_complete": true
+    },
+    {
+      "fixture": "PB-002",
+      "methodology": "proyectos_comunitarios",
+      "expected": {
+        "functional_pass": true
+      },
+      "actual": "PASS",
+      "match": true,
+      "blueprint_status": "DRAFT",
+      "deterministic_failures": [],
+      "semantic_failures": [],
+      "warnings": 0,
+      "repair_count": 0,
+      "generation_latency_ms": null,
+      "semantic_review_latency_ms": 13013,
+      "semantic_complete": true
+    },
+    {
+      "fixture": "PB-003",
+      "methodology": "abp",
+      "expected": {
+        "deterministic": [
+          "BPD-008",
+          "BPD-009",
+          "BPD-010"
+        ]
+      },
+      "actual": "FAIL",
+      "match": true,
+      "blueprint_status": "DRAFT",
+      "deterministic_failures": [
+        "BPD-008",
+        "BPD-009",
+        "BPD-010"
+      ],
+      "semantic_failures": [],
+      "warnings": 0,
+      "repair_count": 0,
+      "generation_latency_ms": null,
+      "semantic_review_latency_ms": 7814,
+      "semantic_complete": true
+    },
+    {
+      "fixture": "PB-004",
+      "methodology": "aprendizaje_servicio",
+      "expected": {
+        "semantic": [
+          "BPS-008"
+        ]
+      },
+      "actual": "FAIL",
+      "match": true,
+      "blueprint_status": "DRAFT",
+      "deterministic_failures": [],
+      "semantic_failures": [
+        "BPS-003",
+        "BPS-008"
+      ],
+      "warnings": 0,
+      "repair_count": 0,
+      "generation_latency_ms": null,
+      "semantic_review_latency_ms": 7254,
+      "semantic_complete": true
+    },
+    {
+      "fixture": "PB-005",
+      "methodology": "steam",
+      "expected": {
+        "deterministic": [
+          "BPD-019"
+        ],
+        "semantic": [
+          "BPS-008"
+        ]
+      },
+      "actual": "FAIL",
+      "match": true,
+      "blueprint_status": "DRAFT",
+      "deterministic_failures": [
+        "BPD-019"
+      ],
+      "semantic_failures": [
+        "BPS-003",
+        "BPS-007",
+        "BPS-008"
+      ],
+      "warnings": 0,
+      "repair_count": 0,
+      "generation_latency_ms": null,
+      "semantic_review_latency_ms": 5750,
+      "semantic_complete": true
+    },
+    {
+      "fixture": "PB-006",
+      "methodology": "abp",
+      "expected": {
+        "deterministic": [
+          "BPD-007"
+        ]
+      },
+      "actual": "FAIL",
+      "match": true,
+      "blueprint_status": "DRAFT",
+      "deterministic_failures": [
+        "BPD-007"
+      ],
+      "semantic_failures": [],
+      "warnings": 0,
+      "repair_count": 0,
+      "generation_latency_ms": null,
+      "semantic_review_latency_ms": 17538,
+      "semantic_complete": true
+    },
+    {
+      "fixture": "PB-007",
+      "methodology": "abp",
+      "expected": {
+        "semantic": [
+          "BPS-004",
+          "BPS-005"
+        ]
+      },
+      "actual": "FAIL",
+      "match": false,
+      "blueprint_status": "DRAFT",
+      "deterministic_failures": [],
+      "semantic_failures": [
+        "BPS-005"
+      ],
+      "warnings": 0,
+      "repair_count": 0,
+      "generation_latency_ms": null,
+      "semantic_review_latency_ms": 22613,
+      "semantic_complete": true
+    },
+    {
+      "fixture": "PB-008",
+      "methodology": "proyectos_comunitarios",
+      "expected": {
+        "semantic": [
+          "BPS-006",
+          "BPS-007"
+        ]
+      },
+      "actual": "FAIL",
+      "match": true,
+      "blueprint_status": "DRAFT",
+      "deterministic_failures": [],
+      "semantic_failures": [
+        "BPS-003",
+        "BPS-006",
+        "BPS-007"
+      ],
+      "warnings": 0,
+      "repair_count": 0,
+      "generation_latency_ms": null,
+      "semantic_review_latency_ms": 5163,
+      "semantic_complete": true
+    },
+    {
+      "fixture": "PB-009",
+      "methodology": "proyectos_comunitarios",
+      "expected": {
+        "semantic": [
+          "BPS-008"
+        ]
+      },
+      "actual": "FAIL",
+      "match": true,
+      "blueprint_status": "DRAFT",
+      "deterministic_failures": [],
+      "semantic_failures": [
+        "BPS-003",
+        "BPS-007",
+        "BPS-008"
+      ],
+      "warnings": 0,
+      "repair_count": 0,
+      "generation_latency_ms": null,
+      "semantic_review_latency_ms": 4547,
+      "semantic_complete": true
+    },
+    {
+      "fixture": "PB-010",
+      "methodology": "abp",
+      "expected": {
+        "pass": true
+      },
+      "actual": "PASS",
+      "match": true,
+      "blueprint_status": "DRAFT",
+      "deterministic_failures": [],
+      "semantic_failures": [],
+      "warnings": 0,
+      "repair_count": 0,
+      "generation_latency_ms": null,
+      "semantic_review_latency_ms": 7354,
+      "semantic_complete": true
+    },
+    {
+      "fixture": "PB-011-STEAM-PASS",
+      "methodology": "steam",
+      "expected": {
+        "pass": true
+      },
+      "actual": "PASS",
+      "match": true,
+      "blueprint_status": "DRAFT",
+      "deterministic_failures": [],
+      "semantic_failures": [],
+      "warnings": 0,
+      "repair_count": 0,
+      "generation_latency_ms": null,
+      "semantic_review_latency_ms": 4449,
+      "semantic_complete": true
+    },
+    {
+      "fixture": "PB-012-SERVICIO-PASS",
+      "methodology": "aprendizaje_servicio",
+      "expected": {
+        "pass": true
+      },
+      "actual": "PASS",
+      "match": true,
+      "blueprint_status": "DRAFT",
+      "deterministic_failures": [],
+      "semantic_failures": [],
+      "warnings": 0,
+      "repair_count": 0,
+      "generation_latency_ms": null,
+      "semantic_review_latency_ms": 18626,
+      "semantic_complete": true
+    },
+    {
+      "fixture": "PB-013-COMUNITARIO-PASS",
+      "methodology": "proyectos_comunitarios",
+      "expected": {
+        "pass": true
+      },
+      "actual": "PASS",
+      "match": true,
+      "blueprint_status": "DRAFT",
+      "deterministic_failures": [],
+      "semantic_failures": [],
+      "warnings": 0,
+      "repair_count": 0,
+      "generation_latency_ms": null,
+      "semantic_review_latency_ms": 7351,
+      "semantic_complete": true
+    },
+    {
+      "fixture": "PB-014-UN-GRADO-UNA-SESION",
+      "methodology": "abp",
+      "expected": {
+        "pass": true
+      },
+      "actual": "PASS",
+      "match": true,
+      "blueprint_status": "DRAFT",
+      "deterministic_failures": [],
+      "semantic_failures": [],
+      "warnings": 0,
+      "repair_count": 0,
+      "generation_latency_ms": null,
+      "semantic_review_latency_ms": 14485,
+      "semantic_complete": true
+    },
+    {
+      "fixture": "PB-015-SEIS-GRADOS-DOS-SESIONES",
+      "methodology": "proyectos_comunitarios",
+      "expected": {
+        "pass": true
+      },
+      "actual": "PASS",
+      "match": true,
+      "blueprint_status": "DRAFT",
+      "deterministic_failures": [],
+      "semantic_failures": [],
+      "warnings": 0,
+      "repair_count": 0,
+      "generation_latency_ms": null,
+      "semantic_review_latency_ms": 3868,
+      "semantic_complete": true
+    },
+    {
+      "fixture": "PB-016-LTG-CORE",
+      "methodology": "abp",
+      "expected": {
+        "deterministic_pass": true
+      },
+      "actual": "PASS",
+      "match": true,
+      "blueprint_status": "DRAFT",
+      "deterministic_failures": [],
+      "semantic_failures": [],
+      "warnings": 0,
+      "repair_count": 0,
+      "generation_latency_ms": null,
+      "semantic_review_latency_ms": 7218,
+      "semantic_complete": true
+    },
+    {
+      "fixture": "PB-017-LTG-SUPPORT",
+      "methodology": "abp",
+      "expected": {
+        "deterministic_pass": true
+      },
+      "actual": "PASS",
+      "match": true,
+      "blueprint_status": "DRAFT",
+      "deterministic_failures": [],
+      "semantic_failures": [],
+      "warnings": 0,
+      "repair_count": 0,
+      "generation_latency_ms": null,
+      "semantic_review_latency_ms": 8499,
+      "semantic_complete": true
+    },
+    {
+      "fixture": "PB-018-LTG-OPTIONAL",
+      "methodology": "abp",
+      "expected": {
+        "deterministic_pass": true
+      },
+      "actual": "PASS",
+      "match": true,
+      "blueprint_status": "DRAFT",
+      "deterministic_failures": [],
+      "semantic_failures": [],
+      "warnings": 0,
+      "repair_count": 0,
+      "generation_latency_ms": null,
+      "semantic_review_latency_ms": 6470,
+      "semantic_complete": true
+    },
+    {
+      "fixture": "PB-019-WEAK",
+      "methodology": "abp",
+      "expected": {
+        "teacher_decision": true
+      },
+      "actual": "NEEDS_TEACHER_DECISION",
+      "match": true,
+      "blueprint_status": "DRAFT",
+      "deterministic_failures": [],
+      "semantic_failures": [],
+      "warnings": 0,
+      "repair_count": 0,
+      "generation_latency_ms": null,
+      "semantic_review_latency_ms": 4443,
+      "semantic_complete": true
+    },
+    {
+      "fixture": "PB-020-MUSEO-REAL",
+      "methodology": "proyectos_comunitarios",
+      "expected": {
+        "semantic": [
+          "BPS-003",
+          "BPS-007",
+          "BPS-008"
+        ],
+        "deterministic": [
+          "BPD-008",
+          "BPD-009",
+          "BPD-010"
+        ]
+      },
+      "actual": "FAIL",
+      "match": false,
+      "blueprint_status": "DRAFT",
+      "deterministic_failures": [
+        "BPD-008",
+        "BPD-009",
+        "BPD-010"
+      ],
+      "semantic_failures": [
+        "BPS-003"
+      ],
+      "warnings": 0,
+      "repair_count": 0,
+      "generation_latency_ms": null,
+      "semantic_review_latency_ms": 8008,
+      "semantic_complete": true
+    },
+    {
+      "fixture": "PB-021-CINCO-SESIONES",
+      "methodology": "abp",
+      "expected": {
+        "pass": true
+      },
+      "actual": "PASS",
+      "match": true,
+      "blueprint_status": "DRAFT",
+      "deterministic_failures": [],
+      "semantic_failures": [],
+      "warnings": 0,
+      "repair_count": 0,
+      "generation_latency_ms": null,
+      "semantic_review_latency_ms": 7144,
+      "semantic_complete": true
+    },
+    {
+      "fixture": "PB-022-MAS-SESIONES-QUE-OPERACIONES",
+      "methodology": "abp",
+      "expected": {
+        "pass": true
+      },
+      "actual": "PASS",
+      "match": true,
+      "blueprint_status": "DRAFT",
+      "deterministic_failures": [],
+      "semantic_failures": [],
+      "warnings": 0,
+      "repair_count": 0,
+      "generation_latency_ms": null,
+      "semantic_review_latency_ms": 5157,
+      "semantic_complete": true
+    }
+  ]
+}

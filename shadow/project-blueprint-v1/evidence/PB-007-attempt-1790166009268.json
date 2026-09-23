@@ -1,0 +1,44 @@
+{
+  "id": "PB-007",
+  "error": "Error: PROVIDER_ERROR:429",
+  "telemetry": {
+    "task": "REVIEW",
+    "provider": "google",
+    "model": "gemini-3.1-pro-preview",
+    "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+    "input_hash": "304b95b4e9e796e68073ece3484375d2ab8904b6b2b47dbd1ba363d3c35c461a",
+    "output_hash": null,
+    "usage": null,
+    "cost": null,
+    "latency_ms": 8649,
+    "attempts": [
+      {
+        "attempt": 1,
+        "latency_ms": 4967,
+        "http_status": 502,
+        "provider_status": 429,
+        "usage": null,
+        "output_hash": null,
+        "backoff_ms": 1000
+      },
+      {
+        "attempt": 2,
+        "latency_ms": 354,
+        "http_status": 502,
+        "provider_status": 429,
+        "usage": null,
+        "output_hash": null,
+        "backoff_ms": 2000
+      },
+      {
+        "attempt": 3,
+        "latency_ms": 324,
+        "http_status": 502,
+        "provider_status": 429,
+        "usage": null,
+        "output_hash": null
+      }
+    ]
+  },
+  "match": false
+}

@@ -13,19 +13,21 @@
     ]
   },
   "actual": "FAIL",
-  "match": false,
+  "match": true,
   "deterministic_failures": [
     "BPD-008",
     "BPD-009",
     "BPD-010"
   ],
   "semantic_failures": [
-    "BPS-003"
+    "BPS-003",
+    "BPS-007",
+    "BPS-008"
   ],
   "warnings": 0,
   "repair_count": 0,
   "generation_latency_ms": null,
-  "semantic_review_latency_ms": 8008,
+  "semantic_review_latency_ms": 32727,
   "semantic": {
     "input_hash": "839a146091ae5cc1d6546a2c3c10081c377891a5ea02fb76ef5e4574fb6f3756",
     "findings": [
@@ -33,9 +35,9 @@
         "rule_id": "BPS-001",
         "severity": "CRITICAL",
         "status": "PASS",
-        "scope": "Problem, purpose, and outcome",
-        "observed": "The problem of unknown school agreements is linked to the purpose of explaining them, resulting in a museum-style outcome.",
-        "expected": "Clear linkage between problem, purpose, and result."
+        "scope": "Problem, purpose and outcome",
+        "observed": "The project addresses the lack of understanding of school agreements through a museum-type outcome that serves to explain these agreements to new students.",
+        "expected": "Clear link between the identified problem, the pedagogical purpose and the final outcome."
       },
       {
         "rule_id": "BPS-002",
@@ -43,118 +45,613 @@
         "status": "PASS",
         "scope": "Guiding question",
         "observed": "The question '¿Cómo podemos explicar y poner en práctica nuestros acuerdos para convivir mejor?' is accessible to both 1st and 3rd grades.",
-        "expected": "Accessible question for all involved grades."
+        "expected": "A question that sustains the project and is accessible to all involved grades."
       },
       {
         "rule_id": "BPS-003",
         "severity": "CRITICAL",
         "status": "FAIL",
-        "scope": "Functional requirements (Museum/Itinerant)",
-        "observed": "The project declares an 'itinerant museum' but limits movement to the same classroom and patio, failing to demonstrate relocation or reinstallation between two viable spaces/audiences.",
-        "expected": "Evidence of movement between at least two viable spaces or audiences."
-      },
-      {
-        "rule_id": "BPS-004",
-        "severity": "CRITICAL",
-        "status": "PASS",
-        "scope": "PDA development",
-        "observed": "1st grade explains situations (F3-DHC-1-010) and 3rd grade investigates practices (F4-DHC-3-001) as core operations.",
-        "expected": "Full PDA development."
-      },
-      {
-        "rule_id": "BPS-005",
-        "severity": "CRITICAL",
-        "status": "PASS",
-        "scope": "Evidence of cognitive performance",
-        "observed": "Evidence includes drawings with dictated explanations (1st) and registered consultations (3rd).",
-        "expected": "Evidence corresponding to the cognitive action of the PDA."
+        "scope": "Functional outcome",
+        "observed": "The outcome is defined as a 'Museo itinerante' but the student operation in the 'apply' stage only mentions 'Conducción de la asamblea final', lacking evidence of circulation or reinstallation in two viable spaces.",
+        "expected": "The outcome must fulfill its functional semantics; if it is an itinerant museum, it must demonstrate viable circulation."
       },
       {
         "rule_id": "BPS-006",
         "severity": "CRITICAL",
         "status": "PASS",
-        "scope": "Integrated project",
-        "observed": "Both grades contribute to a single set of shared explanations for the same museum pieces.",
-        "expected": "Interdependent contributions to a common project."
-      },
-      {
-        "rule_id": "BPS-007",
-        "severity": "CRITICAL",
-        "status": "PASS",
-        "scope": "Progression and operations",
-        "observed": "Each stage (frame, investigate, apply) has defined operations, artifacts, and evidence.",
-        "expected": "Progression with operation, artifact, and evidence at each step."
-      },
-      {
-        "rule_id": "BPS-008",
-        "severity": "CRITICAL",
-        "status": "PASS",
-        "scope": "Methodology authenticity",
-        "observed": "Operations (identification, investigation, application) are consistent with the Proyectos Comunitarios methodology.",
-        "expected": "Authentic methodology operations."
+        "scope": "Common project",
+        "observed": "Both grades contribute to the same 'shared_explanations' artifact, which is then used in the final assembly.",
+        "expected": "A common project built with interdependent contributions."
       },
       {
         "rule_id": "BPS-009",
         "severity": "CRITICAL",
         "status": "PASS",
         "scope": "Complexity and autonomy",
-        "observed": "Supports like teacher modeling and peer support are explicitly included for the low-autonomy profile.",
-        "expected": "Complexity and supports aligned with student profiles."
+        "observed": "The project accounts for the low autonomy profile by including teacher modeling and peer support.",
+        "expected": "Complexity and supports must be adequate to the grades and profiles."
       },
       {
         "rule_id": "BPS-010",
         "severity": "CRITICAL",
         "status": "PASS",
         "scope": "Temporal feasibility",
-        "observed": "The 3-session structure is feasible for the defined complexity and scope.",
-        "expected": "Feasibility based on complexity and stages."
+        "observed": "The 270 minutes allocated are distributed across three stages with clear, simple tasks suitable for the context.",
+        "expected": "Feasibility based on complexity and stages, not just time multiplication."
       },
       {
         "rule_id": "BPS-011",
         "severity": "CRITICAL",
         "status": "PASS",
         "scope": "Transversal grades",
-        "observed": "Each grade works on its own PDA (F3-DHC-1-010 and F4-DHC-3-001) without inheriting requirements from the other.",
-        "expected": "No inheritance of PDA requirements between grades."
+        "observed": "1st and 3rd grades have distinct roles (explaining vs inquiring) that do not overlap or inherit requirements.",
+        "expected": "Grades must not inherit contents or requirements from other PDAs."
       },
       {
         "rule_id": "BPS-012",
-        "severity": "CRITICAL",
+        "severity": "WARNING",
         "status": "PASS",
         "scope": "LTG",
-        "observed": "LTG is absent; justified by the context of using internal school experiences.",
-        "expected": "Pertinent LTG or justified absence."
+        "observed": "LTG is not selected, which is justified by the context of consulting internal school experiences.",
+        "expected": "LTG must be pertinent and authorized; absence can be a justified PASS."
+      },
+      {
+        "rule_id": "BPS-004",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "pda_checks",
+        "observed": "[{\"pda_id\":\"F3-DHC-1-010\",\"grade\":1,\"contribution_ids\":[\"grade_1\"],\"stage_ids\":[\"investigate\"],\"operation_quote\":\"Primero aporta dibujos de situaciones con explicación oral\",\"artifact_ids\":[\"shared_explanations\"],\"evidence_reason\":\"El estudiante realiza la operación cognitiva de explicar situaciones cotidianas mediante el dibujo y la explicación oral, cumpliendo con el desempeño de proponer acuerdos según el PDA.\",\"bps004\":\"PASS\",\"bps005\":\"PASS\"},{\"pda_id\":\"F4-DHC-3-001\",\"grade\":3,\"contribution_ids\":[\"grade_3\"],\"stage_ids\":[\"investigate\"],\"operation_quote\":\"tercero registra la consulta y relaciona acuerdo y necesidad\",\"artifact_ids\":[\"shared_explanations\"],\"evidence_reason\":\"El estudiante ejecuta la operación de indagar mediante el registro de consultas y la comparación de testimonios, cumpliendo con el desempeño de grado superior de contrastar significados.\",\"bps004\":\"PASS\",\"bps005\":\"PASS\"}]",
+        "expected": "El PDA completo se desarrolla mediante su aportación, sin reducirlo a coincidencia temática."
+      },
+      {
+        "rule_id": "BPS-005",
+        "severity": "CRITICAL",
+        "status": "PASS",
+        "scope": "pda_checks",
+        "observed": "[{\"pda_id\":\"F3-DHC-1-010\",\"grade\":1,\"contribution_ids\":[\"grade_1\"],\"stage_ids\":[\"investigate\"],\"operation_quote\":\"Primero aporta dibujos de situaciones con explicación oral\",\"artifact_ids\":[\"shared_explanations\"],\"evidence_reason\":\"El estudiante realiza la operación cognitiva de explicar situaciones cotidianas mediante el dibujo y la explicación oral, cumpliendo con el desempeño de proponer acuerdos según el PDA.\",\"bps004\":\"PASS\",\"bps005\":\"PASS\"},{\"pda_id\":\"F4-DHC-3-001\",\"grade\":3,\"contribution_ids\":[\"grade_3\"],\"stage_ids\":[\"investigate\"],\"operation_quote\":\"tercero registra la consulta y relaciona acuerdo y necesidad\",\"artifact_ids\":[\"shared_explanations\"],\"evidence_reason\":\"El estudiante ejecuta la operación de indagar mediante el registro de consultas y la comparación de testimonios, cumpliendo con el desempeño de grado superior de contrastar significados.\",\"bps004\":\"PASS\",\"bps005\":\"PASS\"}]",
+        "expected": "La evidencia corresponde al desempeño cognitivo del PDA completo."
+      },
+      {
+        "rule_id": "BPS-007",
+        "severity": "CRITICAL",
+        "status": "FAIL",
+        "scope": "stage_checks",
+        "observed": "[{\"stage_id\":\"frame\",\"operation_quote\":\"Identificar juntos situaciones de convivencia que desconocemos, recuperar recuerdos, formular preguntas y acordar qué explicaciones necesita el grupo nuevo.\",\"artifact_id\":\"questions\",\"criteria_quote\":\"Las preguntas responden a la necesidad expresada\",\"consumed_by\":[\"investigate\"],\"outcome_link\":\"El grupo realiza una sesión de diálogo para definir el alcance de la indagación, generando un listado de preguntas que guiarán la búsqueda de información.\",\"bps007\":\"PASS\"},{\"stage_id\":\"investigate\",\"operation_quote\":\"Indagar consultando al docente y contrastando recuerdos del grupo sobre origen, función y significado de dos acuerdos escolares.\",\"artifact_id\":\"shared_explanations\",\"criteria_quote\":\"Las explicaciones usan consulta y acuerdos, no sólo decoración\",\"consumed_by\":[\"apply\"],\"outcome_link\":\"Se produce un registro documental de las consultas realizadas y la construcción de explicaciones basadas en el contraste de testimonios y la relación entre acuerdos y necesidades escolares.\",\"bps007\":\"PASS\"},{\"stage_id\":\"apply\",\"operation_quote\":\"Conducción de la asamblea final de acuerdos y registro de aprendizajes en el cuaderno.\",\"artifact_id\":\"completion\",\"criteria_quote\":\"Existe evidencia de realización con destinatarios del grupo y valoración\",\"consumed_by\":[\"outcome_01\"],\"outcome_link\":\"La operación se limita a una asamblea interna y registro en cuaderno, lo cual no constituye una exposición abierta a la comunidad ni cumple con la naturaleza de museo itinerante declarada.\",\"bps007\":\"FAIL\"}]",
+        "expected": "La progresión produce el resultado y cada avance tiene operación, artefacto y evidencia."
+      },
+      {
+        "rule_id": "BPS-008",
+        "severity": "CRITICAL",
+        "status": "FAIL",
+        "scope": "methodology_checks",
+        "observed": "[{\"operation_id\":\"IDENTIFICACION\",\"stage_ids\":[\"frame\"],\"operation_quote\":\"Identificar juntos situaciones de convivencia que desconocemos\",\"artifact_ids\":[\"questions\"],\"evidence_reason\":\"La acción de identificar situaciones de convivencia está presente en la etapa frame mediante la formulación de preguntas.\",\"bps008\":\"PASS\"},{\"operation_id\":\"RECUPERACION\",\"stage_ids\":[\"frame\"],\"operation_quote\":\"recuperar recuerdos\",\"artifact_ids\":[\"questions\"],\"evidence_reason\":\"Se realiza la recuperación de recuerdos como parte del proceso de formulación de preguntas.\",\"bps008\":\"PASS\"},{\"operation_id\":\"PLANIFICACION\",\"stage_ids\":[\"frame\"],\"operation_quote\":\"acordar qué explicaciones necesita el grupo nuevo. Seleccionar prácticas y criterios\",\"artifact_ids\":[\"questions\"],\"evidence_reason\":\"La selección de criterios y la definición de necesidades de explicación constituyen la planificación.\",\"bps008\":\"PASS\"},{\"operation_id\":\"ACERCAMIENTO\",\"stage_ids\":[\"investigate\"],\"operation_quote\":\"Indagar consultando al docente y contrastando recuerdos\",\"artifact_ids\":[\"shared_explanations\"],\"evidence_reason\":\"La indagación y consulta directa constituyen el acercamiento al objeto de estudio.\",\"bps008\":\"PASS\"},{\"operation_id\":\"COMPRENSION_Y_PRODUCCION\",\"stage_ids\":[\"investigate\"],\"operation_quote\":\"construir explicaciones y acuerdos razonados\",\"artifact_ids\":[\"shared_explanations\"],\"evidence_reason\":\"La construcción de explicaciones razonadas demuestra la comprensión y producción de conocimiento.\",\"bps008\":\"PASS\"},{\"operation_id\":\"RECONOCIMIENTO\",\"stage_ids\":[\"investigate\"],\"operation_quote\":\"Registrar semejanzas y diferencias de testimonios\",\"artifact_ids\":[\"shared_explanations\"],\"evidence_reason\":\"El registro de semejanzas y diferencias implica el reconocimiento de los datos obtenidos.\",\"bps008\":\"PASS\"},{\"operation_id\":\"CONCRECION\",\"stage_ids\":[\"investigate\"],\"operation_quote\":\"Revisar juntos que cada pieza permita comprender la misma pregunta\",\"artifact_ids\":[\"shared_explanations\"],\"evidence_reason\":\"La revisión y validación de las piezas asegura la concreción del producto final.\",\"bps008\":\"PASS\"},{\"operation_id\":\"INTEGRACION\",\"stage_ids\":[\"apply\"],\"operation_quote\":\"Conducción de la asamblea final de acuerdos\",\"artifact_ids\":[\"completion\"],\"evidence_reason\":\"La asamblea integra los aprendizajes previos en un evento de cierre.\",\"bps008\":\"PASS\"},{\"operation_id\":\"DIFUSION\",\"stage_ids\":[\"apply\"],\"operation_quote\":\"Exposición abierta a la comunidad\",\"artifact_ids\":[\"completion\"],\"evidence_reason\":\"El proyecto se define como museo itinerante pero no hay evidencia de circulación fuera del aula, fallando la difusión requerida para este tipo.\",\"bps008\":\"FAIL\"},{\"operation_id\":\"CONSIDERACIONES\",\"stage_ids\":[\"apply\"],\"operation_quote\":\"registro de aprendizajes en el cuaderno\",\"artifact_ids\":[\"completion\"],\"evidence_reason\":\"El registro en el cuaderno constituye la consideración y cierre reflexivo.\",\"bps008\":\"PASS\"},{\"operation_id\":\"AVANCES\",\"stage_ids\":[\"apply\"],\"operation_quote\":\"Conducción de la asamblea final\",\"artifact_ids\":[\"completion\"],\"evidence_reason\":\"La asamblea representa el avance operativo final del proyecto.\",\"bps008\":\"PASS\"}]",
+        "expected": "Las operaciones realizan auténticamente la metodología; reflexión no sustituye servicio, intervención o indagación."
       }
     ],
+    "audit": {
+      "audit_version": "LOCAL_EVIDENCE_V1",
+      "findings": [
+        {
+          "rule_id": "BPS-001",
+          "severity": "CRITICAL",
+          "status": "PASS",
+          "scope": "Problem, purpose and outcome",
+          "observed": "The project addresses the lack of understanding of school agreements through a museum-type outcome that serves to explain these agreements to new students.",
+          "expected": "Clear link between the identified problem, the pedagogical purpose and the final outcome."
+        },
+        {
+          "rule_id": "BPS-002",
+          "severity": "CRITICAL",
+          "status": "PASS",
+          "scope": "Guiding question",
+          "observed": "The question '¿Cómo podemos explicar y poner en práctica nuestros acuerdos para convivir mejor?' is accessible to both 1st and 3rd grades.",
+          "expected": "A question that sustains the project and is accessible to all involved grades."
+        },
+        {
+          "rule_id": "BPS-003",
+          "severity": "CRITICAL",
+          "status": "FAIL",
+          "scope": "Functional outcome",
+          "observed": "The outcome is defined as a 'Museo itinerante' but the student operation in the 'apply' stage only mentions 'Conducción de la asamblea final', lacking evidence of circulation or reinstallation in two viable spaces.",
+          "expected": "The outcome must fulfill its functional semantics; if it is an itinerant museum, it must demonstrate viable circulation."
+        },
+        {
+          "rule_id": "BPS-004",
+          "severity": "CRITICAL",
+          "status": "PASS",
+          "scope": "PDA development",
+          "observed": "1st grade explains situations/agreements and 3rd grade inquires/contrasts, directly mapping to the PDA cognitive actions 'Explica' and 'Indaga'.",
+          "expected": "The PDA must be developed through specific contributions of the same grade level."
+        },
+        {
+          "rule_id": "BPS-005",
+          "severity": "CRITICAL",
+          "status": "PASS",
+          "scope": "Evidence vs Performance",
+          "observed": "The expected evidence (oral explanation, registered consultation, comparison of testimonies) matches the cognitive performance required by the PDAs.",
+          "expected": "Evidence must correspond to the cognitive performance of the full PDA."
+        },
+        {
+          "rule_id": "BPS-006",
+          "severity": "CRITICAL",
+          "status": "PASS",
+          "scope": "Common project",
+          "observed": "Both grades contribute to the same 'shared_explanations' artifact, which is then used in the final assembly.",
+          "expected": "A common project built with interdependent contributions."
+        },
+        {
+          "rule_id": "BPS-007",
+          "severity": "CRITICAL",
+          "status": "PASS",
+          "scope": "Progression",
+          "observed": "Each stage (frame, investigate, apply) has defined operations, artifacts (questions, shared_explanations, completion) and criteria.",
+          "expected": "Progresion must produce the result with operation, artifact and evidence at each step."
+        },
+        {
+          "rule_id": "BPS-008",
+          "severity": "CRITICAL",
+          "status": "PASS",
+          "scope": "Methodology operations",
+          "observed": "The operations (IDENTIFICACION, ACERCAMIENTO, INTEGRACION) are linked to specific actions like consulting the teacher and conducting an assembly.",
+          "expected": "Operations must perform the methodology authentically; reflection cannot substitute service or intervention."
+        },
+        {
+          "rule_id": "BPS-009",
+          "severity": "CRITICAL",
+          "status": "PASS",
+          "scope": "Complexity and autonomy",
+          "observed": "The project accounts for the low autonomy profile by including teacher modeling and peer support.",
+          "expected": "Complexity and supports must be adequate to the grades and profiles."
+        },
+        {
+          "rule_id": "BPS-010",
+          "severity": "CRITICAL",
+          "status": "PASS",
+          "scope": "Temporal feasibility",
+          "observed": "The 270 minutes allocated are distributed across three stages with clear, simple tasks suitable for the context.",
+          "expected": "Feasibility based on complexity and stages, not just time multiplication."
+        },
+        {
+          "rule_id": "BPS-011",
+          "severity": "CRITICAL",
+          "status": "PASS",
+          "scope": "Transversal grades",
+          "observed": "1st and 3rd grades have distinct roles (explaining vs inquiring) that do not overlap or inherit requirements.",
+          "expected": "Grades must not inherit contents or requirements from other PDAs."
+        },
+        {
+          "rule_id": "BPS-012",
+          "severity": "WARNING",
+          "status": "PASS",
+          "scope": "LTG",
+          "observed": "LTG is not selected, which is justified by the context of consulting internal school experiences.",
+          "expected": "LTG must be pertinent and authorized; absence can be a justified PASS."
+        }
+      ],
+      "pda_checks": [
+        {
+          "pda_id": "F3-DHC-1-010",
+          "grade": 1,
+          "contribution_ids": [
+            "grade_1"
+          ],
+          "stage_ids": [
+            "investigate"
+          ],
+          "operation_quote": "Primero aporta dibujos de situaciones con explicación oral",
+          "artifact_ids": [
+            "shared_explanations"
+          ],
+          "evidence_reason": "El estudiante realiza la operación cognitiva de explicar situaciones cotidianas mediante el dibujo y la explicación oral, cumpliendo con el desempeño de proponer acuerdos según el PDA.",
+          "bps004": "PASS",
+          "bps005": "PASS"
+        },
+        {
+          "pda_id": "F4-DHC-3-001",
+          "grade": 3,
+          "contribution_ids": [
+            "grade_3"
+          ],
+          "stage_ids": [
+            "investigate"
+          ],
+          "operation_quote": "tercero registra la consulta y relaciona acuerdo y necesidad",
+          "artifact_ids": [
+            "shared_explanations"
+          ],
+          "evidence_reason": "El estudiante ejecuta la operación de indagar mediante el registro de consultas y la comparación de testimonios, cumpliendo con el desempeño de grado superior de contrastar significados.",
+          "bps004": "PASS",
+          "bps005": "PASS"
+        }
+      ],
+      "stage_checks": [
+        {
+          "stage_id": "frame",
+          "operation_quote": "Identificar juntos situaciones de convivencia que desconocemos, recuperar recuerdos, formular preguntas y acordar qué explicaciones necesita el grupo nuevo.",
+          "artifact_id": "questions",
+          "criteria_quote": "Las preguntas responden a la necesidad expresada",
+          "consumed_by": [
+            "investigate"
+          ],
+          "outcome_link": "El grupo realiza una sesión de diálogo para definir el alcance de la indagación, generando un listado de preguntas que guiarán la búsqueda de información.",
+          "bps007": "PASS"
+        },
+        {
+          "stage_id": "investigate",
+          "operation_quote": "Indagar consultando al docente y contrastando recuerdos del grupo sobre origen, función y significado de dos acuerdos escolares.",
+          "artifact_id": "shared_explanations",
+          "criteria_quote": "Las explicaciones usan consulta y acuerdos, no sólo decoración",
+          "consumed_by": [
+            "apply"
+          ],
+          "outcome_link": "Se produce un registro documental de las consultas realizadas y la construcción de explicaciones basadas en el contraste de testimonios y la relación entre acuerdos y necesidades escolares.",
+          "bps007": "PASS"
+        },
+        {
+          "stage_id": "apply",
+          "operation_quote": "Conducción de la asamblea final de acuerdos y registro de aprendizajes en el cuaderno.",
+          "artifact_id": "completion",
+          "criteria_quote": "Existe evidencia de realización con destinatarios del grupo y valoración",
+          "consumed_by": [
+            "outcome_01"
+          ],
+          "outcome_link": "La operación se limita a una asamblea interna y registro en cuaderno, lo cual no constituye una exposición abierta a la comunidad ni cumple con la naturaleza de museo itinerante declarada.",
+          "bps007": "FAIL"
+        }
+      ],
+      "methodology_checks": [
+        {
+          "operation_id": "IDENTIFICACION",
+          "stage_ids": [
+            "frame"
+          ],
+          "operation_quote": "Identificar juntos situaciones de convivencia que desconocemos",
+          "artifact_ids": [
+            "questions"
+          ],
+          "evidence_reason": "La acción de identificar situaciones de convivencia está presente en la etapa frame mediante la formulación de preguntas.",
+          "bps008": "PASS"
+        },
+        {
+          "operation_id": "RECUPERACION",
+          "stage_ids": [
+            "frame"
+          ],
+          "operation_quote": "recuperar recuerdos",
+          "artifact_ids": [
+            "questions"
+          ],
+          "evidence_reason": "Se realiza la recuperación de recuerdos como parte del proceso de formulación de preguntas.",
+          "bps008": "PASS"
+        },
+        {
+          "operation_id": "PLANIFICACION",
+          "stage_ids": [
+            "frame"
+          ],
+          "operation_quote": "acordar qué explicaciones necesita el grupo nuevo. Seleccionar prácticas y criterios",
+          "artifact_ids": [
+            "questions"
+          ],
+          "evidence_reason": "La selección de criterios y la definición de necesidades de explicación constituyen la planificación.",
+          "bps008": "PASS"
+        },
+        {
+          "operation_id": "ACERCAMIENTO",
+          "stage_ids": [
+            "investigate"
+          ],
+          "operation_quote": "Indagar consultando al docente y contrastando recuerdos",
+          "artifact_ids": [
+            "shared_explanations"
+          ],
+          "evidence_reason": "La indagación y consulta directa constituyen el acercamiento al objeto de estudio.",
+          "bps008": "PASS"
+        },
+        {
+          "operation_id": "COMPRENSION_Y_PRODUCCION",
+          "stage_ids": [
+            "investigate"
+          ],
+          "operation_quote": "construir explicaciones y acuerdos razonados",
+          "artifact_ids": [
+            "shared_explanations"
+          ],
+          "evidence_reason": "La construcción de explicaciones razonadas demuestra la comprensión y producción de conocimiento.",
+          "bps008": "PASS"
+        },
+        {
+          "operation_id": "RECONOCIMIENTO",
+          "stage_ids": [
+            "investigate"
+          ],
+          "operation_quote": "Registrar semejanzas y diferencias de testimonios",
+          "artifact_ids": [
+            "shared_explanations"
+          ],
+          "evidence_reason": "El registro de semejanzas y diferencias implica el reconocimiento de los datos obtenidos.",
+          "bps008": "PASS"
+        },
+        {
+          "operation_id": "CONCRECION",
+          "stage_ids": [
+            "investigate"
+          ],
+          "operation_quote": "Revisar juntos que cada pieza permita comprender la misma pregunta",
+          "artifact_ids": [
+            "shared_explanations"
+          ],
+          "evidence_reason": "La revisión y validación de las piezas asegura la concreción del producto final.",
+          "bps008": "PASS"
+        },
+        {
+          "operation_id": "INTEGRACION",
+          "stage_ids": [
+            "apply"
+          ],
+          "operation_quote": "Conducción de la asamblea final de acuerdos",
+          "artifact_ids": [
+            "completion"
+          ],
+          "evidence_reason": "La asamblea integra los aprendizajes previos en un evento de cierre.",
+          "bps008": "PASS"
+        },
+        {
+          "operation_id": "DIFUSION",
+          "stage_ids": [
+            "apply"
+          ],
+          "operation_quote": "Exposición abierta a la comunidad",
+          "artifact_ids": [
+            "completion"
+          ],
+          "evidence_reason": "El proyecto se define como museo itinerante pero no hay evidencia de circulación fuera del aula, fallando la difusión requerida para este tipo.",
+          "bps008": "FAIL"
+        },
+        {
+          "operation_id": "CONSIDERACIONES",
+          "stage_ids": [
+            "apply"
+          ],
+          "operation_quote": "registro de aprendizajes en el cuaderno",
+          "artifact_ids": [
+            "completion"
+          ],
+          "evidence_reason": "El registro en el cuaderno constituye la consideración y cierre reflexivo.",
+          "bps008": "PASS"
+        },
+        {
+          "operation_id": "AVANCES",
+          "stage_ids": [
+            "apply"
+          ],
+          "operation_quote": "Conducción de la asamblea final",
+          "artifact_ids": [
+            "completion"
+          ],
+          "evidence_reason": "La asamblea representa el avance operativo final del proyecto.",
+          "bps008": "PASS"
+        }
+      ]
+    },
     "telemetry": {
       "task": "REVIEW",
       "provider": "google",
       "model": "gemini-3.1-flash-lite",
-      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1",
-      "input_hash": "dc456e552036b954e38284820a14b8e1c41042f79ce45a6f6d8c755e31def8df",
-      "output_hash": "2d193f902da804117e4d584e7eb59c4d1cf2a9d05626dd6c1a06b9ca7904d236",
-      "latency_ms": 8006,
-      "provider_latency_ms": 7841,
-      "usage": {
-        "promptTokenCount": 4918,
-        "candidatesTokenCount": 1128,
-        "totalTokenCount": 6046,
-        "promptTokensDetails": [
-          {
-            "modality": "TEXT",
-            "tokenCount": 4918
-          }
-        ],
-        "serviceTier": "standard"
-      },
-      "cost": null,
-      "finish_reason": "STOP"
+      "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+      "input_hash": "839a146091ae5cc1d6546a2c3c10081c377891a5ea02fb76ef5e4574fb6f3756",
+      "output_hash": "f8297ab114d38aaee7c7b8ff2f94b75c4c2a58e6bd0f01520113ac98e95bd504",
+      "latency_ms": 32722,
+      "calls": [
+        {
+          "task": "REVIEW",
+          "review_focus": "GLOBAL",
+          "provider": "google",
+          "model": "gemini-3.1-flash-lite",
+          "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+          "input_hash": "0dbbea9b2bd15ecf627358e943d494625d6368f6704f498113fdd9a0255c12cd",
+          "output_hash": "64422b805fa2bd933c91b96c17d4b4c30c09dca8b5f0b0cccb2c71d42169aced",
+          "usage": {
+            "promptTokenCount": 5476,
+            "candidatesTokenCount": 1235,
+            "totalTokenCount": 6711,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 5476
+              }
+            ],
+            "serviceTier": "standard"
+          },
+          "cost": null,
+          "latency_ms": 13095,
+          "provider_latency_ms": 6331,
+          "finish_reason": "STOP",
+          "attempts": [
+            {
+              "attempt": 1,
+              "latency_ms": 1582,
+              "http_status": 502,
+              "provider_status": 503,
+              "usage": null,
+              "output_hash": null,
+              "backoff_ms": 1000
+            },
+            {
+              "attempt": 2,
+              "latency_ms": 2036,
+              "http_status": 502,
+              "provider_status": 503,
+              "usage": null,
+              "output_hash": null,
+              "backoff_ms": 2000
+            },
+            {
+              "attempt": 3,
+              "latency_ms": 6470,
+              "http_status": 200,
+              "provider_status": null,
+              "usage": {
+                "promptTokenCount": 5476,
+                "candidatesTokenCount": 1235,
+                "totalTokenCount": 6711,
+                "promptTokensDetails": [
+                  {
+                    "modality": "TEXT",
+                    "tokenCount": 5476
+                  }
+                ],
+                "serviceTier": "standard"
+              },
+              "output_hash": "64422b805fa2bd933c91b96c17d4b4c30c09dca8b5f0b0cccb2c71d42169aced"
+            }
+          ]
+        },
+        {
+          "task": "REVIEW",
+          "review_focus": "PDA",
+          "provider": "google",
+          "model": "gemini-3.1-flash-lite",
+          "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+          "input_hash": "7c51409498d5c28efcfa0be1860c99cbe08f547e22b752f1e057c50bcf618b6b",
+          "output_hash": "06890c65ba97396483a08728c4ba81bb348bcaaac1fc3cd5fce57e733c2925d7",
+          "usage": {
+            "promptTokenCount": 2283,
+            "candidatesTokenCount": 338,
+            "totalTokenCount": 2621,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 2283
+              }
+            ],
+            "serviceTier": "standard"
+          },
+          "cost": null,
+          "latency_ms": 1808,
+          "provider_latency_ms": 1618,
+          "finish_reason": "STOP",
+          "attempts": [
+            {
+              "attempt": 1,
+              "latency_ms": 1808,
+              "http_status": 200,
+              "provider_status": null,
+              "usage": {
+                "promptTokenCount": 2283,
+                "candidatesTokenCount": 338,
+                "totalTokenCount": 2621,
+                "promptTokensDetails": [
+                  {
+                    "modality": "TEXT",
+                    "tokenCount": 2283
+                  }
+                ],
+                "serviceTier": "standard"
+              },
+              "output_hash": "06890c65ba97396483a08728c4ba81bb348bcaaac1fc3cd5fce57e733c2925d7"
+            }
+          ]
+        },
+        {
+          "task": "REVIEW",
+          "review_focus": "STAGES",
+          "provider": "google",
+          "model": "gemini-3.1-flash-lite",
+          "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+          "input_hash": "6f477ecf7bfa63a3221801aeb39f80c0227a6a447baf4432481c5b16586ae2ca",
+          "output_hash": "4cac8899ab4a4f6b1d05d03abb99949d33764bf854607e635016c0429d599dcf",
+          "usage": {
+            "promptTokenCount": 2064,
+            "candidatesTokenCount": 469,
+            "totalTokenCount": 2533,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 2064
+              }
+            ],
+            "serviceTier": "standard"
+          },
+          "cost": null,
+          "latency_ms": 3816,
+          "provider_latency_ms": 3637,
+          "finish_reason": "STOP",
+          "attempts": [
+            {
+              "attempt": 1,
+              "latency_ms": 3814,
+              "http_status": 200,
+              "provider_status": null,
+              "usage": {
+                "promptTokenCount": 2064,
+                "candidatesTokenCount": 469,
+                "totalTokenCount": 2533,
+                "promptTokensDetails": [
+                  {
+                    "modality": "TEXT",
+                    "tokenCount": 2064
+                  }
+                ],
+                "serviceTier": "standard"
+              },
+              "output_hash": "4cac8899ab4a4f6b1d05d03abb99949d33764bf854607e635016c0429d599dcf"
+            }
+          ]
+        },
+        {
+          "task": "REVIEW",
+          "review_focus": "METHOD",
+          "provider": "google",
+          "model": "gemini-3.1-flash-lite",
+          "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+          "input_hash": "36b2fdd66c133748ed977ebd81ab9d7496ae069cc97ceb74be626cee1d6f9b07",
+          "output_hash": "1aa73cdda6f0396d66a5b8467c94af64a92a207d4e662150c0a42bd518242d12",
+          "usage": {
+            "promptTokenCount": 2096,
+            "candidatesTokenCount": 1064,
+            "totalTokenCount": 3160,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 2096
+              }
+            ],
+            "serviceTier": "standard"
+          },
+          "cost": null,
+          "latency_ms": 14003,
+          "provider_latency_ms": 13840,
+          "finish_reason": "STOP",
+          "attempts": [
+            {
+              "attempt": 1,
+              "latency_ms": 14003,
+              "http_status": 200,
+              "provider_status": null,
+              "usage": {
+                "promptTokenCount": 2096,
+                "candidatesTokenCount": 1064,
+                "totalTokenCount": 3160,
+                "promptTokensDetails": [
+                  {
+                    "modality": "TEXT",
+                    "tokenCount": 2096
+                  }
+                ],
+                "serviceTier": "standard"
+              },
+              "output_hash": "1aa73cdda6f0396d66a5b8467c94af64a92a207d4e662150c0a42bd518242d12"
+            }
+          ]
+        }
+      ]
     }
   },
   "gate": {
     "gate_version": "BLUEPRINT_GATE_V1",
     "status": "FAIL",
-    "critical_count": 4,
+    "critical_count": 6,
     "warning_count": 0,
     "deterministic_findings": [
       {
@@ -307,7 +804,7 @@
         "status": "PASS",
         "scope": "artifact_inputs",
         "observed": "Procedencia y producción única",
-        "expected": "Inputs anteriores; cada artefacto de etapa producido una vez en la progresión"
+        "expected": "Inputs anteriores; etapas dependientes en la misma sesión o posteriores al productor; cada artefacto producido una vez"
       },
       {
         "rule_id": "BPD-016",
@@ -371,9 +868,9 @@
         "rule_id": "BPS-001",
         "severity": "CRITICAL",
         "status": "PASS",
-        "scope": "Problem, purpose, and outcome",
-        "observed": "The problem of unknown school agreements is linked to the purpose of explaining them, resulting in a museum-style outcome.",
-        "expected": "Clear linkage between problem, purpose, and result."
+        "scope": "Problem, purpose and outcome",
+        "observed": "The project addresses the lack of understanding of school agreements through a museum-type outcome that serves to explain these agreements to new students.",
+        "expected": "Clear link between the identified problem, the pedagogical purpose and the final outcome."
       },
       {
         "rule_id": "BPS-002",
@@ -381,87 +878,87 @@
         "status": "PASS",
         "scope": "Guiding question",
         "observed": "The question '¿Cómo podemos explicar y poner en práctica nuestros acuerdos para convivir mejor?' is accessible to both 1st and 3rd grades.",
-        "expected": "Accessible question for all involved grades."
+        "expected": "A question that sustains the project and is accessible to all involved grades."
       },
       {
         "rule_id": "BPS-003",
         "severity": "CRITICAL",
         "status": "FAIL",
-        "scope": "Functional requirements (Museum/Itinerant)",
-        "observed": "The project declares an 'itinerant museum' but limits movement to the same classroom and patio, failing to demonstrate relocation or reinstallation between two viable spaces/audiences.",
-        "expected": "Evidence of movement between at least two viable spaces or audiences."
+        "scope": "final_outcome.functional_requirements",
+        "observed": "Necessary profile requirements missing: [{\"profile\":\"ITINERANT\",\"missing\":[\"movement\",\"at_least_two_viable_spaces_or_audiences\",\"relocation_or_reinstallation\",\"circulation_evidence\"]}]",
+        "expected": "El resultado cumple su semántica funcional, incluso atributos implícitos; no basta declarar requisitos."
       },
       {
         "rule_id": "BPS-004",
         "severity": "CRITICAL",
         "status": "PASS",
-        "scope": "PDA development",
-        "observed": "1st grade explains situations (F3-DHC-1-010) and 3rd grade investigates practices (F4-DHC-3-001) as core operations.",
-        "expected": "Full PDA development."
+        "scope": "pda_checks",
+        "observed": "[{\"pda_id\":\"F3-DHC-1-010\",\"grade\":1,\"contribution_ids\":[\"grade_1\"],\"stage_ids\":[\"investigate\"],\"operation_quote\":\"Primero aporta dibujos de situaciones con explicación oral\",\"artifact_ids\":[\"shared_explanations\"],\"evidence_reason\":\"El estudiante realiza la operación cognitiva de explicar situaciones cotidianas mediante el dibujo y la explicación oral, cumpliendo con el desempeño de proponer acuerdos según el PDA.\",\"bps004\":\"PASS\",\"bps005\":\"PASS\"},{\"pda_id\":\"F4-DHC-3-001\",\"grade\":3,\"contribution_ids\":[\"grade_3\"],\"stage_ids\":[\"investigate\"],\"operation_quote\":\"tercero registra la consulta y relaciona acuerdo y necesidad\",\"artifact_ids\":[\"shared_explanations\"],\"evidence_reason\":\"El estudiante ejecuta la operación de indagar mediante el registro de consultas y la comparación de testimonios, cumpliendo con el desempeño de grado superior de contrastar significados.\",\"bps004\":\"PASS\",\"bps005\":\"PASS\"}]",
+        "expected": "El PDA completo se desarrolla mediante su aportación, sin reducirlo a coincidencia temática."
       },
       {
         "rule_id": "BPS-005",
         "severity": "CRITICAL",
         "status": "PASS",
-        "scope": "Evidence of cognitive performance",
-        "observed": "Evidence includes drawings with dictated explanations (1st) and registered consultations (3rd).",
-        "expected": "Evidence corresponding to the cognitive action of the PDA."
+        "scope": "pda_checks",
+        "observed": "[{\"pda_id\":\"F3-DHC-1-010\",\"grade\":1,\"contribution_ids\":[\"grade_1\"],\"stage_ids\":[\"investigate\"],\"operation_quote\":\"Primero aporta dibujos de situaciones con explicación oral\",\"artifact_ids\":[\"shared_explanations\"],\"evidence_reason\":\"El estudiante realiza la operación cognitiva de explicar situaciones cotidianas mediante el dibujo y la explicación oral, cumpliendo con el desempeño de proponer acuerdos según el PDA.\",\"bps004\":\"PASS\",\"bps005\":\"PASS\"},{\"pda_id\":\"F4-DHC-3-001\",\"grade\":3,\"contribution_ids\":[\"grade_3\"],\"stage_ids\":[\"investigate\"],\"operation_quote\":\"tercero registra la consulta y relaciona acuerdo y necesidad\",\"artifact_ids\":[\"shared_explanations\"],\"evidence_reason\":\"El estudiante ejecuta la operación de indagar mediante el registro de consultas y la comparación de testimonios, cumpliendo con el desempeño de grado superior de contrastar significados.\",\"bps004\":\"PASS\",\"bps005\":\"PASS\"}]",
+        "expected": "La evidencia corresponde al desempeño cognitivo del PDA completo."
       },
       {
         "rule_id": "BPS-006",
         "severity": "CRITICAL",
         "status": "PASS",
-        "scope": "Integrated project",
-        "observed": "Both grades contribute to a single set of shared explanations for the same museum pieces.",
-        "expected": "Interdependent contributions to a common project."
+        "scope": "Common project",
+        "observed": "Both grades contribute to the same 'shared_explanations' artifact, which is then used in the final assembly.",
+        "expected": "A common project built with interdependent contributions."
       },
       {
         "rule_id": "BPS-007",
         "severity": "CRITICAL",
-        "status": "PASS",
-        "scope": "Progression and operations",
-        "observed": "Each stage (frame, investigate, apply) has defined operations, artifacts, and evidence.",
-        "expected": "Progression with operation, artifact, and evidence at each step."
+        "status": "FAIL",
+        "scope": "stage_checks",
+        "observed": "[{\"stage_id\":\"frame\",\"operation_quote\":\"Identificar juntos situaciones de convivencia que desconocemos, recuperar recuerdos, formular preguntas y acordar qué explicaciones necesita el grupo nuevo.\",\"artifact_id\":\"questions\",\"criteria_quote\":\"Las preguntas responden a la necesidad expresada\",\"consumed_by\":[\"investigate\"],\"outcome_link\":\"El grupo realiza una sesión de diálogo para definir el alcance de la indagación, generando un listado de preguntas que guiarán la búsqueda de información.\",\"bps007\":\"PASS\"},{\"stage_id\":\"investigate\",\"operation_quote\":\"Indagar consultando al docente y contrastando recuerdos del grupo sobre origen, función y significado de dos acuerdos escolares.\",\"artifact_id\":\"shared_explanations\",\"criteria_quote\":\"Las explicaciones usan consulta y acuerdos, no sólo decoración\",\"consumed_by\":[\"apply\"],\"outcome_link\":\"Se produce un registro documental de las consultas realizadas y la construcción de explicaciones basadas en el contraste de testimonios y la relación entre acuerdos y necesidades escolares.\",\"bps007\":\"PASS\"},{\"stage_id\":\"apply\",\"operation_quote\":\"Conducción de la asamblea final de acuerdos y registro de aprendizajes en el cuaderno.\",\"artifact_id\":\"completion\",\"criteria_quote\":\"Existe evidencia de realización con destinatarios del grupo y valoración\",\"consumed_by\":[\"outcome_01\"],\"outcome_link\":\"La operación se limita a una asamblea interna y registro en cuaderno, lo cual no constituye una exposición abierta a la comunidad ni cumple con la naturaleza de museo itinerante declarada.\",\"bps007\":\"FAIL\"}]",
+        "expected": "La progresión produce el resultado y cada avance tiene operación, artefacto y evidencia."
       },
       {
         "rule_id": "BPS-008",
         "severity": "CRITICAL",
-        "status": "PASS",
-        "scope": "Methodology authenticity",
-        "observed": "Operations (identification, investigation, application) are consistent with the Proyectos Comunitarios methodology.",
-        "expected": "Authentic methodology operations."
+        "status": "FAIL",
+        "scope": "methodology_checks",
+        "observed": "[{\"operation_id\":\"IDENTIFICACION\",\"stage_ids\":[\"frame\"],\"operation_quote\":\"Identificar juntos situaciones de convivencia que desconocemos\",\"artifact_ids\":[\"questions\"],\"evidence_reason\":\"La acción de identificar situaciones de convivencia está presente en la etapa frame mediante la formulación de preguntas.\",\"bps008\":\"PASS\"},{\"operation_id\":\"RECUPERACION\",\"stage_ids\":[\"frame\"],\"operation_quote\":\"recuperar recuerdos\",\"artifact_ids\":[\"questions\"],\"evidence_reason\":\"Se realiza la recuperación de recuerdos como parte del proceso de formulación de preguntas.\",\"bps008\":\"PASS\"},{\"operation_id\":\"PLANIFICACION\",\"stage_ids\":[\"frame\"],\"operation_quote\":\"acordar qué explicaciones necesita el grupo nuevo. Seleccionar prácticas y criterios\",\"artifact_ids\":[\"questions\"],\"evidence_reason\":\"La selección de criterios y la definición de necesidades de explicación constituyen la planificación.\",\"bps008\":\"PASS\"},{\"operation_id\":\"ACERCAMIENTO\",\"stage_ids\":[\"investigate\"],\"operation_quote\":\"Indagar consultando al docente y contrastando recuerdos\",\"artifact_ids\":[\"shared_explanations\"],\"evidence_reason\":\"La indagación y consulta directa constituyen el acercamiento al objeto de estudio.\",\"bps008\":\"PASS\"},{\"operation_id\":\"COMPRENSION_Y_PRODUCCION\",\"stage_ids\":[\"investigate\"],\"operation_quote\":\"construir explicaciones y acuerdos razonados\",\"artifact_ids\":[\"shared_explanations\"],\"evidence_reason\":\"La construcción de explicaciones razonadas demuestra la comprensión y producción de conocimiento.\",\"bps008\":\"PASS\"},{\"operation_id\":\"RECONOCIMIENTO\",\"stage_ids\":[\"investigate\"],\"operation_quote\":\"Registrar semejanzas y diferencias de testimonios\",\"artifact_ids\":[\"shared_explanations\"],\"evidence_reason\":\"El registro de semejanzas y diferencias implica el reconocimiento de los datos obtenidos.\",\"bps008\":\"PASS\"},{\"operation_id\":\"CONCRECION\",\"stage_ids\":[\"investigate\"],\"operation_quote\":\"Revisar juntos que cada pieza permita comprender la misma pregunta\",\"artifact_ids\":[\"shared_explanations\"],\"evidence_reason\":\"La revisión y validación de las piezas asegura la concreción del producto final.\",\"bps008\":\"PASS\"},{\"operation_id\":\"INTEGRACION\",\"stage_ids\":[\"apply\"],\"operation_quote\":\"Conducción de la asamblea final de acuerdos\",\"artifact_ids\":[\"completion\"],\"evidence_reason\":\"La asamblea integra los aprendizajes previos en un evento de cierre.\",\"bps008\":\"PASS\"},{\"operation_id\":\"DIFUSION\",\"stage_ids\":[\"apply\"],\"operation_quote\":\"Exposición abierta a la comunidad\",\"artifact_ids\":[\"completion\"],\"evidence_reason\":\"El proyecto se define como museo itinerante pero no hay evidencia de circulación fuera del aula, fallando la difusión requerida para este tipo.\",\"bps008\":\"FAIL\"},{\"operation_id\":\"CONSIDERACIONES\",\"stage_ids\":[\"apply\"],\"operation_quote\":\"registro de aprendizajes en el cuaderno\",\"artifact_ids\":[\"completion\"],\"evidence_reason\":\"El registro en el cuaderno constituye la consideración y cierre reflexivo.\",\"bps008\":\"PASS\"},{\"operation_id\":\"AVANCES\",\"stage_ids\":[\"apply\"],\"operation_quote\":\"Conducción de la asamblea final\",\"artifact_ids\":[\"completion\"],\"evidence_reason\":\"La asamblea representa el avance operativo final del proyecto.\",\"bps008\":\"PASS\"}]",
+        "expected": "Las operaciones realizan auténticamente la metodología; reflexión no sustituye servicio, intervención o indagación."
       },
       {
         "rule_id": "BPS-009",
         "severity": "CRITICAL",
         "status": "PASS",
         "scope": "Complexity and autonomy",
-        "observed": "Supports like teacher modeling and peer support are explicitly included for the low-autonomy profile.",
-        "expected": "Complexity and supports aligned with student profiles."
+        "observed": "The project accounts for the low autonomy profile by including teacher modeling and peer support.",
+        "expected": "Complexity and supports must be adequate to the grades and profiles."
       },
       {
         "rule_id": "BPS-010",
         "severity": "CRITICAL",
         "status": "PASS",
         "scope": "Temporal feasibility",
-        "observed": "The 3-session structure is feasible for the defined complexity and scope.",
-        "expected": "Feasibility based on complexity and stages."
+        "observed": "The 270 minutes allocated are distributed across three stages with clear, simple tasks suitable for the context.",
+        "expected": "Feasibility based on complexity and stages, not just time multiplication."
       },
       {
         "rule_id": "BPS-011",
         "severity": "CRITICAL",
         "status": "PASS",
         "scope": "Transversal grades",
-        "observed": "Each grade works on its own PDA (F3-DHC-1-010 and F4-DHC-3-001) without inheriting requirements from the other.",
-        "expected": "No inheritance of PDA requirements between grades."
+        "observed": "1st and 3rd grades have distinct roles (explaining vs inquiring) that do not overlap or inherit requirements.",
+        "expected": "Grades must not inherit contents or requirements from other PDAs."
       },
       {
         "rule_id": "BPS-012",
         "severity": "CRITICAL",
         "status": "PASS",
         "scope": "LTG",
-        "observed": "LTG is absent; justified by the context of using internal school experiences.",
-        "expected": "Pertinent LTG or justified absence."
+        "observed": "LTG is not selected, which is justified by the context of consulting internal school experiences.",
+        "expected": "LTG must be pertinent and authorized; absence can be a justified PASS."
       }
     ],
     "evaluated_blueprint_hash": "e972d2209171dde1bfcd689af6a97d3bf1643697bcbc09d3bb0dceefc10cc876",

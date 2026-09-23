@@ -11,12 +11,12 @@ Deno.serve(async(req:Request)=>{
  try{
   const raw=await req.text();if(raw.length>500000)return json({code:'PAYLOAD_TOO_LARGE'},413);
   const b=JSON.parse(raw);
-  if(!['GENERATE','REPAIR','REVIEW'].includes(b.task)||b.prompt_version!=='PROJECT_BLUEPRINT_SHADOW_V1'||b.model!=='gemini-3.1-flash-lite')return json({code:'INVALID_SHADOW_OPERATION'},400);
+  if(!['GENERATE','REPAIR','REVIEW'].includes(b.task)||b.prompt_version!=='PROJECT_BLUEPRINT_SHADOW_V1_R2'||!['gemini-3.1-flash-lite','gemini-3.1-pro-preview'].includes(b.model))return json({code:'INVALID_SHADOW_OPERATION'},400);
   if(!b.input||!b.input.constraints||!b.input.curriculum||!b.input.methodology||b.task==='GENERATE'&&b.input.blueprint)return json({code:'INVALID_INPUT'},400);
   if(typeof b.system!=='string'||typeof b.prompt!=='object')return json({code:'INVALID_PROMPT'},400);
   const key=Deno.env.get('Multiplan');if(!key)return json({code:'PROVIDER_KEY_UNAVAILABLE'},503);
   const start=Date.now();
-  const response=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${b.model}:generateContent`,{method:'POST',headers:{'content-type':'application/json','x-goog-api-key':key},body:JSON.stringify({systemInstruction:{parts:[{text:b.system}]},contents:[{role:'user',parts:[{text:JSON.stringify(b.prompt)}]}],generationConfig:{temperature:0.15,maxOutputTokens:22000,responseMimeType:'application/json'}}),signal:AbortSignal.timeout(180000)});
+  const response=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${b.model}:generateContent`,{method:'POST',headers:{'content-type':'application/json','x-goog-api-key':key},body:JSON.stringify({systemInstruction:{parts:[{text:b.system}]},contents:[{role:'user',parts:[{text:JSON.stringify(b.prompt)}]}],generationConfig:{temperature:0.15,maxOutputTokens:22000,responseMimeType:'application/json',responseJsonSchema:b.response_schema}}),signal:AbortSignal.timeout(180000)});
   const result=await response.json();if(!response.ok)return json({code:'PROVIDER_ERROR',provider_status:response.status},502);
   const text=result?.candidates?.[0]?.content?.parts?.map((p:any)=>p.text||'').join('')||'';
   return json({output:JSON.parse(text),provider:'google',model:b.model,latency_ms:Date.now()-start,usage:result.usageMetadata||null,cost:null,finish_reason:result?.candidates?.[0]?.finishReason||null});

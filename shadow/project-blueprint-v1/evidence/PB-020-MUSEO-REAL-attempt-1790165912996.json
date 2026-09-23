@@ -1,0 +1,26 @@
+{
+  "id": "PB-020-MUSEO-REAL",
+  "error": "Error: PROVIDER_ERROR:404",
+  "telemetry": {
+    "task": "REVIEW",
+    "provider": "google",
+    "model": "gemini-2.5-pro",
+    "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+    "input_hash": "dfe8420928822707910179bcf8aa6a10cb7f3d668070b46dbd8bb46754517e66",
+    "output_hash": null,
+    "usage": null,
+    "cost": null,
+    "latency_ms": 321,
+    "attempts": [
+      {
+        "attempt": 1,
+        "latency_ms": 320,
+        "http_status": 502,
+        "provider_status": 404,
+        "usage": null,
+        "output_hash": null
+      }
+    ]
+  },
+  "match": false
+}
