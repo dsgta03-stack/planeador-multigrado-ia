@@ -1,5 +1,5 @@
 {
-  "version": "PEDAGOGICAL-REVIEW-V1-SHADOW",
+  "version": "PEDAGOGICAL-REVIEW-V1.1-SHADOW-CALIBRATION",
   "purpose": "Casos mínimos reproducibles para calibrar las reglas pedagógicas antes de volverlas gobernantes.",
   "cases": [
     {
@@ -26,6 +26,26 @@
       "id": "pda-session-overdeclaration",
       "description": "La cabecera de una sesión declara todos los PDA seleccionados, pero los momentos ejecutables sólo trazan un subconjunto.",
       "expected": {"rule_ids": ["PDA-04"], "severity": "CRITICAL", "mode": "DETERMINISTIC-CONTEXT-POSTCHECK"}
+    },
+    {
+      "id": "pda-session-header-mismatch",
+      "description": "La cabecera declara un subconjunto de PDA, pero los momentos ejecutables movilizan otros PDA adicionales.",
+      "expected": {"rule_ids": ["PDA-03"], "severity": "CRITICAL", "mode": "DETERMINISTIC-CONTEXT-POSTCHECK"}
+    },
+    {
+      "id": "deterministic-pass-beats-semantic-fail",
+      "description": "El evaluador semántico intenta marcar FAIL en una regla cuya comprobación determinista autoritativa dio PASS.",
+      "expected": {"semantic_finding_suppressed": true, "calibration_reason": "DETERMINISTIC_PASS"}
+    },
+    {
+      "id": "session-has-concrete-advance",
+      "description": "El modelo afirma que una sesión no avanza el proyecto, pero la estructura contiene evidencia observable y project_advance/product_relation.",
+      "expected": {"rule_id": "SES-01", "semantic_finding_suppressed": true, "calibration_reason": "CONCRETE_ADVANCE_VERIFIED"}
+    },
+    {
+      "id": "artifact-is-observable-evidence",
+      "description": "El modelo llama actividad a una evidencia que en realidad es un artefacto observable, como tarjeta, ficha, dibujo, resumen o mural.",
+      "expected": {"rule_id": "EVD-01", "semantic_finding_suppressed": true, "calibration_reason": "OBSERVABLE_EVIDENCE_VERIFIED"}
     },
     {
       "id": "transversal-with-invented-pda",
