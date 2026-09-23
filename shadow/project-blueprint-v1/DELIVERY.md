@@ -138,3 +138,13 @@ main mantiene df21810bcec69be34f4df950e4474283ad7bb079. PR #3 y #4 siguen abiert
 5. Actualizar esta entrega y detenerse para revisión pedagógica.
 
 Los schemas completos, catálogo, árbol y reglas de la entrega inicial se conservan en [DELIVERY-ROUND1.md](DELIVERY-ROUND1.md) y schemas/. Esta ronda no cambia sus reglas.
+
+## Continuación 2026-09-23 18:47 UTC — bloqueo operacional
+
+Se retomó desde el respaldo GitHub `7a67d40d337a1fd9358cf63c22e8af187ad3222e`, sin repetir las 63 pruebas locales documentadas. La sonda mínima de Gemini 3.1 Flash Lite respondió HTTP 200 (`ok: true`): 24 020 ms totales, 14 315 ms de proveedor, 25 tokens de entrada y 5 de salida.
+
+Se añadió una cola compartida por proceso para todas las llamadas del runner, focos de revisión y reintentos: una solicitud simultánea y al menos 8 segundos entre inicios (máximo 8 en cualquier minuto). El runner se ejecutó en un único proceso. Verificación focalizada con reloj simulado: diez solicitudes concurrentes se serializaron con inicios 0, 8000, …, 72000 ms; el rechazo de una solicitud no bloqueó la cola. `node --check provider.mjs` pasó. No se modificaron contratos, prompts, reglas del Gate ni criterios pedagógicos.
+
+El lote final se detuvo en PB-001: tres respuestas de proveedor 503, con inicios a las 18:47:13.934, 18:47:25.047 y 18:47:33.050 UTC. Resultado `PROVIDER_UNAVAILABLE`, sin salida generada, sin revisión semántica completada y sin reparación pedagógica. La evidencia completa permanece en `evidence/PB-001.json`; el intento anterior fue archivado automáticamente. No se hicieron más llamadas al proveedor después de ese fallo final. Gemini Pro no se utilizó.
+
+Estado: no se alcanzó 22/22; no se ejecutaron generación positiva ni adversarial. PB-007/PB-020 y las 63 pruebas previas conservan su evidencia histórica, sin afirmar que se hayan repetido. No existe un nuevo Blueprint APPROVED. La producción, main, PR #3, PR #4, autenticación e historial productivos no fueron modificados. SessionGraph no se inició. **NO LISTA PARA AVANZAR: bloqueo operacional del proveedor.**

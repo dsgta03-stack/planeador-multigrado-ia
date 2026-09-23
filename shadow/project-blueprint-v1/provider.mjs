@@ -1,3 +1,4 @@
+import {limitShadowRequest} from './request-limiter.mjs';
 import {generationSchema} from './generation-schema.mjs';
 import {REVIEW_SCHEMA,localEvidenceInput,EVIDENCE_INSTRUCTIONS} from './semantic-evidence.mjs';
 import {hash,schemaFor,sourceBinding} from './contracts.mjs';
@@ -39,16 +40,19 @@ export async function callProvider(task,input,{endpoint,token,identity='multipla
  const base={task,review_focus:task==='REVIEW'?reviewFocus:null,provider:'google',model,prompt_version:PROMPT_VERSION,input_hash:hash({task,system,prompt,response_schema}),output_hash:null,usage:null,cost:null};
  const body=JSON.stringify({task,prompt_version:PROMPT_VERSION,model,system,prompt,input,response_schema});
  for(let attempt=1;attempt<=3;attempt++){
-  const started=Date.now();let response,r;
+  let started=Date.now(),response,r;
   try{
+   await limitShadowRequest(async(startedAt)=>{
+   started=startedAt;
    response=await fetchImpl(endpoint,{method:'POST',headers:{'content-type':'application/json',authorization:`Bearer ${token}`,'x-shadow-identity':identity},body,signal:AbortSignal.timeout(210000)});
    r=await response.json();
+   });
   }catch(error){
    // Timeout/network outcome is ambiguous: no automatic replay of that request.
-   attempts.push({attempt,latency_ms:Date.now()-started,error:String(error),outcome:'UNKNOWN'});
+   attempts.push({attempt,started_at:new Date(started).toISOString(),latency_ms:Date.now()-started,error:String(error),outcome:'UNKNOWN'});
    error.code='PROVIDER_UNAVAILABLE';error.telemetry={...base,latency_ms:Date.now()-start,attempts};throw error;
   }
-  attempts.push({attempt,latency_ms:Date.now()-started,http_status:response.status,provider_status:r.provider_status||null,usage:r.usage||null,output_hash:r.output?hash(r.output):null});
+  attempts.push({attempt,started_at:new Date(started).toISOString(),latency_ms:Date.now()-started,http_status:response.status,provider_status:r.provider_status||null,usage:r.usage||null,output_hash:r.output?hash(r.output):null});
   if(response.ok){
    if(task==='REVIEW'&&r.output?.audit_version!=='LOCAL_EVIDENCE_V1')throw Error('SEMANTIC_AUDIT_MISSING');
    return {output:r.output,telemetry:{...base,output_hash:hash(r.output),latency_ms:Date.now()-start,provider_latency_ms:r.latency_ms,usage:r.usage,cost:r.cost,finish_reason:r.finish_reason,attempts}};
