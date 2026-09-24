@@ -32,5 +32,23 @@ function projectShape(n){const o={};if(n.type!==undefined)o.type=n.type;if(n.pro
 export function validateSessionGraphAuthoring(proposal,source){
  const schema=sessionGraphAuthoringSchema(source);const errors=schemaErrors(proposal,schema);
  const extra=(v,s,p='$')=>{if(Array.isArray(v)){if(s.maxItems!==undefined&&v.length>s.maxItems)errors.push(`${p}: maxItems`);v.forEach((x,i)=>extra(x,s.items,`${p}[${i}]`));return}if(v&&typeof v==='object'){for(const [k,x] of Object.entries(v))if(s.properties?.[k])extra(x,s.properties[k],`${p}.${k}`);return}if(typeof v==='string'&&s.maxLength!==undefined&&v.length>s.maxLength)errors.push(`${p}: maxLength ${s.maxLength}`);};
- extra(proposal,schema);if(errors.length){const e=Error(`SESSION_GRAPH_AUTHORING_CONTRACT: ${errors.join('; ')}`);e.code='SESSION_GRAPH_AUTHORING_INVALID';throw e}return true;
+ extra(proposal,schema);
+ const {blueprint,curriculum}=source;
+ const stageByArtifact=new Map((blueprint.project_stages||[]).map(s=>[s.output_artifact_id,s.stage_id]));
+ const reqById=new Map((blueprint.final_outcome?.functional_requirements||[]).map(r=>[r.requirement_id,r]));
+ const pdaById=new Map((curriculum.pdas||[]).map(p=>[p.pda_id,p]));
+ for(const row of proposal?.sessions||[]){
+  const b=blueprint.session_progression.find(s=>s.session_number===row.session_number);if(!b)continue;
+  const stageIds=new Set((b.expected_output_artifact_ids||[]).map(id=>stageByArtifact.get(id)).filter(Boolean));
+  const methods=new Set(b.methodology_operations||[]),artifacts=new Set(b.expected_output_artifact_ids||[]),pdas=new Set(b.pda_focus||[]);
+  for(const a of row.activities||[]){
+   if((a.methodology_operations||[]).some(op=>!methods.has(op)))errors.push(`$.sessions[${row.session_number}].${a.activity_key}: methodology operation outside session`);
+   if((a.contributes_to_artifact_ids||[]).some(id=>!artifacts.has(id)))errors.push(`$.sessions[${row.session_number}].${a.activity_key}: artifact outside session`);
+   if(a.contribution_mode==='DIRECT'&&!(a.contributes_to_artifact_ids||[]).length)errors.push(`$.sessions[${row.session_number}].${a.activity_key}: DIRECT requires artifact`);
+   if(a.contribution_mode==='COMPLEMENTARY'&&(a.contributes_to_artifact_ids||[]).length)errors.push(`$.sessions[${row.session_number}].${a.activity_key}: COMPLEMENTARY cannot claim artifact`);
+   for(const id of a.functional_requirement_ids||[]){const r=reqById.get(id);if(!r||!(r.stage_ids||[]).some(x=>stageIds.has(x)))errors.push(`$.sessions[${row.session_number}].${a.activity_key}: functional requirement ${id} outside authorized stage`)}
+   for(const g of a.grade_participation||[])for(const m of g.pda_mobilization||[]){const p=pdaById.get(m.pda_id);if(!pdas.has(m.pda_id)||!p||p.grade!==g.grade)errors.push(`$.sessions[${row.session_number}].${a.activity_key}: PDA ${m.pda_id} outside session/grade`)}
+  }
+ }
+ if(errors.length){const e=Error(`SESSION_GRAPH_AUTHORING_CONTRACT: ${errors.join('; ')}`);e.code='SESSION_GRAPH_AUTHORING_INVALID';throw e}return true;
 }
