@@ -1,0 +1,44 @@
+{
+  "code": "PROVIDER_OUTPUT_INVALID_JSON",
+  "model": "gemini-3.5-flash-lite",
+  "provider_status": 200,
+  "finish_reason": "MAX_TOKENS",
+  "usage": {
+    "promptTokenCount": 6434,
+    "candidatesTokenCount": 21983,
+    "totalTokenCount": 28417,
+    "promptTokensDetails": [
+      {
+        "modality": "TEXT",
+        "tokenCount": 6434
+      }
+    ],
+    "serviceTier": "standard"
+  },
+  "usageMetadata": {
+    "promptTokenCount": 6434,
+    "candidatesTokenCount": 21983,
+    "totalTokenCount": 28417,
+    "promptTokensDetails": [
+      {
+        "modality": "TEXT",
+        "tokenCount": 6434
+      }
+    ],
+    "serviceTier": "standard"
+  },
+  "text_length": 137608,
+  "text_truncated": true,
+  "parse_error": "SyntaxError: Unterminated string in JSON at position 137608 (line 231 column 127329)",
+  "parse_error_position": 137608,
+  "latency_ms": 51621,
+  "status": "PROVIDER_OUTPUT_INVALID_JSON",
+  "repair_count": 0,
+  "revisions": 0,
+  "google_calls": 1,
+  "google_transport_attempts": 1,
+  "preceding_shadow_403_calls": 1,
+  "client_latency_ms": 62121,
+  "retained_candidate_characters": 100000,
+  "source_evidence": "construction-positive-1790208014571.json"
+}

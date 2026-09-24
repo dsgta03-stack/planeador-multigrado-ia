@@ -1,0 +1,21 @@
+import {readFileSync,writeFileSync} from 'node:fs';
+import {sources} from './fixtures/build.mjs';
+import {makeConstraints} from './contracts.mjs';
+import {constructionPlan} from './construction.mjs';
+import {generateShadow,assertApproved} from './shadow.mjs';
+const mode=process.argv[2]||'positive';
+if(process.env.MULTIPLAN_SHADOW_MODEL!=='gemini-3.5-flash-lite')throw Error('EXPLICIT_FLASH35_REQUIRED');
+const options=JSON.parse(readFileSync(process.env.MULTIPLAN_SHADOW_AUTH_FILE));options.model=process.env.MULTIPLAN_SHADOW_MODEL;
+let src=sources({method:'proyectos_comunitarios'});
+if(mode==='adversarial'){
+ if(!process.argv[3])throw Error('APPROVED_EVIDENCE_REQUIRED');
+ const prior=JSON.parse(readFileSync(process.argv[3]));assertApproved(prior);
+ src={...src,constraints:makeConstraints({...src.constraints,requested_sessions:1,minutes_per_session:1,teacher_explicit_constraints:[...src.constraints.teacher_explicit_constraints,'Debe consultarse al docente y al grupo por separado, contrastar dos testimonios, construir piezas explicadas, presentarlas en aula y patio y registrar las preguntas recibidas dentro del único minuto disponible. No se permite trabajo antes o después ni alargar el tiempo.']})};
+}else if(mode!=='positive')throw Error('INVALID_MODE');
+const plan=constructionPlan(src),stamp=Date.now();options.constructionPlan=plan;
+writeFileSync(new URL(`./evidence/construction-${mode}-plan-${stamp}.json`,import.meta.url),JSON.stringify({sources:src,plan},null,2));
+const result=await generateShadow(src,options);
+const file=new URL(`./evidence/construction-${mode}-${stamp}.json`,import.meta.url);
+writeFileSync(file,JSON.stringify({case:mode,sources:src,construction_plan:plan,...result},null,2));
+if(result.status==='APPROVED')assertApproved(result);
+console.log(JSON.stringify({file:file.pathname,status:result.status,repair_count:result.repair_count,errors:result.errors,failures:[...result.gate?.deterministic_findings||[],...result.gate?.semantic_findings||[]].filter(f=>f.status!=='PASS').map(f=>({rule:f.rule_id,status:f.status,observed:f.observed}))}));

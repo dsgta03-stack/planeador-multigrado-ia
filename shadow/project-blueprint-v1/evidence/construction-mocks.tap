@@ -1,0 +1,15 @@
+✔ official text and owning grade are copied exactly; source never changed (5.101037ms)
+✔ PDA_SELECTED cannot claim another grade PDA (1.17664ms)
+✔ future and same-session session inputs rejected (1.417575ms)
+✔ duplicate production and output artifact IDs rejected (1.292816ms)
+✔ eleven operations fit three purpose-based stages without eleven-stage requirement (1.23604ms)
+✔ coverage labels without observable literal action/evidence rejected (0.366494ms)
+✔ full teacher budget allowed; per-session and total excess rejected without scaling (1.530215ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 93.73197
