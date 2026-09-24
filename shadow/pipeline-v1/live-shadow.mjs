@@ -16,12 +16,8 @@ export async function runLiveShadowPipeline({sources,endpoint,token,identity='mu
  const sessionDrivers=createSessionGraphDrivers({endpoint,token,identity,model,durableEvidence:true,fetchImpl,...(sleep?{sleep}:{})});
  const result=await runShadowPipeline({
   sources,
-  drivers:{sessionAuthor:sessionDrivers.sessionAuthor,sessionRepair:sessionDrivers.sessionRepair,sessionReview:sessionDrivers.sessionReview},
-  options:{
-   graphId:graphId||undefined,
-   maxSessionRepairs,
-   blueprintOptions:{endpoint,token,identity,model,constructionPlan:plan,authoringCompact:true,durableEvidence:true,evidenceDirectory,fetchImpl,...(sleep?{sleep}:{})}
-  }
+  drivers:{sessionAuthor:sessionDrivers.sessionAuthor,sessionRepair:sessionDrivers.sessionRepair,sessionReview:sessionDrivers.sessionReview,sessionCriticalReview:sessionDrivers.sessionCriticalReview},
+  options:{graphId:graphId||undefined,maxSessionRepairs,blueprintOptions:{endpoint,token,identity,model,constructionPlan:plan,authoringCompact:true,durableEvidence:true,evidenceDirectory,fetchImpl,...(sleep?{sleep}:{})}}
  });
  return Object.freeze({...result,runtime:{runner_version:LIVE_SHADOW_RUNNER_VERSION,session_provider:sessionDrivers.diagnostics()}});
 }
