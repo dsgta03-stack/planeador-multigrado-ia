@@ -1,0 +1,64 @@
+name: Router Live Provider Shadow Validation
+
+on:
+  push:
+    branches:
+      - pipeline-v1-router-e2e-validated-shadow
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  live-provider-shadow:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout exact shadow branch
+        uses: actions/checkout@v4
+
+      - name: Setup Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Run controlled real-provider validation
+        env:
+          SUPABASE_URL: https://dvcrwzxznuqongutnifn.supabase.co
+          SUPABASE_ANON_KEY: shadow-validation-no-authority
+          LIVE_SHADOW_PROXY_URL: https://dvcrwzxznuqongutnifn.supabase.co/functions/v1/plan-multiplan-pipeline-v1-shadow
+          LIVE_SHADOW_EVIDENCE_DIR: /tmp/multiplan-live-provider-evidence
+          PORT: '3099'
+        shell: bash
+        run: |
+          set -euo pipefail
+          OIDC_JSON="$(curl -fsSL -H "Authorization: bearer ${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=multiplan-live-shadow")"
+          export LIVE_SHADOW_PROXY_TOKEN="$(printf '%s' "$OIDC_JSON" | node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>process.stdout.write(JSON.parse(s).value))")"
+          test "${#LIVE_SHADOW_PROXY_TOKEN}" -gt 40
+          mkdir -p "$LIVE_SHADOW_EVIDENCE_DIR"
+          node shadow/router-integration-v1/run-live-provider-validation.mjs > "$LIVE_SHADOW_EVIDENCE_DIR/runner.log" 2>&1 &
+          PID=$!
+          PHASE="BOOT"
+          for i in $(seq 1 240); do
+            sleep 5
+            if curl -fsS http://127.0.0.1:3099/ > "$LIVE_SHADOW_EVIDENCE_DIR/state.json" 2>/dev/null; then
+              PHASE="$(node -e "const fs=require('fs');try{process.stdout.write(String(JSON.parse(fs.readFileSync(process.argv[1],'utf8')).phase||''))}catch{}" "$LIVE_SHADOW_EVIDENCE_DIR/state.json")"
+              if [ "$PHASE" = "DONE" ] || [ "$PHASE" = "FATAL" ]; then break; fi
+            fi
+            if ! kill -0 "$PID" 2>/dev/null; then break; fi
+          done
+          kill "$PID" 2>/dev/null || true
+          wait "$PID" 2>/dev/null || true
+          cat "$LIVE_SHADOW_EVIDENCE_DIR/runner.log"
+          echo "FINAL_PHASE=$PHASE"
+          if [ "$PHASE" != "DONE" ]; then exit 1; fi
+
+      - name: Upload durable validation artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: router-live-provider-shadow-evidence
+          path: /tmp/multiplan-live-provider-evidence
+          if-no-files-found: warn
+          retention-days: 7
