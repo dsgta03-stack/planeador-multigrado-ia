@@ -27,13 +27,13 @@ export const SGD=Object.freeze({
 
 export const SGS=Object.freeze({
  'SGS-001':'Las actividades hacen avanzar el estado de cada sesión desde project_state_before hasta project_state_after.',
- 'SGS-002':'Las acciones por grado desarrollan realmente el desempeño cognitivo del PDA completo, no sólo lo nombran.',
- 'SGS-003':'La evidencia y los criterios permiten observar el aprendizaje declarado y el avance del proyecto.',
+ 'SGS-002':'Las acciones por grado desarrollan realmente el desempeño cognitivo del PDA completo; WORKED sólo es válido cuando la actividad realiza el desempeño y finalidad completos, DEVELOPING cuando sólo moviliza una parte.',
+ 'SGS-003':'La evidencia y los criterios permiten observar el aprendizaje declarado y el avance del proyecto mediante desempeños, productos o registros verificables, no fórmulas vagas.',
  'SGS-004':'Las operaciones metodológicas se realizan auténticamente mediante acciones del alumnado.',
- 'SGS-005':'No hay actividades de relleno: cada una construye directamente el artefacto o prepara de forma necesaria una actividad posterior.',
+ 'SGS-005':'No hay actividades de relleno ni falsos DIRECT: DIRECT produce una parte observable del artefacto esperado; una preparación necesaria consumida después es COMPLEMENTARY.',
  'SGS-006':'La secuencia de outputs e inputs produce los artefactos de sesión y sostiene continuidad entre sesiones.',
  'SGS-007':'La organización multigrado integra aportaciones diferenciadas e interdependientes, no dos trayectorias paralelas.',
- 'SGS-008':'Las actividades realizan de manera concreta los requisitos funcionales del resultado final aprobado.',
+ 'SGS-008':'Cada vínculo a un requisito funcional corresponde a una actividad que realmente ejecuta ese requisito y produce su evidencia; no basta la cobertura nominal.',
  'SGS-009':'La complejidad, autonomía, apoyos y formas de participación son adecuadas a cada grado.',
  'SGS-010':'La distribución temporal es pedagógicamente realista a nivel de actividad, no sólo aritméticamente válida.',
  'SGS-011':'El alumnado toma decisiones, indaga, produce, explica o evalúa según corresponda; el docente no sustituye la acción cognitiva central.',
