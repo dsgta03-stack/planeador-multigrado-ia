@@ -11,6 +11,7 @@ const REVIEW_SHAPE={type:'object',properties:{input_hash:{type:'string'},finding
 const sleepDefault=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 const sourcesOnly=ctx=>({constraints:ctx.sources.constraints,curriculum:ctx.sources.curriculum,methodology:ctx.sources.methodology});
 const sessionSource=ctx=>({...sourcesOnly(ctx),blueprint:ctx.blueprint,approval:ctx.approval});
+const repairShape=source=>({type:'object',properties:{status:{type:'string'},reason:{type:'string'},proposal:providerAuthoringShapeSchema(source)},required:['status','reason','proposal']});
 
 function assertConfig({endpoint,token,identity,model}){
  if(typeof endpoint!=='string'||!endpoint.startsWith('https://')||!endpoint.endsWith('/plan-project-blueprint-v1-shadow'))throw Error('SESSION_PROVIDER_SHADOW_ENDPOINT_REQUIRED');
@@ -76,16 +77,21 @@ export function createSessionGraphDrivers({endpoint,token,identity='multiplan-bl
 
  const sessionRepair=async ctx=>{
   const source=sessionSource(ctx);
-  const response_schema=providerAuthoringShapeSchema(source);
+  const response_schema=repairShape(source);
   const reasons=ctx.triggering_rules||[ctx.compile_error].filter(Boolean);
   const {payload,request_id}=await call('REPAIR',{
-   system:'Eres un arquitecto pedagógico de SessionGraph. Repara sólo la microarquitectura de actividades. No cambies ni reinterpretas el ProjectBlueprint aprobado.',
-   prompt:{provider_version:SESSION_PROVIDER_VERSION,authoring_version:'SESSION_GRAPH_AUTHORING_V1',instruction:SESSION_GRAPH_AUTHORING_INSTRUCTION,repair_instruction:'Corrige únicamente los fallos reportados. Conserva problema, pregunta guía, metodología, PDA, producto, etapas, artefactos, progresión, LTG y presupuesto del ProjectBlueprint. No añadas texto para aparentar PASS. Si las restricciones hacen imposible ejecutar el Blueprint, responde mediante el protocolo de imposibilidad del caller en lugar de alterar el proyecto.',triggering_rules:reasons,previous_proposal:ctx.previous_proposal,approved_blueprint_hash:ctx.approval.approved_blueprint_hash,blueprint:ctx.blueprint,constraints:ctx.sources.constraints,curriculum:ctx.sources.curriculum,methodology:ctx.sources.methodology},
+   system:'Eres un arquitecto pedagógico de SessionGraph. Repara sólo la microarquitectura de actividades. No cambies ni reinterpretes el ProjectBlueprint aprobado.',
+   prompt:{provider_version:SESSION_PROVIDER_VERSION,authoring_version:'SESSION_GRAPH_AUTHORING_V1',instruction:SESSION_GRAPH_AUTHORING_INSTRUCTION,repair_protocol:{status_values:['PROPOSAL','BLUEPRINT_REVISION_REQUIRED'],rule:'Usa PROPOSAL si puedes corregir la microarquitectura sin cambiar el Blueprint. Usa BLUEPRINT_REVISION_REQUIRED únicamente si existe una contradicción concreta entre el Blueprint aprobado y las restricciones autorizadas que impide construir un SessionGraph válido. En ese caso explica la contradicción en reason y devuelve previous_proposal sin cambios en proposal; no revises el Blueprint.'},repair_instruction:'Corrige únicamente los fallos reportados. Conserva problema, pregunta guía, metodología, PDA, producto, etapas, artefactos, progresión, LTG y presupuesto del ProjectBlueprint. No añadas texto para aparentar PASS.',triggering_rules:reasons,previous_proposal:ctx.previous_proposal,approved_blueprint_hash:ctx.approval.approved_blueprint_hash,blueprint:ctx.blueprint,constraints:ctx.sources.constraints,curriculum:ctx.sources.curriculum,methodology:ctx.sources.methodology},
    input:{...sourcesOnly(ctx),blueprint:ctx.blueprint},response_schema,input_hash:hash({blueprint:ctx.blueprint,previous_proposal:ctx.previous_proposal,reasons})
   });
-  const proposal=outputFromPayload(payload);
-  validateSessionGraphAuthoring(proposal,source);
-  return {proposal,provider:{request_id,model,finish_reason:payload.finish_reason||null,usage:payload.usage||payload.usageMetadata||null}};
+  const repaired=outputFromPayload(payload);
+  if(repaired.status==='BLUEPRINT_REVISION_REQUIRED'){
+   if(typeof repaired.reason!=='string'||!repaired.reason.trim())throw Error('SESSION_PROVIDER_REVISION_REASON_REQUIRED');
+   return {status:'BLUEPRINT_REVISION_REQUIRED',reason:repaired.reason,provider:{request_id,model,finish_reason:payload.finish_reason||null,usage:payload.usage||payload.usageMetadata||null}};
+  }
+  if(repaired.status!=='PROPOSAL')throw Error('SESSION_PROVIDER_REPAIR_STATUS_INVALID');
+  validateSessionGraphAuthoring(repaired.proposal,source);
+  return {proposal:repaired.proposal,provider:{request_id,model,finish_reason:payload.finish_reason||null,usage:payload.usage||payload.usageMetadata||null}};
  };
 
  const sessionReview=async ({input,request})=>{
