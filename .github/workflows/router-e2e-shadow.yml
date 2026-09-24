@@ -1,0 +1,31 @@
+name: Router E2E Shadow
+
+on:
+  push:
+    branches:
+      - pipeline-v1-router-integrated-shadow
+    paths-ignore:
+      - 'shadow/router-integration-v1/evidence/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  router-e2e-shadow:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout exact shadow commit
+        uses: actions/checkout@v4
+      - name: Use Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Fail-closed adapter and router E2E tests
+        run: >-
+          node --test
+          shadow/integration-v1/tests/legacy-request-adapter.test.mjs
+          shadow/router-integration-v1/tests/router-integration.test.mjs
+          shadow/router-integration-v1/tests/router-e2e-real-request.test.mjs
+      - name: Pipeline focal regression
+        run: node --test shadow/pipeline-v1/tests/*.test.mjs
