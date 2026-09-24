@@ -2,7 +2,7 @@
 
 Provider Authoring Proposal → compilador de construcción → ProjectBlueprintV1 completo → contrato de dominio → Gate determinista → revisión semántica sobre el mismo hash.
 
-**No habilitada en el runner/proveedor vivo. No validada con Gemini.** La primera versión está implementada en `authoring-proposal.mjs`, tiene contrato de transporte propio y pruebas sintéticas locales. No se modifica la representación final de dominio, ni se usa una salida histórica truncada para construir un candidato.
+**Conectada mediante opt-in en el runner/proveedor shadow. Compatibilidad real pendiente: el único intento devolvió 400 INVALID_ARGUMENT.** La primera versión está implementada en `authoring-proposal.mjs`, tiene contrato de transporte propio y pruebas sintéticas locales. No se modifica la representación final de dominio, ni se usa una salida histórica truncada para construir un candidato.
 
 ## Propiedad de la información
 
@@ -32,4 +32,4 @@ El compilador rechaza campos adicionales: el proveedor no puede suplantar source
 
 ## Pendiente
 
-Integrar explícitamente esta propuesta y la instrucción en una futura versión de GENERATE/REPAIR, registrar versión/hash efectivo y evaluar compatibilidad del schema y fidelidad pedagógica con autorización nueva. El protocolo vivo de esta ronda sólo incorpora el máximo diagnóstico configurable. No se hacen llamadas para probar compactación en esta fase.
+La integración explícita en GENERATE/REPAIR ya registra versión y hash efectivo. Falta resolver compatibilidad del schema/configuración con Google y evaluar fidelidad pedagógica real con una autorización nueva; el único intento actual recibió 400 antes de generar candidato. No hubo una segunda generación. La política de texto excesivo ahora emite AUTHORING_FIELD_EXCESSIVE_LENGTH y no crea reparación pedagógica.

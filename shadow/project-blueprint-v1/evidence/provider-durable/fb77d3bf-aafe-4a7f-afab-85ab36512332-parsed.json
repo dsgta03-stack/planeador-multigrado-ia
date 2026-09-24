@@ -1,0 +1,19 @@
+{
+  "timestamp": "2026-09-24T04:56:45.047Z",
+  "task": "GENERATE",
+  "model": "gemini-3.5-flash-lite",
+  "http_status": 400,
+  "provider_status": 400,
+  "latency_ms": 533,
+  "max_output_tokens": 65536,
+  "finish_reason": null,
+  "usageMetadata": null,
+  "promptTokenCount": null,
+  "candidatesTokenCount": null,
+  "totalTokenCount": null,
+  "candidate_text": "",
+  "text_length": 0,
+  "parse_result": "PROVIDER_ERROR",
+  "parse_error": null,
+  "parse_error_position": null
+}

@@ -1,0 +1,24 @@
+{
+  "function": "plan-project-blueprint-v1-shadow",
+  "version": 13,
+  "bundle_sha256": "1320c428beafa4e5085b4b8606beb9665233a6b03e7e314d5077cf6eeb6daa6d",
+  "bucket": "multiplan-blueprint-shadow-evidence-v1",
+  "bucket_public": false,
+  "storage_policies_before": [],
+  "policies_added": [],
+  "verified_request_id": "fb77d3bf-aafe-4a7f-afab-85ab36512332",
+  "verified_objects": [
+    "request.json",
+    "received.json",
+    "parsed.json",
+    "result.json"
+  ],
+  "ordering_utc": {
+    "request": "2026-09-24T04:56:44.471061Z",
+    "received": "2026-09-24T04:56:45.137793Z",
+    "parsed": "2026-09-24T04:56:45.238860Z",
+    "result": "2026-09-24T04:56:45.355876Z"
+  },
+  "product_user_tables_touched": false,
+  "production_auth_changed": false
+}

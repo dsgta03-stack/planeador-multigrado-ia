@@ -1,0 +1,19 @@
+✔ compact proposal compiles to same full domain without inventing or removing pedagogy (7.899142ms)
+✔ source ownership exact; domain/Gate bytes and deterministic result remain unchanged (6.403199ms)
+✔ eleven operations, artifact provenance, budget and conceptual states preserved (4.434522ms)
+✔ authoring bloat rejected without truncation, repair, or domain change (2.573277ms)
+✔ references cannot fabricate evidence, operations, or compiler-owned source values (9.462077ms)
+✔ provider proposal remains compact and excludes deterministic metadata (0.373463ms)
+✔ valid provider response persisted BEFORE envelope and candidate parsing; later Gate cannot remove it (3.242165ms)
+✔ invalid JSON and MAX_TOKENS retain full candidate, finish, tokens and parse error (0.585041ms)
+✔ persist failure prevents parser; no reconstruction or content retry (0.474284ms)
+✔ secrets absent from received and parsed durable evidence (0.240793ms)
+✔ private storage only, immutable path and no secrets serialized into stored body (2.875753ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 122.381688

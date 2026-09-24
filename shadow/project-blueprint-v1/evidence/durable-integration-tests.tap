@@ -1,0 +1,10 @@
+✔ compact live protocol polls stored result, records raw response before returning to evaluator (12.373524ms)
+✔ construction-mode deterministic failure stops before semantic calls or pedagogical repair (5.760971ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 97.320982

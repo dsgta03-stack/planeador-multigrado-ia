@@ -1,4 +1,4 @@
-// Offline initial implementation. Not enabled in the live runner/provider.
+// Opt-in compact authoring for the isolated shadow runner.
 // This contract can reject authoring output; it cannot approve a Blueprint.
 import {assertContract,hash,schemaErrors,sourceBinding} from './contracts.mjs';
 import {constructionPlan,constructionTransport,compileConstruction} from './construction.mjs';
@@ -25,7 +25,7 @@ function validateAuthoring(value,s,path='$'){
   if(typeof v==='string'&&x.maxLength!==undefined&&v.length>x.maxLength)errors.push(`${p}: maxLength ${x.maxLength}`);
   if(Array.isArray(v)){if(x.maxItems!==undefined&&v.length>x.maxItems)errors.push(`${p}: maxItems`);v.forEach((item,i)=>extra(item,x.items,`${p}[${i}]`));}
   else if(v&&typeof v==='object')for(const [k,item] of Object.entries(v))if(x.properties?.[k])extra(item,x.properties[k],`${p}.${k}`);
- };extra(value,s,path);if(errors.length)throw Error(`AUTHORING_CONTRACT: ${errors.join('; ')}`);
+ };extra(value,s,path);if(errors.length){const e=Error(`AUTHORING_CONTRACT: ${errors.join('; ')}`);e.code=errors.some(x=>x.includes('maxLength'))?'AUTHORING_FIELD_EXCESSIVE_LENGTH':'AUTHORING_CONTRACT_INVALID';throw e;}
 }
 export function compileAuthoring(proposal,src,plan,{blueprint_id,revision=1}={}){
  if(!blueprint_id||![1,2].includes(revision))throw Error('AUTHORING_ENVELOPE_REQUIRED');

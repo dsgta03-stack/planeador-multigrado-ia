@@ -1,3 +1,4 @@
+import {compileAuthoring} from './authoring-proposal.mjs';
 import {compileConstruction} from './construction.mjs';
 import {applyEvidenceAudit} from './semantic-evidence.mjs';
 import {randomUUID} from 'node:crypto';
@@ -38,14 +39,14 @@ export async function generateShadow(sources,options={},provider=callProvider){
   telemetry.push({...r.telemetry,repair_count:repairCount});
   let raw=structuredClone(r.output);
   if(options.constructionPlan){
-   try{const built=compileConstruction(raw,options.constructionPlan);construction_attempts.push({revision,status:'CONSTRUCTED',...built.record});raw=built.blueprint;}
-   catch(e){construction_attempts.push({revision,status:'CONSTRUCTION_REJECTED',raw_proposal:raw,rule:e.rule||null,error:String(e)});errors.push({revision,task:'CONSTRUCT',code:'CONSTRUCTION_REJECTED',error:String(e)});break;}
+   try{const built=options.authoringCompact?compileAuthoring(raw,frozen,options.constructionPlan,{blueprint_id:id,revision}):compileConstruction(raw,options.constructionPlan);construction_attempts.push({revision,status:'CONSTRUCTED',...built.record});raw=built.blueprint;}
+   catch(e){construction_attempts.push({revision,status:'CONSTRUCTION_REJECTED',raw_proposal:raw,rule:e.rule||null,error:String(e)});errors.push({revision,task:'CONSTRUCT',code:e.code||'CONSTRUCTION_REJECTED',error:String(e)});break;}
   }
   // Envelope IDs are assigned by the orchestrator, never pedagogy or source fields.
   const b={...raw,blueprint_id:id,revision,status:'DRAFT',gate_result:null};
   const input={...frozen,blueprint:b};let gate=blueprintGate(input),semantic=null,reviewUnavailable=false;
   // Full gate is rerun after semantic review. Invalid schema is never sent for review.
-  if(!gate.deterministic_findings.some(x=>x.rule_id==='BPD-SCHEMA'&&x.status==='FAIL')){
+  if(!gate.deterministic_findings.some(x=>(options.constructionPlan||x.rule_id==='BPD-SCHEMA')&&x.status!=='PASS')){
    try{semantic=await reviewBlueprint(input,options,provider);telemetry.push({...semantic.telemetry,repair_count:revision-1})}catch(e){telemetry.push({...e.telemetry,task:'REVIEW',error:String(e),repair_count:revision-1});reviewUnavailable=true;errors.push({revision,task:'REVIEW',code:e.code||'PROVIDER_ERROR',error:String(e)})}
    gate=blueprintGate(input,semantic);
   }

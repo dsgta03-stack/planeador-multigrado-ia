@@ -1,0 +1,15 @@
+{
+  "http_status": 502,
+  "body": {
+    "timestamp": "2026-09-24T04:56:45.047Z",
+    "task": "GENERATE",
+    "model": "gemini-3.5-flash-lite",
+    "http_status": 400,
+    "provider_status": 400,
+    "latency_ms": 533,
+    "max_output_tokens": 65536,
+    "code": "PROVIDER_ERROR",
+    "provider_error_status": "INVALID_ARGUMENT",
+    "provider_message": "Request contains an invalid argument."
+  }
+}

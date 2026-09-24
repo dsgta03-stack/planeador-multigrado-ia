@@ -5,7 +5,7 @@ import {constructionPlan} from './construction.mjs';
 import {generateShadow,assertApproved} from './shadow.mjs';
 const mode=process.argv[2]||'positive';
 if(process.env.MULTIPLAN_SHADOW_MODEL!=='gemini-3.5-flash-lite')throw Error('EXPLICIT_FLASH35_REQUIRED');
-const options=JSON.parse(readFileSync(process.env.MULTIPLAN_SHADOW_AUTH_FILE));options.model=process.env.MULTIPLAN_SHADOW_MODEL;options.diagnosticMaxOutput=process.env.MULTIPLAN_SHADOW_OUTPUT_DIAGNOSTIC==='1';
+const options=JSON.parse(readFileSync(process.env.MULTIPLAN_SHADOW_AUTH_FILE));options.model=process.env.MULTIPLAN_SHADOW_MODEL;options.authoringCompact=process.env.MULTIPLAN_SHADOW_AUTHORING_COMPACT==='1';options.durableEvidence=options.authoringCompact;options.evidenceDirectory=new URL('./evidence/provider-durable/',import.meta.url).pathname;options.diagnosticMaxOutput=process.env.MULTIPLAN_SHADOW_OUTPUT_DIAGNOSTIC==='1';
 let src=sources({method:'proyectos_comunitarios'});
 if(mode==='adversarial'){
  if(!process.argv[3])throw Error('APPROVED_EVIDENCE_REQUIRED');
