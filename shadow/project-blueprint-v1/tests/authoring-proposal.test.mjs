@@ -4,7 +4,7 @@ import {readFileSync} from 'node:fs';
 import {sources,candidate} from '../fixtures/build.mjs';
 import {authoringSchema,compileAuthoring} from '../authoring-proposal.mjs';
 import {constructionPlan,compileConstruction,validateConstruction} from '../construction.mjs';
-import {assertContract,hash} from '../contracts.mjs';
+import {assertContract,hash,schemaFor} from '../contracts.mjs';
 import {blueprintGate} from '../gate.mjs';
 const src=sources(),plan=constructionPlan(src);
 // Test-only conversion of an explicitly authored synthetic fixture. Never a live PASS.
@@ -54,4 +54,14 @@ test('provider proposal remains compact and excludes deterministic metadata',()=
  assert(!('official_text' in p.pda_analysis[0]));assert(!('output_artifact_id' in p.project_stages[0]));
  assert(!('total_available_minutes' in p.feasibility));assert(!('evidence_quote' in p.coverage[0]));
  assert(JSON.stringify(p).length<JSON.stringify(baseline).length);
+});
+test('all model-owned domain enums are restored in local compact authoring',()=>{
+ const d=schemaFor('ProjectBlueprintV1').properties,p=schema.properties;
+ assert.deepEqual(p.guiding_question.properties.grade_accessibility.enum,d.guiding_question.properties.grade_accessibility.enum);
+ assert.deepEqual(p.final_outcome.properties.type.enum,d.final_outcome.properties.type.enum);
+ assert.deepEqual(p.pda_analysis.items.properties.integration_strength.enum,d.pda_analysis.items.properties.integration_strength.enum);
+ assert.deepEqual(p.ltg_strategy.properties.mode.enum,d.ltg_strategy.properties.mode.enum);
+ assert.deepEqual(p.ltg_strategy.properties.selections.items.properties.role.enum,d.ltg_strategy.properties.selections.items.properties.role.enum);
+ for(const key of ['complexity','resource_feasibility','time_feasibility','multigrade_feasibility'])assert.deepEqual(p.feasibility.properties[key].enum,d.feasibility.properties[key].enum);
+ const invalid=proposal();invalid.ltg_strategy.mode='none';invalid.feasibility.complexity='Baja';assert.throws(()=>build(invalid),e=>e.code==='AUTHORING_CONTRACT_INVALID');
 });
