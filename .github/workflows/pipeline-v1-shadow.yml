@@ -1,0 +1,28 @@
+name: Multiplan Pipeline V1 Shadow
+
+on:
+  push:
+    branches:
+      - pipeline-v1-shadow
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  focal-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Blueprint boundary tests
+        run: node --test shadow/project-blueprint-v1/tests/contracts-gate.test.mjs shadow/project-blueprint-v1/tests/construction.test.mjs shadow/project-blueprint-v1/tests/authoring-proposal.test.mjs
+      - name: SessionGraph boundary tests
+        run: node --test shadow/session-graph-v1/tests/*.test.mjs
+      - name: End-to-end pipeline boundary tests
+        run: node --test shadow/pipeline-v1/tests/*.test.mjs
