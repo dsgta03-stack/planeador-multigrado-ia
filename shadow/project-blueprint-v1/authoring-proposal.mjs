@@ -3,8 +3,9 @@
 import {assertContract,hash,schemaErrors,sourceBinding} from './contracts.mjs';
 import {constructionPlan,constructionTransport,compileConstruction} from './construction.mjs';
 import {transportSchema} from './transport-schema.mjs';
+import {FUNCTIONAL_PROFILES} from './catalog.mjs';
 export const AUTHORING_VERSION='BLUEPRINT_AUTHORING_COMPACT_V1';
-export const AUTHORING_INSTRUCTION='Escribe decisiones pedagógicas concretas, una idea por campo, sin introducciones ni ensayos. No repitas el PDA completo ni expliques de nuevo la metodología. Conserva acciones observables, evidencia, criterios, aportaciones por grado y progresión conceptual. support_need: hasta 1200 caracteres; otros textos: hasta 4000. Estos son límites de autoría, no criterios de aprobación pedagógica. Si no puedes expresar evidencia suficiente, informa la limitación; no sustituyas acciones por etiquetas. No escribas metadatos que completa el compilador. Las referencias de evidencia deben señalar texto escrito por ti en la etapa indicada.';
+export const AUTHORING_INSTRUCTION='Escribe decisiones pedagógicas concretas, una idea por campo, sin introducciones ni ensayos. No repitas el PDA completo ni expliques de nuevo la metodología. Conserva acciones observables, evidencia, criterios, aportaciones por grado y progresión conceptual. support_need: hasta 1200 caracteres; otros textos: hasta 4000. Estos son límites de autoría, no criterios de aprobación pedagógica. Si no puedes expresar evidencia suficiente, informa la limitación; no sustituyas acciones por etiquetas. No escribas metadatos que completa el compilador. functional_profiles contiene sólo nombres de perfiles del catálogo (por ejemplo MUSEUM o ITINERANT), nunca sus requirement_id; functional_requirements contiene una fila por cada requisito del perfil declarado. Las referencias de evidencia deben señalar texto escrito por ti en la etapa indicada.';
 const omit=(s,keys)=>{for(const k of keys)delete s.properties[k];s.required=s.required.filter(k=>!keys.includes(k));};
 export function authoringSchema(src,plan){
  const s=constructionTransport(transportSchema(src),plan),p=s.properties;
@@ -13,11 +14,11 @@ export function authoringSchema(src,plan){
  omit(p.feasibility,['requested_sessions','minutes_per_session','total_available_minutes']);
  omit(p.grade_contributions.items,['contribution_id']);
  omit(p.session_progression.items,['terminal','next_session_dependency']);
- // Keep model-owned domain enums in the LOCAL authoring contract/prompt. The provider
- // shape projection removes these before Gemini decoder validation, so they add no
- // provider-schema complexity but prevent avoidable domain-contract failures later.
+ // Model-owned domain values remain strict locally/in the prompt. The provider decoder
+ // projection removes these enums, so they do not increase Gemini schema complexity.
  p.guiding_question.properties.grade_accessibility.enum=['ALL_GRADES'];
  p.final_outcome.properties.type.enum=['MATERIAL_PRODUCT','EXHIBITION','MUSEUM','CAMPAIGN','INVESTIGATION','PROPOSAL','PROTOTYPE','SERVICE','INTERVENTION','COMMUNICATION','COLLECTIVE_DOCUMENT','TRANSFORMATION','OTHER'];
+ p.final_outcome.properties.functional_profiles.items.enum=Object.keys(FUNCTIONAL_PROFILES);
  p.pda_analysis.items.properties.integration_strength.enum=['DIRECT','VIABLE_WITH_SPECIFIC_CONTRIBUTION','SECONDARY','WEAK','INCOMPATIBLE'];
  p.coverage={type:'array',minItems:plan.coverage_matrix.length,maxItems:plan.coverage_matrix.length,items:{type:'object',properties:{operation:{type:'string',enum:plan.coverage_matrix.map(x=>x.operation)},stage_id:{type:'string',enum:plan.stages.map(x=>x.stage_id)},action_quote:{type:'string'},evidence_ref:{type:'object',properties:{field:{type:'string',enum:['expected_output','acceptance_criteria']},index:{anyOf:[{type:'integer',minimum:0},{type:'null'}]}},required:['field','index']}},required:['operation','stage_id','action_quote','evidence_ref']}};
  s.required.push('coverage');
