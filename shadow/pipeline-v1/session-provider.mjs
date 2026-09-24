@@ -6,6 +6,7 @@ import {SESSION_GRAPH_REVIEW_INSTRUCTION} from '../session-graph-v1/reviewer.mjs
 export const SESSION_PROVIDER_VERSION='SESSION_GRAPH_PROVIDER_V1';
 export const SESSION_PROVIDER_MODEL='gemini-3.5-flash-lite';
 export const SHADOW_PROMPT_VERSION='PROJECT_BLUEPRINT_SHADOW_V1_R2';
+export const ALLOWED_SHADOW_ENDPOINT_SUFFIXES=Object.freeze(['/plan-project-blueprint-v1-shadow','/plan-multiplan-pipeline-v1-shadow']);
 
 const REVIEW_SHAPE={type:'object',properties:{input_hash:{type:'string'},findings:{type:'array',items:{type:'object',properties:{rule_id:{type:'string'},status:{type:'string'},scope:{type:'string'},observed:{type:'string'},expected:{type:'string'}},required:['rule_id','status','scope','observed','expected']}}},required:['input_hash','findings']};
 const sleepDefault=ms=>new Promise(resolve=>setTimeout(resolve,ms));
@@ -14,7 +15,7 @@ const sessionSource=ctx=>({...sourcesOnly(ctx),blueprint:ctx.blueprint,approval:
 const repairShape=source=>({type:'object',properties:{status:{type:'string'},reason:{type:'string'},proposal:providerAuthoringShapeSchema(source)},required:['status','reason','proposal']});
 
 function assertConfig({endpoint,token,identity,model}){
- if(typeof endpoint!=='string'||!endpoint.startsWith('https://')||!endpoint.endsWith('/plan-project-blueprint-v1-shadow'))throw Error('SESSION_PROVIDER_SHADOW_ENDPOINT_REQUIRED');
+ if(typeof endpoint!=='string'||!endpoint.startsWith('https://')||!ALLOWED_SHADOW_ENDPOINT_SUFFIXES.some(suffix=>endpoint.endsWith(suffix)))throw Error('SESSION_PROVIDER_SHADOW_ENDPOINT_REQUIRED');
  if(typeof token!=='string'||token.length<40)throw Error('SESSION_PROVIDER_SHADOW_TOKEN_REQUIRED');
  if(typeof identity!=='string'||!identity)throw Error('SESSION_PROVIDER_SHADOW_IDENTITY_REQUIRED');
  if(model!==SESSION_PROVIDER_MODEL)throw Error('SESSION_PROVIDER_MODEL_LOCKED');
@@ -66,8 +67,6 @@ export function createSessionGraphDrivers({endpoint,token,identity='multiplan-bl
   const {payload,request_id}=await call('GENERATE',{
    system:'Eres un diseñador experto de secuencias didácticas multigrado de la Nueva Escuela Mexicana. El ProjectBlueprint aprobado es inmutable. Tu autoridad termina en la microarquitectura de actividades.',
    prompt:{provider_version:SESSION_PROVIDER_VERSION,authoring_version:'SESSION_GRAPH_AUTHORING_V1',instruction:SESSION_GRAPH_AUTHORING_INSTRUCTION,approved_blueprint_hash:ctx.approval.approved_blueprint_hash,blueprint:ctx.blueprint,constraints:ctx.sources.constraints,curriculum:ctx.sources.curriculum,methodology:ctx.sources.methodology},
-   // The protected Blueprint shadow endpoint forbids blueprint inside GENERATE.input.
-   // The immutable Blueprint is therefore prompt context, while input remains the three source artifacts.
    input:sourcesOnly(ctx),response_schema,input_hash:hash({blueprint:ctx.blueprint,approval:ctx.approval,sources:ctx.sources})
   });
   const proposal=outputFromPayload(payload);
