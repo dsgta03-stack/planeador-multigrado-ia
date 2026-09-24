@@ -27,6 +27,8 @@ test('compiles immutable graph and deterministic invariants pass',()=>{const f=f
 
 test('rejects orphan complementary activity',()=>{const f=fixture();f.proposal.sessions[0].activities[1].input_refs=['input_context'];assert.throws(()=>compileSessionGraph(f.proposal,f,{graph_id:'g1'}),/SGD-010/);});
 
+test('rejects complementary activity that claims expected artifact',()=>{const f=fixture();f.proposal.sessions[0].activities[0].contributes_to_artifact_ids=['artifact_1'];assert.throws(()=>compileSessionGraph(f.proposal,f,{graph_id:'g1'}),/SGD-010/);});
+
 test('rejects foreign PDA grade',()=>{const f=fixture();f.proposal.sessions[0].activities[0].grade_participation[0].pda_mobilization=[{pda_id:'p3',status:'WORKED'}];assert.throws(()=>compileSessionGraph(f.proposal,f,{graph_id:'g1'}),/SGD-007/);});
 
 test('rejects functional requirement linked outside authorized stage',()=>{const f=fixture();f.proposal.sessions[0].activities[1].functional_requirement_ids=['mounting'];assert.throws(()=>compileSessionGraph(f.proposal,f,{graph_id:'g1'}),/SGD-012/);});
