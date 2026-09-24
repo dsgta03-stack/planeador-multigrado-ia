@@ -1,5 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
-import {authoringSchema} from '../authoring-proposal.mjs';import {providerResponseSchema,assertProviderSchema} from '../provider-schema.mjs';import {hash} from '../contracts.mjs';import {REVIEW_SCHEMA} from '../semantic-evidence.mjs';
+import {authoringSchema} from '../authoring-proposal.mjs';import {providerResponseSchema,providerAuthoringShapeSchema,assertProviderSchema} from '../provider-schema.mjs';import {hash} from '../contracts.mjs';import {REVIEW_SCHEMA} from '../semantic-evidence.mjs';
 const old=JSON.parse(readFileSync(new URL('../evidence/schema-400-effective-request.json',import.meta.url))),local=authoringSchema(old.request.input,old.request.prompt.construction_plan);
 test('historical schema exactly reproduced; only maxLength removed and local limits retained',()=>{
  assert.deepEqual(local,old.request.response_schema);const h=hash(local),{schema,removed}=providerResponseSchema(local);
@@ -17,3 +17,13 @@ test('unknown constraints fail closed; supported refs, arrays, enums and nullabi
  const s={$defs:{value:{type:'string',enum:['A','B']}},type:'object',properties:{rows:{type:'array',items:{$ref:'#/$defs/value'},minItems:1,maxItems:3},nullable:{anyOf:[{type:'integer',minimum:0},{type:'null'}]}},required:['rows','nullable'],additionalProperties:false};assert.deepEqual(providerResponseSchema(s).schema,s);
 });
 test('review local minLength remains intact; transport projection passes guard',()=>{const h=hash(REVIEW_SCHEMA);assert.throws(()=>assertProviderSchema(REVIEW_SCHEMA),e=>e.keyword==='minLength');const p=providerResponseSchema(REVIEW_SCHEMA);assert(p.removed.every(x=>x.keyword==='minLength'));assertProviderSchema(p.schema);assert.equal(hash(REVIEW_SCHEMA),h);});
+test('compact authoring uses decoder shape without weakening local contract',()=>{
+ const h=hash(local),p=providerAuthoringShapeSchema(local),serialized=JSON.stringify(p.schema);
+ assert.equal(hash(local),h);assert.equal(p.profile,'AUTHORING_SHAPE_V1');assertProviderSchema(p.schema);
+ assert.deepEqual(p.schema.required,local.required);assert.deepEqual(Object.keys(p.schema.properties),Object.keys(local.properties));
+ assert.equal(p.schema.properties.grade_contributions.items.properties.support_need.type,'string');
+ assert.equal(p.schema.properties.final_outcome.properties.required_resources.items.properties.alternative.type.includes('null'),true);
+ for(const keyword of ['maxLength','minLength','enum','minItems','maxItems','minimum','maximum','additionalProperties','anyOf'])assert.equal(serialized.includes(`\"${keyword}\"`),false,keyword);
+ assert.equal(local.properties.grade_contributions.items.properties.support_need.maxLength,1200);
+ assert.equal(local.properties.coverage.minItems,11);
+});
