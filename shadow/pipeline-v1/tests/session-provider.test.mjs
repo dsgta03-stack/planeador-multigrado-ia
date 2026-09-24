@@ -32,7 +32,7 @@ test('GENERATE keeps approved Blueprint out of protected endpoint input and uses
 
 test('REPAIR preserves Blueprint as immutable context and validates repaired proposal',async()=>{
  const f=fixture();let sent;
- const fetchImpl=async (_url,init)=>{sent=JSON.parse(init.body);return jsonResponse({provider:'google',finish_reason:'STOP',output:f.proposal})};
+ const fetchImpl=async (_url,init)=>{sent=JSON.parse(init.body);return jsonResponse({provider:'google',finish_reason:'STOP',output:{status:'PROPOSAL',reason:'microarquitectura corregida',proposal:f.proposal}})};
  const drivers=createSessionGraphDrivers({endpoint,token,durableEvidence:false,fetchImpl});
  const result=await drivers.sessionRepair({...f.ctx,previous_proposal:f.proposal,compile_error:{rule:'SGD-010',message:'bad contribution'}});
  assert.equal(result.proposal.sessions.length,1);
@@ -40,6 +40,17 @@ test('REPAIR preserves Blueprint as immutable context and validates repaired pro
  assert.equal(sent.input.blueprint.blueprint_id,'bp1');
  assert.equal(sent.prompt.previous_proposal.authoring_version,'SESSION_GRAPH_AUTHORING_V1');
  assert.equal(sent.prompt.triggering_rules[0].rule,'SGD-010');
+ assert.deepEqual(sent.response_schema.required,['status','reason','proposal']);
+});
+
+test('REPAIR can request Blueprint revision without rewriting it',async()=>{
+ const f=fixture();
+ const fetchImpl=async()=>jsonResponse({provider:'google',finish_reason:'STOP',output:{status:'BLUEPRINT_REVISION_REQUIRED',reason:'el presupuesto aprobado no permite ejecutar la etapa',proposal:f.proposal}});
+ const drivers=createSessionGraphDrivers({endpoint,token,durableEvidence:false,fetchImpl});
+ const result=await drivers.sessionRepair({...f.ctx,previous_proposal:f.proposal,compile_error:{rule:'SGD-005',message:'time'}});
+ assert.equal(result.status,'BLUEPRINT_REVISION_REQUIRED');
+ assert.match(result.reason,/presupuesto/);
+ assert.equal('proposal' in result,false);
 });
 
 test('REVIEW sends exact semantic input hash and returns semantic envelope',async()=>{
