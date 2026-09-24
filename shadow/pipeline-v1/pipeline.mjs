@@ -1,6 +1,5 @@
 import {randomUUID} from 'node:crypto';
 import {deepFreeze,hash} from '../project-blueprint-v1/contracts.mjs';
-import {generateShadow,assertApproved} from '../project-blueprint-v1/shadow.mjs';
 import {compileSessionGraph} from '../session-graph-v1/session-graph.mjs';
 import {sessionGraphGate,approveSessionGraph} from '../session-graph-v1/gate.mjs';
 import {buildSessionGraphReviewRequest} from '../session-graph-v1/reviewer.mjs';
@@ -24,9 +23,14 @@ const freezeClone=value=>deepFreeze(structuredClone(value));
 const errorInfo=e=>({code:e?.code||'ERROR',rule:e?.rule||null,message:String(e?.message||e)});
 const exactSourceKeys=s=>Object.keys(s||{}).sort().join(',')==='constraints,curriculum,methodology';
 
+export function assertApprovedBlueprintEnvelope(envelope){
+ const blueprintHash=envelope?.blueprint?hash(envelope.blueprint):null;
+ if(!envelope||envelope.status!=='APPROVED'||envelope.gate?.gate_version!=='BLUEPRINT_GATE_V1'||envelope.gate?.status!=='PASS'||!blueprintHash||envelope.approved_blueprint_hash!==blueprintHash||envelope.gate.evaluated_blueprint_hash!==blueprintHash)throw Error('APPROVED_BLUEPRINT_TAMPERED_OR_NOT_APPROVED');
+ return blueprintHash;
+}
+
 export function blueprintApprovalFromEnvelope(envelope){
- assertApproved(envelope);
- const blueprint_hash=hash(envelope.blueprint);
+ const blueprint_hash=assertApprovedBlueprintEnvelope(envelope);
  return deepFreeze({
   approval_version:'PROJECT_BLUEPRINT_APPROVAL_V1',
   status:'APPROVED',
@@ -51,6 +55,7 @@ function normalizeSemantic(result){
 }
 
 async function defaultBlueprintRunner(sources,{blueprintOptions={},blueprintProvider}={}){
+ const {generateShadow}=await import('../project-blueprint-v1/shadow.mjs');
  return generateShadow(sources,blueprintOptions,blueprintProvider);
 }
 
