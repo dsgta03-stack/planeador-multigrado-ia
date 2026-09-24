@@ -1,0 +1,27 @@
+{
+  "status": "DIAGNOSTIC_RESULT_UNAVAILABLE",
+  "model": "gemini-3.5-flash-lite",
+  "configured_max_output_tokens": 65536,
+  "review_max_output_tokens": 22000,
+  "runner_invocations": 1,
+  "plan_file": "construction-positive-plan-1790217326541.json",
+  "expected_result_file": "construction-positive-1790217326541.json",
+  "result_file_present": false,
+  "provider_status": null,
+  "finish_reason": null,
+  "usage": null,
+  "latency_ms": null,
+  "transport_attempts": null,
+  "reason": "Automatic approval review rejected polling the already launched process because it considered disclosure to Supabase/provider insufficiently established. Sources were subsequently confirmed synthetic and endpoint isolated shadow; process was no longer available and left no response file. No repeat generation was started. Provider completion and consumption cannot be confirmed.",
+  "semantic_result": null,
+  "approved_blueprint_hash": null,
+  "adversarial_executed": false,
+  "new_generation_repeated": false,
+  "historical_audit_source": "construction-positive-1790208014571.json",
+  "shadow_deployment": {
+    "function": "plan-project-blueprint-v1-shadow",
+    "version": 12,
+    "bundle_sha256": "a81abbfe78c2dc2c85077c1a431cdc4636af1c96ceb202d02bbca7b81e977bb5"
+  },
+  "production_changed": false
+}

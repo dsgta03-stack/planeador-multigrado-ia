@@ -1,0 +1,2250 @@
+{
+  "source_file": "construction-positive-1790208014571.json",
+  "source_sha256": "f4f3d5f0a070ea8286b3074860a27bc34923a774e1a78ac1afaa33f17c2fc9a3",
+  "source_status": "PROVIDER_OUTPUT_INVALID_JSON",
+  "provider_text_length": 137608,
+  "retained_characters": 100000,
+  "text_truncated": true,
+  "measurement": "Observed prefix only. Incomplete node lengths are lower bounds. Containers overlap their children; do not sum all nodes. No partial Blueprint reconstructed.",
+  "top_leaf_fields": [
+    {
+      "path": "$.grade_contributions[0].support_need",
+      "type": "string",
+      "characters": 89698,
+      "complete_in_retained_prefix": false,
+      "preview": "Modelado docente y apoyo entre pares de tercer grado para la redacción de ideas breves con dictado al maestro o registros gráficos de apoyo alfanumérico básico ",
+      "whitespace_characters": 11678,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.pda_analysis[1].cognitive_interpretation.official_text_basis",
+      "type": "string",
+      "characters": 185,
+      "complete_in_retained_prefix": true,
+      "preview": "Indaga acerca de ideas, conocimientos, prácticas culturales, formas de organización y acuerdos familiares, escolares y comunitarios, para compartir su importanc",
+      "whitespace_characters": 22,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.description",
+      "type": "string",
+      "characters": 178,
+      "complete_in_retained_prefix": true,
+      "preview": "Exhibición itinerante de carteles y explicaciones orales presentadas en el aula y en el patio techado para explicar las prácticas y acuerdos de convivencia a co",
+      "whitespace_characters": 26,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.problem_frame.original_problem",
+      "type": "string",
+      "characters": 158,
+      "complete_in_retained_prefix": true,
+      "preview": "En el grupo desconocemos por qué existen nuestros acuerdos y prácticas escolares; esto dificulta convivir y explicar su importancia a los compañeros nuevos.",
+      "whitespace_characters": 22,
+      "longest_whitespace_run": 1,
+      "ownership": "REFERENCE_ONLY"
+    },
+    {
+      "path": "$.problem_frame.pedagogical_focus",
+      "type": "string",
+      "characters": 149,
+      "complete_in_retained_prefix": true,
+      "preview": "Indagación y explicación de los acuerdos escolares y comunitarios mediante la creación de un recorrido explicativo itinerante dentro de la escuela.",
+      "whitespace_characters": 20,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.problem_frame.context_relevance",
+      "type": "string",
+      "characters": 147,
+      "complete_in_retained_prefix": true,
+      "preview": "Permite al alumnado de primero y tercer grado comprender y revalorar la convivencia escolar sin requerir recursos externos o conexión a internet.",
+      "whitespace_characters": 21,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.pda_analysis[0].cognitive_interpretation.official_text_basis",
+      "type": "string",
+      "characters": 147,
+      "complete_in_retained_prefix": true,
+      "preview": "Explica situaciones cotidianas que se presentan en la escuela y la casa, con la intención de proponer acuerdos que generen una mejor convivencia.",
+      "whitespace_characters": 22,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.problem_frame.why_project_is_needed",
+      "type": "string",
+      "characters": 145,
+      "complete_in_retained_prefix": true,
+      "preview": "Porque fortalece el sentido de pertenencia y facilita la integración del alumnado nuevo mediante la socialización de las normas de convivencia.",
+      "whitespace_characters": 20,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.grade_contributions[0].learning_role",
+      "type": "string",
+      "characters": 121,
+      "complete_in_retained_prefix": true,
+      "preview": "Participa en la identificación de situaciones cotidianas y propone acuerdos mediante dibujos y explicaciones sencillas.",
+      "whitespace_characters": 14,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.pda_analysis[0].cognitive_interpretation.reasoning",
+      "type": "string",
+      "characters": 118,
+      "complete_in_retained_prefix": true,
+      "preview": "El alumno identifica situaciones de convivencia cotidiana y articula explicaciones para proponer mejoras normativas.",
+      "whitespace_characters": 13,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.guiding_question.product_link",
+      "type": "string",
+      "characters": 111,
+      "complete_in_retained_prefix": true,
+      "preview": "Se resuelve mediante la elaboración y presentación de un recorrido guiado itinerante y carteles explicativos.",
+      "whitespace_characters": 14,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.guiding_question.question",
+      "type": "string",
+      "characters": 109,
+      "complete_in_retained_prefix": true,
+      "preview": "¿Por qué son importantes nuestros acuerdos escolares y cómo podemos compartirlos con los nuevos compañeros?",
+      "whitespace_characters": 14,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.pda_analysis[1].cognitive_interpretation.reasoning",
+      "type": "string",
+      "characters": 106,
+      "complete_in_retained_prefix": true,
+      "preview": "El alumno investiga prácticas y formas de organización escolar para socializar su importancia con otros.",
+      "whitespace_characters": 14,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.purpose",
+      "type": "string",
+      "characters": 100,
+      "complete_in_retained_prefix": true,
+      "preview": "Difundir la importancia de los acuerdos escolares mediante un formato de museo itinerante escolar.",
+      "whitespace_characters": 13,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.pda_analysis[0].possible_project_contribution",
+      "type": "string",
+      "characters": 95,
+      "complete_in_retained_prefix": true,
+      "preview": "Aporta los contenidos normativos y las explicaciones básicas sobre el origen de los acuerdos.",
+      "whitespace_characters": 13,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.pda_analysis[1].possible_project_contribution",
+      "type": "string",
+      "characters": 89,
+      "complete_in_retained_prefix": true,
+      "preview": "Aporta profundidad en la indagación y la estructuración de la difusión de los acuerdos.",
+      "whitespace_characters": 13,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.pda_analysis[1].integration_reason",
+      "type": "string",
+      "characters": 85,
+      "complete_in_retained_prefix": true,
+      "preview": "Fundamenta la búsqueda y socialización de los acuerdos escolares ante la comunidad.",
+      "whitespace_characters": 11,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.guiding_question.problem_link",
+      "type": "string",
+      "characters": 82,
+      "complete_in_retained_prefix": true,
+      "preview": "Aborda el desconocimiento del origen de las normas de convivencia en la escuela.",
+      "whitespace_characters": 12,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.pda_analysis[0].integration_reason",
+      "type": "string",
+      "characters": 82,
+      "complete_in_retained_prefix": true,
+      "preview": "Conecta directamente con la necesidad de explicar y proponer acuerdos escolares.",
+      "whitespace_characters": 10,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.use_or_destination",
+      "type": "string",
+      "characters": 81,
+      "complete_in_retained_prefix": true,
+      "preview": "Utilizado en espacios seguros de la escuela para orientar sobre la convivencia.",
+      "whitespace_characters": 11,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    }
+  ],
+  "top_arrays": [
+    {
+      "path": "$.grade_contributions",
+      "type": "array",
+      "characters": 90129,
+      "complete_in_retained_prefix": false,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements",
+      "type": "array",
+      "characters": 2943,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.pda_analysis",
+      "type": "array",
+      "characters": 2429,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.required_resources",
+      "type": "array",
+      "characters": 869,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.methodology.required_operations",
+      "type": "array",
+      "characters": 256,
+      "complete_in_retained_prefix": true,
+      "ownership": "COMPILER_OWNED"
+    },
+    {
+      "path": "$.final_outcome.authenticity_conditions",
+      "type": "array",
+      "characters": 174,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.problem_frame.scope",
+      "type": "array",
+      "characters": 163,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.pda_analysis[0].cognitive_interpretation.performance_indicators",
+      "type": "array",
+      "characters": 154,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.pda_analysis[1].cognitive_interpretation.performance_indicators",
+      "type": "array",
+      "characters": 148,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.problem_frame.out_of_scope",
+      "type": "array",
+      "characters": 137,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.completion_evidence",
+      "type": "array",
+      "characters": 132,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.pda_analysis[1].observable_evidence_conditions",
+      "type": "array",
+      "characters": 124,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.pda_analysis[0].observable_evidence_conditions",
+      "type": "array",
+      "characters": 118,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_profiles",
+      "type": "array",
+      "characters": 41,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[3].stage_ids",
+      "type": "array",
+      "characters": 16,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    }
+  ],
+  "all_paths": [
+    {
+      "path": "$",
+      "type": "object",
+      "characters": 100000,
+      "complete_in_retained_prefix": false,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.blueprint_id",
+      "type": "string",
+      "characters": 39,
+      "complete_in_retained_prefix": true,
+      "preview": "bp-proyectos-comunitarios-acuerdos-01",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "COMPILER_OWNED"
+    },
+    {
+      "path": "$.final_outcome",
+      "type": "object",
+      "characters": 4944,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.audience_or_beneficiary",
+      "type": "string",
+      "characters": 59,
+      "complete_in_retained_prefix": true,
+      "preview": "Alumnos de nuevo ingreso y compañeros del centro escolar.",
+      "whitespace_characters": 8,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.authenticity_conditions",
+      "type": "array",
+      "characters": 174,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.authenticity_conditions[0]",
+      "type": "string",
+      "characters": 75,
+      "complete_in_retained_prefix": true,
+      "preview": "Desarrollado íntegramente con recursos locales disponibles en la escuela.",
+      "whitespace_characters": 8,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.authenticity_conditions[1]",
+      "type": "string",
+      "characters": 77,
+      "complete_in_retained_prefix": true,
+      "preview": "Orientado a solucionar una necesidad real de integración de alumnos nuevos.",
+      "whitespace_characters": 10,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.completion_evidence",
+      "type": "array",
+      "characters": 132,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.completion_evidence[0]",
+      "type": "string",
+      "characters": 33,
+      "complete_in_retained_prefix": true,
+      "preview": "Carteles ilustrados de acuerdos",
+      "whitespace_characters": 3,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.completion_evidence[1]",
+      "type": "string",
+      "characters": 35,
+      "complete_in_retained_prefix": true,
+      "preview": "Bitácora del recorrido itinerante",
+      "whitespace_characters": 3,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.completion_evidence[2]",
+      "type": "string",
+      "characters": 34,
+      "complete_in_retained_prefix": true,
+      "preview": "Registro de explicaciones orales",
+      "whitespace_characters": 3,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.description",
+      "type": "string",
+      "characters": 178,
+      "complete_in_retained_prefix": true,
+      "preview": "Exhibición itinerante de carteles y explicaciones orales presentadas en el aula y en el patio techado para explicar las prácticas y acuerdos de convivencia a co",
+      "whitespace_characters": 26,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_profiles",
+      "type": "array",
+      "characters": 41,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_profiles[0]",
+      "type": "string",
+      "characters": 8,
+      "complete_in_retained_prefix": true,
+      "preview": "MUSEUM",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_profiles[1]",
+      "type": "string",
+      "characters": 11,
+      "complete_in_retained_prefix": true,
+      "preview": "ITINERANT",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements",
+      "type": "array",
+      "characters": 2943,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[0]",
+      "type": "object",
+      "characters": 259,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[0].criterion",
+      "type": "string",
+      "characters": 77,
+      "complete_in_retained_prefix": true,
+      "preview": "Selección clara de carteles con dibujos y textos breves sobre los acuerdos.",
+      "whitespace_characters": 11,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[0].evidence",
+      "type": "string",
+      "characters": 56,
+      "complete_in_retained_prefix": true,
+      "preview": "Carteles ilustrados con normas de convivencia escolar.",
+      "whitespace_characters": 6,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[0].requirement_id",
+      "type": "string",
+      "characters": 8,
+      "complete_in_retained_prefix": true,
+      "preview": "pieces",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[0].stage_ids",
+      "type": "array",
+      "characters": 14,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[0].stage_ids[0]",
+      "type": "string",
+      "characters": 12,
+      "complete_in_retained_prefix": true,
+      "preview": "production",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[10]",
+      "type": "object",
+      "characters": 264,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[10].criterion",
+      "type": "string",
+      "characters": 68,
+      "complete_in_retained_prefix": true,
+      "preview": "Registro del paso de la audiencia entre los espacios establecidos.",
+      "whitespace_characters": 9,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[10].evidence",
+      "type": "string",
+      "characters": 54,
+      "complete_in_retained_prefix": true,
+      "preview": "Lista de asistencia y reporte de la ruta completada.",
+      "whitespace_characters": 8,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[10].requirement_id",
+      "type": "string",
+      "characters": 22,
+      "complete_in_retained_prefix": true,
+      "preview": "circulation_evidence",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[10].stage_ids",
+      "type": "array",
+      "characters": 16,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[10].stage_ids[0]",
+      "type": "string",
+      "characters": 14,
+      "complete_in_retained_prefix": true,
+      "preview": "intervention",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[1]",
+      "type": "object",
+      "characters": 274,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[1].criterion",
+      "type": "string",
+      "characters": 79,
+      "complete_in_retained_prefix": true,
+      "preview": "Criterio basado en la utilidad de los acuerdos para la convivencia cotidiana.",
+      "whitespace_characters": 11,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[1].evidence",
+      "type": "string",
+      "characters": 59,
+      "complete_in_retained_prefix": true,
+      "preview": "Registro de acuerdos seleccionados en el plan de trabajo.",
+      "whitespace_characters": 8,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[1].requirement_id",
+      "type": "string",
+      "characters": 20,
+      "complete_in_retained_prefix": true,
+      "preview": "selection_criteria",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[1].stage_ids",
+      "type": "array",
+      "characters": 12,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[1].stage_ids[0]",
+      "type": "string",
+      "characters": 10,
+      "complete_in_retained_prefix": true,
+      "preview": "planning",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[2]",
+      "type": "object",
+      "characters": 248,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[2].criterion",
+      "type": "string",
+      "characters": 61,
+      "complete_in_retained_prefix": true,
+      "preview": "Secuencia lógica de presentación de los acuerdos escolares.",
+      "whitespace_characters": 7,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[2].evidence",
+      "type": "string",
+      "characters": 55,
+      "complete_in_retained_prefix": true,
+      "preview": "Estructura ordenada de las piezas para la exposición.",
+      "whitespace_characters": 7,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[2].requirement_id",
+      "type": "string",
+      "characters": 14,
+      "complete_in_retained_prefix": true,
+      "preview": "organization",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[2].stage_ids",
+      "type": "array",
+      "characters": 14,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[2].stage_ids[0]",
+      "type": "string",
+      "characters": 12,
+      "complete_in_retained_prefix": true,
+      "preview": "production",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[3]",
+      "type": "object",
+      "characters": 259,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[3].criterion",
+      "type": "string",
+      "characters": 68,
+      "complete_in_retained_prefix": true,
+      "preview": "Explicación oral comprensible por parte de los alumnos de 1° y 3°.",
+      "whitespace_characters": 11,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[3].evidence",
+      "type": "string",
+      "characters": 52,
+      "complete_in_retained_prefix": true,
+      "preview": "Discurso de presentación dado por los estudiantes.",
+      "whitespace_characters": 6,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[3].requirement_id",
+      "type": "string",
+      "characters": 19,
+      "complete_in_retained_prefix": true,
+      "preview": "piece_explanation",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[3].stage_ids",
+      "type": "array",
+      "characters": 16,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[3].stage_ids[0]",
+      "type": "string",
+      "characters": 14,
+      "complete_in_retained_prefix": true,
+      "preview": "intervention",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[4]",
+      "type": "object",
+      "characters": 239,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[4].criterion",
+      "type": "string",
+      "characters": 55,
+      "complete_in_retained_prefix": true,
+      "preview": "Montaje temporal utilizando mesas y paredes del aula.",
+      "whitespace_characters": 7,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[4].evidence",
+      "type": "string",
+      "characters": 54,
+      "complete_in_retained_prefix": true,
+      "preview": "Distribución física de los carteles sobre las mesas.",
+      "whitespace_characters": 7,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[4].requirement_id",
+      "type": "string",
+      "characters": 10,
+      "complete_in_retained_prefix": true,
+      "preview": "mounting",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[4].stage_ids",
+      "type": "array",
+      "characters": 16,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[4].stage_ids[0]",
+      "type": "string",
+      "characters": 14,
+      "complete_in_retained_prefix": true,
+      "preview": "intervention",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[5]",
+      "type": "object",
+      "characters": 245,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[5].criterion",
+      "type": "string",
+      "characters": 65,
+      "complete_in_retained_prefix": true,
+      "preview": "Definición de ruta itinerante entre el aula y el patio techado.",
+      "whitespace_characters": 10,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[5].evidence",
+      "type": "string",
+      "characters": 45,
+      "complete_in_retained_prefix": true,
+      "preview": "Plano de ruta validado para la itinerancia.",
+      "whitespace_characters": 6,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[5].requirement_id",
+      "type": "string",
+      "characters": 19,
+      "complete_in_retained_prefix": true,
+      "preview": "audience_or_route",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[5].stage_ids",
+      "type": "array",
+      "characters": 12,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[5].stage_ids[0]",
+      "type": "string",
+      "characters": 10,
+      "complete_in_retained_prefix": true,
+      "preview": "planning",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[6]",
+      "type": "object",
+      "characters": 266,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[6].criterion",
+      "type": "string",
+      "characters": 75,
+      "complete_in_retained_prefix": true,
+      "preview": "Mediación activa de los estudiantes al explicar el sentido de las normas.",
+      "whitespace_characters": 11,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[6].evidence",
+      "type": "string",
+      "characters": 60,
+      "complete_in_retained_prefix": true,
+      "preview": "Interacción directa con los asistentes durante la muestra.",
+      "whitespace_characters": 7,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[6].requirement_id",
+      "type": "string",
+      "characters": 11,
+      "complete_in_retained_prefix": true,
+      "preview": "mediation",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[6].stage_ids",
+      "type": "array",
+      "characters": 16,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[6].stage_ids[0]",
+      "type": "string",
+      "characters": 14,
+      "complete_in_retained_prefix": true,
+      "preview": "intervention",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[7]",
+      "type": "object",
+      "characters": 248,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[7].criterion",
+      "type": "string",
+      "characters": 57,
+      "complete_in_retained_prefix": true,
+      "preview": "Capacidad de trasladar la muestra de un espacio a otro.",
+      "whitespace_characters": 9,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[7].evidence",
+      "type": "string",
+      "characters": 61,
+      "complete_in_retained_prefix": true,
+      "preview": "Traslado exitoso de los carteles del aula al patio techado.",
+      "whitespace_characters": 9,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[7].requirement_id",
+      "type": "string",
+      "characters": 10,
+      "complete_in_retained_prefix": true,
+      "preview": "movement",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[7].stage_ids",
+      "type": "array",
+      "characters": 16,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[7].stage_ids[0]",
+      "type": "string",
+      "characters": 14,
+      "complete_in_retained_prefix": true,
+      "preview": "intervention",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[8]",
+      "type": "object",
+      "characters": 287,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[8].criterion",
+      "type": "string",
+      "characters": 66,
+      "complete_in_retained_prefix": true,
+      "preview": "Uso comprobado de dos espacios escolares (aula y patio techado).",
+      "whitespace_characters": 9,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[8].evidence",
+      "type": "string",
+      "characters": 60,
+      "complete_in_retained_prefix": true,
+      "preview": "Evidencia fotográfica o bitácora de uso en ambos espacios.",
+      "whitespace_characters": 8,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[8].requirement_id",
+      "type": "string",
+      "characters": 41,
+      "complete_in_retained_prefix": true,
+      "preview": "at_least_two_viable_spaces_or_audiences",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[8].stage_ids",
+      "type": "array",
+      "characters": 16,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[8].stage_ids[0]",
+      "type": "string",
+      "characters": 14,
+      "complete_in_retained_prefix": true,
+      "preview": "intervention",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[9]",
+      "type": "object",
+      "characters": 260,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[9].criterion",
+      "type": "string",
+      "characters": 62,
+      "complete_in_retained_prefix": true,
+      "preview": "Reinstalación fluida de la exposición en el segundo espacio.",
+      "whitespace_characters": 8,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[9].evidence",
+      "type": "string",
+      "characters": 48,
+      "complete_in_retained_prefix": true,
+      "preview": "Montaje funcional montado en el patio techado.",
+      "whitespace_characters": 6,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[9].requirement_id",
+      "type": "string",
+      "characters": 30,
+      "complete_in_retained_prefix": true,
+      "preview": "relocation_or_reinstallation",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[9].stage_ids",
+      "type": "array",
+      "characters": 16,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.functional_requirements[9].stage_ids[0]",
+      "type": "string",
+      "characters": 14,
+      "complete_in_retained_prefix": true,
+      "preview": "intervention",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.name",
+      "type": "string",
+      "characters": 44,
+      "complete_in_retained_prefix": true,
+      "preview": "Recorrido Itinerante de Acuerdos Escolares",
+      "whitespace_characters": 4,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.outcome_id",
+      "type": "string",
+      "characters": 12,
+      "complete_in_retained_prefix": true,
+      "preview": "outcome_01",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.purpose",
+      "type": "string",
+      "characters": 100,
+      "complete_in_retained_prefix": true,
+      "preview": "Difundir la importancia de los acuerdos escolares mediante un formato de museo itinerante escolar.",
+      "whitespace_characters": 13,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.required_resources",
+      "type": "array",
+      "characters": 869,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.required_resources[0]",
+      "type": "object",
+      "characters": 144,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.required_resources[0].alternative",
+      "type": "primitive",
+      "characters": 4,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.required_resources[0].alternative_rationale",
+      "type": "primitive",
+      "characters": 11,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.required_resources[0].essential",
+      "type": "primitive",
+      "characters": 4,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.required_resources[0].resource",
+      "type": "string",
+      "characters": 19,
+      "complete_in_retained_prefix": true,
+      "preview": "papel reutilizado",
+      "whitespace_characters": 1,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.required_resources[1]",
+      "type": "object",
+      "characters": 134,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.required_resources[1].alternative",
+      "type": "primitive",
+      "characters": 4,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.required_resources[1].alternative_rationale",
+      "type": "primitive",
+      "characters": 11,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.required_resources[1].essential",
+      "type": "primitive",
+      "characters": 4,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.required_resources[1].resource",
+      "type": "string",
+      "characters": 9,
+      "complete_in_retained_prefix": true,
+      "preview": "lápices",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.required_resources[2]",
+      "type": "object",
+      "characters": 134,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.required_resources[2].alternative",
+      "type": "primitive",
+      "characters": 4,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.required_resources[2].alternative_rationale",
+      "type": "primitive",
+      "characters": 11,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.required_resources[2].essential",
+      "type": "primitive",
+      "characters": 4,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.required_resources[2].resource",
+      "type": "string",
+      "characters": 9,
+      "complete_in_retained_prefix": true,
+      "preview": "colores",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.required_resources[3]",
+      "type": "object",
+      "characters": 132,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.required_resources[3].alternative",
+      "type": "primitive",
+      "characters": 4,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.required_resources[3].alternative_rationale",
+      "type": "primitive",
+      "characters": 11,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.required_resources[3].essential",
+      "type": "primitive",
+      "characters": 4,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.required_resources[3].resource",
+      "type": "string",
+      "characters": 7,
+      "complete_in_retained_prefix": true,
+      "preview": "mesas",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.required_resources[4]",
+      "type": "object",
+      "characters": 131,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.required_resources[4].alternative",
+      "type": "primitive",
+      "characters": 4,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.required_resources[4].alternative_rationale",
+      "type": "primitive",
+      "characters": 11,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.required_resources[4].essential",
+      "type": "primitive",
+      "characters": 4,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.required_resources[4].resource",
+      "type": "string",
+      "characters": 6,
+      "complete_in_retained_prefix": true,
+      "preview": "aula",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.required_resources[5]",
+      "type": "object",
+      "characters": 140,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.required_resources[5].alternative",
+      "type": "primitive",
+      "characters": 4,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.required_resources[5].alternative_rationale",
+      "type": "primitive",
+      "characters": 11,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.required_resources[5].essential",
+      "type": "primitive",
+      "characters": 4,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.required_resources[5].resource",
+      "type": "string",
+      "characters": 15,
+      "complete_in_retained_prefix": true,
+      "preview": "patio techado",
+      "whitespace_characters": 1,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.type",
+      "type": "string",
+      "characters": 8,
+      "complete_in_retained_prefix": true,
+      "preview": "MUSEUM",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.final_outcome.use_or_destination",
+      "type": "string",
+      "characters": 81,
+      "complete_in_retained_prefix": true,
+      "preview": "Utilizado en espacios seguros de la escuela para orientar sobre la convivencia.",
+      "whitespace_characters": 11,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.grade_contributions",
+      "type": "array",
+      "characters": 90129,
+      "complete_in_retained_prefix": false,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.grade_contributions[0]",
+      "type": "object",
+      "characters": 90123,
+      "complete_in_retained_prefix": false,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.grade_contributions[0].complexity_level",
+      "type": "string",
+      "characters": 6,
+      "complete_in_retained_prefix": true,
+      "preview": "Baja",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.grade_contributions[0].contribution_id",
+      "type": "string",
+      "characters": 6,
+      "complete_in_retained_prefix": true,
+      "preview": "gc_1",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.grade_contributions[0].expected_evidence",
+      "type": "string",
+      "characters": 43,
+      "complete_in_retained_prefix": true,
+      "preview": "Ilustraciones con propuestas de acuerdos.",
+      "whitespace_characters": 4,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.grade_contributions[0].grade",
+      "type": "primitive",
+      "characters": 1,
+      "complete_in_retained_prefix": true,
+      "ownership": "REFERENCE_ONLY"
+    },
+    {
+      "path": "$.grade_contributions[0].learning_role",
+      "type": "string",
+      "characters": 121,
+      "complete_in_retained_prefix": true,
+      "preview": "Participa en la identificación de situaciones cotidianas y propone acuerdos mediante dibujos y explicaciones sencillas.",
+      "whitespace_characters": 14,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.grade_contributions[0].project_contribution",
+      "type": "string",
+      "characters": 66,
+      "complete_in_retained_prefix": true,
+      "preview": "Aporta dibujos y explicaciones breves sobre las normas del aula.",
+      "whitespace_characters": 9,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.grade_contributions[0].support_need",
+      "type": "string",
+      "characters": 89698,
+      "complete_in_retained_prefix": false,
+      "preview": "Modelado docente y apoyo entre pares de tercer grado para la redacción de ideas breves con dictado al maestro o registros gráficos de apoyo alfanumérico básico ",
+      "whitespace_characters": 11678,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.guiding_question",
+      "type": "object",
+      "characters": 409,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.guiding_question.grade_accessibility",
+      "type": "string",
+      "characters": 12,
+      "complete_in_retained_prefix": true,
+      "preview": "ALL_GRADES",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.guiding_question.problem_link",
+      "type": "string",
+      "characters": 82,
+      "complete_in_retained_prefix": true,
+      "preview": "Aborda el desconocimiento del origen de las normas de convivencia en la escuela.",
+      "whitespace_characters": 12,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.guiding_question.product_link",
+      "type": "string",
+      "characters": 111,
+      "complete_in_retained_prefix": true,
+      "preview": "Se resuelve mediante la elaboración y presentación de un recorrido guiado itinerante y carteles explicativos.",
+      "whitespace_characters": 14,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.guiding_question.question",
+      "type": "string",
+      "characters": 109,
+      "complete_in_retained_prefix": true,
+      "preview": "¿Por qué son importantes nuestros acuerdos escolares y cómo podemos compartirlos con los nuevos compañeros?",
+      "whitespace_characters": 14,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.methodology",
+      "type": "object",
+      "characters": 383,
+      "complete_in_retained_prefix": true,
+      "ownership": "COMPILER_OWNED"
+    },
+    {
+      "path": "$.methodology.catalog_version",
+      "type": "string",
+      "characters": 24,
+      "complete_in_retained_prefix": true,
+      "preview": "METHODOLOGY_CATALOG_V1",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "COMPILER_OWNED"
+    },
+    {
+      "path": "$.methodology.required_operations",
+      "type": "array",
+      "characters": 256,
+      "complete_in_retained_prefix": true,
+      "ownership": "COMPILER_OWNED"
+    },
+    {
+      "path": "$.methodology.required_operations[0]",
+      "type": "string",
+      "characters": 16,
+      "complete_in_retained_prefix": true,
+      "preview": "IDENTIFICACION",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "COMPILER_OWNED"
+    },
+    {
+      "path": "$.methodology.required_operations[10]",
+      "type": "string",
+      "characters": 9,
+      "complete_in_retained_prefix": true,
+      "preview": "AVANCES",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "COMPILER_OWNED"
+    },
+    {
+      "path": "$.methodology.required_operations[1]",
+      "type": "string",
+      "characters": 14,
+      "complete_in_retained_prefix": true,
+      "preview": "RECUPERACION",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "COMPILER_OWNED"
+    },
+    {
+      "path": "$.methodology.required_operations[2]",
+      "type": "string",
+      "characters": 15,
+      "complete_in_retained_prefix": true,
+      "preview": "PLANIFICACION",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "COMPILER_OWNED"
+    },
+    {
+      "path": "$.methodology.required_operations[3]",
+      "type": "string",
+      "characters": 14,
+      "complete_in_retained_prefix": true,
+      "preview": "ACERCAMIENTO",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "COMPILER_OWNED"
+    },
+    {
+      "path": "$.methodology.required_operations[4]",
+      "type": "string",
+      "characters": 26,
+      "complete_in_retained_prefix": true,
+      "preview": "COMPRENSION_Y_PRODUCCION",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "COMPILER_OWNED"
+    },
+    {
+      "path": "$.methodology.required_operations[5]",
+      "type": "string",
+      "characters": 16,
+      "complete_in_retained_prefix": true,
+      "preview": "RECONOCIMIENTO",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "COMPILER_OWNED"
+    },
+    {
+      "path": "$.methodology.required_operations[6]",
+      "type": "string",
+      "characters": 12,
+      "complete_in_retained_prefix": true,
+      "preview": "CONCRECION",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "COMPILER_OWNED"
+    },
+    {
+      "path": "$.methodology.required_operations[7]",
+      "type": "string",
+      "characters": 13,
+      "complete_in_retained_prefix": true,
+      "preview": "INTEGRACION",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "COMPILER_OWNED"
+    },
+    {
+      "path": "$.methodology.required_operations[8]",
+      "type": "string",
+      "characters": 10,
+      "complete_in_retained_prefix": true,
+      "preview": "DIFUSION",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "COMPILER_OWNED"
+    },
+    {
+      "path": "$.methodology.required_operations[9]",
+      "type": "string",
+      "characters": 17,
+      "complete_in_retained_prefix": true,
+      "preview": "CONSIDERACIONES",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "COMPILER_OWNED"
+    },
+    {
+      "path": "$.methodology.selected_id",
+      "type": "string",
+      "characters": 24,
+      "complete_in_retained_prefix": true,
+      "preview": "proyectos_comunitarios",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "COMPILER_OWNED"
+    },
+    {
+      "path": "$.pda_analysis",
+      "type": "array",
+      "characters": 2429,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.pda_analysis[0]",
+      "type": "object",
+      "characters": 1197,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.pda_analysis[0].central_cognitive_action",
+      "type": "string",
+      "characters": 9,
+      "complete_in_retained_prefix": true,
+      "preview": "Explica",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.pda_analysis[0].cognitive_interpretation",
+      "type": "object",
+      "characters": 519,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.pda_analysis[0].cognitive_interpretation.official_text_basis",
+      "type": "string",
+      "characters": 147,
+      "complete_in_retained_prefix": true,
+      "preview": "Explica situaciones cotidianas que se presentan en la escuela y la casa, con la intención de proponer acuerdos que generen una mejor convivencia.",
+      "whitespace_characters": 22,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.pda_analysis[0].cognitive_interpretation.performance_indicators",
+      "type": "array",
+      "characters": 154,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.pda_analysis[0].cognitive_interpretation.performance_indicators[0]",
+      "type": "string",
+      "characters": 45,
+      "complete_in_retained_prefix": true,
+      "preview": "Identifica situaciones cotidianas escolares",
+      "whitespace_characters": 3,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.pda_analysis[0].cognitive_interpretation.performance_indicators[1]",
+      "type": "string",
+      "characters": 30,
+      "complete_in_retained_prefix": true,
+      "preview": "Explica causas de las normas",
+      "whitespace_characters": 4,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.pda_analysis[0].cognitive_interpretation.performance_indicators[2]",
+      "type": "string",
+      "characters": 33,
+      "complete_in_retained_prefix": true,
+      "preview": "Propone acuerdos de convivencia",
+      "whitespace_characters": 3,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.pda_analysis[0].cognitive_interpretation.reasoning",
+      "type": "string",
+      "characters": 118,
+      "complete_in_retained_prefix": true,
+      "preview": "El alumno identifica situaciones de convivencia cotidiana y articula explicaciones para proponer mejoras normativas.",
+      "whitespace_characters": 13,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.pda_analysis[0].expected_performance",
+      "type": "string",
+      "characters": 79,
+      "complete_in_retained_prefix": true,
+      "preview": "Explicar situaciones escolares cotidianas y proponer acuerdos de convivencia.",
+      "whitespace_characters": 8,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.pda_analysis[0].integration_reason",
+      "type": "string",
+      "characters": 82,
+      "complete_in_retained_prefix": true,
+      "preview": "Conecta directamente con la necesidad de explicar y proponer acuerdos escolares.",
+      "whitespace_characters": 10,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.pda_analysis[0].integration_strength",
+      "type": "string",
+      "characters": 8,
+      "complete_in_retained_prefix": true,
+      "preview": "DIRECT",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.pda_analysis[0].observable_evidence_conditions",
+      "type": "array",
+      "characters": 118,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.pda_analysis[0].observable_evidence_conditions[0]",
+      "type": "string",
+      "characters": 36,
+      "complete_in_retained_prefix": true,
+      "preview": "Participación en diálogos grupales",
+      "whitespace_characters": 3,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.pda_analysis[0].observable_evidence_conditions[1]",
+      "type": "string",
+      "characters": 54,
+      "complete_in_retained_prefix": true,
+      "preview": "Propuestas de acuerdos plasmadas en dibujos o textos",
+      "whitespace_characters": 7,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.pda_analysis[0].pda_id",
+      "type": "string",
+      "characters": 14,
+      "complete_in_retained_prefix": true,
+      "preview": "F3-DHC-1-010",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "REFERENCE_ONLY"
+    },
+    {
+      "path": "$.pda_analysis[0].possible_project_contribution",
+      "type": "string",
+      "characters": 95,
+      "complete_in_retained_prefix": true,
+      "preview": "Aporta los contenidos normativos y las explicaciones básicas sobre el origen de los acuerdos.",
+      "whitespace_characters": 13,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.pda_analysis[1]",
+      "type": "object",
+      "characters": 1216,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.pda_analysis[1].central_cognitive_action",
+      "type": "string",
+      "characters": 8,
+      "complete_in_retained_prefix": true,
+      "preview": "Indaga",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.pda_analysis[1].cognitive_interpretation",
+      "type": "object",
+      "characters": 539,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.pda_analysis[1].cognitive_interpretation.official_text_basis",
+      "type": "string",
+      "characters": 185,
+      "complete_in_retained_prefix": true,
+      "preview": "Indaga acerca de ideas, conocimientos, prácticas culturales, formas de organización y acuerdos familiares, escolares y comunitarios, para compartir su importanc",
+      "whitespace_characters": 22,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.pda_analysis[1].cognitive_interpretation.performance_indicators",
+      "type": "array",
+      "characters": 148,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.pda_analysis[1].cognitive_interpretation.performance_indicators[0]",
+      "type": "string",
+      "characters": 28,
+      "complete_in_retained_prefix": true,
+      "preview": "Indaga prácticas escolares",
+      "whitespace_characters": 2,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.pda_analysis[1].cognitive_interpretation.performance_indicators[1]",
+      "type": "string",
+      "characters": 33,
+      "complete_in_retained_prefix": true,
+      "preview": "Reconoce formas de organización",
+      "whitespace_characters": 3,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.pda_analysis[1].cognitive_interpretation.performance_indicators[2]",
+      "type": "string",
+      "characters": 41,
+      "complete_in_retained_prefix": true,
+      "preview": "Comparte la importancia de los acuerdos",
+      "whitespace_characters": 5,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.pda_analysis[1].cognitive_interpretation.reasoning",
+      "type": "string",
+      "characters": 106,
+      "complete_in_retained_prefix": true,
+      "preview": "El alumno investiga prácticas y formas de organización escolar para socializar su importancia con otros.",
+      "whitespace_characters": 14,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.pda_analysis[1].expected_performance",
+      "type": "string",
+      "characters": 76,
+      "complete_in_retained_prefix": true,
+      "preview": "Indagar acuerdos escolares y compartir su importancia en la socialización.",
+      "whitespace_characters": 9,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.pda_analysis[1].integration_reason",
+      "type": "string",
+      "characters": 85,
+      "complete_in_retained_prefix": true,
+      "preview": "Fundamenta la búsqueda y socialización de los acuerdos escolares ante la comunidad.",
+      "whitespace_characters": 11,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.pda_analysis[1].integration_strength",
+      "type": "string",
+      "characters": 8,
+      "complete_in_retained_prefix": true,
+      "preview": "DIRECT",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.pda_analysis[1].observable_evidence_conditions",
+      "type": "array",
+      "characters": 124,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.pda_analysis[1].observable_evidence_conditions[0]",
+      "type": "string",
+      "characters": 50,
+      "complete_in_retained_prefix": true,
+      "preview": "Registro de indagación sobre prácticas escolares",
+      "whitespace_characters": 5,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.pda_analysis[1].observable_evidence_conditions[1]",
+      "type": "string",
+      "characters": 46,
+      "complete_in_retained_prefix": true,
+      "preview": "Exposición de la importancia de los acuerdos",
+      "whitespace_characters": 6,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.pda_analysis[1].pda_id",
+      "type": "string",
+      "characters": 14,
+      "complete_in_retained_prefix": true,
+      "preview": "F4-DHC-3-001",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "REFERENCE_ONLY"
+    },
+    {
+      "path": "$.pda_analysis[1].possible_project_contribution",
+      "type": "string",
+      "characters": 89,
+      "complete_in_retained_prefix": true,
+      "preview": "Aporta profundidad en la indagación y la estructuración de la difusión de los acuerdos.",
+      "whitespace_characters": 13,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.problem_frame",
+      "type": "object",
+      "characters": 1051,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.problem_frame.context_relevance",
+      "type": "string",
+      "characters": 147,
+      "complete_in_retained_prefix": true,
+      "preview": "Permite al alumnado de primero y tercer grado comprender y revalorar la convivencia escolar sin requerir recursos externos o conexión a internet.",
+      "whitespace_characters": 21,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.problem_frame.original_problem",
+      "type": "string",
+      "characters": 158,
+      "complete_in_retained_prefix": true,
+      "preview": "En el grupo desconocemos por qué existen nuestros acuerdos y prácticas escolares; esto dificulta convivir y explicar su importancia a los compañeros nuevos.",
+      "whitespace_characters": 22,
+      "longest_whitespace_run": 1,
+      "ownership": "REFERENCE_ONLY"
+    },
+    {
+      "path": "$.problem_frame.out_of_scope",
+      "type": "array",
+      "characters": 137,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.problem_frame.out_of_scope[0]",
+      "type": "string",
+      "characters": 29,
+      "complete_in_retained_prefix": true,
+      "preview": "Salidas fuera de la escuela",
+      "whitespace_characters": 4,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.problem_frame.out_of_scope[1]",
+      "type": "string",
+      "characters": 41,
+      "complete_in_retained_prefix": true,
+      "preview": "Uso de tecnologías digitales o internet",
+      "whitespace_characters": 5,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.problem_frame.out_of_scope[2]",
+      "type": "string",
+      "characters": 37,
+      "complete_in_retained_prefix": true,
+      "preview": "Compra de materiales especializados",
+      "whitespace_characters": 3,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.problem_frame.pedagogical_focus",
+      "type": "string",
+      "characters": 149,
+      "complete_in_retained_prefix": true,
+      "preview": "Indagación y explicación de los acuerdos escolares y comunitarios mediante la creación de un recorrido explicativo itinerante dentro de la escuela.",
+      "whitespace_characters": 20,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.problem_frame.scope",
+      "type": "array",
+      "characters": 163,
+      "complete_in_retained_prefix": true,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.problem_frame.scope[0]",
+      "type": "string",
+      "characters": 35,
+      "complete_in_retained_prefix": true,
+      "preview": "Indagación de prácticas escolares",
+      "whitespace_characters": 3,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.problem_frame.scope[1]",
+      "type": "string",
+      "characters": 43,
+      "complete_in_retained_prefix": true,
+      "preview": "Creación de guías explicativas ilustradas",
+      "whitespace_characters": 4,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.problem_frame.scope[2]",
+      "type": "string",
+      "characters": 55,
+      "complete_in_retained_prefix": true,
+      "preview": "Recorrido itinerante entre el aula y el patio techado",
+      "whitespace_characters": 8,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.problem_frame.why_project_is_needed",
+      "type": "string",
+      "characters": 145,
+      "complete_in_retained_prefix": true,
+      "preview": "Porque fortalece el sentido de pertenencia y facilita la integración del alumnado nuevo mediante la socialización de las normas de convivencia.",
+      "whitespace_characters": 20,
+      "longest_whitespace_run": 1,
+      "ownership": "MODEL_OWNED"
+    },
+    {
+      "path": "$.revision",
+      "type": "primitive",
+      "characters": 1,
+      "complete_in_retained_prefix": true,
+      "ownership": "COMPILER_OWNED"
+    },
+    {
+      "path": "$.schema_version",
+      "type": "string",
+      "characters": 22,
+      "complete_in_retained_prefix": true,
+      "preview": "PROJECT_BLUEPRINT_V1",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "COMPILER_OWNED"
+    },
+    {
+      "path": "$.source",
+      "type": "object",
+      "characters": 368,
+      "complete_in_retained_prefix": true,
+      "ownership": "COMPILER_OWNED"
+    },
+    {
+      "path": "$.source.constraints_hash",
+      "type": "string",
+      "characters": 66,
+      "complete_in_retained_prefix": true,
+      "preview": "231186405b12537fc00f9cb7d644bb98e7c79b2cc9eb7cae401aecc399c5400a",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "COMPILER_OWNED"
+    },
+    {
+      "path": "$.source.curriculum_snapshot_hash",
+      "type": "string",
+      "characters": 66,
+      "complete_in_retained_prefix": true,
+      "preview": "2dd0aee8c51fc86fc10cbe6fb4a81afcba1b03d5a8fa875eb1ec638157449259",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "COMPILER_OWNED"
+    },
+    {
+      "path": "$.source.methodology_decision_hash",
+      "type": "string",
+      "characters": 66,
+      "complete_in_retained_prefix": true,
+      "preview": "de16300665ef01491f040f9c4027a38fa4f8a2f11529218fed911b9efe2c93d9",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "COMPILER_OWNED"
+    },
+    {
+      "path": "$.source.methodology_decision_id",
+      "type": "string",
+      "characters": 38,
+      "complete_in_retained_prefix": true,
+      "preview": "fb9d3d70-54e9-4bfc-b508-1946e0388fda",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "COMPILER_OWNED"
+    },
+    {
+      "path": "$.status",
+      "type": "string",
+      "characters": 7,
+      "complete_in_retained_prefix": true,
+      "preview": "DRAFT",
+      "whitespace_characters": 0,
+      "longest_whitespace_run": 0,
+      "ownership": "COMPILER_OWNED"
+    }
+  ],
+  "within_field_repeats": [
+    {
+      "path": "$.grade_contributions[0].support_need",
+      "word_count_observed": 11679,
+      "top_repeated_12_word_sequences": [
+        {
+          "text": "correspondiente en la república mexicana formalmente establecida para los fines pedagógicos pertinentes",
+          "occurrences": 88
+        },
+        {
+          "text": "en la república mexicana formalmente establecida para los fines pedagógicos pertinentes a",
+          "occurrences": 88
+        },
+        {
+          "text": "la república mexicana formalmente establecida para los fines pedagógicos pertinentes a la",
+          "occurrences": 88
+        },
+        {
+          "text": "república mexicana formalmente establecida para los fines pedagógicos pertinentes a la propuesta",
+          "occurrences": 88
+        },
+        {
+          "text": "mexicana formalmente establecida para los fines pedagógicos pertinentes a la propuesta curricular",
+          "occurrences": 87
+        },
+        {
+          "text": "formalmente establecida para los fines pedagógicos pertinentes a la propuesta curricular oficial",
+          "occurrences": 87
+        },
+        {
+          "text": "establecida para los fines pedagógicos pertinentes a la propuesta curricular oficial vigente",
+          "occurrences": 87
+        },
+        {
+          "text": "para los fines pedagógicos pertinentes a la propuesta curricular oficial vigente del",
+          "occurrences": 87
+        }
+      ]
+    }
+  ],
+  "identical_texts": [
+    {
+      "characters_per_value": 12,
+      "occurrences": 7,
+      "paths": [
+        "$.final_outcome.functional_requirements[3].stage_ids[0]",
+        "$.final_outcome.functional_requirements[4].stage_ids[0]",
+        "$.final_outcome.functional_requirements[6].stage_ids[0]",
+        "$.final_outcome.functional_requirements[7].stage_ids[0]",
+        "$.final_outcome.functional_requirements[8].stage_ids[0]",
+        "$.final_outcome.functional_requirements[9].stage_ids[0]",
+        "$.final_outcome.functional_requirements[10].stage_ids[0]"
+      ],
+      "preview": "intervention"
+    },
+    {
+      "characters_per_value": 10,
+      "occurrences": 2,
+      "paths": [
+        "$.final_outcome.functional_requirements[0].stage_ids[0]",
+        "$.final_outcome.functional_requirements[2].stage_ids[0]"
+      ],
+      "preview": "production"
+    },
+    {
+      "characters_per_value": 8,
+      "occurrences": 2,
+      "paths": [
+        "$.final_outcome.functional_requirements[1].stage_ids[0]",
+        "$.final_outcome.functional_requirements[5].stage_ids[0]"
+      ],
+      "preview": "planning"
+    },
+    {
+      "characters_per_value": 6,
+      "occurrences": 2,
+      "paths": [
+        "$.final_outcome.type",
+        "$.final_outcome.functional_profiles[0]"
+      ],
+      "preview": "MUSEUM"
+    },
+    {
+      "characters_per_value": 6,
+      "occurrences": 2,
+      "paths": [
+        "$.pda_analysis[0].integration_strength",
+        "$.pda_analysis[1].integration_strength"
+      ],
+      "preview": "DIRECT"
+    }
+  ],
+  "normalized_repeats": [],
+  "official_text_occurrences": [
+    {
+      "pda_id": "F3-DHC-1-010",
+      "official_text": 1,
+      "id_occurrences": 1
+    },
+    {
+      "pda_id": "F4-DHC-3-001",
+      "official_text": 1,
+      "id_occurrences": 1
+    }
+  ],
+  "methodology_operation_occurrences": {
+    "IDENTIFICACION": 1,
+    "RECUPERACION": 1,
+    "PLANIFICACION": 1,
+    "ACERCAMIENTO": 1,
+    "COMPRENSION_Y_PRODUCCION": 1,
+    "RECONOCIMIENTO": 1,
+    "CONCRECION": 1,
+    "INTEGRACION": 1,
+    "DIFUSION": 1,
+    "CONSIDERACIONES": 1,
+    "AVANCES": 1
+  },
+  "scope_limit": "Artifact metadata, criteria/evidence, state_before/state_after and all other fields are measured only if present in retained prefix. Unseen tails are unknown, not zero."
+}

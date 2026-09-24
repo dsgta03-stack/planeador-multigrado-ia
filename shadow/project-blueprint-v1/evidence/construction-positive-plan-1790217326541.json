@@ -1,0 +1,305 @@
+{
+  "sources": {
+    "constraints": {
+      "grades": [
+        1,
+        3
+      ],
+      "selected_pda_ids": [
+        "F3-DHC-1-010",
+        "F4-DHC-3-001"
+      ],
+      "explicit_ltg_selections": [],
+      "requested_sessions": 3,
+      "minutes_per_session": 90,
+      "original_problem": "En el grupo desconocemos por qué existen nuestros acuerdos y prácticas escolares; esto dificulta convivir y explicar su importancia a los compañeros nuevos.",
+      "original_context": "Escuela multigrado. Podemos consultar al docente y los recuerdos del grupo sobre prácticas y acuerdos de la escuela. Tenemos aula y patio techado, dos espacios seguros para intercambiar explicaciones con compañeros del mismo grupo. Sin internet, visitas ni participación familiar obligatoria. El alumnado nuevo necesita conocer cómo convivir y dónde pedir apoyo.",
+      "students_by_grade": {
+        "1": 5,
+        "3": 5
+      },
+      "reading_profile": "Lectura inicial en primero; tercero lee textos breves con apoyo.",
+      "writing_profile": "Primero usa dibujos y dictado; tercero registros breves.",
+      "autonomy_profile": "Baja; requiere consignas visuales y apoyo entre pares.",
+      "connectivity": "SIN_INTERNET",
+      "available_resources": [
+        "papel reutilizado",
+        "lápices",
+        "colores",
+        "mesas",
+        "aula",
+        "patio techado"
+      ],
+      "supports": [
+        "modelado docente",
+        "apoyo entre pares"
+      ],
+      "teacher_explicit_constraints": [
+        "Sin salir de la escuela",
+        "No pedir compras"
+      ],
+      "schema_version": "TEACHER_CONSTRAINTS_V1",
+      "constraints_id": "2050d05b-a125-425a-b1f3-97d2e6a3cbb0",
+      "created_at": "2026-09-24T02:35:26.538Z",
+      "constraints_hash": "231186405b12537fc00f9cb7d644bb98e7c79b2cc9eb7cae401aecc399c5400a"
+    },
+    "curriculum": {
+      "corpus_version_or_provenance": "Supabase official PDA, read-only export 2026-09-23; no user records",
+      "pdas": [
+        {
+          "pda_id": "F3-DHC-1-010",
+          "grade": 1,
+          "field": "De lo Humano y lo Comunitario",
+          "content_official": "Construcción del proyecto de vida.",
+          "pda_official": "Explica situaciones cotidianas que se presentan en la escuela y la casa, con la intención de proponer acuerdos que generen una mejor convivencia.",
+          "verification_status": "Verificado"
+        },
+        {
+          "pda_id": "F4-DHC-3-001",
+          "grade": 3,
+          "field": "De lo Humano y lo Comunitario",
+          "content_official": "La comunidad como el espacio en el que se vive y se encuentra la escuela.",
+          "pda_official": "Indaga acerca de ideas, conocimientos, prácticas culturales, formas de organización y acuerdos familiares, escolares y comunitarios, para compartir su importancia en la socialización.",
+          "verification_status": "Verificado"
+        }
+      ],
+      "ltg": [],
+      "schema_version": "CURRICULUM_SNAPSHOT_V1",
+      "snapshot_id": "6ef7ab5f-50d9-4c37-8ddb-e67c1d77c8ba",
+      "created_at": "2026-09-24T02:35:26.541Z",
+      "snapshot_hash": "2dd0aee8c51fc86fc10cbe6fb4a81afcba1b03d5a8fa875eb1ec638157449259"
+    },
+    "methodology": {
+      "schema_version": "METHODOLOGY_DECISION_V1",
+      "methodology_decision_id": "2e4fc053-54d9-4c6c-82d8-a7bd25478c3b",
+      "recommended_id": null,
+      "selected_id": "proyectos_comunitarios",
+      "selection_source": "TEACHER",
+      "catalog_version": "METHODOLOGY_CATALOG_V1",
+      "required_operations": [
+        "IDENTIFICACION",
+        "RECUPERACION",
+        "PLANIFICACION",
+        "ACERCAMIENTO",
+        "COMPRENSION_Y_PRODUCCION",
+        "RECONOCIMIENTO",
+        "CONCRECION",
+        "INTEGRACION",
+        "DIFUSION",
+        "CONSIDERACIONES",
+        "AVANCES"
+      ]
+    }
+  },
+  "plan": {
+    "version": "BLUEPRINT_CONSTRUCTION_V1",
+    "pda_bindings": [
+      {
+        "pda_id": "F3-DHC-1-010",
+        "grade": 1,
+        "official_text": "Explica situaciones cotidianas que se presentan en la escuela y la casa, con la intención de proponer acuerdos que generen una mejor convivencia."
+      },
+      {
+        "pda_id": "F4-DHC-3-001",
+        "grade": 3,
+        "official_text": "Indaga acerca de ideas, conocimientos, prácticas culturales, formas de organización y acuerdos familiares, escolares y comunitarios, para compartir su importancia en la socialización."
+      }
+    ],
+    "grade_bindings": [
+      {
+        "grade": 1,
+        "pda_ids": [
+          "F3-DHC-1-010"
+        ]
+      },
+      {
+        "grade": 3,
+        "pda_ids": [
+          "F4-DHC-3-001"
+        ]
+      }
+    ],
+    "outcome_id": "outcome_01",
+    "stages": [
+      {
+        "stage_id": "planning",
+        "session_number": 1,
+        "operations": [
+          "IDENTIFICACION",
+          "RECUPERACION",
+          "PLANIFICACION"
+        ],
+        "order": 1,
+        "output_artifact_id": "artifact_planning",
+        "required_inputs": [
+          "input_context",
+          "input_curriculum"
+        ],
+        "consumed_by": [
+          "production"
+        ],
+        "max_minutes": 90
+      },
+      {
+        "stage_id": "production",
+        "session_number": 2,
+        "operations": [
+          "ACERCAMIENTO",
+          "COMPRENSION_Y_PRODUCCION",
+          "RECONOCIMIENTO",
+          "CONCRECION"
+        ],
+        "order": 2,
+        "output_artifact_id": "artifact_production",
+        "required_inputs": [
+          "artifact_planning"
+        ],
+        "consumed_by": [
+          "intervention"
+        ],
+        "max_minutes": 90
+      },
+      {
+        "stage_id": "intervention",
+        "session_number": 3,
+        "operations": [
+          "INTEGRACION",
+          "DIFUSION",
+          "CONSIDERACIONES",
+          "AVANCES"
+        ],
+        "order": 3,
+        "output_artifact_id": "artifact_intervention",
+        "required_inputs": [
+          "artifact_production"
+        ],
+        "consumed_by": [
+          "outcome_01"
+        ],
+        "max_minutes": 90
+      }
+    ],
+    "coverage_matrix": [
+      {
+        "operation": "IDENTIFICACION",
+        "stage_id": "planning",
+        "session_number": 1,
+        "output_artifact_id": "artifact_planning",
+        "student_operation": "REQUIRED_FROM_MODEL: exact observable action quote",
+        "evidence": "REQUIRED_FROM_MODEL: exact output or acceptance criterion quote"
+      },
+      {
+        "operation": "RECUPERACION",
+        "stage_id": "planning",
+        "session_number": 1,
+        "output_artifact_id": "artifact_planning",
+        "student_operation": "REQUIRED_FROM_MODEL: exact observable action quote",
+        "evidence": "REQUIRED_FROM_MODEL: exact output or acceptance criterion quote"
+      },
+      {
+        "operation": "PLANIFICACION",
+        "stage_id": "planning",
+        "session_number": 1,
+        "output_artifact_id": "artifact_planning",
+        "student_operation": "REQUIRED_FROM_MODEL: exact observable action quote",
+        "evidence": "REQUIRED_FROM_MODEL: exact output or acceptance criterion quote"
+      },
+      {
+        "operation": "ACERCAMIENTO",
+        "stage_id": "production",
+        "session_number": 2,
+        "output_artifact_id": "artifact_production",
+        "student_operation": "REQUIRED_FROM_MODEL: exact observable action quote",
+        "evidence": "REQUIRED_FROM_MODEL: exact output or acceptance criterion quote"
+      },
+      {
+        "operation": "COMPRENSION_Y_PRODUCCION",
+        "stage_id": "production",
+        "session_number": 2,
+        "output_artifact_id": "artifact_production",
+        "student_operation": "REQUIRED_FROM_MODEL: exact observable action quote",
+        "evidence": "REQUIRED_FROM_MODEL: exact output or acceptance criterion quote"
+      },
+      {
+        "operation": "RECONOCIMIENTO",
+        "stage_id": "production",
+        "session_number": 2,
+        "output_artifact_id": "artifact_production",
+        "student_operation": "REQUIRED_FROM_MODEL: exact observable action quote",
+        "evidence": "REQUIRED_FROM_MODEL: exact output or acceptance criterion quote"
+      },
+      {
+        "operation": "CONCRECION",
+        "stage_id": "production",
+        "session_number": 2,
+        "output_artifact_id": "artifact_production",
+        "student_operation": "REQUIRED_FROM_MODEL: exact observable action quote",
+        "evidence": "REQUIRED_FROM_MODEL: exact output or acceptance criterion quote"
+      },
+      {
+        "operation": "INTEGRACION",
+        "stage_id": "intervention",
+        "session_number": 3,
+        "output_artifact_id": "artifact_intervention",
+        "student_operation": "REQUIRED_FROM_MODEL: exact observable action quote",
+        "evidence": "REQUIRED_FROM_MODEL: exact output or acceptance criterion quote"
+      },
+      {
+        "operation": "DIFUSION",
+        "stage_id": "intervention",
+        "session_number": 3,
+        "output_artifact_id": "artifact_intervention",
+        "student_operation": "REQUIRED_FROM_MODEL: exact observable action quote",
+        "evidence": "REQUIRED_FROM_MODEL: exact output or acceptance criterion quote"
+      },
+      {
+        "operation": "CONSIDERACIONES",
+        "stage_id": "intervention",
+        "session_number": 3,
+        "output_artifact_id": "artifact_intervention",
+        "student_operation": "REQUIRED_FROM_MODEL: exact observable action quote",
+        "evidence": "REQUIRED_FROM_MODEL: exact output or acceptance criterion quote"
+      },
+      {
+        "operation": "AVANCES",
+        "stage_id": "intervention",
+        "session_number": 3,
+        "output_artifact_id": "artifact_intervention",
+        "student_operation": "REQUIRED_FROM_MODEL: exact observable action quote",
+        "evidence": "REQUIRED_FROM_MODEL: exact output or acceptance criterion quote"
+      }
+    ],
+    "artifact_dag": [
+      {
+        "artifact_id": "artifact_planning",
+        "produced_by_stage": "planning",
+        "produced_in_session": 1,
+        "valid_consumers": [
+          "production"
+        ]
+      },
+      {
+        "artifact_id": "artifact_production",
+        "produced_by_stage": "production",
+        "produced_in_session": 2,
+        "valid_consumers": [
+          "intervention"
+        ]
+      },
+      {
+        "artifact_id": "artifact_intervention",
+        "produced_by_stage": "intervention",
+        "produced_in_session": 3,
+        "valid_consumers": [
+          "outcome_01"
+        ]
+      }
+    ],
+    "budget": {
+      "requested_sessions": 3,
+      "session_minutes": 90,
+      "total_minutes": 270
+    },
+    "instruction": "Design pedagogy within official phase purposes. No one-stage-per-operation requirement. Action must execute every assigned operation with observable evidence. Estimates must be realistic; never compress impossible work to fake feasibility. This is construction metadata, not sessions or a lesson plan."
+  }
+}

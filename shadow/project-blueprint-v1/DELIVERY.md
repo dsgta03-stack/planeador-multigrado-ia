@@ -1,86 +1,87 @@
-# ProjectBlueprint V1 — construcción determinista previa
+# Multiplan — máximo diagnóstico y autoría compacta
 
-**NO LISTA. Implementación local 77/77 pruebas; única generación nueva no produjo JSON evaluable.** No existe APPROVED y no se ejecutó adversarial. No se modificaron Gate, BPD/BPS, contratos de dominio ni revisor semántico.
+**NO LISTA. No se obtuvo un APPROVED verificable; adversarial no ejecutado.** Referencia remota: `9662228ee26a5049f20ca93faca985a297e9f5cb`, rama exclusiva `project-blueprint-v1-shadow`.
 
-Rama `project-blueprint-v1-shadow`, referencia `1d3612cdfb86356478351b5bd37222993b9a3894`. Modelo exclusivo Gemini 3.5 Flash-Lite. Los 22/22 históricos permanecen respaldados y no se repitieron. Tampoco se reevaluaron las revisiones históricas.
+## A. Único intento con máximo temporal
 
-## Causas verificadas en revision 2 histórica
+El límite de salida de Gemini 3.5 Flash-Lite se confirmó en la [documentación oficial](https://ai.google.dev/gemini-api/docs/models/gemini-3.5-flash-lite): 65.536 tokens. Se habilitó sólo con opción diagnóstica explícita para GENERATE/REPAIR; el valor normal y REVIEW continúan en 22.000. La función aislada shadow fue actualizada a versión 12. Producción y su autenticación no se modificaron.
 
-- BPD-002: Gemini escribió «Indagación acerca» donde CurriculumSnapshotV1 dice «Indaga acerca» para F4-DHC-3-001. Primero conservaba el texto exacto.
-- BPD-015: sólo art_acercamiento, art_integracion y art_terminal tenían sesión productora. Faltaban art_identificacion, art_recuperacion, art_planificacion, art_produccion, art_reconocimiento, art_concrecion, art_difusion y art_consideraciones.
-- BPD-019: las operaciones de esas etapas no tenían un vínculo válido con su sesión productora; no era simplemente ausencia de etiquetas.
-- BPD-TIME: 375 minutos estimados frente a 270 disponibles. BPD-007 ya estaba corregido y no se reabrió.
+Dos pruebas dirigidas pasaron antes del intento: selección del máximo por tarea/modelo y preservación del diagnóstico MAX_TOKENS como BLUEPRINT_OUTPUT_BLOAT, sin convertirlo en fallo pedagógico. [Resultados](evidence/output-budget-tests.tap).
 
-## Cambios y razón
+Se inició una sola ejecución de `run-construction.mjs positive`, con Gemini 3.5 Flash-Lite y opción diagnóstica. Quedó guardado el [plan previo](evidence/construction-positive-plan-1790217326541.json). La revisión automática de aprobación rechazó el seguimiento del proceso por considerar no establecida la autorización de divulgación al endpoint Supabase/proveedor. Se comprobó después que el runner usa fuentes sintéticas del fixture y el endpoint aislado; el proceso ya no estaba disponible y no dejó el archivo esperado de respuesta.
 
-[Construcción y límites detallados](CONSTRUCTION.md).
+**Resultado: DIAGNOSTIC_RESULT_UNAVAILABLE.** No se puede confirmar si Google terminó, qué respuesta emitió ni cuánto consumió. No se reconstruyen telemetría o revisiones inexistentes. No se inició otra generación para sustituirla. [Incidencia completa](evidence/output-diagnostic-incident.json).
 
-1. construction.mjs crea PDA bindings exactos, matriz de cobertura, DAG y presupuestos antes de la llamada. Para este caso, las tres fases oficiales de Proyectos Comunitarios forman tres paquetes de trabajo con propósito, sin exigir once etapas ni repartir operaciones por índice. Cada sesión dispone de hasta 90 minutos y el total es 270. No se utiliza porcentaje artificial.
-2. El schema de solicitud omite los campos autoritativos que no debe redactar el modelo. Gemini diseña la pedagogía y aporta una cita de acción y evidencia por cada operación; el compilador copia textos/grados del snapshot y deriva las listas de artefactos/operaciones antes de crear el candidato de dominio.
-3. Los minutos y el contenido pedagógico no se reescriben ni se escalan. Citas ausentes, asignaciones inválidas o exceso temporal se rechazan antes del Gate. Las citas sólo prueban trazabilidad; la revisión semántica conserva la responsabilidad de juzgar su significado.
-4. Se guardan el plan previo y las propuestas crudas; una construcción válida conserva su huella y la del plan. No se trata de editar manualmente una salida del Gate.
-5. Con esta política activada, cualquier fallo determinista restante detiene el flujo sin usar reparación. Sólo un fallo semántico real en un candidato determinísticamente válido puede consumir la reparación permitida.
-6. run-construction.mjs exige el modelo 3.5 explícito, guarda el plan antes de llamar y exige un APPROVED real para habilitar el adversarial.
+| Métrica del intento diagnóstico | Valor verificable |
+|---|---|
+| Invocaciones nuevas del runner | 1 |
+| Modelo / máximo configurado | gemini-3.5-flash-lite / 65536 |
+| Intentos de transporte realmente realizados | Desconocidos |
+| provider_status / finish_reason | Desconocidos |
+| Prompt / output / total tokens | Desconocidos |
+| Caracteres / latencia | Desconocidos |
+| 429 / 503 | Sin respuesta disponible; no se puede determinar |
 
-Alcance limitado: la política actual soporta Proyectos Comunitarios con tres sesiones y el adversarial de una sesión. No se presenta como solución genérica para todos los métodos/números de sesiones. Las demás combinaciones se rechazan explícitamente. No es SessionGraph ni una planeación.
+La política de concurrencia, separación entre llamadas y reintentos operativos permanece intacta. El código no reintenta contenido inválido/MAX_TOKENS. No se usaron Gemini 3.1 ni Pro.
 
-## Pruebas
+## B. Positive Blueprint
 
-Ocho comprobaciones dirigidas pasaron antes de Gemini: texto y grado oficiales exactos; PDA de otro grado; inputs futuros o de la misma sesión; producción/IDs duplicados; once operaciones en tres etapas; acción/evidencia literal; presupuestos por sesión/global sin escalado; y las cuatro reglas del Gate original sobre una construcción sintética.
+No existe un nuevo candidato recuperado que pueda validarse, ni hash aprobado. No se atribuye PASS al dominio, deterministas o semántica de este intento. Las revisiones y los resultados históricos permanecen intactos. Los 22/22 históricos homogéneos y el reviewer LOCAL_EVIDENCE_V1_LITERAL_QUOTES_R2 no se volvieron a ejecutar ni modificar.
 
-Evidencias: [siete mocks](evidence/construction-mocks.tap) y [comprobación con Gate](evidence/construction-gate-test.tap). Estos mocks no equivalen a aprobación pedagógica real.
+## C. Adversarial
 
-**Suite local completa final: 77/77 PASS, 0 fallos, una sola corrida**: [salida](evidence/construction-full-tests.tap). No se ejecutaron los 22 fixtures remotos ni una revisión semántica histórica.
+No ejecutado: requiere un APPROVED real previo. PROJECTBLUEPRINT_V1_VALIDATION continúa pendiente; los mocks no cierran la validación pedagógica.
 
-## Única generación real
+## D. Auditoría de tamaño sin llamadas
 
-El primer acceso devolvió 403 SHADOW_DISABLED antes de alcanzar Google: el acceso shadow estaba caducado. Se conservó [ese intento](evidence/construction-positive-1790207970244.json) y su plan. Se renovó exclusivamente la configuración expirable de la función shadow (versión 11), con el mismo código de transporte. No se cambió autenticación productiva.
+Se analizó la **última respuesta real disponible**, `construction-positive-1790208014571.json`, histórica, con límite 22.000. No es la respuesta del intento de esta ronda.
 
-[Plan enviado a la única llamada real](evidence/construction-positive-plan-1790208014571.json).
+| Métrica histórica disponible | Valor |
+|---|---:|
+| provider_status | 200 |
+| finish_reason | MAX_TOKENS |
+| promptTokenCount | 6434 |
+| candidatesTokenCount | 21983 |
+| totalTokenCount | 28417 |
+| Caracteres reportados | 137608 |
+| Caracteres conservados | 100000 |
+| Latencia proveedor, ms | 51621 |
 
-[Respuesta real, fragmento crudo preservado, fuentes y telemetría](evidence/construction-positive-1790208014571.json).
+El analizador léxico mide el prefijo conservado sin reparar JSON ni reconstruir un Blueprint. Tamaños de nodos incompletos son mínimos observados; contenedores incluyen hijos y no deben sumarse con ellos. La cola de 37.608 caracteres no está disponible.
 
-Resultado: PROVIDER_OUTPUT_INVALID_JSON, provider_status=200, finish_reason=MAX_TOKENS. La cadena llegó incompleta: el parser reportó una cadena sin terminar en posición 137608. El proveedor informó 137608 caracteres; por el límite de observabilidad vigente se conservan los primeros 100000 y text_truncated=true. Los 37608 restantes no están disponibles en la evidencia y no se reconstruyeron.
+| Principal campo/array | Caracteres observados | Observación |
+|---|---:|---|
+| grade_contributions[0].support_need | 89698 | Campo incompleto, MODEL_OWNED |
+| final_outcome.functional_requirements | 2943 | Array completo de requisitos pedagógicos |
+| pda_analysis | 2429 | Array completo |
+| pda_analysis[1].cognitive_interpretation.official_text_basis | 185 | Base textual elegida para interpretar el PDA |
+| final_outcome.description | 178 | Descripción pedagógica |
 
-No hubo Blueprint de dominio, ejecución de Gate, revisión semántica ni reparación pedagógica de este candidato. Revisions=[], repair_count=0. No se hizo una segunda llamada de generación a Google. El fallo no se presenta como BPD/BPS ni como incumplimiento demostrado de las cuatro invariantes; la prevención sólo tiene validación local hasta ahora.
+El campo support_need contiene una secuencia de doce palabras repetida **88 veces**. Esto demuestra repetición descontrolada en un campo; no justifica atribuir todo el volumen a la cantidad de campos del contrato. Es el 89,7% del prefijo observado, no del total original.
 
-## Telemetría
+[Auditoría legible](evidence/blueprint-size-audit.md) y [todas las rutas, clases, duplicados y conteos](evidence/blueprint-size-audit.json). Artefactos, criterios de etapas y estados before/after que quedaron fuera del prefijo no pueden medirse. Su desconocimiento no se registra como ausencia o tamaño cero.
 
-```json
-{
-  "google_calls": 1,
-  "google_transport_attempts": 1,
-  "preceding_shadow_403_calls": 1,
-  "finish_reason": "MAX_TOKENS",
-  "text_length": 137608,
-  "retained_candidate_characters": 100000,
-  "client_latency_ms": 62121,
-  "latency_ms": 51621,
-  "usage": {
-    "promptTokenCount": 6434,
-    "candidatesTokenCount": 21983,
-    "totalTokenCount": 28417,
-    "promptTokensDetails": [
-      {
-        "modality": "TEXT",
-        "tokenCount": 6434
-      }
-    ],
-    "serviceTier": "standard"
-  },
-  "repair_count": 0
-}
-```
+## E. Diseño e implementación inicial de compactación
 
-[Resumen completo](evidence/construction-round-summary.json). Sin 429/503. No hubo retries a Google. Se mantuvo máximo una llamada simultánea y separación mínima de ocho segundos. No se usó Gemini Pro ni 3.1.
+[Diseño y propiedad de campos](AUTHORING.md). Módulo nuevo `authoring-proposal.mjs`, **offline y no habilitado en el runner vivo**:
 
-## Estado final
+- Gemini conserva propósito, problema interpretado, pregunta, operaciones, evidencia, criterios, contribuciones diferenciadas, estimaciones y progresión conceptual.
+- El compilador copia fuentes/hashes, metodología, textos oficiales/grados y problema original; deriva identidad de contribuciones, cierre/secuencia y los metadatos ya protegidos por constructionPlan.
+- La matriz referencia evidencia de la etapa por campo/índice; no vuelve a redactarla. La cita de acción permanece literal para conservar trazabilidad. El compilador no interpreta esas citas como aprobación pedagógica.
+- La propuesta impide campos adicionales y rechaza suplantaciones de metadatos. Se comprueba que el plan corresponda exactamente a las fuentes.
+- Instrucción de autoría concreta sin ensayos. Límites iniciales de propuesta: support_need 1.200 caracteres; otros textos 4.000 por valor. El compilador rechaza exceso sin truncar ni corregir. Estos límites no alteran ProjectBlueprintV1 ni el Gate.
+- El resultado debe pasar `assertContract(ProjectBlueprintV1)` completo y posteriormente los Gates originales. No se fabrica un APPROVED.
 
-- APPROVED completo/hash: no obtenido.
-- Nueva revision 1/revision 2: no existen candidatos parseados en esta ronda. Las dos revisiones históricas permanecen intactas.
-- Adversarial: no ejecutado, falta APPROVED previo.
-- Falsos positivos/negativos: no se puede medir el nuevo diseño con una salida que no llegó a parsearse. No se declara éxito pedagógico a partir de los mocks.
-- Producción, main, PR #3, PR #4, historial, contratos/Gate y autenticación productiva: no modificados. Sólo se renovó el acceso expirable shadow.
-- SessionGraph: no iniciado.
+Seis pruebas sintéticas nuevas pasaron: igualdad del Blueprint compilado completo frente al caso sintético de referencia; copia exacta PDA/grado; DAG y once operaciones en tres etapas; tiempo; conservación literal de pedagogía/estados; rechazo de referencias inventadas, campos autoritativos y texto excesivo. [Resultados](evidence/authoring-proposal-tests.tap).
 
-Se detiene tras guardar y publicar esta evidencia. El bloqueo observado para la próxima revisión es el agotamiento de salida durante la única generación; no se incrementaron límites ni se hicieron reintentos ciegos. [Entrega anterior](DELIVERY-PRE-CONSTRUCTION.md).
+No se afirma ahorro de tokens medido con Gemini ni calidad pedagógica real de la propuesta compacta. La reducción de tamaño y equivalencia comprobadas son locales/sintéticas. No hubo llamadas al modelo en esta fase.
+
+## F. Verificación final y pendientes
+
+**Única suite local completa de cierre: 85/85 PASS, 0 fallos, 0 omitidas.** Duración: 56,26 segundos. Las 77 pruebas previas se ejecutaron sólo en esta corrida final, junto con 2 pruebas diagnósticas y 6 de compactación. [Salida completa](evidence/authoring-final-local-tests.tap).
+
+Pendiente para una autorización posterior: recuperar o repetir explícitamente el diagnóstico que no dejó respuesta; integrar/validar la propuesta compacta con el proveedor; obtener un Blueprint positivo APPROVED con hash verificado y después rechazo adversarial apropiado. No se deben mezclar los resultados sintéticos o históricos para declarar cierre real.
+
+No hay nuevos falsos positivos/negativos pedagógicos medibles en esta ronda: falta respuesta evaluable. El rechazo por tamaño del contrato de autoría es operativo/estructural y no un BPD/BPS. Su límite inicial necesita validación futura de suficiencia pedagógica.
+
+Producción, main, PR #3, PR #4, historial, autenticación productiva, schemas de dominio, Gate BPD/BPS y revisor no se modificaron. Única intervención remota de ejecución: función shadow aislada versión 12. SessionGraph no iniciado. [Entrega anterior preservada](DELIVERY-PRE-AUTHORING.md).

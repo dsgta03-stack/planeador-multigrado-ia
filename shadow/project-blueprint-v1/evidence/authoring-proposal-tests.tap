@@ -1,0 +1,14 @@
+✔ compact proposal compiles to same full domain without inventing or removing pedagogy (10.323166ms)
+✔ source ownership exact; domain/Gate bytes and deterministic result remain unchanged (8.469609ms)
+✔ eleven operations, artifact provenance, budget and conceptual states preserved (5.55887ms)
+✔ authoring bloat rejected without truncation, repair, or domain change (3.746858ms)
+✔ references cannot fabricate evidence, operations, or compiler-owned source values (14.27816ms)
+✔ provider proposal remains compact and excludes deterministic metadata (0.48178ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 167.235634

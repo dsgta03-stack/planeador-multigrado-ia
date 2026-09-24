@@ -1,3 +1,4 @@
+import {outputBudget} from './output-budget.mjs';
 import {parseCandidate,redactSecrets} from './provider-output.mjs';
 import { config } from './config.ts';
 // A separate, expiring machine identity. Never accepts Supabase user IDs or writes DB.
@@ -16,8 +17,9 @@ Deno.serve(async(req:Request)=>{
   if(!b.input||!b.input.constraints||!b.input.curriculum||!b.input.methodology||b.task==='GENERATE'&&b.input.blueprint)return json({code:'INVALID_INPUT'},400);
   if(typeof b.system!=='string'||typeof b.prompt!=='object')return json({code:'INVALID_PROMPT'},400);
   const key=Deno.env.get('Multiplan');if(!key)return json({code:'PROVIDER_KEY_UNAVAILABLE'},503);
+  const maxOutputTokens=outputBudget(b.task,b.model,b.output_diagnostic===true);
   const start=Date.now();
-  const response=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${b.model}:generateContent`,{method:'POST',headers:{'content-type':'application/json','x-goog-api-key':key},body:JSON.stringify({systemInstruction:{parts:[{text:b.system}]},contents:[{role:'user',parts:[{text:JSON.stringify(b.prompt)}]}],generationConfig:{temperature:0.15,maxOutputTokens:22000,responseMimeType:'application/json',responseJsonSchema:b.response_schema}}),signal:AbortSignal.timeout(180000)});
+  const response=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${b.model}:generateContent`,{method:'POST',headers:{'content-type':'application/json','x-goog-api-key':key},body:JSON.stringify({systemInstruction:{parts:[{text:b.system}]},contents:[{role:'user',parts:[{text:JSON.stringify(b.prompt)}]}],generationConfig:{temperature:0.15,maxOutputTokens,responseMimeType:'application/json',responseJsonSchema:b.response_schema}}),signal:AbortSignal.timeout(180000)});
   const providerRaw=await response.text();let result:any=null;try{result=JSON.parse(providerRaw)}catch{}
   if(!response.ok){
    const pe=result?.error||{};
@@ -25,7 +27,7 @@ Deno.serve(async(req:Request)=>{
    return json(safe,502);
   }
   if(!result)return json({code:'PROVIDER_INVALID_JSON',provider_status:response.status,latency_ms:Date.now()-start},502);
-  const parsed=parseCandidate(result,{model:b.model,latency_ms:Date.now()-start,secrets:[key,token,req.headers.get('authorization')||'']});
+  const parsed=parseCandidate(result,{model:b.model,latency_ms:Date.now()-start,max_output_tokens:maxOutputTokens,diagnostic:b.output_diagnostic===true,secrets:[key,token,req.headers.get('authorization')||'']});
   return json(parsed.body,parsed.http_status);
  }catch(e){return json({code:'SHADOW_PROVIDER_ERROR',message:String(e).slice(0,160)},502)}
 });
