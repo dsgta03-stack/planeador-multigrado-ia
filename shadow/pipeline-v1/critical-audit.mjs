@@ -12,7 +12,7 @@ export function buildCriticalClaimsInput({blueprint,graph,curriculum}){
  for(const {session,activity} of activityRows(graph)){
   for(const g of activity.grade_participation||[])for(const m of g.pda_mobilization||[])if(m.status==='WORKED'){
    const p=pdaById.get(m.pda_id);
-   worked.push({activity_id:activity.activity_id,session_number:session.session_number,grade:g.grade,pda_id:m.pda_id,official_pda:p?.official_text||'',student_action:g.student_action,evidence:g.evidence,activity_evidence:activity.evidence,assessment_criteria:[...activity.assessment_criteria]});
+   worked.push({activity_id:activity.activity_id,session_number:session.session_number,grade:g.grade,pda_id:m.pda_id,official_pda:p?.pda_official||'',student_action:g.student_action,evidence:g.evidence,activity_evidence:activity.evidence,assessment_criteria:[...activity.assessment_criteria]});
   }
   for(const operation of activity.methodology_operations||[])methodology_links.push({operation,activity_id:activity.activity_id,session_number:session.session_number,title:activity.title,common_student_action:activity.common_student_action,grade_actions:(activity.grade_participation||[]).map(g=>({grade:g.grade,student_action:g.student_action})),output:activity.output,evidence:activity.evidence});
   for(const requirement_id of activity.functional_requirement_ids||[]){
