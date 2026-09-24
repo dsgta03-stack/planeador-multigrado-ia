@@ -42,8 +42,13 @@ function methodologyFrom(body){
 function teacherConstraintPayload(body,grades){
  const tc=body.teacher_constraints&&typeof body.teacher_constraints==='object'?body.teacher_constraints:{};
  const missing=[];
- const students_by_grade=tc.students_by_grade&&typeof tc.students_by_grade==='object'&&!Array.isArray(tc.students_by_grade)?clone(tc.students_by_grade):null;
- if(!students_by_grade||grades.some(g=>!Number.isInteger(Number(students_by_grade[String(g)]??students_by_grade[g]))||Number(students_by_grade[String(g)]??students_by_grade[g])<1))missing.push('students_by_grade');
+ let students_by_grade=null;
+ if(tc.students_by_grade&&typeof tc.students_by_grade==='object'&&!Array.isArray(tc.students_by_grade)){
+  const candidate={};let valid=true;
+  for(const grade of grades){const value=tc.students_by_grade[String(grade)]??tc.students_by_grade[grade];const n=Number(value);if(!Number.isInteger(n)||n<1){valid=false;break}candidate[String(grade)]=n;}
+  if(valid)students_by_grade=candidate;
+ }
+ if(!students_by_grade)missing.push('students_by_grade');
  const reading_profile=nonEmpty(tc.reading_profile)?tc.reading_profile.trim():null;if(!reading_profile)missing.push('reading_profile');
  const writing_profile=nonEmpty(tc.writing_profile)?tc.writing_profile.trim():null;if(!writing_profile)missing.push('writing_profile');
  const autonomy_profile=nonEmpty(tc.autonomy_profile)?tc.autonomy_profile.trim():null;if(!autonomy_profile)missing.push('autonomy_profile');
