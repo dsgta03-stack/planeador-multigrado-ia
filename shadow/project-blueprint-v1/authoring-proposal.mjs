@@ -13,6 +13,12 @@ export function authoringSchema(src,plan){
  omit(p.feasibility,['requested_sessions','minutes_per_session','total_available_minutes']);
  omit(p.grade_contributions.items,['contribution_id']);
  omit(p.session_progression.items,['terminal','next_session_dependency']);
+ // Keep model-owned domain enums in the LOCAL authoring contract/prompt. The provider
+ // shape projection removes these before Gemini decoder validation, so they add no
+ // provider-schema complexity but prevent avoidable domain-contract failures later.
+ p.guiding_question.properties.grade_accessibility.enum=['ALL_GRADES'];
+ p.final_outcome.properties.type.enum=['MATERIAL_PRODUCT','EXHIBITION','MUSEUM','CAMPAIGN','INVESTIGATION','PROPOSAL','PROTOTYPE','SERVICE','INTERVENTION','COMMUNICATION','COLLECTIVE_DOCUMENT','TRANSFORMATION','OTHER'];
+ p.pda_analysis.items.properties.integration_strength.enum=['DIRECT','VIABLE_WITH_SPECIFIC_CONTRIBUTION','SECONDARY','WEAK','INCOMPATIBLE'];
  p.coverage={type:'array',minItems:plan.coverage_matrix.length,maxItems:plan.coverage_matrix.length,items:{type:'object',properties:{operation:{type:'string',enum:plan.coverage_matrix.map(x=>x.operation)},stage_id:{type:'string',enum:plan.stages.map(x=>x.stage_id)},action_quote:{type:'string'},evidence_ref:{type:'object',properties:{field:{type:'string',enum:['expected_output','acceptance_criteria']},index:{anyOf:[{type:'integer',minimum:0},{type:'null'}]}},required:['field','index']}},required:['operation','stage_id','action_quote','evidence_ref']}};
  s.required.push('coverage');
  const constrain=(x)=>{if(x.type==='object'){x.additionalProperties=false;Object.values(x.properties).forEach(constrain)}if(x.items)constrain(x.items);if(x.anyOf)x.anyOf.forEach(constrain);if(x.type==='string')x.maxLength=4000;};constrain(s);
@@ -21,7 +27,7 @@ export function authoringSchema(src,plan){
 }
 function validateAuthoring(value,s,path='$'){
  const errors=schemaErrors(value,s,path);
- const extra=(v,x,p)=>{if(x.anyOf)return; // only nullable integer here; schemaErrors checks it
+ const extra=(v,x,p)=>{if(x.anyOf)return;
   if(typeof v==='string'&&x.maxLength!==undefined&&v.length>x.maxLength)errors.push(`${p}: maxLength ${x.maxLength}`);
   if(Array.isArray(v)){if(x.maxItems!==undefined&&v.length>x.maxItems)errors.push(`${p}: maxItems`);v.forEach((item,i)=>extra(item,x.items,`${p}[${i}]`));}
   else if(v&&typeof v==='object')for(const [k,item] of Object.entries(v))if(x.properties?.[k])extra(item,x.properties[k],`${p}.${k}`);
