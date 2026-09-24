@@ -16,11 +16,15 @@ Si una sesión no puede ejecutar el Blueprint dentro de sus restricciones, Sessi
 
 ## Reglas clave
 
-- No existe actividad de relleno: `DIRECT` construye un artefacto esperado; `COMPLEMENTARY` debe ser consumida por una actividad posterior.
+- No existe actividad de relleno.
+- `DIRECT` significa que el output de la actividad es una parte observable del artefacto esperado de la sesión. Una actividad no se vuelve DIRECT sólo porque sea necesaria o porque su output se use después.
+- `COMPLEMENTARY` se reserva a una preparación necesaria cuyo output no forma parte del artefacto esperado; debe ser consumida por una actividad posterior de la misma sesión y no puede reclamar `contributes_to_artifact_ids`.
 - Todo input de actividad proviene del artefacto de entrada de la sesión o de un output anterior.
 - Cada operación metodológica del Blueprint debe ejecutarse en actividades observables.
-- Cada PDA en foco debe movilizarse desde el grado correcto; no se permite herencia curricular entre grados.
-- Cada requisito funcional del resultado final debe enlazarse a actividades de sus etapas autorizadas.
+- Cada PDA en foco sólo puede movilizarse desde el grado correcto; no se permite herencia curricular entre grados.
+- `WORKED` significa que esa actividad realiza el desempeño cognitivo y la finalidad completos expresados en el PDA oficial. Si la acción sólo desarrolla un componente o prerrequisito, debe usarse `DEVELOPING`; si la actividad no moviliza el PDA, se deja vacío `pda_mobilization`.
+- Un `functional_requirement_id` sólo puede declararse cuando la actividad ejecuta de manera concreta ese requisito y produce evidencia pertinente. La cobertura nominal no es suficiente.
+- Los criterios de evaluación deben ser observables en la acción, producto o evidencia del alumnado; expresiones vagas como “comprende claramente” no bastan.
 - Recursos y apoyos se limitan a `TeacherConstraints`.
 - El último nodo es terminal; nunca puede “preparar la siguiente sesión”.
 - La trazabilidad PDA/metodología/artefactos/requisitos funcionales la deriva el compilador, no el modelo.
