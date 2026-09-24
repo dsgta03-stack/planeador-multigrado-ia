@@ -17,7 +17,7 @@ export function buildCriticalClaimsInput({blueprint,graph,curriculum}){
   for(const operation of activity.methodology_operations||[])methodology_links.push({operation,activity_id:activity.activity_id,session_number:session.session_number,title:activity.title,common_student_action:activity.common_student_action,grade_actions:(activity.grade_participation||[]).map(g=>({grade:g.grade,student_action:g.student_action})),output:activity.output,evidence:activity.evidence});
   for(const requirement_id of activity.functional_requirement_ids||[]){
    const r=reqById.get(requirement_id);
-   functional_links.push({requirement_id,requirement:{criterion:r?.criterion||'',evidence:r?.evidence||'',stage_ids:[...(r?.stage_ids||[])]},activity_id:activity.activity_id,session_number:session.session_number,stage_ids:[...session.stage_ids],title:activity.title,common_student_action:activity.common_student_action,grade_actions:(activity.grade_participation||[]).map(g=>({grade:g.grade,student_action:g.student_action})),output:activity.output,evidence:activity.evidence});
+   functional_links.push({requirement_id,requirement:{criterion:r?.criterion||'',evidence:r?.evidence||'',stage_ids:[...(r?.stage_ids||[])]},activity_id:activity.activity_id,session_number:session.session_number,stage_ids:[...session.stage_ids],title:activity.title,common_student_action:activity.common_student_action,grade_actions:(activity.grade_participation||[]).map(g=>({grade:g.grade,student_action:g.student_action,evidence:g.evidence})),output:activity.output,evidence:activity.evidence});
   }
  }
  return deepFreeze({audit_version:SESSION_CRITICAL_AUDIT_VERSION,worked,methodology_links,functional_links});
@@ -30,6 +30,8 @@ WORKED: trata el PDA oficial como una conjunción de todos sus componentes susta
 METODOLOGÍA: evalúa cada vínculo activity_id→operation de forma local. Una etiqueta o título no cuenta. COMPRENSION_Y_PRODUCCION requiere producción o construcción real además de comprensión; analizar o conversar no basta. DIFUSION requiere comunicar o presentar a una audiencia real; trasladar materiales no es por sí mismo difusión. Una operación de evaluación, producción, intervención o construcción debe ejecutarse sustantivamente en la actividad enlazada.
 
 REQUISITOS FUNCIONALES: evalúa cada vínculo activity_id→requirement_id de forma local. La actividad debe ejecutar el criterio y producir evidencia pertinente en una etapa autorizada. at_least_two_viable_spaces_or_audiences no se satisface en una actividad que sólo ocurre en el primer espacio. circulation_evidence que exige documentar diferentes espacios no se satisface con un conteo de un solo espacio. selection_criteria no es pieces; traslado no es mediation. Un requisito global puede completarse en una actividad posterior, pero eso no vuelve verdadero un vínculo local falso.
+
+Toda cita de una fila PASS debe ser literal y contigua en los campos del claim recibido: student_action para WORKED; common_student_action o grade_actions.student_action para metodología y acción funcional; output, evidence o grade_actions.evidence para evidencia funcional. No inventes ni parafrasees citas.
 
 Devuelve una fila por cada claim recibido, con los mismos identificadores. status=FAIL ante cualquier componente sustantivo ausente.`;
 
@@ -55,19 +57,45 @@ const exactRows=(expected,actual,key)=>{
  if(!Array.isArray(actual)||actual.length!==expected.length)return false;
  const e=new Set(expected.map(key));const a=actual.map(key);return a.length===new Set(a).size&&a.every(k=>e.has(k));
 };
+const nonEmpty=s=>typeof s==='string'&&s.trim().length>0;
+const literalIn=(quote,texts)=>nonEmpty(quote)&&texts.some(text=>typeof text==='string'&&text.includes(quote));
+const actionTexts=claim=>[claim?.common_student_action,...(claim?.grade_actions||[]).map(g=>g.student_action)];
+const evidenceTexts=claim=>[claim?.output,claim?.evidence,...(claim?.grade_actions||[]).map(g=>g.evidence)];
+const validWorked=(row,claim)=>{
+ if(!['PASS','FAIL'].includes(row.status)||typeof row.reason!=='string'||!Array.isArray(row.component_checks)||row.component_checks.length===0)return false;
+ for(const c of row.component_checks){
+  if(typeof c.component!=='string'||typeof c.satisfied!=='boolean'||typeof c.exact_quote!=='string')return false;
+  if(c.satisfied&&!literalIn(c.exact_quote,[claim.student_action]))return false;
+ }
+ if(row.status==='PASS')return row.component_checks.every(c=>c.satisfied&&literalIn(c.exact_quote,[claim.student_action]));
+ return row.component_checks.some(c=>c.satisfied===false);
+};
+const validMethod=(row,claim)=>{
+ if(!['PASS','FAIL'].includes(row.status)||typeof row.exact_quote!=='string'||typeof row.reason!=='string')return false;
+ if(row.status==='PASS')return literalIn(row.exact_quote,actionTexts(claim));
+ return !nonEmpty(row.exact_quote)||literalIn(row.exact_quote,actionTexts(claim));
+};
+const validFunctional=(row,claim)=>{
+ if(!['PASS','FAIL'].includes(row.status)||typeof row.action_quote!=='string'||typeof row.evidence_quote!=='string'||typeof row.reason!=='string')return false;
+ if(row.status==='PASS')return literalIn(row.action_quote,actionTexts(claim))&&literalIn(row.evidence_quote,evidenceTexts(claim));
+ const actionOk=!nonEmpty(row.action_quote)||literalIn(row.action_quote,actionTexts(claim));
+ const evidenceOk=!nonEmpty(row.evidence_quote)||literalIn(row.evidence_quote,evidenceTexts(claim));
+ return actionOk&&evidenceOk;
+};
 
 export function criticalClaimsGate(input,audit=null){
  const request=buildCriticalClaimsReviewRequest(input),claims=request.claims;
  const findings=[];const add=(claim_type,key,status,observed,expected)=>findings.push({claim_type,key,severity:'CRITICAL',status,observed,expected});
  if(!audit||audit.input_hash!==request.input_hash){add('audit','binding','NOT_EVALUABLE','Critical audit missing or bound to another graph','Exact critical audit input hash');return deepFreeze({gate_version:SESSION_CRITICAL_GATE_VERSION,status:'NOT_EVALUABLE',critical_count:0,input_hash:request.input_hash,evaluated_graph_hash:hash(input.graph),findings});}
  const groups=[
-  {type:'WORKED',expected:claims.worked,actual:audit.worked_audits,key:keyWorked,valid:r=>['PASS','FAIL'].includes(r.status)&&Array.isArray(r.component_checks)&&r.component_checks.every(c=>typeof c.component==='string'&&typeof c.satisfied==='boolean'&&typeof c.exact_quote==='string')},
-  {type:'METHODOLOGY_LINK',expected:claims.methodology_links,actual:audit.methodology_link_audits,key:keyMethod,valid:r=>['PASS','FAIL'].includes(r.status)&&typeof r.exact_quote==='string'&&typeof r.reason==='string'},
-  {type:'FUNCTIONAL_LINK',expected:claims.functional_links,actual:audit.functional_link_audits,key:keyFunctional,valid:r=>['PASS','FAIL'].includes(r.status)&&typeof r.action_quote==='string'&&typeof r.evidence_quote==='string'&&typeof r.reason==='string'}
+  {type:'WORKED',expected:claims.worked,actual:audit.worked_audits,key:keyWorked,valid:validWorked},
+  {type:'METHODOLOGY_LINK',expected:claims.methodology_links,actual:audit.methodology_link_audits,key:keyMethod,valid:validMethod},
+  {type:'FUNCTIONAL_LINK',expected:claims.functional_links,actual:audit.functional_link_audits,key:keyFunctional,valid:validFunctional}
  ];
  for(const group of groups){
   if(!exactRows(group.expected,group.actual,group.key)){add(group.type,'coverage','NOT_EVALUABLE','Missing, duplicated or foreign audit rows','Exactly one audit row per critical claim');continue;}
-  for(const row of group.actual){const valid=group.valid(row);const status=!valid?'NOT_EVALUABLE':row.status;const reason=row.reason||'Invalid critical audit row';add(group.type,group.key(row),status,reason,'Critical semantic claim must be locally true');}
+  const expectedByKey=new Map(group.expected.map(row=>[group.key(row),row]));
+  for(const row of group.actual){const key=group.key(row),claim=expectedByKey.get(key);const valid=group.valid(row,claim);const status=!valid?'NOT_EVALUABLE':row.status;const reason=valid?(row.reason||'Critical claim evaluated'):'Audit row is malformed or its claimed literal evidence is not present in the local claim';add(group.type,key,status,reason,'Critical semantic claim must be locally true and any PASS quote must be literal evidence from this exact claim');}
  }
  const failed=findings.some(x=>x.status==='FAIL'),incomplete=findings.some(x=>x.status==='NOT_EVALUABLE');
  return deepFreeze({gate_version:SESSION_CRITICAL_GATE_VERSION,status:failed?'FAIL':incomplete?'NOT_EVALUABLE':'PASS',critical_count:findings.filter(x=>x.status==='FAIL').length,input_hash:request.input_hash,evaluated_graph_hash:hash(input.graph),findings});
