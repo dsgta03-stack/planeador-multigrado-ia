@@ -6,6 +6,9 @@ on:
       - pipeline-v1-router-integrated-shadow
     paths-ignore:
       - 'shadow/router-integration-v1/evidence/**'
+  pull_request:
+    branches:
+      - pipeline-v1-router-integrated-shadow
   workflow_dispatch:
 
 permissions:
