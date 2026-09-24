@@ -1,0 +1,24 @@
+name: SessionGraph V1 Shadow
+
+on:
+  push:
+    branches:
+      - session-graph-v1-shadow
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  focal-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: SessionGraph focal tests
+        run: node --test shadow/session-graph-v1/tests/*.test.mjs
