@@ -26,3 +26,5 @@ jobs:
         run: node --test shadow/session-graph-v1/tests/*.test.mjs
       - name: End-to-end pipeline boundary tests
         run: node --test shadow/pipeline-v1/tests/*.test.mjs
+
+# Pipeline V1 focal verification trigger.
