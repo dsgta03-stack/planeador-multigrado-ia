@@ -1,0 +1,40 @@
+✔ compact proposal compiles to same full domain without inventing or removing pedagogy (8.273216ms)
+✔ source ownership exact; domain/Gate bytes and deterministic result remain unchanged (6.833737ms)
+✔ eleven operations, artifact provenance, budget and conceptual states preserved (4.749947ms)
+✔ authoring bloat rejected without truncation, repair, or domain change (3.648728ms)
+✔ references cannot fabricate evidence, operations, or compiler-owned source values (11.10312ms)
+✔ provider proposal remains compact and excludes deterministic metadata (0.440103ms)
+✔ compact live protocol polls stored result, records raw response before returning to evaluator (16.635906ms)
+✔ construction-mode deterministic failure stops before semantic calls or pedagogical repair (7.175462ms)
+✔ historical schema exactly reproduced; only maxLength removed and local limits retained (6.468697ms)
+✔ guard reports unsupported keyword and exact path, including nested definitions (0.731863ms)
+✔ unknown constraints fail closed; supported refs, arrays, enums and nullability survive (0.43137ms)
+✖ unchanged reviewer schema is compatible with same provider guard (0.319722ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 11
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 142.594526
+
+✖ failing tests:
+
+test at shadow/project-blueprint-v1/tests/provider-schema.test.mjs:19:1
+✖ unchanged reviewer schema is compatible with same provider guard (0.319722ms)
+  Error: PROVIDER_SCHEMA_UNSUPPORTED_KEYWORD: minLength at $.properties["findings"].items.properties["rule_id"].minLength
+      at file:///workspace/scratch/555ac411d0a8/multiplan-blueprint/shadow/project-blueprint-v1/provider-schema.mjs:16:66
+      at visit (file:///workspace/scratch/555ac411d0a8/multiplan-blueprint/shadow/project-blueprint-v1/provider-schema.mjs:9:33)
+      at visit (file:///workspace/scratch/555ac411d0a8/multiplan-blueprint/shadow/project-blueprint-v1/provider-schema.mjs:10:95)
+      at visit (file:///workspace/scratch/555ac411d0a8/multiplan-blueprint/shadow/project-blueprint-v1/provider-schema.mjs:12:87)
+      at visit (file:///workspace/scratch/555ac411d0a8/multiplan-blueprint/shadow/project-blueprint-v1/provider-schema.mjs:10:95)
+      at assertProviderSchema (file:///workspace/scratch/555ac411d0a8/multiplan-blueprint/shadow/project-blueprint-v1/provider-schema.mjs:16:2)
+      at TestContext.<anonymous> (file:///workspace/scratch/555ac411d0a8/multiplan-blueprint/shadow/project-blueprint-v1/tests/provider-schema.test.mjs:19:77)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18) {
+    code: 'PROVIDER_SCHEMA_UNSUPPORTED_KEYWORD',
+    keyword: 'minLength',
+    path: '$.properties["findings"].items.properties["rule_id"].minLength'
+  }

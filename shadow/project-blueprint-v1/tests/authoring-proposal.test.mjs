@@ -39,7 +39,7 @@ test('eleven operations, artifact provenance, budget and conceptual states prese
 });
 test('authoring bloat rejected without truncation, repair, or domain change',()=>{
  const p=proposal();p.grade_contributions[0].support_need='Texto repetido '.repeat(600);const h=hash(p);
- assert.throws(()=>build(p),/maxLength 1200/);assert.equal(hash(p),h);
+ assert.throws(()=>build(p),e=>e.code==='AUTHORING_FIELD_EXCESSIVE_LENGTH'&&/maxLength 1200/.test(e.message));assert.equal(hash(p),h);
  // Limits are provider authoring policy, not a new restriction in the domain.
  const domain=structuredClone(expected);domain.grade_contributions[0].support_need=p.grade_contributions[0].support_need;assertContract('ProjectBlueprintV1',domain);
 });

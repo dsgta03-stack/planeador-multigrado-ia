@@ -1,0 +1,20 @@
+✔ compact proposal compiles to same full domain without inventing or removing pedagogy (10.06732ms)
+✔ source ownership exact; domain/Gate bytes and deterministic result remain unchanged (7.184215ms)
+✔ eleven operations, artifact provenance, budget and conceptual states preserved (4.739131ms)
+✔ authoring bloat rejected without truncation, repair, or domain change (2.802413ms)
+✔ references cannot fabricate evidence, operations, or compiler-owned source values (9.135605ms)
+✔ provider proposal remains compact and excludes deterministic metadata (0.397619ms)
+✔ compact live protocol polls stored result, records raw response before returning to evaluator (15.735389ms)
+✔ construction-mode deterministic failure stops before semantic calls or pedagogical repair (7.561814ms)
+✔ historical schema exactly reproduced; only maxLength removed and local limits retained (8.606689ms)
+✔ guard reports unsupported keyword and exact path, including nested definitions (0.824462ms)
+✔ unknown constraints fail closed; supported refs, arrays, enums and nullability survive (0.388526ms)
+✔ review local minLength remains intact; transport projection passes guard (0.851263ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 141.173784

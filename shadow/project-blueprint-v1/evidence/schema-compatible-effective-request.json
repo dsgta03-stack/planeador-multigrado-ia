@@ -1,0 +1,2237 @@
+{
+  "provenance": "Offline exact recreation verified against recorded hash; no HTTP sent.",
+  "request_id": "ac4df1f3-1009-4cae-9e46-c8dcb9798876",
+  "input_hash": "b30253078fbff27af16a47d0bb853d8671a4428f05267da65f4bcb8cd481e868",
+  "request": {
+    "task": "GENERATE",
+    "prompt_version": "PROJECT_BLUEPRINT_SHADOW_V1_R2",
+    "model": "gemini-3.5-flash-lite",
+    "system": "Construye únicamente ProjectBlueprintV1 ANTES de sesiones ejecutables. No recibes planeaciones V6.4 ni Beta.10. Respeta constraints/corpus/método exactos. Lee texto completo del PDA e interpreta acción cognitiva, no matching literal. No agregues PDA ni currículo ajeno a grados transversales. Mantén un único producto construido conjuntamente. Describe arquitectura, etapas, operaciones, artefactos y criterios observables, NO actividades detalladas ni SessionGraph. Nunca distribuyas fases por índice, proporción ni calendario; diseña las operaciones necesarias y su factibilidad. Una sola sesión puede contener varias operaciones justificadas. No inventes recursos, audiencias externas ni espacios. Un museo itinerante requiere circulación viable y evidencias, no sólo nombre. Todas las condiciones funcionales deben tener stage_ids y evidencia. Usa functional_profiles explícitos según semántica, incluyendo ITINERANT cuando proceda. Etapas: required_inputs sólo input_context/input_curriculum o artefactos de etapas anteriores; consumed_by nombra etapas posteriores que realmente lo usan o outcome_id. Cada artefacto se produce en exactamente una sesión. Inputs de sesión sólo externos o artefactos de sesiones ANTERIORES; productos de etapas internas a una sesión se expresan en las etapas, no como input de esa misma sesión. Cada etapa estima minutos con fundamento, suma por sesión no excede disponibilidad. Mantén selección LTG explícita. La última sesión es terminal y no tiene siguiente. Sin fallbacks genéricos. Si un PDA es débil/incompatible exprésalo honestamente; no lo sustituyas.  No puedes aprobarte. Devuelve exclusivamente JSON conforme al schema.\nEscribe decisiones pedagógicas concretas, una idea por campo, sin introducciones ni ensayos. No repitas el PDA completo ni expliques de nuevo la metodología. Conserva acciones observables, evidencia, criterios, aportaciones por grado y progresión conceptual. support_need: hasta 1200 caracteres; otros textos: hasta 4000. Estos son límites de autoría, no criterios de aprobación pedagógica. Si no puedes expresar evidencia suficiente, informa la limitación; no sustituyas acciones por etiquetas. No escribas metadatos que completa el compilador. Las referencias de evidencia deben señalar texto escrito por ti en la etapa indicada.\nDevuelve SOLO la propuesta de autoría. Los campos omitidos son del compilador y no deben aparecer en la respuesta.",
+    "prompt": {
+      "authoring_version": "BLUEPRINT_AUTHORING_COMPACT_V1",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "problem_frame": {
+            "type": "object",
+            "properties": {
+              "pedagogical_focus": {
+                "type": "string"
+              },
+              "context_relevance": {
+                "type": "string"
+              },
+              "why_project_is_needed": {
+                "type": "string"
+              },
+              "scope": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "out_of_scope": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "pedagogical_focus",
+              "context_relevance",
+              "why_project_is_needed",
+              "scope",
+              "out_of_scope"
+            ],
+            "additionalProperties": false
+          },
+          "guiding_question": {
+            "type": "object",
+            "properties": {
+              "question": {
+                "type": "string"
+              },
+              "problem_link": {
+                "type": "string"
+              },
+              "product_link": {
+                "type": "string"
+              },
+              "grade_accessibility": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "question",
+              "problem_link",
+              "product_link",
+              "grade_accessibility"
+            ],
+            "additionalProperties": false
+          },
+          "final_outcome": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "purpose": {
+                "type": "string"
+              },
+              "audience_or_beneficiary": {
+                "type": "string"
+              },
+              "use_or_destination": {
+                "type": "string"
+              },
+              "functional_profiles": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "functional_requirements": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "requirement_id": {
+                      "type": "string"
+                    },
+                    "criterion": {
+                      "type": "string"
+                    },
+                    "stage_ids": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "evidence": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "requirement_id",
+                    "criterion",
+                    "stage_ids",
+                    "evidence"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "completion_evidence": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "authenticity_conditions": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "required_resources": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "resource": {
+                      "type": "string"
+                    },
+                    "essential": {
+                      "type": "boolean"
+                    },
+                    "alternative": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "alternative_rationale": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "resource",
+                    "essential",
+                    "alternative",
+                    "alternative_rationale"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "name",
+              "type",
+              "description",
+              "purpose",
+              "audience_or_beneficiary",
+              "use_or_destination",
+              "functional_profiles",
+              "functional_requirements",
+              "completion_evidence",
+              "authenticity_conditions",
+              "required_resources"
+            ],
+            "additionalProperties": false
+          },
+          "pda_analysis": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "pda_id": {
+                  "type": "string",
+                  "enum": [
+                    "F3-DHC-1-010",
+                    "F4-DHC-3-001"
+                  ]
+                },
+                "central_cognitive_action": {
+                  "type": "string"
+                },
+                "cognitive_interpretation": {
+                  "type": "object",
+                  "properties": {
+                    "official_text_basis": {
+                      "type": "string"
+                    },
+                    "reasoning": {
+                      "type": "string"
+                    },
+                    "performance_indicators": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "official_text_basis",
+                    "reasoning",
+                    "performance_indicators"
+                  ],
+                  "additionalProperties": false
+                },
+                "expected_performance": {
+                  "type": "string"
+                },
+                "observable_evidence_conditions": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "possible_project_contribution": {
+                  "type": "string"
+                },
+                "integration_strength": {
+                  "type": "string"
+                },
+                "integration_reason": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "pda_id",
+                "central_cognitive_action",
+                "cognitive_interpretation",
+                "expected_performance",
+                "observable_evidence_conditions",
+                "possible_project_contribution",
+                "integration_strength",
+                "integration_reason"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "grade_contributions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "grade": {
+                  "type": "integer",
+                  "enum": [
+                    1,
+                    3
+                  ]
+                },
+                "learning_role": {
+                  "type": "string"
+                },
+                "project_contribution": {
+                  "type": "string"
+                },
+                "expected_evidence": {
+                  "type": "string"
+                },
+                "complexity_level": {
+                  "type": "string"
+                },
+                "support_need": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "grade",
+                "learning_role",
+                "project_contribution",
+                "expected_evidence",
+                "complexity_level",
+                "support_need"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "project_stages": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "stage_id": {
+                  "type": "string",
+                  "enum": [
+                    "planning",
+                    "production",
+                    "intervention"
+                  ]
+                },
+                "purpose": {
+                  "type": "string"
+                },
+                "student_operation": {
+                  "type": "string"
+                },
+                "expected_output": {
+                  "type": "string"
+                },
+                "acceptance_criteria": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "estimated_minutes": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 90
+                },
+                "estimate_rationale": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "stage_id",
+                "purpose",
+                "student_operation",
+                "expected_output",
+                "acceptance_criteria",
+                "estimated_minutes",
+                "estimate_rationale"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 3,
+            "maxItems": 3
+          },
+          "session_progression": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "session_number": {
+                  "type": "integer"
+                },
+                "project_state_before": {
+                  "type": "string"
+                },
+                "session_project_goal": {
+                  "type": "string"
+                },
+                "required_learning": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "pda_focus": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "expected_partial_product": {
+                  "type": "string"
+                },
+                "acceptance_criteria": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "project_state_after": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "session_number",
+                "project_state_before",
+                "session_project_goal",
+                "required_learning",
+                "pda_focus",
+                "expected_partial_product",
+                "acceptance_criteria",
+                "project_state_after"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 3,
+            "maxItems": 3
+          },
+          "ltg_strategy": {
+            "type": "object",
+            "properties": {
+              "mode": {
+                "type": "string"
+              },
+              "selections": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "project_id": {
+                      "type": "string"
+                    },
+                    "role": {
+                      "type": "string"
+                    },
+                    "pda_ids": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "activity_ids": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "reason": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "project_id",
+                    "role",
+                    "pda_ids",
+                    "activity_ids",
+                    "reason"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "reason": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "mode",
+              "selections",
+              "reason"
+            ],
+            "additionalProperties": false
+          },
+          "feasibility": {
+            "type": "object",
+            "properties": {
+              "complexity": {
+                "type": "string"
+              },
+              "resource_feasibility": {
+                "type": "string"
+              },
+              "time_feasibility": {
+                "type": "string"
+              },
+              "multigrade_feasibility": {
+                "type": "string"
+              },
+              "risks": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "assumptions": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "complexity",
+              "resource_feasibility",
+              "time_feasibility",
+              "multigrade_feasibility",
+              "risks",
+              "assumptions"
+            ],
+            "additionalProperties": false
+          },
+          "coverage": {
+            "type": "array",
+            "minItems": 11,
+            "maxItems": 11,
+            "items": {
+              "type": "object",
+              "properties": {
+                "operation": {
+                  "type": "string",
+                  "enum": [
+                    "IDENTIFICACION",
+                    "RECUPERACION",
+                    "PLANIFICACION",
+                    "ACERCAMIENTO",
+                    "COMPRENSION_Y_PRODUCCION",
+                    "RECONOCIMIENTO",
+                    "CONCRECION",
+                    "INTEGRACION",
+                    "DIFUSION",
+                    "CONSIDERACIONES",
+                    "AVANCES"
+                  ]
+                },
+                "stage_id": {
+                  "type": "string",
+                  "enum": [
+                    "planning",
+                    "production",
+                    "intervention"
+                  ]
+                },
+                "action_quote": {
+                  "type": "string"
+                },
+                "evidence_ref": {
+                  "type": "object",
+                  "properties": {
+                    "field": {
+                      "type": "string",
+                      "enum": [
+                        "expected_output",
+                        "acceptance_criteria"
+                      ]
+                    },
+                    "index": {
+                      "anyOf": [
+                        {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "field",
+                    "index"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "operation",
+                "stage_id",
+                "action_quote",
+                "evidence_ref"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "problem_frame",
+          "guiding_question",
+          "final_outcome",
+          "pda_analysis",
+          "grade_contributions",
+          "project_stages",
+          "session_progression",
+          "ltg_strategy",
+          "feasibility",
+          "coverage"
+        ],
+        "additionalProperties": false
+      },
+      "input": {
+        "constraints": {
+          "grades": [
+            1,
+            3
+          ],
+          "selected_pda_ids": [
+            "F3-DHC-1-010",
+            "F4-DHC-3-001"
+          ],
+          "explicit_ltg_selections": [],
+          "requested_sessions": 3,
+          "minutes_per_session": 90,
+          "original_problem": "En el grupo desconocemos por qué existen nuestros acuerdos y prácticas escolares; esto dificulta convivir y explicar su importancia a los compañeros nuevos.",
+          "original_context": "Escuela multigrado. Podemos consultar al docente y los recuerdos del grupo sobre prácticas y acuerdos de la escuela. Tenemos aula y patio techado, dos espacios seguros para intercambiar explicaciones con compañeros del mismo grupo. Sin internet, visitas ni participación familiar obligatoria. El alumnado nuevo necesita conocer cómo convivir y dónde pedir apoyo.",
+          "students_by_grade": {
+            "1": 5,
+            "3": 5
+          },
+          "reading_profile": "Lectura inicial en primero; tercero lee textos breves con apoyo.",
+          "writing_profile": "Primero usa dibujos y dictado; tercero registros breves.",
+          "autonomy_profile": "Baja; requiere consignas visuales y apoyo entre pares.",
+          "connectivity": "SIN_INTERNET",
+          "available_resources": [
+            "papel reutilizado",
+            "lápices",
+            "colores",
+            "mesas",
+            "aula",
+            "patio techado"
+          ],
+          "supports": [
+            "modelado docente",
+            "apoyo entre pares"
+          ],
+          "teacher_explicit_constraints": [
+            "Sin salir de la escuela",
+            "No pedir compras"
+          ],
+          "schema_version": "TEACHER_CONSTRAINTS_V1",
+          "constraints_id": "87d50a5b-da93-4263-9a0e-f14a442fca1a",
+          "created_at": "2026-09-24T05:13:35.917Z",
+          "constraints_hash": "231186405b12537fc00f9cb7d644bb98e7c79b2cc9eb7cae401aecc399c5400a"
+        },
+        "curriculum": {
+          "corpus_version_or_provenance": "Supabase official PDA, read-only export 2026-09-23; no user records",
+          "pdas": [
+            {
+              "pda_id": "F3-DHC-1-010",
+              "grade": 1,
+              "field": "De lo Humano y lo Comunitario",
+              "content_official": "Construcción del proyecto de vida.",
+              "pda_official": "Explica situaciones cotidianas que se presentan en la escuela y la casa, con la intención de proponer acuerdos que generen una mejor convivencia.",
+              "verification_status": "Verificado"
+            },
+            {
+              "pda_id": "F4-DHC-3-001",
+              "grade": 3,
+              "field": "De lo Humano y lo Comunitario",
+              "content_official": "La comunidad como el espacio en el que se vive y se encuentra la escuela.",
+              "pda_official": "Indaga acerca de ideas, conocimientos, prácticas culturales, formas de organización y acuerdos familiares, escolares y comunitarios, para compartir su importancia en la socialización.",
+              "verification_status": "Verificado"
+            }
+          ],
+          "ltg": [],
+          "schema_version": "CURRICULUM_SNAPSHOT_V1",
+          "snapshot_id": "4de94e28-88b3-4eaf-89c6-cb8db51a2d97",
+          "created_at": "2026-09-24T05:13:35.918Z",
+          "snapshot_hash": "2dd0aee8c51fc86fc10cbe6fb4a81afcba1b03d5a8fa875eb1ec638157449259"
+        },
+        "methodology": {
+          "schema_version": "METHODOLOGY_DECISION_V1",
+          "methodology_decision_id": "a266c38f-2156-402d-b18d-f6fc4ea4fa74",
+          "recommended_id": null,
+          "selected_id": "proyectos_comunitarios",
+          "selection_source": "TEACHER",
+          "catalog_version": "METHODOLOGY_CATALOG_V1",
+          "required_operations": [
+            "IDENTIFICACION",
+            "RECUPERACION",
+            "PLANIFICACION",
+            "ACERCAMIENTO",
+            "COMPRENSION_Y_PRODUCCION",
+            "RECONOCIMIENTO",
+            "CONCRECION",
+            "INTEGRACION",
+            "DIFUSION",
+            "CONSIDERACIONES",
+            "AVANCES"
+          ]
+        }
+      },
+      "construction_plan": {
+        "version": "BLUEPRINT_CONSTRUCTION_V1",
+        "pda_bindings": [
+          {
+            "pda_id": "F3-DHC-1-010",
+            "grade": 1,
+            "official_text": "Explica situaciones cotidianas que se presentan en la escuela y la casa, con la intención de proponer acuerdos que generen una mejor convivencia."
+          },
+          {
+            "pda_id": "F4-DHC-3-001",
+            "grade": 3,
+            "official_text": "Indaga acerca de ideas, conocimientos, prácticas culturales, formas de organización y acuerdos familiares, escolares y comunitarios, para compartir su importancia en la socialización."
+          }
+        ],
+        "grade_bindings": [
+          {
+            "grade": 1,
+            "pda_ids": [
+              "F3-DHC-1-010"
+            ]
+          },
+          {
+            "grade": 3,
+            "pda_ids": [
+              "F4-DHC-3-001"
+            ]
+          }
+        ],
+        "outcome_id": "outcome_01",
+        "stages": [
+          {
+            "stage_id": "planning",
+            "session_number": 1,
+            "operations": [
+              "IDENTIFICACION",
+              "RECUPERACION",
+              "PLANIFICACION"
+            ],
+            "order": 1,
+            "output_artifact_id": "artifact_planning",
+            "required_inputs": [
+              "input_context",
+              "input_curriculum"
+            ],
+            "consumed_by": [
+              "production"
+            ],
+            "max_minutes": 90
+          },
+          {
+            "stage_id": "production",
+            "session_number": 2,
+            "operations": [
+              "ACERCAMIENTO",
+              "COMPRENSION_Y_PRODUCCION",
+              "RECONOCIMIENTO",
+              "CONCRECION"
+            ],
+            "order": 2,
+            "output_artifact_id": "artifact_production",
+            "required_inputs": [
+              "artifact_planning"
+            ],
+            "consumed_by": [
+              "intervention"
+            ],
+            "max_minutes": 90
+          },
+          {
+            "stage_id": "intervention",
+            "session_number": 3,
+            "operations": [
+              "INTEGRACION",
+              "DIFUSION",
+              "CONSIDERACIONES",
+              "AVANCES"
+            ],
+            "order": 3,
+            "output_artifact_id": "artifact_intervention",
+            "required_inputs": [
+              "artifact_production"
+            ],
+            "consumed_by": [
+              "outcome_01"
+            ],
+            "max_minutes": 90
+          }
+        ],
+        "coverage_matrix": [
+          {
+            "operation": "IDENTIFICACION",
+            "stage_id": "planning",
+            "session_number": 1,
+            "output_artifact_id": "artifact_planning",
+            "student_operation": "REQUIRED_FROM_MODEL: exact observable action quote",
+            "evidence": "REQUIRED_FROM_MODEL: exact output or acceptance criterion quote"
+          },
+          {
+            "operation": "RECUPERACION",
+            "stage_id": "planning",
+            "session_number": 1,
+            "output_artifact_id": "artifact_planning",
+            "student_operation": "REQUIRED_FROM_MODEL: exact observable action quote",
+            "evidence": "REQUIRED_FROM_MODEL: exact output or acceptance criterion quote"
+          },
+          {
+            "operation": "PLANIFICACION",
+            "stage_id": "planning",
+            "session_number": 1,
+            "output_artifact_id": "artifact_planning",
+            "student_operation": "REQUIRED_FROM_MODEL: exact observable action quote",
+            "evidence": "REQUIRED_FROM_MODEL: exact output or acceptance criterion quote"
+          },
+          {
+            "operation": "ACERCAMIENTO",
+            "stage_id": "production",
+            "session_number": 2,
+            "output_artifact_id": "artifact_production",
+            "student_operation": "REQUIRED_FROM_MODEL: exact observable action quote",
+            "evidence": "REQUIRED_FROM_MODEL: exact output or acceptance criterion quote"
+          },
+          {
+            "operation": "COMPRENSION_Y_PRODUCCION",
+            "stage_id": "production",
+            "session_number": 2,
+            "output_artifact_id": "artifact_production",
+            "student_operation": "REQUIRED_FROM_MODEL: exact observable action quote",
+            "evidence": "REQUIRED_FROM_MODEL: exact output or acceptance criterion quote"
+          },
+          {
+            "operation": "RECONOCIMIENTO",
+            "stage_id": "production",
+            "session_number": 2,
+            "output_artifact_id": "artifact_production",
+            "student_operation": "REQUIRED_FROM_MODEL: exact observable action quote",
+            "evidence": "REQUIRED_FROM_MODEL: exact output or acceptance criterion quote"
+          },
+          {
+            "operation": "CONCRECION",
+            "stage_id": "production",
+            "session_number": 2,
+            "output_artifact_id": "artifact_production",
+            "student_operation": "REQUIRED_FROM_MODEL: exact observable action quote",
+            "evidence": "REQUIRED_FROM_MODEL: exact output or acceptance criterion quote"
+          },
+          {
+            "operation": "INTEGRACION",
+            "stage_id": "intervention",
+            "session_number": 3,
+            "output_artifact_id": "artifact_intervention",
+            "student_operation": "REQUIRED_FROM_MODEL: exact observable action quote",
+            "evidence": "REQUIRED_FROM_MODEL: exact output or acceptance criterion quote"
+          },
+          {
+            "operation": "DIFUSION",
+            "stage_id": "intervention",
+            "session_number": 3,
+            "output_artifact_id": "artifact_intervention",
+            "student_operation": "REQUIRED_FROM_MODEL: exact observable action quote",
+            "evidence": "REQUIRED_FROM_MODEL: exact output or acceptance criterion quote"
+          },
+          {
+            "operation": "CONSIDERACIONES",
+            "stage_id": "intervention",
+            "session_number": 3,
+            "output_artifact_id": "artifact_intervention",
+            "student_operation": "REQUIRED_FROM_MODEL: exact observable action quote",
+            "evidence": "REQUIRED_FROM_MODEL: exact output or acceptance criterion quote"
+          },
+          {
+            "operation": "AVANCES",
+            "stage_id": "intervention",
+            "session_number": 3,
+            "output_artifact_id": "artifact_intervention",
+            "student_operation": "REQUIRED_FROM_MODEL: exact observable action quote",
+            "evidence": "REQUIRED_FROM_MODEL: exact output or acceptance criterion quote"
+          }
+        ],
+        "artifact_dag": [
+          {
+            "artifact_id": "artifact_planning",
+            "produced_by_stage": "planning",
+            "produced_in_session": 1,
+            "valid_consumers": [
+              "production"
+            ]
+          },
+          {
+            "artifact_id": "artifact_production",
+            "produced_by_stage": "production",
+            "produced_in_session": 2,
+            "valid_consumers": [
+              "intervention"
+            ]
+          },
+          {
+            "artifact_id": "artifact_intervention",
+            "produced_by_stage": "intervention",
+            "produced_in_session": 3,
+            "valid_consumers": [
+              "outcome_01"
+            ]
+          }
+        ],
+        "budget": {
+          "requested_sessions": 3,
+          "session_minutes": 90,
+          "total_minutes": 270
+        },
+        "instruction": "Design pedagogy within official phase purposes. No one-stage-per-operation requirement. Action must execute every assigned operation with observable evidence. Estimates must be realistic; never compress impossible work to fake feasibility. This is construction metadata, not sessions or a lesson plan."
+      },
+      "functional_profiles": {
+        "MUSEUM": [
+          "pieces",
+          "selection_criteria",
+          "organization",
+          "piece_explanation",
+          "mounting",
+          "audience_or_route",
+          "mediation"
+        ],
+        "ITINERANT": [
+          "movement",
+          "at_least_two_viable_spaces_or_audiences",
+          "relocation_or_reinstallation",
+          "circulation_evidence"
+        ],
+        "CAMPAIGN": [
+          "message",
+          "audience",
+          "channel",
+          "dissemination_action",
+          "evidence_of_dissemination"
+        ],
+        "INVESTIGATION": [
+          "research_question",
+          "sources_or_observations",
+          "procedure",
+          "analysis",
+          "conclusion"
+        ],
+        "PROTOTYPE": [
+          "need",
+          "design",
+          "construction",
+          "testing",
+          "evaluation",
+          "improvement_when_applicable"
+        ],
+        "SERVICE": [
+          "real_need",
+          "beneficiary",
+          "service_action",
+          "execution",
+          "service_evidence",
+          "reflection"
+        ],
+        "INTERVENTION": [
+          "context_action",
+          "application_or_transformation",
+          "observable_effect_or_execution_evidence"
+        ]
+      },
+      "cognitive_actions": [
+        "IDENTIFICA",
+        "INDAGA",
+        "DIALOGA",
+        "EXPLICA",
+        "ANALIZA",
+        "ARGUMENTA",
+        "PROPONE",
+        "REPRESENTA",
+        "COMPARA",
+        "DESCRIBE",
+        "RECONOCE",
+        "REFLEXIONA"
+      ],
+      "generation_checks": [
+        "Cubre TODAS las required_operations de la metodología en etapas y sesiones; varias operaciones pueden compartir una sesión con fundamento. No omitas operaciones por falta de sesiones.",
+        "Los recursos y alternativas son cadenas exactas de available_resources. Si el recurso ya está disponible, alternative y alternative_rationale pueden ser null. No inventes cámara, cartón, internet ni beneficiarios externos.",
+        "Cada perfil funcional declarado requiere una fila por cada clave del catálogo FUNCTIONAL_PROFILES. requirement_id es esa clave, no REQ_01. Completa criterio, etapas y evidencia real para cada condición."
+      ],
+      "coverage_protocol": "Una fila coverage por operación requerida. action_quote debe ser un fragmento literal de student_operation en su etapa asignada. evidence_ref apunta a expected_output con index=null o acceptance_criteria con índice cero-basado. La etiqueta no prueba acción ni evidencia. Completa acciones reales para todas las operaciones en el tiempo disponible."
+    },
+    "input": {
+      "constraints": {
+        "grades": [
+          1,
+          3
+        ],
+        "selected_pda_ids": [
+          "F3-DHC-1-010",
+          "F4-DHC-3-001"
+        ],
+        "explicit_ltg_selections": [],
+        "requested_sessions": 3,
+        "minutes_per_session": 90,
+        "original_problem": "En el grupo desconocemos por qué existen nuestros acuerdos y prácticas escolares; esto dificulta convivir y explicar su importancia a los compañeros nuevos.",
+        "original_context": "Escuela multigrado. Podemos consultar al docente y los recuerdos del grupo sobre prácticas y acuerdos de la escuela. Tenemos aula y patio techado, dos espacios seguros para intercambiar explicaciones con compañeros del mismo grupo. Sin internet, visitas ni participación familiar obligatoria. El alumnado nuevo necesita conocer cómo convivir y dónde pedir apoyo.",
+        "students_by_grade": {
+          "1": 5,
+          "3": 5
+        },
+        "reading_profile": "Lectura inicial en primero; tercero lee textos breves con apoyo.",
+        "writing_profile": "Primero usa dibujos y dictado; tercero registros breves.",
+        "autonomy_profile": "Baja; requiere consignas visuales y apoyo entre pares.",
+        "connectivity": "SIN_INTERNET",
+        "available_resources": [
+          "papel reutilizado",
+          "lápices",
+          "colores",
+          "mesas",
+          "aula",
+          "patio techado"
+        ],
+        "supports": [
+          "modelado docente",
+          "apoyo entre pares"
+        ],
+        "teacher_explicit_constraints": [
+          "Sin salir de la escuela",
+          "No pedir compras"
+        ],
+        "schema_version": "TEACHER_CONSTRAINTS_V1",
+        "constraints_id": "87d50a5b-da93-4263-9a0e-f14a442fca1a",
+        "created_at": "2026-09-24T05:13:35.917Z",
+        "constraints_hash": "231186405b12537fc00f9cb7d644bb98e7c79b2cc9eb7cae401aecc399c5400a"
+      },
+      "curriculum": {
+        "corpus_version_or_provenance": "Supabase official PDA, read-only export 2026-09-23; no user records",
+        "pdas": [
+          {
+            "pda_id": "F3-DHC-1-010",
+            "grade": 1,
+            "field": "De lo Humano y lo Comunitario",
+            "content_official": "Construcción del proyecto de vida.",
+            "pda_official": "Explica situaciones cotidianas que se presentan en la escuela y la casa, con la intención de proponer acuerdos que generen una mejor convivencia.",
+            "verification_status": "Verificado"
+          },
+          {
+            "pda_id": "F4-DHC-3-001",
+            "grade": 3,
+            "field": "De lo Humano y lo Comunitario",
+            "content_official": "La comunidad como el espacio en el que se vive y se encuentra la escuela.",
+            "pda_official": "Indaga acerca de ideas, conocimientos, prácticas culturales, formas de organización y acuerdos familiares, escolares y comunitarios, para compartir su importancia en la socialización.",
+            "verification_status": "Verificado"
+          }
+        ],
+        "ltg": [],
+        "schema_version": "CURRICULUM_SNAPSHOT_V1",
+        "snapshot_id": "4de94e28-88b3-4eaf-89c6-cb8db51a2d97",
+        "created_at": "2026-09-24T05:13:35.918Z",
+        "snapshot_hash": "2dd0aee8c51fc86fc10cbe6fb4a81afcba1b03d5a8fa875eb1ec638157449259"
+      },
+      "methodology": {
+        "schema_version": "METHODOLOGY_DECISION_V1",
+        "methodology_decision_id": "a266c38f-2156-402d-b18d-f6fc4ea4fa74",
+        "recommended_id": null,
+        "selected_id": "proyectos_comunitarios",
+        "selection_source": "TEACHER",
+        "catalog_version": "METHODOLOGY_CATALOG_V1",
+        "required_operations": [
+          "IDENTIFICACION",
+          "RECUPERACION",
+          "PLANIFICACION",
+          "ACERCAMIENTO",
+          "COMPRENSION_Y_PRODUCCION",
+          "RECONOCIMIENTO",
+          "CONCRECION",
+          "INTEGRACION",
+          "DIFUSION",
+          "CONSIDERACIONES",
+          "AVANCES"
+        ]
+      }
+    },
+    "output_diagnostic": true,
+    "response_schema": {
+      "type": "object",
+      "properties": {
+        "problem_frame": {
+          "type": "object",
+          "properties": {
+            "pedagogical_focus": {
+              "type": "string"
+            },
+            "context_relevance": {
+              "type": "string"
+            },
+            "why_project_is_needed": {
+              "type": "string"
+            },
+            "scope": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "out_of_scope": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "pedagogical_focus",
+            "context_relevance",
+            "why_project_is_needed",
+            "scope",
+            "out_of_scope"
+          ],
+          "additionalProperties": false
+        },
+        "guiding_question": {
+          "type": "object",
+          "properties": {
+            "question": {
+              "type": "string"
+            },
+            "problem_link": {
+              "type": "string"
+            },
+            "product_link": {
+              "type": "string"
+            },
+            "grade_accessibility": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "question",
+            "problem_link",
+            "product_link",
+            "grade_accessibility"
+          ],
+          "additionalProperties": false
+        },
+        "final_outcome": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "purpose": {
+              "type": "string"
+            },
+            "audience_or_beneficiary": {
+              "type": "string"
+            },
+            "use_or_destination": {
+              "type": "string"
+            },
+            "functional_profiles": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "functional_requirements": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "requirement_id": {
+                    "type": "string"
+                  },
+                  "criterion": {
+                    "type": "string"
+                  },
+                  "stage_ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "evidence": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "requirement_id",
+                  "criterion",
+                  "stage_ids",
+                  "evidence"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "completion_evidence": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "authenticity_conditions": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "required_resources": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "resource": {
+                    "type": "string"
+                  },
+                  "essential": {
+                    "type": "boolean"
+                  },
+                  "alternative": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "alternative_rationale": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "resource",
+                  "essential",
+                  "alternative",
+                  "alternative_rationale"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "name",
+            "type",
+            "description",
+            "purpose",
+            "audience_or_beneficiary",
+            "use_or_destination",
+            "functional_profiles",
+            "functional_requirements",
+            "completion_evidence",
+            "authenticity_conditions",
+            "required_resources"
+          ],
+          "additionalProperties": false
+        },
+        "pda_analysis": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "pda_id": {
+                "type": "string",
+                "enum": [
+                  "F3-DHC-1-010",
+                  "F4-DHC-3-001"
+                ]
+              },
+              "central_cognitive_action": {
+                "type": "string"
+              },
+              "cognitive_interpretation": {
+                "type": "object",
+                "properties": {
+                  "official_text_basis": {
+                    "type": "string"
+                  },
+                  "reasoning": {
+                    "type": "string"
+                  },
+                  "performance_indicators": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "official_text_basis",
+                  "reasoning",
+                  "performance_indicators"
+                ],
+                "additionalProperties": false
+              },
+              "expected_performance": {
+                "type": "string"
+              },
+              "observable_evidence_conditions": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "possible_project_contribution": {
+                "type": "string"
+              },
+              "integration_strength": {
+                "type": "string"
+              },
+              "integration_reason": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "pda_id",
+              "central_cognitive_action",
+              "cognitive_interpretation",
+              "expected_performance",
+              "observable_evidence_conditions",
+              "possible_project_contribution",
+              "integration_strength",
+              "integration_reason"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "grade_contributions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "grade": {
+                "type": "integer",
+                "enum": [
+                  1,
+                  3
+                ]
+              },
+              "learning_role": {
+                "type": "string"
+              },
+              "project_contribution": {
+                "type": "string"
+              },
+              "expected_evidence": {
+                "type": "string"
+              },
+              "complexity_level": {
+                "type": "string"
+              },
+              "support_need": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "grade",
+              "learning_role",
+              "project_contribution",
+              "expected_evidence",
+              "complexity_level",
+              "support_need"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "project_stages": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "stage_id": {
+                "type": "string",
+                "enum": [
+                  "planning",
+                  "production",
+                  "intervention"
+                ]
+              },
+              "purpose": {
+                "type": "string"
+              },
+              "student_operation": {
+                "type": "string"
+              },
+              "expected_output": {
+                "type": "string"
+              },
+              "acceptance_criteria": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "estimated_minutes": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 90
+              },
+              "estimate_rationale": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "stage_id",
+              "purpose",
+              "student_operation",
+              "expected_output",
+              "acceptance_criteria",
+              "estimated_minutes",
+              "estimate_rationale"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "session_progression": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "session_number": {
+                "type": "integer"
+              },
+              "project_state_before": {
+                "type": "string"
+              },
+              "session_project_goal": {
+                "type": "string"
+              },
+              "required_learning": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "pda_focus": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "expected_partial_product": {
+                "type": "string"
+              },
+              "acceptance_criteria": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "project_state_after": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "session_number",
+              "project_state_before",
+              "session_project_goal",
+              "required_learning",
+              "pda_focus",
+              "expected_partial_product",
+              "acceptance_criteria",
+              "project_state_after"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "ltg_strategy": {
+          "type": "object",
+          "properties": {
+            "mode": {
+              "type": "string"
+            },
+            "selections": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "project_id": {
+                    "type": "string"
+                  },
+                  "role": {
+                    "type": "string"
+                  },
+                  "pda_ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "activity_ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "reason": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "project_id",
+                  "role",
+                  "pda_ids",
+                  "activity_ids",
+                  "reason"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "reason": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "mode",
+            "selections",
+            "reason"
+          ],
+          "additionalProperties": false
+        },
+        "feasibility": {
+          "type": "object",
+          "properties": {
+            "complexity": {
+              "type": "string"
+            },
+            "resource_feasibility": {
+              "type": "string"
+            },
+            "time_feasibility": {
+              "type": "string"
+            },
+            "multigrade_feasibility": {
+              "type": "string"
+            },
+            "risks": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "assumptions": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "complexity",
+            "resource_feasibility",
+            "time_feasibility",
+            "multigrade_feasibility",
+            "risks",
+            "assumptions"
+          ],
+          "additionalProperties": false
+        },
+        "coverage": {
+          "type": "array",
+          "minItems": 11,
+          "maxItems": 11,
+          "items": {
+            "type": "object",
+            "properties": {
+              "operation": {
+                "type": "string",
+                "enum": [
+                  "IDENTIFICACION",
+                  "RECUPERACION",
+                  "PLANIFICACION",
+                  "ACERCAMIENTO",
+                  "COMPRENSION_Y_PRODUCCION",
+                  "RECONOCIMIENTO",
+                  "CONCRECION",
+                  "INTEGRACION",
+                  "DIFUSION",
+                  "CONSIDERACIONES",
+                  "AVANCES"
+                ]
+              },
+              "stage_id": {
+                "type": "string",
+                "enum": [
+                  "planning",
+                  "production",
+                  "intervention"
+                ]
+              },
+              "action_quote": {
+                "type": "string"
+              },
+              "evidence_ref": {
+                "type": "object",
+                "properties": {
+                  "field": {
+                    "type": "string",
+                    "enum": [
+                      "expected_output",
+                      "acceptance_criteria"
+                    ]
+                  },
+                  "index": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "field",
+                  "index"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "operation",
+              "stage_id",
+              "action_quote",
+              "evidence_ref"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "problem_frame",
+        "guiding_question",
+        "final_outcome",
+        "pda_analysis",
+        "grade_contributions",
+        "project_stages",
+        "session_progression",
+        "ltg_strategy",
+        "feasibility",
+        "coverage"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "generation_config": {
+    "temperature": 0.15,
+    "maxOutputTokens": 65536,
+    "responseMimeType": "application/json",
+    "responseJsonSchema": {
+      "type": "object",
+      "properties": {
+        "problem_frame": {
+          "type": "object",
+          "properties": {
+            "pedagogical_focus": {
+              "type": "string"
+            },
+            "context_relevance": {
+              "type": "string"
+            },
+            "why_project_is_needed": {
+              "type": "string"
+            },
+            "scope": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "out_of_scope": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "pedagogical_focus",
+            "context_relevance",
+            "why_project_is_needed",
+            "scope",
+            "out_of_scope"
+          ],
+          "additionalProperties": false
+        },
+        "guiding_question": {
+          "type": "object",
+          "properties": {
+            "question": {
+              "type": "string"
+            },
+            "problem_link": {
+              "type": "string"
+            },
+            "product_link": {
+              "type": "string"
+            },
+            "grade_accessibility": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "question",
+            "problem_link",
+            "product_link",
+            "grade_accessibility"
+          ],
+          "additionalProperties": false
+        },
+        "final_outcome": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "purpose": {
+              "type": "string"
+            },
+            "audience_or_beneficiary": {
+              "type": "string"
+            },
+            "use_or_destination": {
+              "type": "string"
+            },
+            "functional_profiles": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "functional_requirements": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "requirement_id": {
+                    "type": "string"
+                  },
+                  "criterion": {
+                    "type": "string"
+                  },
+                  "stage_ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "evidence": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "requirement_id",
+                  "criterion",
+                  "stage_ids",
+                  "evidence"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "completion_evidence": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "authenticity_conditions": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "required_resources": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "resource": {
+                    "type": "string"
+                  },
+                  "essential": {
+                    "type": "boolean"
+                  },
+                  "alternative": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "alternative_rationale": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "resource",
+                  "essential",
+                  "alternative",
+                  "alternative_rationale"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "name",
+            "type",
+            "description",
+            "purpose",
+            "audience_or_beneficiary",
+            "use_or_destination",
+            "functional_profiles",
+            "functional_requirements",
+            "completion_evidence",
+            "authenticity_conditions",
+            "required_resources"
+          ],
+          "additionalProperties": false
+        },
+        "pda_analysis": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "pda_id": {
+                "type": "string",
+                "enum": [
+                  "F3-DHC-1-010",
+                  "F4-DHC-3-001"
+                ]
+              },
+              "central_cognitive_action": {
+                "type": "string"
+              },
+              "cognitive_interpretation": {
+                "type": "object",
+                "properties": {
+                  "official_text_basis": {
+                    "type": "string"
+                  },
+                  "reasoning": {
+                    "type": "string"
+                  },
+                  "performance_indicators": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "official_text_basis",
+                  "reasoning",
+                  "performance_indicators"
+                ],
+                "additionalProperties": false
+              },
+              "expected_performance": {
+                "type": "string"
+              },
+              "observable_evidence_conditions": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "possible_project_contribution": {
+                "type": "string"
+              },
+              "integration_strength": {
+                "type": "string"
+              },
+              "integration_reason": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "pda_id",
+              "central_cognitive_action",
+              "cognitive_interpretation",
+              "expected_performance",
+              "observable_evidence_conditions",
+              "possible_project_contribution",
+              "integration_strength",
+              "integration_reason"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "grade_contributions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "grade": {
+                "type": "integer",
+                "enum": [
+                  1,
+                  3
+                ]
+              },
+              "learning_role": {
+                "type": "string"
+              },
+              "project_contribution": {
+                "type": "string"
+              },
+              "expected_evidence": {
+                "type": "string"
+              },
+              "complexity_level": {
+                "type": "string"
+              },
+              "support_need": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "grade",
+              "learning_role",
+              "project_contribution",
+              "expected_evidence",
+              "complexity_level",
+              "support_need"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "project_stages": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "stage_id": {
+                "type": "string",
+                "enum": [
+                  "planning",
+                  "production",
+                  "intervention"
+                ]
+              },
+              "purpose": {
+                "type": "string"
+              },
+              "student_operation": {
+                "type": "string"
+              },
+              "expected_output": {
+                "type": "string"
+              },
+              "acceptance_criteria": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "estimated_minutes": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 90
+              },
+              "estimate_rationale": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "stage_id",
+              "purpose",
+              "student_operation",
+              "expected_output",
+              "acceptance_criteria",
+              "estimated_minutes",
+              "estimate_rationale"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "session_progression": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "session_number": {
+                "type": "integer"
+              },
+              "project_state_before": {
+                "type": "string"
+              },
+              "session_project_goal": {
+                "type": "string"
+              },
+              "required_learning": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "pda_focus": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "expected_partial_product": {
+                "type": "string"
+              },
+              "acceptance_criteria": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "project_state_after": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "session_number",
+              "project_state_before",
+              "session_project_goal",
+              "required_learning",
+              "pda_focus",
+              "expected_partial_product",
+              "acceptance_criteria",
+              "project_state_after"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "ltg_strategy": {
+          "type": "object",
+          "properties": {
+            "mode": {
+              "type": "string"
+            },
+            "selections": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "project_id": {
+                    "type": "string"
+                  },
+                  "role": {
+                    "type": "string"
+                  },
+                  "pda_ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "activity_ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "reason": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "project_id",
+                  "role",
+                  "pda_ids",
+                  "activity_ids",
+                  "reason"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "reason": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "mode",
+            "selections",
+            "reason"
+          ],
+          "additionalProperties": false
+        },
+        "feasibility": {
+          "type": "object",
+          "properties": {
+            "complexity": {
+              "type": "string"
+            },
+            "resource_feasibility": {
+              "type": "string"
+            },
+            "time_feasibility": {
+              "type": "string"
+            },
+            "multigrade_feasibility": {
+              "type": "string"
+            },
+            "risks": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "assumptions": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "complexity",
+            "resource_feasibility",
+            "time_feasibility",
+            "multigrade_feasibility",
+            "risks",
+            "assumptions"
+          ],
+          "additionalProperties": false
+        },
+        "coverage": {
+          "type": "array",
+          "minItems": 11,
+          "maxItems": 11,
+          "items": {
+            "type": "object",
+            "properties": {
+              "operation": {
+                "type": "string",
+                "enum": [
+                  "IDENTIFICACION",
+                  "RECUPERACION",
+                  "PLANIFICACION",
+                  "ACERCAMIENTO",
+                  "COMPRENSION_Y_PRODUCCION",
+                  "RECONOCIMIENTO",
+                  "CONCRECION",
+                  "INTEGRACION",
+                  "DIFUSION",
+                  "CONSIDERACIONES",
+                  "AVANCES"
+                ]
+              },
+              "stage_id": {
+                "type": "string",
+                "enum": [
+                  "planning",
+                  "production",
+                  "intervention"
+                ]
+              },
+              "action_quote": {
+                "type": "string"
+              },
+              "evidence_ref": {
+                "type": "object",
+                "properties": {
+                  "field": {
+                    "type": "string",
+                    "enum": [
+                      "expected_output",
+                      "acceptance_criteria"
+                    ]
+                  },
+                  "index": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "field",
+                  "index"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "operation",
+              "stage_id",
+              "action_quote",
+              "evidence_ref"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "problem_frame",
+        "guiding_question",
+        "final_outcome",
+        "pda_analysis",
+        "grade_contributions",
+        "project_stages",
+        "session_progression",
+        "ltg_strategy",
+        "feasibility",
+        "coverage"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "remaining_inspection": {
+    "unsupported_keywords": [],
+    "structural_issues": [],
+    "stats": {
+      "nodes": 121,
+      "enum_values": 23,
+      "max_depth": 5
+    },
+    "conclusion": "No further specific incompatibility established. Provider returned no field violations. Structural keyword compatibility is not proof of model-specific decoder complexity compatibility."
+  }
+}

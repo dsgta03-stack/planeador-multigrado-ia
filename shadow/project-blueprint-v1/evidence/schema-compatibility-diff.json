@@ -1,0 +1,944 @@
+{
+  "request_id": "fb77d3bf-aafe-4a7f-afab-85ab36512332",
+  "recreated_request_hash_matches": true,
+  "historical_input_hash": "9f8eb51d69ad127284ea68b742d839e9de27bf7e04a2df1ed9d4633aa6b285b0",
+  "before_schema_hash": "59f3900446922a2d0612c4c8db01b8573dcf7f0c4f77fcbe0e636158746bf07d",
+  "after_schema_hash": "8c515718e98c0a3f5890e768b90bdcc1385cd1b29a6043022a9f79252016d518",
+  "removed": [
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"problem_frame\"].properties[\"pedagogical_focus\"].maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"problem_frame\"].properties[\"context_relevance\"].maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"problem_frame\"].properties[\"why_project_is_needed\"].maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"problem_frame\"].properties[\"scope\"].items.maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"problem_frame\"].properties[\"out_of_scope\"].items.maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"guiding_question\"].properties[\"question\"].maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"guiding_question\"].properties[\"problem_link\"].maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"guiding_question\"].properties[\"product_link\"].maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"guiding_question\"].properties[\"grade_accessibility\"].maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"final_outcome\"].properties[\"name\"].maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"final_outcome\"].properties[\"type\"].maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"final_outcome\"].properties[\"description\"].maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"final_outcome\"].properties[\"purpose\"].maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"final_outcome\"].properties[\"audience_or_beneficiary\"].maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"final_outcome\"].properties[\"use_or_destination\"].maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"final_outcome\"].properties[\"functional_profiles\"].items.maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"final_outcome\"].properties[\"functional_requirements\"].items.properties[\"requirement_id\"].maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"final_outcome\"].properties[\"functional_requirements\"].items.properties[\"criterion\"].maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"final_outcome\"].properties[\"functional_requirements\"].items.properties[\"stage_ids\"].items.maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"final_outcome\"].properties[\"functional_requirements\"].items.properties[\"evidence\"].maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"final_outcome\"].properties[\"completion_evidence\"].items.maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"final_outcome\"].properties[\"authenticity_conditions\"].items.maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"final_outcome\"].properties[\"required_resources\"].items.properties[\"resource\"].maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"final_outcome\"].properties[\"required_resources\"].items.properties[\"alternative\"].anyOf[0].maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"final_outcome\"].properties[\"required_resources\"].items.properties[\"alternative_rationale\"].anyOf[0].maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"pda_analysis\"].items.properties[\"pda_id\"].maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"pda_analysis\"].items.properties[\"central_cognitive_action\"].maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"pda_analysis\"].items.properties[\"cognitive_interpretation\"].properties[\"official_text_basis\"].maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"pda_analysis\"].items.properties[\"cognitive_interpretation\"].properties[\"reasoning\"].maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"pda_analysis\"].items.properties[\"cognitive_interpretation\"].properties[\"performance_indicators\"].items.maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"pda_analysis\"].items.properties[\"expected_performance\"].maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"pda_analysis\"].items.properties[\"observable_evidence_conditions\"].items.maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"pda_analysis\"].items.properties[\"possible_project_contribution\"].maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"pda_analysis\"].items.properties[\"integration_strength\"].maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"pda_analysis\"].items.properties[\"integration_reason\"].maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"grade_contributions\"].items.properties[\"learning_role\"].maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"grade_contributions\"].items.properties[\"project_contribution\"].maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"grade_contributions\"].items.properties[\"expected_evidence\"].maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"grade_contributions\"].items.properties[\"complexity_level\"].maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"grade_contributions\"].items.properties[\"support_need\"].maxLength",
+      "local_value": 1200
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"project_stages\"].items.properties[\"stage_id\"].maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"project_stages\"].items.properties[\"purpose\"].maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"project_stages\"].items.properties[\"student_operation\"].maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"project_stages\"].items.properties[\"expected_output\"].maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"project_stages\"].items.properties[\"acceptance_criteria\"].items.maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"project_stages\"].items.properties[\"estimate_rationale\"].maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"session_progression\"].items.properties[\"project_state_before\"].maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"session_progression\"].items.properties[\"session_project_goal\"].maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"session_progression\"].items.properties[\"required_learning\"].items.maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"session_progression\"].items.properties[\"pda_focus\"].items.maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"session_progression\"].items.properties[\"expected_partial_product\"].maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"session_progression\"].items.properties[\"acceptance_criteria\"].items.maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"session_progression\"].items.properties[\"project_state_after\"].maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"ltg_strategy\"].properties[\"mode\"].maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"ltg_strategy\"].properties[\"selections\"].items.properties[\"project_id\"].maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"ltg_strategy\"].properties[\"selections\"].items.properties[\"role\"].maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"ltg_strategy\"].properties[\"selections\"].items.properties[\"pda_ids\"].items.maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"ltg_strategy\"].properties[\"selections\"].items.properties[\"activity_ids\"].items.maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"ltg_strategy\"].properties[\"selections\"].items.properties[\"reason\"].maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"ltg_strategy\"].properties[\"reason\"].maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"feasibility\"].properties[\"complexity\"].maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"feasibility\"].properties[\"resource_feasibility\"].maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"feasibility\"].properties[\"time_feasibility\"].maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"feasibility\"].properties[\"multigrade_feasibility\"].maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"feasibility\"].properties[\"risks\"].items.maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"feasibility\"].properties[\"assumptions\"].items.maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"coverage\"].items.properties[\"operation\"].maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"coverage\"].items.properties[\"stage_id\"].maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"coverage\"].items.properties[\"action_quote\"].maxLength",
+      "local_value": 4000
+    },
+    {
+      "keyword": "maxLength",
+      "path": "$.properties[\"coverage\"].items.properties[\"evidence_ref\"].properties[\"field\"].maxLength",
+      "local_value": 4000
+    }
+  ],
+  "changed_keywords": [
+    "maxLength"
+  ],
+  "shape_required_enums_refs_arrays_unchanged": true,
+  "local_authoring_contract_unchanged": true,
+  "provider_schema": {
+    "type": "object",
+    "properties": {
+      "problem_frame": {
+        "type": "object",
+        "properties": {
+          "pedagogical_focus": {
+            "type": "string"
+          },
+          "context_relevance": {
+            "type": "string"
+          },
+          "why_project_is_needed": {
+            "type": "string"
+          },
+          "scope": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "out_of_scope": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "pedagogical_focus",
+          "context_relevance",
+          "why_project_is_needed",
+          "scope",
+          "out_of_scope"
+        ],
+        "additionalProperties": false
+      },
+      "guiding_question": {
+        "type": "object",
+        "properties": {
+          "question": {
+            "type": "string"
+          },
+          "problem_link": {
+            "type": "string"
+          },
+          "product_link": {
+            "type": "string"
+          },
+          "grade_accessibility": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "question",
+          "problem_link",
+          "product_link",
+          "grade_accessibility"
+        ],
+        "additionalProperties": false
+      },
+      "final_outcome": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "purpose": {
+            "type": "string"
+          },
+          "audience_or_beneficiary": {
+            "type": "string"
+          },
+          "use_or_destination": {
+            "type": "string"
+          },
+          "functional_profiles": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "functional_requirements": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "requirement_id": {
+                  "type": "string"
+                },
+                "criterion": {
+                  "type": "string"
+                },
+                "stage_ids": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "evidence": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "requirement_id",
+                "criterion",
+                "stage_ids",
+                "evidence"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "completion_evidence": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "authenticity_conditions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "required_resources": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "resource": {
+                  "type": "string"
+                },
+                "essential": {
+                  "type": "boolean"
+                },
+                "alternative": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "alternative_rationale": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "resource",
+                "essential",
+                "alternative",
+                "alternative_rationale"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "name",
+          "type",
+          "description",
+          "purpose",
+          "audience_or_beneficiary",
+          "use_or_destination",
+          "functional_profiles",
+          "functional_requirements",
+          "completion_evidence",
+          "authenticity_conditions",
+          "required_resources"
+        ],
+        "additionalProperties": false
+      },
+      "pda_analysis": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "pda_id": {
+              "type": "string",
+              "enum": [
+                "F3-DHC-1-010",
+                "F4-DHC-3-001"
+              ]
+            },
+            "central_cognitive_action": {
+              "type": "string"
+            },
+            "cognitive_interpretation": {
+              "type": "object",
+              "properties": {
+                "official_text_basis": {
+                  "type": "string"
+                },
+                "reasoning": {
+                  "type": "string"
+                },
+                "performance_indicators": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": [
+                "official_text_basis",
+                "reasoning",
+                "performance_indicators"
+              ],
+              "additionalProperties": false
+            },
+            "expected_performance": {
+              "type": "string"
+            },
+            "observable_evidence_conditions": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "possible_project_contribution": {
+              "type": "string"
+            },
+            "integration_strength": {
+              "type": "string"
+            },
+            "integration_reason": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "pda_id",
+            "central_cognitive_action",
+            "cognitive_interpretation",
+            "expected_performance",
+            "observable_evidence_conditions",
+            "possible_project_contribution",
+            "integration_strength",
+            "integration_reason"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "grade_contributions": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "grade": {
+              "type": "integer",
+              "enum": [
+                1,
+                3
+              ]
+            },
+            "learning_role": {
+              "type": "string"
+            },
+            "project_contribution": {
+              "type": "string"
+            },
+            "expected_evidence": {
+              "type": "string"
+            },
+            "complexity_level": {
+              "type": "string"
+            },
+            "support_need": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "grade",
+            "learning_role",
+            "project_contribution",
+            "expected_evidence",
+            "complexity_level",
+            "support_need"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "project_stages": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "stage_id": {
+              "type": "string",
+              "enum": [
+                "planning",
+                "production",
+                "intervention"
+              ]
+            },
+            "purpose": {
+              "type": "string"
+            },
+            "student_operation": {
+              "type": "string"
+            },
+            "expected_output": {
+              "type": "string"
+            },
+            "acceptance_criteria": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "estimated_minutes": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 90
+            },
+            "estimate_rationale": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "stage_id",
+            "purpose",
+            "student_operation",
+            "expected_output",
+            "acceptance_criteria",
+            "estimated_minutes",
+            "estimate_rationale"
+          ],
+          "additionalProperties": false
+        },
+        "minItems": 3,
+        "maxItems": 3
+      },
+      "session_progression": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "session_number": {
+              "type": "integer"
+            },
+            "project_state_before": {
+              "type": "string"
+            },
+            "session_project_goal": {
+              "type": "string"
+            },
+            "required_learning": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "pda_focus": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "expected_partial_product": {
+              "type": "string"
+            },
+            "acceptance_criteria": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "project_state_after": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "session_number",
+            "project_state_before",
+            "session_project_goal",
+            "required_learning",
+            "pda_focus",
+            "expected_partial_product",
+            "acceptance_criteria",
+            "project_state_after"
+          ],
+          "additionalProperties": false
+        },
+        "minItems": 3,
+        "maxItems": 3
+      },
+      "ltg_strategy": {
+        "type": "object",
+        "properties": {
+          "mode": {
+            "type": "string"
+          },
+          "selections": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "project_id": {
+                  "type": "string"
+                },
+                "role": {
+                  "type": "string"
+                },
+                "pda_ids": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "activity_ids": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "reason": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "project_id",
+                "role",
+                "pda_ids",
+                "activity_ids",
+                "reason"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "reason": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "mode",
+          "selections",
+          "reason"
+        ],
+        "additionalProperties": false
+      },
+      "feasibility": {
+        "type": "object",
+        "properties": {
+          "complexity": {
+            "type": "string"
+          },
+          "resource_feasibility": {
+            "type": "string"
+          },
+          "time_feasibility": {
+            "type": "string"
+          },
+          "multigrade_feasibility": {
+            "type": "string"
+          },
+          "risks": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "assumptions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "complexity",
+          "resource_feasibility",
+          "time_feasibility",
+          "multigrade_feasibility",
+          "risks",
+          "assumptions"
+        ],
+        "additionalProperties": false
+      },
+      "coverage": {
+        "type": "array",
+        "minItems": 11,
+        "maxItems": 11,
+        "items": {
+          "type": "object",
+          "properties": {
+            "operation": {
+              "type": "string",
+              "enum": [
+                "IDENTIFICACION",
+                "RECUPERACION",
+                "PLANIFICACION",
+                "ACERCAMIENTO",
+                "COMPRENSION_Y_PRODUCCION",
+                "RECONOCIMIENTO",
+                "CONCRECION",
+                "INTEGRACION",
+                "DIFUSION",
+                "CONSIDERACIONES",
+                "AVANCES"
+              ]
+            },
+            "stage_id": {
+              "type": "string",
+              "enum": [
+                "planning",
+                "production",
+                "intervention"
+              ]
+            },
+            "action_quote": {
+              "type": "string"
+            },
+            "evidence_ref": {
+              "type": "object",
+              "properties": {
+                "field": {
+                  "type": "string",
+                  "enum": [
+                    "expected_output",
+                    "acceptance_criteria"
+                  ]
+                },
+                "index": {
+                  "anyOf": [
+                    {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "field",
+                "index"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "operation",
+            "stage_id",
+            "action_quote",
+            "evidence_ref"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    "required": [
+      "problem_frame",
+      "guiding_question",
+      "final_outcome",
+      "pda_analysis",
+      "grade_contributions",
+      "project_stages",
+      "session_progression",
+      "ltg_strategy",
+      "feasibility",
+      "coverage"
+    ],
+    "additionalProperties": false
+  }
+}
