@@ -28,7 +28,7 @@ Deno.serve(async(req:Request)=>{
   if(durable){await store.setup();await store.put(b.request_id,'request',{timestamp:new Date().toISOString(),task:b.task,model:b.model,max_output_tokens:maxOutputTokens,input_hash:b.input_hash||null,status:'STARTED'});}
   const execute=async()=>{
   const start=Date.now();
-  const response=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${b.model}:generateContent`,{method:'POST',headers:{'content-type':'application/json','x-goog-api-key':key},body:JSON.stringify({systemInstruction:{parts:[{text:b.system}]},contents:[{role:'user',parts:[{text:JSON.stringify(b.prompt)}]}],generationConfig:{maxOutputTokens,responseMimeType:'application/json',responseJsonSchema:b.response_schema}}),signal:AbortSignal.timeout(180000)});
+  const response=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${b.model}:generateContent`,{method:'POST',headers:{'content-type':'application/json','x-goog-api-key':key},body:JSON.stringify({systemInstruction:{parts:[{text:b.system}]},contents:[{role:'user',parts:[{text:JSON.stringify(b.prompt)}]}],generationConfig:{maxOutputTokens,responseFormat:{text:{mimeType:'application/json',schema:b.response_schema}}}}),signal:AbortSignal.timeout(180000)});
   const providerRaw=await response.text();
   if(durable){return persistProviderResponse(providerRaw,{task:b.task,model:b.model,http_status:response.status,latency_ms:Date.now()-start,max_output_tokens:maxOutputTokens,diagnostic:b.output_diagnostic===true,secrets:[key,token,req.headers.get('authorization')||'',Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')||''],persist:(part:string,data:unknown)=>store.put(b.request_id,part,data)});}
   let result:any=null;try{result=JSON.parse(providerRaw)}catch{}
