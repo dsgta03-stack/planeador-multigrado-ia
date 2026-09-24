@@ -3,10 +3,10 @@ export const SESSION_GRAPH_ADVERSARIAL_VERSION='SESSION_GRAPH_ADVERSARIAL_V1';
 /**
  * Creates a deliberately semantic-only defect while preserving the structural
  * shape expected by the deterministic compiler. The adversary keeps artifact,
- * methodology and functional-requirement links but replaces actual itinerant
- * execution with discussion/planning language. A correct deterministic pass
- * followed by semantic rejection demonstrates that SGS-005/SGS-008 are doing
- * work that cannot be reduced to ID/link validation.
+ * methodology, PDA-mobilization and functional-requirement links but replaces
+ * actual itinerant execution with discussion/planning language. A correct
+ * deterministic pass followed by semantic rejection demonstrates that the SGS
+ * review is doing work that cannot be reduced to ID/link validation.
  */
 export function makeItinerancySemanticAdversarial(proposal){
  const x=structuredClone(proposal);
@@ -22,7 +22,6 @@ export function makeItinerancySemanticAdversarial(proposal){
   g.student_action=g.grade===1
    ? 'Describe cómo imagina que podrían llevarse sus dibujos al patio, sin realizar el traslado ni una segunda explicación.'
    : 'Escribe una lista de pasos hipotéticos para trasladar y reinstalar el museo, sin ejecutar el movimiento ni la reinstalación.';
-  g.pda_mobilization=[];
   g.evidence='Lista o comentario hipotético sobre un traslado que no se ejecuta.';
  }
  a.output='Lista de ideas sobre un posible traslado no ejecutado.';
