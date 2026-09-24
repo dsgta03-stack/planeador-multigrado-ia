@@ -1,4 +1,4 @@
-import {providerResponseSchema,assertProviderSchema,PROVIDER_SCHEMA_VERSION} from './provider-schema.mjs';
+import {providerResponseSchema,providerAuthoringShapeSchema,assertProviderSchema,PROVIDER_SCHEMA_VERSION} from './provider-schema.mjs';
 import {randomUUID} from 'node:crypto';
 import {saveLocalEvidence} from './local-evidence.mjs';
 import {authoringSchema,AUTHORING_INSTRUCTION,AUTHORING_VERSION} from './authoring-proposal.mjs';
@@ -46,9 +46,10 @@ export async function callProvider(task,input,{endpoint,token,identity='multipla
  if(task!=='REVIEW'){prompt.schema=generationSchema(input);response_schema=transportSchema(input);if(constructionPlan){response_schema=constructionTransport(response_schema,constructionPlan);prompt.construction_plan=constructionPlan;prompt.construction_protocol='Author the pedagogical proposal using only properties requested by response_schema. The compiler copies official PDA grade/text and grade-owned PDA lists from the snapshot, derives stage order, artifact IDs/dependencies and session artifact/operation lists from the immutable construction plan BEFORE domain validation. Do not invent those omitted fields. Stage IDs must match the plan. Supply construction_evidence for EVERY required operation: literal contiguous quote from its assigned student_operation and literal quote from expected_output or acceptance_criteria. Labels alone do not prove execution. Design a viable shared project within every session budget; do not disguise impossible work by lowering estimates. All other domain constraints still apply.';}}
  if(task!=='REVIEW'&&authoringCompact){
   if(!constructionPlan)throw Error('AUTHORING_CONSTRUCTION_PLAN_REQUIRED');
-  response_schema=providerResponseSchema(authoringSchema(input,constructionPlan)).schema;
+  const localAuthoringSchema=authoringSchema(input,constructionPlan);
+  response_schema=providerAuthoringShapeSchema(localAuthoringSchema).schema;
   system=GENERATOR.replace('status=DRAFT, gate_result=null.','')+'\n'+AUTHORING_INSTRUCTION+'\nDevuelve SOLO la propuesta de autoría. Los campos omitidos son del compilador y no deben aparecer en la respuesta.';
-  prompt={authoring_version:AUTHORING_VERSION,schema:response_schema,input,construction_plan:constructionPlan,functional_profiles:FUNCTIONAL_PROFILES,cognitive_actions:COGNITIVE_ACTIONS,generation_checks:generation_checks.slice(3),coverage_protocol:'Una fila coverage por operación requerida. action_quote debe ser un fragmento literal de student_operation en su etapa asignada. evidence_ref apunta a expected_output con index=null o acceptance_criteria con índice cero-basado. La etiqueta no prueba acción ni evidencia. Completa acciones reales para todas las operaciones en el tiempo disponible.',...(repair?{repair}: {})};
+  prompt={authoring_version:AUTHORING_VERSION,schema:localAuthoringSchema,input,construction_plan:constructionPlan,functional_profiles:FUNCTIONAL_PROFILES,cognitive_actions:COGNITIVE_ACTIONS,generation_checks:generation_checks.slice(3),coverage_protocol:'Una fila coverage por operación requerida. action_quote debe ser un fragmento literal de student_operation en su etapa asignada. evidence_ref apunta a expected_output con index=null o acceptance_criteria con índice cero-basado. La etiqueta no prueba acción ni evidencia. Completa acciones reales para todas las operaciones en el tiempo disponible.',...(repair?{repair}: {})};
  }
  if(task==='REVIEW')response_schema=providerResponseSchema(response_schema).schema;
  assertProviderSchema(response_schema); // Before limiter, fetch, or provider quota.
