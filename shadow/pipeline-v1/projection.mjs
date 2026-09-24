@@ -3,6 +3,7 @@ import {deepFreeze,hash} from '../project-blueprint-v1/contracts.mjs';
 export const TEACHER_PROJECTION_VERSION='TEACHER_PLAN_PROJECTION_V1';
 
 const clone=x=>structuredClone(x);
+export const teacherProjectionHash=projection=>hash(Object.fromEntries(Object.entries(projection).filter(([key])=>key!=='projection_hash')));
 
 /**
  * Pure deterministic projection. It cannot invent, repair, summarize with AI,
@@ -52,7 +53,7 @@ export function projectTeacherPlan({blueprint,blueprintApproval,graph,graphAppro
   }))
  }));
 
- return deepFreeze({
+ const body={
   projection_version:TEACHER_PROJECTION_VERSION,
   status:'READY_FOR_TEACHER',
   source:{
@@ -75,5 +76,11 @@ export function projectTeacherPlan({blueprint,blueprintApproval,graph,graphAppro
   },
   sessions,
   traceability:clone(graph.traceability)
- });
+ };
+ return deepFreeze({...body,projection_hash:hash(body)});
+}
+
+export function assertTeacherProjection(projection){
+ if(!projection||projection.projection_version!==TEACHER_PROJECTION_VERSION||projection.status!=='READY_FOR_TEACHER'||typeof projection.projection_hash!=='string'||projection.projection_hash!==teacherProjectionHash(projection))throw Error('TEACHER_PROJECTION_TAMPERED');
+ return true;
 }
