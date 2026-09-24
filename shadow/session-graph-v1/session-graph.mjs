@@ -1,5 +1,6 @@
 import {deepFreeze,hash} from '../project-blueprint-v1/contracts.mjs';
 import {SESSION_GRAPH_VERSION,SESSION_GRAPH_PROPOSAL_VERSION,BLUEPRINT_APPROVAL_VERSION,CONTRIBUTION_MODES,PDA_MOBILIZATION_STATUSES} from './catalog.mjs';
+import {validateSessionGraphAuthoring} from './authoring.mjs';
 
 const fail=(rule,detail)=>{const e=Error(`${rule}: ${detail}`);e.code='SESSION_GRAPH_REJECTED';e.rule=rule;throw e};
 const asSet=a=>new Set(a||[]);
@@ -33,6 +34,7 @@ export function compileSessionGraph(proposal,source,{graph_id,revision=1}={}){
  if(!graph_id||!Number.isInteger(revision)||revision<1)fail('SGD-001','graph envelope required');
  const {blueprint,approval,constraints,curriculum}=source;
  const blueprintHash=assertApprovedBlueprintSource(source);
+ validateSessionGraphAuthoring(proposal,source);
  validateProposalShape(proposal,blueprint);
  const pdaById=new Map((curriculum.pdas||[]).map(p=>[p.pda_id,p]));
  const availableResources=asSet(constraints.available_resources);
