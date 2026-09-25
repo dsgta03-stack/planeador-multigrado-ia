@@ -6,6 +6,20 @@ export const BLUEPRINT_APPROVAL_VERSION='PROJECT_BLUEPRINT_APPROVAL_V1';
 export const CONTRIBUTION_MODES=Object.freeze(['DIRECT','COMPLEMENTARY']);
 export const PDA_MOBILIZATION_STATUSES=Object.freeze(['WORKED','DEVELOPING']);
 
+export const METHODOLOGY_OPERATION_SEMANTICS=Object.freeze({
+ IDENTIFICACION:Object.freeze({required:'El alumnado identifica, describe o delimita de forma observable la situación, problema o elemento que será trabajado.',not_enough:'Nombrar el tema o escuchar una explicación docente sin identificar nada.'}),
+ RECUPERACION:Object.freeze({required:'El alumnado recupera, expresa, registra, compara o pone en juego saberes, experiencias o información previa pertinente.',not_enough:'Recibir información nueva sin recuperar saberes o experiencias previas.'}),
+ PLANIFICACION:Object.freeze({required:'El alumnado toma decisiones de organización: criterios, orden, responsabilidades, ruta de trabajo o acciones concretas para producir el resultado.',not_enough:'Conversar sobre lo que podría hacerse sin decidir un plan verificable.'}),
+ ACERCAMIENTO:Object.freeze({required:'El alumnado se acerca de forma activa a información, fuentes, materiales, situaciones u observaciones pertinentes para comprender el objeto de trabajo.',not_enough:'Mencionar que se revisará información sin consulta, observación o exploración efectiva.'}),
+ COMPRENSION_Y_PRODUCCION:Object.freeze({required:'En la misma actividad el alumnado procesa o comprende información Y produce, construye o transforma un componente concreto del trabajo o artefacto.',not_enough:'Sólo analizar, revisar, conversar, ordenar o comprender sin producir/construir algo concreto.'}),
+ RECONOCIMIENTO:Object.freeze({required:'El alumnado reconoce hallazgos, relaciones, dificultades, criterios, diferencias, avances o necesidades de ajuste a partir del trabajo realizado.',not_enough:'Etiquetar la actividad como reconocimiento sin una acción observable de revisión, contraste o identificación.'}),
+ CONCRECION:Object.freeze({required:'El alumnado concreta, termina, ensambla o deja listo un producto, componente o decisión sustantiva prevista para la etapa.',not_enough:'Preparar materiales o bosquejos que todavía no constituyen una concreción del producto.'}),
+ INTEGRACION:Object.freeze({required:'El alumnado integra, combina, organiza o ensambla componentes ya producidos para formar una unidad funcional del proyecto.',not_enough:'Mover materiales o colocarlos sin integrar componentes con una finalidad funcional.'}),
+ DIFUSION:Object.freeze({required:'En la misma actividad el alumnado comunica, presenta, explica o socializa el producto, hallazgo o mensaje ante una audiencia real y explícita.',not_enough:'Montar, trasladar, ensayar, diseñar una ruta, preparar una presentación o mencionar visitantes sin comunicar realmente a una audiencia.'}),
+ CONSIDERACIONES:Object.freeze({required:'El alumnado recoge, considera o analiza comentarios, resultados, dificultades, criterios o efectos para valorar lo realizado y decidir ajustes o aprendizajes.',not_enough:'Cerrar la actividad o circular el producto sin considerar información de retorno o resultados.'}),
+ AVANCES:Object.freeze({required:'El alumnado identifica, compara, registra o explica avances, cambios, mejoras, aprendizajes o pendientes a partir de evidencias del proceso.',not_enough:'Afirmar que hubo avances sin comparación, registro, reflexión o evidencia observable.'})
+});
+
 export const SGD=Object.freeze({
  'SGD-001':'El grafo está ligado exactamente a un ProjectBlueprint aprobado y a sus fuentes.',
  'SGD-002':'Existe exactamente una sesión por cada sesión del Blueprint, en el mismo orden y numeración.',
