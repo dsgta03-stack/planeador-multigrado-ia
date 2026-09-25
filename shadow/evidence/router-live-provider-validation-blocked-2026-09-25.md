@@ -10,7 +10,7 @@ Validation branch:
 
 `pipeline-v1-router-e2e-validated-shadow`
 
-The branch subsequently added only a validation harness/workflow surface before this evidence record. No architecture, Gate, pedagogical rule, source contract, production route, `main`, PR #3, or PR #4 was changed.
+The branch subsequently added only validation harness/workflow/evidence surfaces. No architecture, Gate, pedagogical rule, source contract, production route, `main`, PR #3, or PR #4 was changed.
 
 ## Requested operational chain
 
@@ -103,26 +103,38 @@ Result:
 - message: `GITHUB_BRANCH_404`
 - provider requests recorded: `0`
 
-The temporary runner attempted to materialize the exact private validation branch at runtime. Anonymous GitHub access from the Edge runtime could not resolve the private branch. The failure occurred before ProjectBlueprint authoring and before Gemini was called.
+The temporary runner attempted to materialize the exact validation branch at runtime and anonymous GitHub access from that runtime returned 404. A later repository metadata check reports the repository visibility as public, so this evidence does not classify that 404 as proof of repository privacy. The failure still occurred before ProjectBlueprint authoring and before Gemini was called.
 
 ### Railway isolated-candidate host
 
 Only the old non-production candidate service `planeador-multigrado-ia-v0112-candidate` was used. Stable production was not touched.
 
-A fresh image deployment was successfully created as deployment:
+A fresh image deployment was created as deployment:
 
 `6e46d7e0-b2d5-410d-8148-68d6d19f8e9a`
 
-The container then failed to bootstrap the exact validation branch because the repository is private:
+The container failed to bootstrap the exact validation branch:
 
 - `could not fetch https://github.com/dsgta03-stack/planeador-multigrado-ia`
 - `could not find commit hash for pipeline-v1-router-e2e-validated-shadow`
+
+The deployment ultimately settled as `FAILED` at the healthcheck stage.
 
 Classification:
 
 `HOSTING/TRANSPORT`
 
-After pointing the candidate back at the private GitHub source, Railway's repository deployment operation independently reported that its GitHub App/repository installation was no longer active, so it could not resolve or fetch the branch. No Gemini Pipeline call was issued from Railway.
+After pointing the candidate source configuration back to the repository, Railway's repository deployment operation independently reported that no active GitHub installation was available for `dsgta03-stack/planeador-multigrado-ia`, so it could not resolve/fetch the branch for a fresh source deployment. No Gemini Pipeline call was issued from Railway.
+
+The immediately prior candidate deployment `7baa5b26-3d73-45e1-9589-0361cd335f05` remains recorded as `SUCCESS`; the current control-plane configuration has been restored to `main` + `node server-v0113-v65beta10-promoted.mjs` + `/health`, but a fresh deployment cannot be created until Railway repository access is restored.
+
+## GitHub Actions execution-path check
+
+A branch-local workflow `router-live-provider-shadow.yml` exists and a harmless marker commit was added solely to trigger the branch workflow:
+
+`5b032823e2f80a46fd1409ff003815890703f011`
+
+GitHub's Actions run collection still reported `total_count: 0` for the repository and for the validation branch after that commit. Therefore no workflow execution is claimed and GitHub Actions did not provide an alternate execution host in this validation window.
 
 ## Gate / usage result for this requested run
 
@@ -137,14 +149,23 @@ Because every full-chain execution host failed **before ProjectBlueprint authori
 - Gemini tokens/usage for the requested full-chain run: **none**
 - final status: **NOT `READY_FOR_TEACHER`**
 
-The single provider availability probe above returned HTTP 200 but does not expose token usage and is not counted as the Pipeline run.
+The single provider availability probe above returned HTTP 200 but is not counted as the Pipeline run.
+
+## Required external control-plane action before rerun
+
+The remaining executable path is to restore Railway's GitHub repository authorization for `dsgta03-stack/planeador-multigrado-ia`. Railway's current control plane cannot perform that authorization on behalf of the account owner.
+
+Required user-side control-plane sequence:
+
+1. Railway → `planeador-multigrado-ia-v0112-candidate` → Settings → Source.
+2. Reconnect the repository source. If the repository is not selectable, verify/re-authorize the Railway GitHub App for `dsgta03-stack/planeador-multigrado-ia` and accept any pending permission update.
+3. Return to Railway and refresh/reselect the repository.
+
+Once repository access is restored, rerun only the isolated candidate against `pipeline-v1-router-e2e-validated-shadow` and resume the same controlled validation without changing Gates, pedagogical rules or contracts.
 
 ## Decision
 
-The deterministic E2E router/Pipeline checkpoint remains valid, and the certified Gemini model was independently reachable. The requested new live operational chain could not be executed end-to-end because of two transport boundaries external to the pedagogical Gates:
-
-1. current user/anon PostgREST authorization cannot read the authoritative curriculum tables;
-2. the available isolated runtime could not materialize the private validation branch (Railway GitHub connection unavailable; anonymous Edge/GitHub access returns 404).
+The deterministic E2E router/Pipeline checkpoint remains valid, and the certified Gemini model was independently reachable. The requested new live operational chain could not yet be executed end-to-end because the remaining full-chain execution host is blocked at its repository authorization boundary, while the production-shaped anon curriculum path also remains correctly fail-closed.
 
 No retry loop was used, no rule was weakened, no candidate was rewritten to force a PASS, and no pedagogical rejection was converted into success.
 
