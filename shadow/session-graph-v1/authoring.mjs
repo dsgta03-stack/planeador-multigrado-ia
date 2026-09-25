@@ -6,12 +6,12 @@ export const SESSION_GRAPH_AUTHORING_PREFLIGHT=Object.freeze({
  methodology_links:'Para CADA methodology_operation enlazada, compara la acción local con METHODOLOGY_OPERATION_SEMANTICS[operation].required y rechaza cualquier caso que sólo cumpla not_enough. DIFUSION debe estar en la actividad que realmente comunica/presenta/explica ante audiencia real; no en montaje, traslado o planeación de ruta. COMPRENSION_Y_PRODUCCION debe estar en la actividad que comprende/procesa Y produce/construye en esa misma actividad.',
  functional_links:'Para CADA functional_requirement_id enlazado, la misma actividad debe ejecutar concretamente el criterio y producir o registrar la evidencia pertinente dentro de una etapa autorizada. No agrupes requisitos por pertenecer al mismo producto. at_least_two_viable_spaces_or_audiences sólo puede enlazarse donde la actividad realmente presenta/actúa en dos espacios o audiencias, no donde sólo planea una ruta. circulation_evidence sólo donde se registra circulación ya realizada. Montaje, explicación, mediación, movimiento y reinstalación son afirmaciones distintas y requieren acción/evidencia local.',
  contribution_links:'Regla mecánica sin excepciones: contributes_to_artifact_ids no vacío => contribution_mode DIRECT. contribution_mode COMPLEMENTARY => contributes_to_artifact_ids vacío y una actividad posterior de ESA MISMA sesión incluye activity_key en input_refs. Un output que sea sólo análisis, notas, selección, esquema preliminar o preparación es COMPLEMENTARY salvo que el artefacto esperado del Blueprint sea precisamente ese análisis/plan. Si una actividad produce, monta, media, mueve, reinstala o registra circulación y deja un componente observable del artefacto esperado, debe ser DIRECT.',
- deterministic_contract:'Antes de devolver, verifica literalmente: (1) minutos totales por sesión <= minutes_per_session; (2) cada operación metodológica de la sesión aparece en actividad que cumple su semántica required y no sólo not_enough; (3) recursos/apoyos exactamente autorizados; (4) DIRECT implica artefacto no vacío; (5) COMPLEMENTARY implica artefacto vacío y consumidor posterior; (6) cada artefacto esperado tiene DIRECT; (7) sin dependencias futuras; (8) requisitos dentro de stage_ids; (9) no enlaces un requisito a una actividad que sólo prepara su ejecución posterior.'
+ deterministic_contract:'Antes de devolver, verifica literalmente: (1) minutos totales por sesión <= minutes_per_session; (2) cada operación metodológica de la sesión aparece en actividad que cumple su semántica required y no sólo not_enough; (3) recursos/apoyos exactamente autorizados; (4) DIRECT implica artefacto no vacío; (5) COMPLEMENTARY implica artefacto vacío y consumidor posterior; (6) cada artefacto esperado tiene DIRECT; (7) sin dependencias futuras; (8) requisitos dentro de stage_ids; (9) no enlaces un requisito a una actividad que sólo prepara su ejecución posterior; (10) toda fila WORKED pasa el preflight determinista local: indagación exige fuente/consulta, procesamiento/contraste y registro; las finalidades de compartir/proponer y la acción de explicar deben aparecer explícitamente cuando el PDA oficial las exige.'
 });
 
 export const SESSION_GRAPH_AUTHORING_INSTRUCTION=`Convierte el ProjectBlueprint aprobado en actividades ejecutables sin cambiar problema, pregunta, metodología, PDA, producto, etapas, estados, artefactos ni operaciones. Mantén una cadena input→acción del alumnado→output→evidencia→criterio. Aplica sin excepciones: contributes_to_artifact_ids.length>0 => contribution_mode=DIRECT; contribution_mode=COMPLEMENTARY => contributes_to_artifact_ids=[] y una actividad posterior de la misma sesión consume activity_key mediante input_refs. DIRECT significa que el output YA ES un componente observable del artefacto esperado; análisis, notas, selección, bosquejo, ensayo o preparación que sólo sirven a una actividad posterior son COMPLEMENTARY, salvo que el artefacto esperado del Blueprint sea exactamente ese tipo de producto. Si la actividad ejecuta un requisito constitutivo y deja resultado observable del artefacto, debe ser DIRECT.
 
-WORKED es excepcional, no el estado por defecto. Para cada PDA seleccionado procura como máximo una actividad WORKED auténtica en todo el grafo y usa DEVELOPING en las demás movilizaciones. Antes de escribir WORKED compara student_action de esa misma fila contra el PDA oficial completo. Repetir el texto o los verbos del PDA NO demuestra el desempeño. Una forma nominal o pasiva como “acuerdos propuestos”, “información investigada” o “importancia registrada” no sustituye la acción requerida. Si el PDA combina explicar+proponer, student_action debe decir qué explica y qué acuerdo concreto propone. Si combina indagar+compartir importancia, la misma actividad debe indicar: qué fuente/observación/consulta accesible utiliza; qué información procesa, compara o contrasta; qué registro trazable produce; y a quién/cómo comparte, explica o comunica su importancia. Si falta cualquiera, usa DEVELOPING. No heredes indagación, explicación, propuesta o socialización desde otra actividad.
+WORKED es excepcional, no el estado por defecto. Para cada PDA seleccionado procura como máximo una actividad WORKED auténtica en todo el grafo y usa DEVELOPING en las demás movilizaciones. Antes de escribir WORKED compara student_action de esa misma fila contra el PDA oficial completo. Repetir el texto o los verbos del PDA NO demuestra el desempeño. Una forma nominal o pasiva como “acuerdos propuestos”, “información investigada” o “importancia registrada” no sustituye la acción requerida. Si el PDA combina explicar+proponer, student_action debe decir qué explica y qué acuerdo concreto propone. Si combina indagar+compartir importancia, la misma actividad debe indicar: qué fuente/observación/consulta accesible utiliza; qué información procesa, compara o contrasta; qué registro trazable produce; y a quién/cómo comparte, explica o comunica su importancia. Si falta cualquiera, usa DEVELOPING. No heredes indagación, explicación, propuesta o socialización desde otra actividad. El validador local rechazará una fila WORKED de indagación que no contenga fuente/consulta, procesamiento/contraste y registro trazable aunque el texto diga “indaga”; también rechazará WORKED si el PDA exige compartir, explicar o proponer y esa acción no aparece localmente.
 
 Las operaciones metodológicas se enlazan sólo donde realmente se ejecutan y debes usar METHODOLOGY_OPERATION_SEMANTICS como contrato semántico explícito. Para cada operation comprueba required y evita not_enough. En particular: DIFUSION va en la actividad que realmente comunica, presenta o explica ante una audiencia real; montar, trasladar o diseñar la ruta no es DIFUSION. COMPRENSION_Y_PRODUCCION va en la actividad que comprende/procesa Y produce/construye algo concreto; sólo revisar o comprender no basta. CONSIDERACIONES exige recoger/considerar resultados, comentarios o dificultades; AVANCES exige comparar/registrar/reflexionar sobre avances o pendientes. Si la operación está en la sesión pero la actividad actual no la ejecuta, asigna la etiqueta a otra actividad de ESA MISMA sesión que sí la ejecute; no cambies las operaciones aprobadas del Blueprint ni inventes una acción artificial sólo para portar la etiqueta.
 
@@ -21,6 +21,35 @@ Antes de devolver, recorre cada actividad y pregunta literalmente: ¿DIRECT prod
 
 export function methodologyOperationPolicy(blueprint){
  return (blueprint?.methodology?.required_operations||[]).map(operation=>({operation,...METHODOLOGY_OPERATION_SEMANTICS[operation]}));
+}
+
+const normalized=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+const has=(text,re)=>re.test(normalized(text));
+const WORKED_LOCAL_SIGNALS=Object.freeze({
+ source:/\b(consult|entrevist|observ|revis|pregunt|encuest|fuente|recuerdo|testimoni|document|registro previo|libro|texto|nota previa)/,
+ process:/\b(compar|contrast|analiz|relacion|clasific|organiza|interpre|sintetiz|disting|seleccion|ordena|define.*criter)/,
+ trace:/\b(registr|anot|escrib|redact|ficha|nota|bitacora|lista|cuadro|esquema|dibuja.*registro)/,
+ share:/\b(compart|explic|comunic|present|socializ|expone|dialoga con|cuenta a)/,
+ explain:/\b(explic|describ|narra|cuenta)/,
+ propose:/\b(propon|sugier|formula.*acuerdo|plantea.*acuerdo|acuerda que|propone.*acuerdo)/
+});
+
+/**
+ * Conservative local guardrail for author self-claims. It never promotes a
+ * mobilization to WORKED; it can only reject an overclaim before compilation.
+ * The semantic and critical reviewers remain authoritative afterwards.
+ */
+export function workedSemanticMissing(officialText,studentAction){
+ const official=normalized(officialText),action=normalized(studentAction),missing=[];
+ if(/\bindag/.test(official)){
+  if(!WORKED_LOCAL_SIGNALS.source.test(action))missing.push('INDAGA_SOURCE_OR_OBSERVATION');
+  if(!WORKED_LOCAL_SIGNALS.process.test(action))missing.push('INDAGA_PROCESS_OR_CONTRAST');
+  if(!WORKED_LOCAL_SIGNALS.trace.test(action))missing.push('INDAGA_TRACEABLE_RECORD');
+ }
+ if(/\bexplic/.test(official)&&!WORKED_LOCAL_SIGNALS.explain.test(action))missing.push('EXPLICA_LOCAL_ACTION');
+ if(/\bpropon/.test(official)&&!WORKED_LOCAL_SIGNALS.propose.test(action))missing.push('PROPONE_LOCAL_ACTION');
+ if(/\b(compart|socializ|comunic)/.test(official)&&!WORKED_LOCAL_SIGNALS.share.test(action))missing.push('SHARE_OR_COMMUNICATE_PURPOSE');
+ return missing;
 }
 
 export function sessionGraphAuthoringSchema(source){
@@ -67,7 +96,11 @@ export function validateSessionGraphAuthoring(proposal,source){
    if(a.contribution_mode==='DIRECT'&&!(a.contributes_to_artifact_ids||[]).length)errors.push(`$.sessions[${row.session_number}].${a.activity_key}: DIRECT requires artifact`);
    if(a.contribution_mode==='COMPLEMENTARY'&&(a.contributes_to_artifact_ids||[]).length)errors.push(`$.sessions[${row.session_number}].${a.activity_key}: COMPLEMENTARY cannot claim artifact`);
    for(const id of a.functional_requirement_ids||[]){const r=reqById.get(id);if(!r||!(r.stage_ids||[]).some(x=>stageIds.has(x)))errors.push(`$.sessions[${row.session_number}].${a.activity_key}: functional requirement ${id} outside authorized stage`)}
-   for(const g of a.grade_participation||[])for(const m of g.pda_mobilization||[]){const p=pdaById.get(m.pda_id);if(!pdas.has(m.pda_id)||!p||p.grade!==g.grade)errors.push(`$.sessions[${row.session_number}].${a.activity_key}: PDA ${m.pda_id} outside session/grade`)}
+   for(const g of a.grade_participation||[])for(const m of g.pda_mobilization||[]){
+    const p=pdaById.get(m.pda_id);
+    if(!pdas.has(m.pda_id)||!p||p.grade!==g.grade)errors.push(`$.sessions[${row.session_number}].${a.activity_key}: PDA ${m.pda_id} outside session/grade`);
+    if(m.status==='WORKED'&&p){const missing=workedSemanticMissing(p.pda_official,g.student_action);if(missing.length)errors.push(`$.sessions[${row.session_number}].${a.activity_key}.grade_${g.grade}: WORKED ${m.pda_id} missing ${missing.join(',')}`)}
+   }
   }
  }
  if(errors.length){const e=Error(`SESSION_GRAPH_AUTHORING_CONTRACT: ${errors.join('; ')}`);e.code='SESSION_GRAPH_AUTHORING_INVALID';throw e}return true;
