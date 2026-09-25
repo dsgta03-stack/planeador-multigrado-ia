@@ -30,6 +30,9 @@ test('GENERATE keeps approved Blueprint out of protected endpoint input and uses
  assert.match(sent.prompt.preflight_checklist.worked_policy,/misma actividad/i);
  assert.equal(sent.prompt.worked_pda_policy[0].official_text,curriculumText(f));
  assert.equal(sent.prompt.functional_requirement_policy[0].requirement_id,'r1');
+ assert.equal(sent.prompt.methodology_operation_policy[0].operation,'IDENTIFICACION');
+ assert.match(sent.prompt.methodology_operation_policy[0].required,/identifica/i);
+ assert.match(sent.prompt.methodology_operation_policy[0].not_enough,/tema|explicación docente/i);
  assert.equal(JSON.stringify(sent.response_schema).includes('"enum"'),false);
  assert.equal(drivers.diagnostics().logical_calls,1);
 });
@@ -46,7 +49,8 @@ test('REPAIR preserves Blueprint as immutable context, runs full preflight, and 
  assert.equal(sent.input.blueprint.blueprint_id,'bp1');
  assert.equal(sent.prompt.previous_proposal.authoring_version,'SESSION_GRAPH_AUTHORING_V1');
  assert.equal(sent.prompt.triggering_rules[0].rule,'SGD-010');
- assert.match(sent.prompt.repair_instruction,/revisión integral/i);
+ assert.match(sent.prompt.repair_instruction,/revisa TODAS/i);
+ assert.match(sent.prompt.repair_instruction,/methodology_operation_policy/i);
  assert.match(sent.prompt.repair_instruction,/functional_requirement_id/i);
  assert.match(sent.prompt.preflight_checklist.deterministic_contract,/minutos/i);
  assert.deepEqual(sent.response_schema.required,['status','reason','proposal']);
@@ -68,11 +72,12 @@ test('REVIEW sends exact semantic input hash and returns semantic envelope',asyn
  const fetchImpl=async (_url,init)=>{sent=JSON.parse(init.body);return jsonResponse({provider:'google',finish_reason:'STOP',output:{input_hash:'h1',findings}})};
  const drivers=createSessionGraphDrivers({endpoint,token,durableEvidence:false,fetchImpl});
  const input={...f.ctx.sources,blueprint:f.ctx.blueprint,graph:{schema_version:'SESSION_GRAPH_V1'}};
- const result=await drivers.sessionReview({input,request:{review_version:'SESSION_GRAPH_SEMANTIC_REVIEW_V1',gate_version:'SESSION_GRAPH_GATE_V1',input_hash:'h1',rules:{},context:{},output_contract:{}}});
+ const result=await drivers.sessionReview({input,request:{review_version:'SESSION_GRAPH_SEMANTIC_REVIEW_V1',gate_version:'SESSION_GRAPH_GATE_V1',input_hash:'h1',rules:{},methodology_operation_policy:{IDENTIFICACION:{required:'identifica',not_enough:'tema'}},context:{},output_contract:{}}});
  assert.equal(result.semantic.input_hash,'h1');
  assert.equal(sent.task,'REVIEW');
  assert.equal(sent.input_hash,'h1');
  assert.equal(sent.input.graph.schema_version,'SESSION_GRAPH_V1');
+ assert.equal(sent.prompt.methodology_operation_policy.IDENTIFICACION.required,'identifica');
 });
 
 test('durable call polls the same request instead of replaying GENERATE',async()=>{
