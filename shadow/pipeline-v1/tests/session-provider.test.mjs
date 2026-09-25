@@ -17,7 +17,7 @@ function fixture(){
 
 const jsonResponse=(body,status=200)=>new Response(JSON.stringify(body),{status,headers:{'content-type':'application/json'}});
 
-test('GENERATE keeps approved Blueprint out of protected endpoint input and uses decoder shape',async()=>{
+test('GENERATE keeps approved Blueprint out of protected endpoint input and sends explicit authoring guardrails',async()=>{
  const f=fixture();let sent;
  const fetchImpl=async (_url,init)=>{sent=JSON.parse(init.body);return jsonResponse({provider:'google',finish_reason:'STOP',output:f.proposal})};
  const drivers=createSessionGraphDrivers({endpoint,token,durableEvidence:false,fetchImpl});
@@ -27,7 +27,9 @@ test('GENERATE keeps approved Blueprint out of protected endpoint input and uses
  assert.equal('blueprint' in sent.input,false);
  assert.equal(sent.prompt.blueprint.blueprint_id,'bp1');
  assert.equal(sent.prompt.provider_version,'SESSION_GRAPH_PROVIDER_V1_R2');
- assert.match(sent.prompt.preflight_checklist.worked_policy,/misma actividad/i);
+ assert.match(sent.prompt.preflight_checklist.worked_policy,/WORKED/i);
+ assert.deepEqual(sent.prompt.pda_status_policy.allowed_statuses,['WORKED','DEVELOPING']);
+ assert.deepEqual(sent.prompt.pda_grade_policy,[{grade:1,allowed_pda_ids:['p1'],rule:'En grade_participation de este grado sólo puedes incluir estos PDA. Nunca copies todos los PDA en todos los grados.'}]);
  assert.equal(sent.prompt.worked_pda_policy[0].official_text,curriculumText(f));
  assert.equal(sent.prompt.functional_requirement_policy[0].requirement_id,'r1');
  assert.equal(sent.prompt.methodology_operation_policy[0].operation,'IDENTIFICACION');
@@ -50,6 +52,8 @@ test('REPAIR preserves Blueprint as immutable context, runs full preflight, and 
  assert.equal(sent.prompt.previous_proposal.authoring_version,'SESSION_GRAPH_AUTHORING_V1');
  assert.equal(sent.prompt.triggering_rules[0].rule,'SGD-010');
  assert.match(sent.prompt.repair_instruction,/revisa TODAS/i);
+ assert.match(sent.prompt.repair_instruction,/pda_grade_policy/i);
+ assert.match(sent.prompt.repair_instruction,/WORKED y DEVELOPING/i);
  assert.match(sent.prompt.repair_instruction,/methodology_operation_policy/i);
  assert.match(sent.prompt.repair_instruction,/functional_requirement_id/i);
  assert.match(sent.prompt.preflight_checklist.deterministic_contract,/minutos/i);
