@@ -1,0 +1,1 @@
+Trigger marker for the controlled live-provider shadow validation. No architecture, Gate, pedagogical rule, contract, production route, main, PR #3 or PR #4 is modified.
