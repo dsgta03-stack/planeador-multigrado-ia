@@ -28,26 +28,52 @@ function assertScalarPolicy(prompt){
  assert.match(prompt.scalar_text_policy.rule,/Nunca devuelvas un objeto ni un arreglo/i);
 }
 
-test('GENERATE propagates scalar text policy to provider',async()=>{
+function assertWorkedDefaultPolicy(prompt){
+ assert.ok(prompt.pda_status_policy);
+ assert.deepEqual(prompt.pda_status_policy.allowed_statuses,['WORKED','DEVELOPING']);
+ assert.equal(prompt.pda_status_policy.default_status,'DEVELOPING');
+ assert.match(prompt.pda_status_policy.rule,/inicializa TODA movilización como DEVELOPING/i);
+ assert.match(prompt.pda_status_policy.rule,/ESA MISMA actividad/i);
+ assert.match(prompt.pda_status_policy.rule,/no hereda/i);
+ assert.equal(prompt.worked_pda_policy.length,1);
+ assert.equal(prompt.worked_pda_policy[0].pda_id,'p1');
+ assert.equal(prompt.worked_pda_policy[0].default_status,'DEVELOPING');
+ assert.ok(prompt.worked_pda_policy[0].required_local_signals.includes('EXPLAIN_LOCAL_ACTION'));
+ assert.ok(prompt.worked_pda_policy[0].required_local_signals.includes('PROPOSE_LOCAL_ACTION'));
+ assert.match(prompt.worked_pda_policy[0].rule,/TODOS los required_local_signals/i);
+ assert.match(prompt.worked_pda_policy[0].rule,/conserva DEVELOPING/i);
+}
+
+test('GENERATE propagates scalar text and fail-closed WORKED policies to provider',async()=>{
  const f=fixture();let sent;
  const fetchImpl=async (_url,init)=>{sent=JSON.parse(init.body);return jsonResponse({provider:'google',finish_reason:'STOP',output:f.proposal})};
  const drivers=createSessionGraphDrivers({endpoint,token,durableEvidence:false,fetchImpl});
  await drivers.sessionAuthor(f.ctx);
  assert.equal(sent.task,'GENERATE');
  assertScalarPolicy(sent.prompt);
+ assertWorkedDefaultPolicy(sent.prompt);
  assert.match(sent.system,/scalar_text_policy/i);
  assert.match(sent.system,/objetos ni arreglos/i);
+ assert.match(sent.system,/DEVELOPING/i);
+ assert.match(sent.system,/required_local_signals/i);
+ assert.match(sent.system,/nunca heredes componentes/i);
 });
 
-test('REPAIR propagates scalar text policy and forbids structural coercion',async()=>{
+test('REPAIR propagates scalar text policy and re-evaluates PDA status from DEVELOPING',async()=>{
  const f=fixture();let sent;
  const fetchImpl=async (_url,init)=>{sent=JSON.parse(init.body);return jsonResponse({provider:'google',finish_reason:'STOP',output:{status:'PROPOSAL',reason:'corregido',proposal:f.proposal}})};
  const drivers=createSessionGraphDrivers({endpoint,token,durableEvidence:false,fetchImpl});
  await drivers.sessionRepair({...f.ctx,previous_proposal:f.proposal,compile_error:{rule:'SESSION_GRAPH_AUTHORING_INVALID',message:'student_action must be string'}});
  assert.equal(sent.task,'REPAIR');
  assertScalarPolicy(sent.prompt);
+ assertWorkedDefaultPolicy(sent.prompt);
  assert.match(sent.system,/scalar_text_policy/i);
+ assert.match(sent.system,/DEVELOPING/i);
+ assert.match(sent.system,/required_local_signals/i);
  assert.match(sent.prompt.repair_instruction,/student_action/i);
  assert.match(sent.prompt.repair_instruction,/evidence/i);
  assert.match(sent.prompt.repair_instruction,/cadenas JSON escalares/i);
+ assert.match(sent.prompt.repair_instruction,/REINICIA el juicio de cada movilización desde DEVELOPING/i);
+ assert.match(sent.prompt.repair_instruction,/ESA MISMA actividad/i);
+ assert.match(sent.prompt.repair_instruction,/Nunca inventes pasos artificiales sólo para obtener WORKED/i);
 });
