@@ -4,5 +4,11 @@
   "private": true,
   "type": "module",
   "engines": { "node": ">=22" },
-  "scripts": { "start": "node server-v0122-methodology-ui-freeze-fix.mjs" }
+  "scripts": {
+    "start": "node server-v0122-methodology-ui-freeze-fix.mjs",
+    "test:shadow:sessiongraph": "node --test shadow/session-graph-v1/tests/*.test.mjs",
+    "test:shadow:pipeline": "node --test shadow/pipeline-v1/tests/*.test.mjs",
+    "test:shadow:presentation": "node --test shadow/presentation-v1/tests/*.test.mjs",
+    "test:shadow:core": "npm run test:shadow:sessiongraph && npm run test:shadow:pipeline && npm run test:shadow:presentation"
+  }
 }
