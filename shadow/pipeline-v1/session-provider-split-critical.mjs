@@ -35,11 +35,14 @@ function assertSplitConfig({endpoint,token,identity,model}){
  if(model!==SESSION_PROVIDER_MODEL)throw Error('SESSION_PROVIDER_MODEL_LOCKED');
 }
 
-export function createSplitCriticalReview({endpoint,token,identity='multiplan-blueprint-shadow-test-v1',model=SESSION_PROVIDER_MODEL,durableEvidence=true,pollIntervalMs=3000,maxPolls=90,fetchImpl=fetch,sleep=sleepDefault}={}){
+export function createSplitCriticalReview({endpoint,token,identity='multiplan-blueprint-shadow-test-v1',model=SESSION_PROVIDER_MODEL,durableEvidence=true,pollIntervalMs=3000,maxPolls=90,minIntervalMs=8200,fetchImpl=fetch,sleep=sleepDefault}={}){
  assertSplitConfig({endpoint,token,identity,model});
- let logicalCalls=0;
+ let logicalCalls=0,lastStart=0;
 
  async function callGroup(group,{input,request}){
+  const delay=lastStart+minIntervalMs-Date.now();
+  if(delay>0)await sleep(delay);
+  lastStart=Date.now();
   logicalCalls++;
   const request_id=durableEvidence?`sessiongraph-review-${group.focus.toLowerCase()}-${randomUUID()}`:null;
   const claims=request?.claims?.[group.claim_key];
@@ -102,7 +105,7 @@ export function createSplitCriticalReview({endpoint,token,identity='multiplan-bl
   };
   return {audit,provider:{mode:SESSION_CRITICAL_REVIEW_MODE,model,requests:parts.map(x=>x.provider)}};
  };
- return Object.freeze({sessionCriticalReview,diagnostics:()=>({mode:SESSION_CRITICAL_REVIEW_MODE,model,logical_calls:logicalCalls,durable_evidence:durableEvidence})});
+ return Object.freeze({sessionCriticalReview,diagnostics:()=>({mode:SESSION_CRITICAL_REVIEW_MODE,model,logical_calls:logicalCalls,durable_evidence:durableEvidence,min_interval_ms:minIntervalMs})});
 }
 
 export function createSessionGraphDriversSplitCritical(options={}){
