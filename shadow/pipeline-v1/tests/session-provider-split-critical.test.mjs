@@ -30,7 +30,7 @@ test('split critical review performs three focused calls and merges exact-hash a
   if(focus==='FUNCTIONAL')return jsonResponse({provider:'google',finish_reason:'STOP',output:{input_hash:'critical-hash',functional_link_audits:[{requirement_id:'mounting',activity_id:'a3',status:'PASS',action_quote:'monta las piezas',evidence_quote:'piezas montadas',reason:'literal'}]}});
   throw Error(`unexpected focus ${focus}`);
  };
- const driver=createSplitCriticalReview({endpoint,token,durableEvidence:false,fetchImpl});
+ const driver=createSplitCriticalReview({endpoint,token,durableEvidence:false,minIntervalMs:0,fetchImpl});
  const result=await driver.sessionCriticalReview({input,request:requestFixture()});
  assert.equal(sent.length,3);
  assert.deepEqual(sent.map(x=>x.prompt.review_focus),['WORKED','METHODOLOGY','FUNCTIONAL']);
@@ -46,6 +46,7 @@ test('split critical review performs three focused calls and merges exact-hash a
  assert.equal(result.provider.mode,SESSION_CRITICAL_REVIEW_MODE);
  assert.equal(result.provider.requests.length,3);
  assert.equal(driver.diagnostics().logical_calls,3);
+ assert.equal(driver.diagnostics().min_interval_ms,0);
 });
 
 test('split critical review fails closed if any partial audit changes input hash',async()=>{
@@ -57,7 +58,7 @@ test('split critical review fails closed if any partial audit changes input hash
   if(focus==='METHODOLOGY')return jsonResponse({output:{input_hash:'wrong-hash',methodology_link_audits:[]}});
   return jsonResponse({output:{input_hash:'critical-hash',functional_link_audits:[]}});
  };
- const driver=createSplitCriticalReview({endpoint,token,durableEvidence:false,fetchImpl});
+ const driver=createSplitCriticalReview({endpoint,token,durableEvidence:false,minIntervalMs:0,fetchImpl});
  await assert.rejects(()=>driver.sessionCriticalReview({input,request:{...requestFixture(),claims:{worked:[],methodology_links:[],functional_links:[]}}}),/SESSION_CRITICAL_METHODOLOGY_INPUT_HASH_MISMATCH/);
  assert.equal(calls,2);
 });
