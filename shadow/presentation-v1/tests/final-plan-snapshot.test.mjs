@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {teacherProjectionHash} from '../../pipeline-v1/projection.mjs';
-import {toTeacherPlanView} from '../teacher-plan-view.mjs';
+import {toTeacherPlanView,teacherPlanViewHash} from '../teacher-plan-view.mjs';
 import {createFinalPlanSnapshot,assertFinalPlanSnapshot,restoreTeacherPlanView,finalPlanSnapshotHash} from '../final-plan-snapshot.mjs';
 
 function pipelineFixture(){
@@ -48,6 +48,6 @@ test('tampering only the duplicated source binding is also detected',()=>{
 test('snapshot rejects unbound teacher context',()=>{
  const view=structuredClone(viewFixture());
  view.source.constraints_hash=null;
- view.view_hash=(await import('../teacher-plan-view.mjs')).teacherPlanViewHash(view);
+ view.view_hash=teacherPlanViewHash(view);
  assert.throws(()=>createFinalPlanSnapshot({view,createdAt:'2026-09-26T05:00:00.000Z'}),/FINAL_PLAN_SNAPSHOT_CONTEXT_BINDING_REQUIRED/);
 });
