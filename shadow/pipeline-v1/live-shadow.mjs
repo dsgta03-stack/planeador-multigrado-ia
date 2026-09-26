@@ -1,6 +1,7 @@
 import {constructionPlan} from '../project-blueprint-v1/construction.mjs';
 import {runShadowPipeline} from './pipeline.mjs';
-import {createSessionGraphDrivers,SESSION_PROVIDER_MODEL} from './session-provider.mjs';
+import {SESSION_PROVIDER_MODEL} from './session-provider.mjs';
+import {createSessionGraphDriversSplitCritical} from './session-provider-split-critical.mjs';
 
 export const LIVE_SHADOW_RUNNER_VERSION='MULTIPLAN_LIVE_SHADOW_RUNNER_V1';
 
@@ -13,7 +14,7 @@ export async function runLiveShadowPipeline({sources,endpoint,token,identity='mu
  if(process.env.MULTIPLAN_SHADOW_RUN!=='1'||process.env.NODE_ENV==='production')throw Error('PIPELINE_SHADOW_RUN_NOT_EXPLICIT_OR_PRODUCTION');
  if(model!==SESSION_PROVIDER_MODEL)throw Error('PIPELINE_MODEL_LOCKED');
  const plan=constructionPlan(sources);
- const sessionDrivers=createSessionGraphDrivers({endpoint,token,identity,model,durableEvidence:true,fetchImpl,...(sleep?{sleep}:{})});
+ const sessionDrivers=createSessionGraphDriversSplitCritical({endpoint,token,identity,model,durableEvidence:true,fetchImpl,...(sleep?{sleep}:{})});
  const result=await runShadowPipeline({
   sources,
   drivers:{sessionAuthor:sessionDrivers.sessionAuthor,sessionRepair:sessionDrivers.sessionRepair,sessionReview:sessionDrivers.sessionReview,sessionCriticalReview:sessionDrivers.sessionCriticalReview},
