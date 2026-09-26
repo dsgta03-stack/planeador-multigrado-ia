@@ -25,3 +25,5 @@ jobs:
         run: node --test shadow/session-graph-v1/tests/*.test.mjs
       - name: Pipeline tests
         run: node --test shadow/pipeline-v1/tests/*.test.mjs
+      - name: TeacherPlanProjection presentation tests
+        run: node --test shadow/presentation-v1/tests/*.test.mjs
