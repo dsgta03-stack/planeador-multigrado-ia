@@ -1,9 +1,10 @@
-name: SessionGraph V1 Shadow
+name: SessionGraph Shadow CI
 
 on:
   push:
     branches:
       - session-graph-v1-shadow
+      - session-graph-authoring-r2-shadow
   workflow_dispatch:
 
 permissions:
@@ -12,7 +13,7 @@ permissions:
 jobs:
   focal-tests:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 8
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -20,5 +21,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: SessionGraph focal tests
+      - name: SessionGraph tests
         run: node --test shadow/session-graph-v1/tests/*.test.mjs
+      - name: Pipeline tests
+        run: node --test shadow/pipeline-v1/tests/*.test.mjs
