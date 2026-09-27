@@ -62,7 +62,7 @@ export function createSplitCriticalReview({endpoint,token,identity='multiplan-bl
     claims:{[group.claim_key]:claims},
     output_contract:{input_hash:'repeat exact input_hash',[group.result_key]:request.output_contract?.[group.result_key]||`exactly one row per ${group.focus} claim`}
    },
-   input:{claims:{[group.claim_key]:claims}},
+   input:{constraints:input.constraints,curriculum:input.curriculum,methodology:input.methodology,blueprint:input.blueprint,graph:input.graph},
    response_schema:partialShape(group.result_key),
    input_hash:request.input_hash,
    ...(request_id?{request_id}:{})
