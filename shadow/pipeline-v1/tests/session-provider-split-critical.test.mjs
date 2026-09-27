@@ -35,6 +35,9 @@ test('split critical review performs three focused calls and merges exact-hash a
  assert.equal(sent.length,3);
  assert.deepEqual(sent.map(x=>x.prompt.review_focus),['WORKED','METHODOLOGY','FUNCTIONAL']);
  assert.ok(sent.every(x=>x.input_hash==='critical-hash'));
+ assert.ok(sent.every(x=>['constraints','curriculum','methodology','blueprint','graph'].every(k=>k in x.input)));
+ assert.ok(sent.every(x=>!('claims' in x.input)));
+ assert.deepEqual(sent.map(x=>Object.keys(x.prompt.claims)),[['worked'],['methodology_links'],['functional_links']]);
  assert.ok(sent.every(x=>x.prompt.quote_policy.includes('CONTIGUA')&&x.prompt.quote_policy.includes('EXACTA')));
  assert.deepEqual(sent[0].response_schema.required,['input_hash','worked_audits']);
  assert.deepEqual(sent[1].response_schema.required,['input_hash','methodology_link_audits']);
