@@ -25,10 +25,11 @@ export function assertApproved(envelope){
 export async function generateShadow(sources,options={},provider=callProvider){
  if(Object.keys(sources).sort().join(',')!=='constraints,curriculum,methodology')throw Error('ONLY_SOURCE_ARTIFACTS_ALLOWED_NO_LEGACY_PLAN');
  for(const [name,key] of [['TeacherConstraintsV1','constraints'],['CurriculumSnapshotV1','curriculum'],['MethodologyDecisionV1','methodology']])assertContract(name,sources[key]);
- const frozen=deepFreeze(structuredClone(sources)),revisions=[],telemetry=[],errors=[],construction_attempts=[];const id=randomUUID();let repairCount=0;
+ const frozen=deepFreeze(structuredClone(sources)),revisions=[],telemetry=[],errors=[],construction_attempts=[];const id=randomUUID();let repairCount=0,constructionRepair=null;
  for(let revision=1;revision<=2;revision++){
   const previous=revisions.at(-1);
-  const repair=previous?{previous_blueprint:previous.blueprint,triggering_rules:[...previous.gate.deterministic_findings,...previous.gate.semantic_findings].filter(x=>x.status!=='PASS'),instruction:'Repara sólo el Blueprint. Conserva decisiones docentes, texto oficial, método y fuentes. No añadas frases para aparentar PASS.'}:null;
+  const semanticRepair=previous?{previous_blueprint:previous.blueprint,triggering_rules:[...previous.gate.deterministic_findings,...previous.gate.semantic_findings].filter(x=>x.status!=='PASS'),instruction:'Repara sólo el Blueprint. Conserva decisiones docentes, texto oficial, método y fuentes. No añadas frases para aparentar PASS.'}:null;
+  const repair=constructionRepair||semanticRepair;constructionRepair=null;
 
   let r;try{r=await provider(revision===1?'GENERATE':'REPAIR',frozen,{...options,repair})}catch(e){
    errors.push({revision,task:revision===1?'GENERATE':'REPAIR',error:String(e),code:e.code||'PROVIDER_ERROR'});
@@ -40,7 +41,12 @@ export async function generateShadow(sources,options={},provider=callProvider){
   let raw=structuredClone(r.output);
   if(options.constructionPlan){
    try{const built=options.authoringCompact?compileAuthoring(raw,frozen,options.constructionPlan,{blueprint_id:id,revision}):compileConstruction(raw,options.constructionPlan);construction_attempts.push({revision,status:'CONSTRUCTED',...built.record});raw=built.blueprint;}
-   catch(e){construction_attempts.push({revision,status:'CONSTRUCTION_REJECTED',raw_proposal:raw,rule:e.rule||null,error:String(e)});errors.push({revision,task:'CONSTRUCT',code:e.code||'CONSTRUCTION_REJECTED',error:String(e)});break;}
+   catch(e){
+    construction_attempts.push({revision,status:'CONSTRUCTION_REJECTED',raw_proposal:raw,rule:e.rule||null,error:String(e)});
+    const repairable=revision===1&&(e.code==='CONSTRUCTION_REJECTED'||e.code==='AUTHORING_CONTRACT_INVALID'||e.code==='AUTHORING_FIELD_EXCESSIVE_LENGTH'||String(e?.message||e)==='AUTHORING_EVIDENCE_REFERENCE_INVALID');
+    if(repairable){constructionRepair={previous_authoring_proposal:structuredClone(raw),triggering_rules:[{rule_id:e.rule||e.code||'AUTHORING_CONSTRUCTION',status:'FAIL',scope:'AUTHORING_CONSTRUCTION',observed:String(e),expected:'La propuesta de autoría debe superar sin excepciones el contrato y la construcción local estricta.'}],instruction:'Repara sólo la propuesta de autoría compacta que falló la construcción local. Corrige exactamente la regla indicada usando citas literales y referencias válidas de la propia etapa. Conserva fuentes, plan de construcción y decisiones no relacionadas. No inventes evidencia, no relajes criterios y no cambies metadatos del compilador.'};continue;}
+    errors.push({revision,task:'CONSTRUCT',code:e.code||'CONSTRUCTION_REJECTED',error:String(e)});break;
+   }
   }
   // Envelope IDs are assigned by the orchestrator, never pedagogy or source fields.
   const b={...raw,blueprint_id:id,revision,status:'DRAFT',gate_result:null};
