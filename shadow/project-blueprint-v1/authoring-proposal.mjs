@@ -39,11 +39,29 @@ function validateAuthoring(value,s,path='$'){
   else if(v&&typeof v==='object')for(const [k,item] of Object.entries(v))if(x.properties?.[k])extra(item,x.properties[k],`${p}.${k}`);
  };extra(value,s,path);if(errors.length){const e=Error(`AUTHORING_CONTRACT: ${errors.join('; ')}`);e.code=errors.some(x=>x.includes('maxLength'))?'AUTHORING_FIELD_EXCESSIVE_LENGTH':'AUTHORING_CONTRACT_INVALID';throw e;}
 }
+function validateCoverageCompleteness(proposal,plan){
+ const failures=[];
+ for(const link of plan.coverage_matrix){
+  const rows=proposal.coverage.filter(r=>r.operation===link.operation);
+  if(rows.length!==1){failures.push(link.operation);continue;}
+  const row=rows[0],stage=proposal.project_stages.find(s=>s.stage_id===row.stage_id),ref=row.evidence_ref;
+  const actionOk=row.stage_id===link.stage_id&&!!row.action_quote?.trim()&&!!stage?.student_operation?.includes(row.action_quote);
+  let evidenceText='';
+  if(stage&&ref?.field==='expected_output'&&ref.index===null)evidenceText=stage.expected_output;
+  else if(stage&&ref?.field==='acceptance_criteria'&&Number.isInteger(ref.index)&&ref.index>=0&&ref.index<stage.acceptance_criteria.length)evidenceText=stage.acceptance_criteria[ref.index];
+  if(!actionOk||!evidenceText?.trim())failures.push(link.operation);
+ }
+ if(failures.length){
+  const e=Error(`BPD-019: missing literal action/evidence for ${[...new Set(failures)].join(', ')}`);
+  e.code='CONSTRUCTION_REJECTED';e.rule='BPD-019';throw e;
+ }
+}
 export function compileAuthoring(proposal,src,plan,{blueprint_id,revision=1}={}){
  if(!blueprint_id||![1,2].includes(revision))throw Error('AUTHORING_ENVELOPE_REQUIRED');
  for(const [name,key] of [['TeacherConstraintsV1','constraints'],['CurriculumSnapshotV1','curriculum'],['MethodologyDecisionV1','methodology']])assertContract(name,src[key]);
  if(hash(plan)!==hash(constructionPlan(src)))throw Error('AUTHORING_SOURCE_PLAN_MISMATCH');
  validateAuthoring(proposal,authoringSchema(src,plan));
+ validateCoverageCompleteness(proposal,plan);
  const b=structuredClone(proposal),coverage=b.coverage;delete b.coverage;
  Object.assign(b,{schema_version:'PROJECT_BLUEPRINT_V1',blueprint_id,revision,status:'DRAFT',source:sourceBinding(src),methodology:{selected_id:src.methodology.selected_id,catalog_version:src.methodology.catalog_version,required_operations:[...src.methodology.required_operations]},gate_result:null});
  b.problem_frame.original_problem=src.constraints.original_problem;

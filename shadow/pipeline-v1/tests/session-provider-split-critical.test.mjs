@@ -38,6 +38,13 @@ test('split critical review performs three focused calls and merges exact-hash a
  assert.ok(sent.every(x=>['constraints','curriculum','methodology','blueprint','graph'].every(k=>k in x.input)));
  assert.ok(sent.every(x=>!('claims' in x.input)));
  assert.deepEqual(sent.map(x=>Object.keys(x.prompt.claims)),[['worked'],['methodology_links'],['functional_links']]);
+ assert.ok(sent.every(x=>x.prompt.instruction!=='strict literal audit'));
+ assert.ok(sent[0].prompt.instruction.includes('SOLO los claims WORKED'));
+ assert.ok(sent[1].prompt.instruction.includes('SOLO los claims METHODOLOGY'));
+ assert.ok(sent[1].prompt.instruction.includes('claim.semantics.required'));
+ assert.ok(sent[1].prompt.instruction.includes('COMPRENSION_Y_PRODUCCION'));
+ assert.ok(sent[1].prompt.instruction.includes('no exijas explicar+proponer'));
+ assert.ok(sent[2].prompt.instruction.includes('SOLO los claims FUNCTIONAL'));
  assert.ok(sent.every(x=>x.prompt.quote_policy.includes('CONTIGUA')&&x.prompt.quote_policy.includes('EXACTA')));
  assert.deepEqual(sent[0].response_schema.required,['input_hash','worked_audits']);
  assert.deepEqual(sent[1].response_schema.required,['input_hash','methodology_link_audits']);

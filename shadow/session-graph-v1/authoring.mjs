@@ -6,7 +6,7 @@ export const SESSION_GRAPH_AUTHORING_PREFLIGHT=Object.freeze({
  methodology_links:'Para CADA methodology_operation enlazada, compara la acción local con METHODOLOGY_OPERATION_SEMANTICS[operation].required y rechaza cualquier caso que sólo cumpla not_enough. RECONOCIMIENTO exige una acción observable de reconocer, identificar, comparar, revisar o detectar hallazgos, relaciones, dificultades, criterios, diferencias, avances o necesidades de ajuste; preparar, ordenar o producir sin esa revisión no basta. DIFUSION debe estar en la actividad que realmente comunica/presenta/explica ante audiencia real; no en montaje, traslado o planeación de ruta. COMPRENSION_Y_PRODUCCION debe estar en la actividad que comprende/procesa Y produce/construye en esa misma actividad.',
  functional_links:'Para CADA functional_requirement_id enlazado, la misma actividad debe ejecutar concretamente el criterio y producir o registrar la evidencia pertinente dentro de una etapa autorizada. No agrupes requisitos por pertenecer al mismo producto. at_least_two_viable_spaces_or_audiences sólo puede enlazarse donde la actividad realmente presenta/actúa en dos espacios o audiencias, no donde sólo planea una ruta. circulation_evidence sólo donde se registra circulación ya realizada. Montaje, explicación, mediación, movimiento y reinstalación son afirmaciones distintas y requieren acción/evidencia local.',
  contribution_links:'Regla mecánica sin excepciones: contributes_to_artifact_ids no vacío => contribution_mode DIRECT. contribution_mode COMPLEMENTARY => contributes_to_artifact_ids vacío y una actividad posterior de ESA MISMA sesión incluye activity_key en input_refs. Un output que sea sólo análisis, notas, selección, esquema preliminar o preparación es COMPLEMENTARY salvo que el artefacto esperado del Blueprint sea precisamente ese análisis/plan. Si una actividad produce, monta, media, mueve, reinstala o registra circulación y deja un componente observable del artefacto esperado, debe ser DIRECT.',
- deterministic_contract:'Antes de devolver, verifica literalmente: (1) minutos totales por sesión <= minutes_per_session; (2) cada operación metodológica de la sesión aparece en actividad que cumple su semántica required y no sólo not_enough; RECONOCIMIENTO debe reconocer/revisar hallazgos, dificultades, criterios, diferencias, avances o ajustes de forma observable; (3) recursos/apoyos exactamente autorizados; (4) DIRECT implica artefacto no vacío; (5) COMPLEMENTARY implica artefacto vacío y consumidor posterior; (6) cada artefacto esperado tiene DIRECT; (7) sin dependencias futuras; (8) requisitos dentro de stage_ids; (9) no enlaces un requisito a una actividad que sólo prepara su ejecución posterior; (10) toda fila WORKED pasa el preflight determinista local: indagación exige fuente/consulta dirigida al objeto del PDA, procesamiento/contraste y registro; las finalidades de compartir/proponer y la acción de explicar deben aparecer explícitamente cuando el PDA oficial las exige; un infinitivo de propósito como “intención de proponer” no cuenta como propuesta ejecutada.'
+ deterministic_contract:'Antes de devolver, verifica literalmente: (1) minutos totales por sesión <= minutes_per_session; (2) cada operación metodológica de la sesión aparece en actividad que cumple su semántica required y no sólo not_enough; (3) recursos/apoyos exactamente autorizados; (4) DIRECT implica artefacto no vacío; (5) COMPLEMENTARY implica artefacto vacío y consumidor posterior; (6) cada artefacto esperado tiene DIRECT; (7) sin dependencias futuras; (8) requisitos dentro de stage_ids; (9) no enlaces un requisito a una actividad que sólo prepara su ejecución posterior; (10) toda fila WORKED pasa el preflight determinista local: indagación exige fuente/consulta, procesamiento/contraste y registro; las finalidades de compartir/proponer y la acción de explicar deben aparecer explícitamente cuando el PDA oficial las exige.'
 });
 
 export const SESSION_GRAPH_AUTHORING_INSTRUCTION=`Convierte el ProjectBlueprint aprobado en actividades ejecutables sin cambiar problema, pregunta, metodología, PDA, producto, etapas, estados, artefactos ni operaciones. Mantén una cadena input→acción del alumnado→output→evidencia→criterio. Aplica sin excepciones: contributes_to_artifact_ids.length>0 => contribution_mode=DIRECT; contribution_mode=COMPLEMENTARY => contributes_to_artifact_ids=[] y una actividad posterior de la misma sesión consume activity_key mediante input_refs. DIRECT significa que el output YA ES un componente observable del artefacto esperado; análisis, notas, selección, bosquejo, ensayo o preparación que sólo sirven a una actividad posterior son COMPLEMENTARY, salvo que el artefacto esperado del Blueprint sea exactamente ese tipo de producto. Si la actividad ejecuta un requisito constitutivo y deja resultado observable del artefacto, debe ser DIRECT.
@@ -17,7 +17,7 @@ Las operaciones metodológicas se enlazan sólo donde realmente se ejecutan y de
 
 Cada functional_requirement_id se decide uno por uno y sólo se enlaza si esa misma actividad realiza el criterio y produce/registra su evidencia. No repartas IDs por conveniencia ni asignes todos los requisitos de una etapa a una actividad. at_least_two_viable_spaces_or_audiences exige que esa actividad efectivamente actúe/presente en dos espacios o audiencias; planear la ruta no basta. circulation_evidence exige registrar circulación ya realizada; anunciar que habrá traslado no basta. movement exige desplazamiento real; relocation_or_reinstallation exige reinstalación real; mediation exige interacción explicativa real; mounting exige montaje real; piece_explanation exige explicación real de piezas. Usa sólo recursos y apoyos autorizados.
 
-Antes de devolver, recorre cada actividad y pregunta literalmente: ¿DIRECT produce el artefacto? ¿COMPLEMENTARY queda sin artefacto y es consumida después? ¿cada WORKED ejecuta PDA completo localmente y no sólo repite palabras? ¿la fuente de una indagación trata realmente el objeto del PDA? ¿cada propuesta está ejecutada y no expresada sólo como intención? ¿cada operación cumple METHODOLOGY_OPERATION_SEMANTICS.required y evita not_enough? ¿RECONOCIMIENTO contiene una revisión/reconocimiento observable? ¿cada requisito es verdadero en esta actividad con evidencia local? ¿minutos, recursos, apoyos y dependencias cumplen? Corrige la propuesta antes de responder.`;
+Antes de devolver, recorre cada actividad y pregunta literalmente: ¿DIRECT produce el artefacto? ¿COMPLEMENTARY queda sin artefacto y es consumida después? ¿cada WORKED ejecuta PDA completo localmente y no sólo repite palabras? ¿cada operación cumple METHODOLOGY_OPERATION_SEMANTICS.required y evita not_enough? ¿cada requisito es verdadero en esta actividad con evidencia local? ¿minutos, recursos, apoyos y dependencias cumplen? Corrige la propuesta antes de responder.`;
 
 export function methodologyOperationPolicy(blueprint){
  return (blueprint?.methodology?.required_operations||[]).map(operation=>({operation,...METHODOLOGY_OPERATION_SEMANTICS[operation]}));
@@ -46,8 +46,14 @@ const indagaScopeMatches=(official,action)=>{
  return officialStems.some(o=>clauseStems.some(c=>o===c||o.startsWith(c)||c.startsWith(o)));
 };
 const RECOGNITION_ACTION=/\b(reconoc|identific|compar|contrast|revis|detect|disting|analiz|valora|ubica)\w*/;
-const RECOGNITION_OBJECT=/\b(hallazg|relacion|dificult|criter|diferenc|avance|ajust|necesidad|resultado|cambi|pendient|falta)\w*/;
+const RECOGNITION_OBJECT=/\b(hallazg|relacion|dificult|criter|diferenc|avance|ajust|necesidad|resultado|cambi|pendient|falta|mejor|calidad)\w*/;
 
+export function complementaryConsumerMissing(activities,index){
+ if(!Array.isArray(activities)||!Number.isInteger(index)||index<0||index>=activities.length)return false;
+ const activity=activities[index];
+ if(activity?.contribution_mode!=='COMPLEMENTARY')return false;
+ return !activities.slice(index+1).some(next=>Array.isArray(next?.input_refs)&&next.input_refs.includes(activity.activity_key));
+}
 export function methodologySemanticMissing(operation,studentAction){
  const action=normalized(studentAction),missing=[];
  if(operation==='RECONOCIMIENTO'&&(!RECOGNITION_ACTION.test(action)||!RECOGNITION_OBJECT.test(action)))missing.push('RECONOCIMIENTO_LOCAL_ACTION');
@@ -105,6 +111,16 @@ export function validateSessionGraphAuthoring(proposal,source){
  extra(proposal,schema);
  const {blueprint,curriculum}=source;
  const stageByArtifact=new Map((blueprint.project_stages||[]).map(s=>[s.output_artifact_id,s.stage_id]));
+ const authoredSessions=Array.isArray(proposal?.sessions)?proposal.sessions:[];
+ for(const [sessionIndex,session] of authoredSessions.entries()){
+  const activities=Array.isArray(session?.activities)?session.activities:[];
+  for(let activityIndex=0;activityIndex<activities.length;activityIndex++){
+   const activity=activities[activityIndex];
+   if(complementaryConsumerMissing(activities,activityIndex)){
+    errors.push(`$.sessions[${sessionIndex}].${activity.activity_key}: SGD-010 orphan complementary; COMPLEMENTARY requires later same-session consumer via input_refs`);
+   }
+  }
+ }
  const reqById=new Map((blueprint.final_outcome?.functional_requirements||[]).map(r=>[r.requirement_id,r]));
  const pdaById=new Map((curriculum.pdas||[]).map(p=>[p.pda_id,p]));
  for(const row of proposal?.sessions||[]){

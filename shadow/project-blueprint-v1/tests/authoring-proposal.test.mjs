@@ -65,3 +65,16 @@ test('all model-owned domain enums are restored in local compact authoring',()=>
  for(const key of ['complexity','resource_feasibility','time_feasibility','multigrade_feasibility'])assert.deepEqual(p.feasibility.properties[key].enum,d.feasibility.properties[key].enum);
  const invalid=proposal();invalid.ltg_strategy.mode='none';invalid.feasibility.complexity='Baja';assert.throws(()=>build(invalid),e=>e.code==='AUTHORING_CONTRACT_INVALID');
 });
+
+test('BPD-019 compact preflight reports every invalid literal coverage row before repair',()=>{
+ const p=proposal(),targets=['CONCRECION','AVANCES'];
+ for(const op of targets){
+  const row=p.coverage.find(x=>x.operation===op);
+  assert.ok(row,`fixture must contain ${op}`);
+  row.action_quote=`CITA NO LITERAL ${op}`;
+ }
+ assert.throws(
+  ()=>build(p),
+  e=>e.code==='CONSTRUCTION_REJECTED'&&e.rule==='BPD-019'&&targets.every(op=>e.message.includes(op))
+ );
+});

@@ -47,3 +47,18 @@ test('provider exhaustion during review retains candidate and consumes no repair
  const r=await generateShadow(src,{},async task=>{if(task==='GENERATE')return{output:blueprint,telemetry:{task}};const e=Error('503');e.code='PROVIDER_UNAVAILABLE';throw e});
  assert.equal(r.status,'PROVIDER_UNAVAILABLE');assert.equal(r.revisions.length,1);assert.equal(r.repair_count,0);assert.equal(r.revisions[0].status,'PROVIDER_UNAVAILABLE');assert.equal(r.revisions[0].label,'PROVIDER_UNAVAILABLE');assert.equal(r.approved_blueprint_hash,null);
 });
+
+test('METHOD reviewer requires exact artifact binding for every PASS',()=>{
+ const source=readFileSync(new URL('../provider.mjs',import.meta.url),'utf8');
+ assert.match(source,/si bps008=PASS, artifact_ids NUNCA puede quedar vacío/);
+ assert.match(source,/output_artifact_id exacto de cada stage_id citado/);
+ assert.match(source,/incluida una etapa terminal/);
+ assert.match(source,/no inventes IDs/i);
+});
+test('review evidence schema constrains operation_quote to exact stage operations',()=>{
+ const source=readFileSync(new URL('../provider.mjs',import.meta.url),'utf8');
+ assert(source.includes("const exactStageQuotes=['',...new Set(actualStages.map(s=>s.student_operation))];"));
+ assert(source.includes("if(['PDA','STAGES'].includes(reviewFocus))"));
+ assert(!source.includes("if(['PDA','STAGES','METHOD'].includes(reviewFocus))"));
+ assert(source.includes("enum:exactStageQuotes"));
+});

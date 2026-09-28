@@ -23,6 +23,10 @@ test('ProjectBlueprint construction rejection spends its single repair before gi
   if(task==='REPAIR'){
    assert.equal(options.repair?.triggering_rules?.[0]?.rule_id,'BPD-019');
    assert.deepEqual(options.repair?.previous_authoring_proposal,bad);
+   assert.ok(options.repair?.instruction.includes('coverage.action_quote'));
+   assert.ok(options.repair?.instruction.includes('se considera inmutable'));
+   assert.ok(options.repair?.instruction.includes('carácter por carácter'));
+   assert.ok(options.repair?.instruction.includes('subcadena literal contigua'));
    return {output:good,telemetry:{task}};
   }
   const e=Error('stop after repaired construction');e.code='PROVIDER_UNAVAILABLE';throw e;

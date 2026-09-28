@@ -10,6 +10,12 @@ const GROUPS=Object.freeze([
  {focus:'FUNCTIONAL',claim_key:'functional_links',result_key:'functional_link_audits'}
 ]);
 
+const FOCUS_INSTRUCTIONS=Object.freeze({
+ WORKED:'Audita SOLO los claims WORKED recibidos. Evalúa cada PDA oficial como conjunción de todos sus componentes y usa únicamente student_action de esa misma fila. Para explicar+proponer exige explicación observable y propuesta explícita de un acuerdo concreto. Para indagar+compartir exige fuente u observación concreta, procesamiento o contraste, registro trazable y socialización explícita. No evalúes operaciones metodológicas ni requisitos funcionales.',
+ METHODOLOGY:'Audita SOLO los claims METHODOLOGY recibidos. IGNORA por completo PDA, estados WORKED/DEVELOPING y requisitos funcionales. Evalúa exclusivamente claim.semantics.required contra claim.semantics.not_enough usando la acción local de la actividad. COMPRENSION_Y_PRODUCCION es PASS cuando la misma actividad procesa o comprende información Y produce, construye o transforma un componente concreto; no exijas explicar+proponer ni ningún otro componente de un PDA salvo que aparezca literalmente en claim.semantics.required. DIFUSION requiere comunicación real a audiencia; RECONOCIMIENTO requiere reconocimiento o revisión observable; cada operación se juzga sólo por su propio contrato semántico. Para una fila PASS, exact_quote DEBE ser una subcadena literal y contigua tomada exclusivamente de claim.common_student_action o claim.grade_actions[].student_action. Nunca uses claim.output, claim.evidence, título, producto o evidencia como exact_quote metodológico.',
+ FUNCTIONAL:'Audita SOLO los claims FUNCTIONAL recibidos. IGNORA PDA, estados WORKED/DEVELOPING y etiquetas metodológicas. Evalúa únicamente si la misma actividad ejecuta el requirement_id y produce evidencia local pertinente en una etapa autorizada. at_least_two_viable_spaces_or_audiences exige uso real de dos espacios o audiencias; circulation_evidence exige circulación ya realizada y registrada; movement exige desplazamiento; relocation_or_reinstallation reinstalación; mediation interacción explicativa; mounting montaje físico; piece_explanation explicación real de piezas. Para una fila PASS, action_quote DEBE ser una subcadena literal y contigua tomada exclusivamente de claim.common_student_action o claim.grade_actions[].student_action. evidence_quote DEBE ser una subcadena literal y contigua tomada de claim.output, claim.evidence o claim.grade_actions[].evidence. Nunca copies output o evidence dentro de action_quote.'
+});
+
 const sleepDefault=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 const providerError=(payload,status)=>{
  const e=Error(payload?.provider_message||payload?.message||payload?.code||`SESSION_PROVIDER_HTTP_${status}`);
@@ -56,7 +62,7 @@ export function createSplitCriticalReview({endpoint,token,identity='multiplan-bl
     provider_version:SESSION_PROVIDER_VERSION,
     audit_version:request.audit_version,
     input_hash:request.input_hash,
-    instruction:request.instruction,
+    instruction:FOCUS_INSTRUCTIONS[group.focus],
     review_focus:group.focus,
     quote_policy:'Para cada PASS copia una cita CORTA, CONTIGUA y EXACTA de los campos del claim recibido. No resumas, no normalices, no unas fragmentos y no uses puntos suspensivos. Si no existe una cita literal que demuestre el claim, marca FAIL; nunca fabriques una cita aproximada.',
     claims:{[group.claim_key]:claims},

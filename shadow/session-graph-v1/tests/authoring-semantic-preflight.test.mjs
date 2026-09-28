@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {workedSemanticMissing,methodologySemanticMissing} from '../authoring.mjs';
+import {workedSemanticMissing,methodologySemanticMissing,complementaryConsumerMissing} from '../authoring.mjs';
 
 test('WORKED explain+propose rejects purpose-only proposal language',()=>{
  const official='Explica situaciones cotidianas y propone acuerdos para mejorar la convivencia.';
@@ -20,4 +20,27 @@ test('WORKED indagacion requires the source clause to target the official PDA ob
 test('RECONOCIMIENTO requires observable recognition or review of findings or adjustments',()=>{
  assert.deepEqual(methodologySemanticMissing('RECONOCIMIENTO','Organizan piezas y preparan la ruta.'),['RECONOCIMIENTO_LOCAL_ACTION']);
  assert.deepEqual(methodologySemanticMissing('RECONOCIMIENTO','Comparan el resultado, identifican dificultades y reconocen ajustes necesarios.'),[]);
+});
+test('RECONOCIMIENTO accepts observable review of quality and improvement details',()=>{
+ const repaired='El alumnado revisa el conjunto de piezas producidas, verifica su calidad y concreta el orden. Revisa sus dibujos y piezas creadas. Reconoce detalles de mejora en los textos y organiza la secuencia de exhibición.';
+ assert.deepEqual(methodologySemanticMissing('RECONOCIMIENTO',repaired),[]);
+ assert.deepEqual(methodologySemanticMissing('RECONOCIMIENTO','Revisa las piezas y concreta el orden para el museo.'),['RECONOCIMIENTO_LOCAL_ACTION']);
+});
+test('COMPLEMENTARY requires a later same-session consumer',()=>{
+ const valid=[
+  {activity_key:'a1',contribution_mode:'COMPLEMENTARY',input_refs:[]},
+  {activity_key:'a2',contribution_mode:'DIRECT',input_refs:['a1']}
+ ];
+ assert.equal(complementaryConsumerMissing(valid,0),false);
+
+ const orphan=[
+  {activity_key:'a1',contribution_mode:'DIRECT',input_refs:[]},
+  {activity_key:'a2',contribution_mode:'COMPLEMENTARY',input_refs:['a1']}
+ ];
+ assert.equal(complementaryConsumerMissing(orphan,1),true);
+
+ const directTerminal=[
+  {activity_key:'a1',contribution_mode:'DIRECT',input_refs:[]}
+ ];
+ assert.equal(complementaryConsumerMissing(directTerminal,0),false);
 });
