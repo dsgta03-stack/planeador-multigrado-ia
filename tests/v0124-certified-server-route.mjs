@@ -55,6 +55,39 @@ test('uses existing body limit helper, rejects invalid JSON and relays route sta
  assert.deepEqual(calls[3][1],{body:{pdas:['P1']},authorization:'Bearer user-token'});
 });
 
+test('422, 409 and 503 remain unchanged; validated READY can pass as 200',async()=>{
+ const env={MULTIPLAN_CERTIFIED_R2_ENABLED:'1'};
+ for(const [http_status,status] of [[422,'NEEDS_TEACHER_INPUT'],[409,'BLUEPRINT_NOT_APPROVED'],[503,'SESSION_REVIEW_UNAVAILABLE'],[200,'READY_FOR_TEACHER']]){
+  const body={pipeline_mode:'CERTIFIED_R2',status,renderable:http_status===200,view_model:http_status===200?{view_model_version:'V0124_CERTIFIED_TEACHER_VIEW_V1'}:null,descriptor:{kind:'status'},repair_count:0};
+  const t=setup({env,planRouteFactory:()=>async()=>({http_status,body})});
+  assert.deepEqual(await t.run(),{http_status,body});
+ }
+});
+
+test('unknown state or rejected plan can never pass through as HTTP 200',async()=>{
+ const env={MULTIPLAN_CERTIFIED_R2_ENABLED:'1'};
+ for(const body of [
+  {status:'FUTURE_UNKNOWN',renderable:true,view_model:{}},
+  {status:'SESSION_GRAPH_REJECTED',renderable:false,view_model:null},
+  {status:'READY_FOR_TEACHER',renderable:false,view_model:{}},
+  {status:'READY_FOR_TEACHER',renderable:true,view_model:null}
+ ]){
+  const t=setup({env,planRouteFactory:()=>async()=>({http_status:200,body})});
+  assert.deepEqual(await t.run(),{http_status:503,body:{code:'CERTIFIED_ROUTE_UNAVAILABLE'}});
+ }
+});
+
+test('oversized payload retains the existing reader protection',async()=>{
+ const env={MULTIPLAN_CERTIFIED_R2_ENABLED:'1'};
+ let factoryCalls=0;
+ const handler=createCertifiedServerRoute({env,readBody:async()=>{throw Error('PAYLOAD_TOO_LARGE');},bearer:()=> 'Bearer user-token',json,runtimeFactory:()=>{factoryCalls++;}});
+ const res={};await handler({method:'POST'},res);
+ assert.deepEqual(res.out,{http_status:413,body:{code:'PAYLOAD_TOO_LARGE'}});
+ assert.equal(factoryCalls,0);
+ const server=readFileSync(new URL('../server-v0124-consolidated-shadow.mjs',import.meta.url),'utf8');
+ assert.match(server,/function readBody\(req,max=2_500_000\)/);
+});
+
 test('enabled configuration errors fail closed without secrets or external calls',async()=>{
  const env={MULTIPLAN_CERTIFIED_R2_ENABLED:'1',MULTIPLAN_CERTIFIED_R2_ENDPOINT:'https://example.invalid/other',MULTIPLAN_CERTIFIED_R2_TOKEN:'secret'};
  let network=0;
@@ -64,6 +97,15 @@ test('enabled configuration errors fail closed without secrets or external calls
  assert.deepEqual(t.calls,['read']);
  assert.equal(network,0);
  assert.ok(!JSON.stringify(out).includes('secret'));
+});
+
+test('provider/configuration exception does not expose token or Authorization',async()=>{
+ const env={MULTIPLAN_CERTIFIED_R2_ENABLED:'1',MULTIPLAN_CERTIFIED_R2_TOKEN:'sensitive-provider-token'};
+ const t=setup({env,runtimeFactory:()=>{throw Error('Bearer sensitive-provider-token Authorization: Bearer user-token');}});
+ const out=await t.run();
+ assert.deepEqual(out,{http_status:503,body:{code:'CERTIFIED_ROUTE_UNAVAILABLE'}});
+ const serialized=JSON.stringify(out);
+ for(const secret of ['sensitive-provider-token','Authorization','user-token'])assert.ok(!serialized.includes(secret));
 });
 
 test('server intercepts certified path before proxy; legacy generation block remains separate',()=>{
