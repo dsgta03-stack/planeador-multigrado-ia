@@ -1,0 +1,189 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:multiplan:shadow:CurriculumSnapshotV1",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "CURRICULUM_SNAPSHOT_V1"
+    },
+    "snapshot_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "snapshot_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "created_at": {
+      "type": "string",
+      "minLength": 1
+    },
+    "corpus_version_or_provenance": {
+      "type": "string",
+      "minLength": 1
+    },
+    "pdas": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "pda_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "grade": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 6
+          },
+          "field": {
+            "type": "string",
+            "minLength": 1
+          },
+          "content_official": {
+            "type": "string",
+            "minLength": 1
+          },
+          "pda_official": {
+            "type": "string",
+            "minLength": 1
+          },
+          "verification_status": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "pda_id",
+          "grade",
+          "field",
+          "content_official",
+          "pda_official",
+          "verification_status"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0
+    },
+    "ltg": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "grade": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 6
+          },
+          "book": {
+            "type": "string",
+            "minLength": 1
+          },
+          "scenario": {
+            "type": "string",
+            "minLength": 1
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "pages": {
+            "type": "object",
+            "properties": {
+              "start": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "end": {
+                "type": "integer",
+                "minimum": 1
+              }
+            },
+            "required": [
+              "start",
+              "end"
+            ],
+            "additionalProperties": false
+          },
+          "verified_pda_links": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 0,
+            "uniqueItems": true
+          },
+          "verified_activities": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "activity_id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "activity_order": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "summary": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "page_start": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "page_end": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "verification_status": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "activity_id",
+                "activity_order",
+                "summary",
+                "page_start",
+                "page_end",
+                "verification_status"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 0
+          }
+        },
+        "required": [
+          "project_id",
+          "grade",
+          "book",
+          "scenario",
+          "name",
+          "pages",
+          "verified_pda_links",
+          "verified_activities"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0
+    }
+  },
+  "required": [
+    "schema_version",
+    "snapshot_id",
+    "snapshot_hash",
+    "created_at",
+    "corpus_version_or_provenance",
+    "pdas",
+    "ltg"
+  ],
+  "additionalProperties": false
+}

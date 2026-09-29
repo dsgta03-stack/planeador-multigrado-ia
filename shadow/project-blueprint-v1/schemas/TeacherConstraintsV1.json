@@ -1,0 +1,163 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:multiplan:shadow:TeacherConstraintsV1",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "TEACHER_CONSTRAINTS_V1"
+    },
+    "constraints_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "constraints_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "created_at": {
+      "type": "string",
+      "minLength": 1
+    },
+    "grades": {
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 6
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "selected_pda_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 0,
+      "uniqueItems": true
+    },
+    "explicit_ltg_selections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "pda_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          },
+          "intent": {
+            "type": "string",
+            "enum": [
+              "CORE",
+              "SUPPORT",
+              "OPTIONAL"
+            ]
+          }
+        },
+        "required": [
+          "project_id",
+          "pda_ids",
+          "intent"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0
+    },
+    "requested_sessions": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "minutes_per_session": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "original_problem": {
+      "type": "string",
+      "minLength": 1
+    },
+    "original_context": {
+      "type": "string",
+      "minLength": 1
+    },
+    "students_by_grade": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "integer",
+        "minimum": 1
+      }
+    },
+    "reading_profile": {
+      "type": "string",
+      "minLength": 1
+    },
+    "writing_profile": {
+      "type": "string",
+      "minLength": 1
+    },
+    "autonomy_profile": {
+      "type": "string",
+      "minLength": 1
+    },
+    "connectivity": {
+      "type": "string",
+      "minLength": 1
+    },
+    "available_resources": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 0,
+      "uniqueItems": true
+    },
+    "supports": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 0
+    },
+    "teacher_explicit_constraints": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 0
+    }
+  },
+  "required": [
+    "schema_version",
+    "constraints_id",
+    "constraints_hash",
+    "created_at",
+    "grades",
+    "selected_pda_ids",
+    "explicit_ltg_selections",
+    "requested_sessions",
+    "minutes_per_session",
+    "original_problem",
+    "original_context",
+    "students_by_grade",
+    "reading_profile",
+    "writing_profile",
+    "autonomy_profile",
+    "connectivity",
+    "available_resources",
+    "supports",
+    "teacher_explicit_constraints"
+  ],
+  "additionalProperties": false
+}
