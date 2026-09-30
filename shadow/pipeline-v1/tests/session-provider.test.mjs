@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {createSessionGraphDrivers} from '../session-provider.mjs';
+import {createSessionGraphDrivers,repairTargetsFromContext} from '../session-provider.mjs';
 
 const endpoint='https://example.supabase.co/functions/v1/plan-project-blueprint-v1-shadow';
 const token='x'.repeat(64);
@@ -51,6 +51,10 @@ test('REPAIR preserves Blueprint as immutable context, runs full preflight, and 
  assert.equal(sent.input.blueprint.blueprint_id,'bp1');
  assert.equal(sent.prompt.previous_proposal.authoring_version,'SESSION_GRAPH_AUTHORING_V1');
  assert.equal(sent.prompt.triggering_rules[0].rule,'SGD-010');
+ assert.equal(sent.prompt.repair_targets[0].rule_id,'SGD-010');
+ assert.equal(sent.prompt.repair_targets[0].target_id,'RT-1');
+ assert.match(sent.prompt.repair_completion_contract.rule,/bloqueante/i);
+ assert.match(sent.prompt.repair_instruction,/TODOS los repair_targets/i);
  assert.match(sent.prompt.repair_instruction,/revisa TODAS/i);
  assert.match(sent.prompt.repair_instruction,/pda_grade_policy/i);
  assert.match(sent.prompt.repair_instruction,/WORKED y DEVELOPING/i);
@@ -58,6 +62,23 @@ test('REPAIR preserves Blueprint as immutable context, runs full preflight, and 
  assert.match(sent.prompt.repair_instruction,/functional_requirement_id/i);
  assert.match(sent.prompt.preflight_checklist.deterministic_contract,/minutos/i);
  assert.deepEqual(sent.response_schema.required,['status','reason','proposal']);
+});
+
+test('compound authoring contract is expanded into independent blocking repair targets',()=>{
+ const compile_error={
+  code:'SESSION_GRAPH_AUTHORING_INVALID',
+  message:'SESSION_GRAPH_AUTHORING_CONTRACT: $.sessions[2].s3_act2: SGD-010 orphan complementary; COMPLEMENTARY requires later same-session consumer via input_refs; $.sessions[2].s2_act1: methodology RECONOCIMIENTO missing RECONOCIMIENTO_LOCAL_ACTION; $.sessions[2].s2_act2.grade_1: WORKED F3-DHC-1-010 missing EXPLICA_LOCAL_ACTION; $.sessions[2].s2_act2.grade_3: WORKED F4-DHC-3-001 missing INDAGA_SOURCE_OR_OBSERVATION'
+ };
+ const targets=repairTargetsFromContext({compile_error});
+ assert.equal(targets.length,4);
+ assert.deepEqual(targets.map(x=>x.target_id),['RT-1','RT-2','RT-3','RT-4']);
+ assert.deepEqual(targets.map(x=>x.rule_id),['SGD-010','RECONOCIMIENTO_LOCAL_ACTION','EXPLICA_LOCAL_ACTION','INDAGA_SOURCE_OR_OBSERVATION']);
+ assert.equal(targets[0].scope,'$.sessions[2].s3_act2');
+ assert.equal(targets[1].scope,'$.sessions[2].s2_act1');
+ assert.match(targets[0].required,/input_refs/);
+ assert.match(targets[1].required,/RECONOCIMIENTO/);
+ assert.match(targets[2].required,/DEVELOPING/);
+ assert.match(targets[3].required,/DEVELOPING/);
 });
 
 test('REPAIR can request Blueprint revision without rewriting it',async()=>{
