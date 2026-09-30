@@ -85,7 +85,7 @@ export function repairTargetsFromContext(ctx={}){
  const expanded=[];
  for(const item of raw){
   if(!triggering&&item?.code==='SESSION_GRAPH_AUTHORING_INVALID'&&typeof item.message==='string'&&item.message.startsWith(AUTHORING_CONTRACT_PREFIX)){
-   const defects=item.message.slice(AUTHORING_CONTRACT_PREFIX.length).split('; ').map(x=>x.trim()).filter(Boolean);
+   const defects=item.message.slice(AUTHORING_CONTRACT_PREFIX.length).split(/;\s+(?=\$\.sessions\[)/).map(x=>x.trim()).filter(Boolean);
    expanded.push(...defects.map(text=>({kind:'defect',text,source:'SESSION_COMPILE'})));
    continue;
   }
