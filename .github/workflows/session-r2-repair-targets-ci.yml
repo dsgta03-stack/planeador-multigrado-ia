@@ -1,0 +1,21 @@
+name: Session R2 repair targets CI
+
+on:
+  push:
+    branches:
+      - v0124-session-r2-repair-targets-ci
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install
+      - name: SessionGraph and pipeline tests
+        run: node --test shadow/session-graph-v1/tests/*.test.mjs shadow/pipeline-v1/tests/*.test.mjs
+      - name: Certified runtime tests
+        run: node --test lib/v0124/tests/certified-*.test.mjs
