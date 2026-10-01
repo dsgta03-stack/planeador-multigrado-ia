@@ -9,9 +9,9 @@ function fixture(){
  const constraints={constraints_hash:'a'.repeat(64),grades:[1],selected_pda_ids:['p1'],minutes_per_session:60,available_resources:['papel'],supports:['modelado']};
  const curriculum={snapshot_hash:'b'.repeat(64),pdas:[{pda_id:'p1',grade:1,pda_official:'Explica una situación y propone un acuerdo para mejorar la convivencia.'}]};
  const methodology={methodology_decision_id:'m1',selected_id:'proyectos_comunitarios',catalog_version:'METHODOLOGY_CATALOG_V1',required_operations:['IDENTIFICACION']};
- const blueprint={blueprint_id:'bp1',revision:1,methodology:{required_operations:['IDENTIFICACION']},project_stages:[{stage_id:'s1',output_artifact_id:'artifact_1'}],session_progression:[{session_number:1,pda_focus:['p1'],methodology_operations:['IDENTIFICACION'],expected_output_artifact_ids:['artifact_1']}],final_outcome:{functional_requirements:[{requirement_id:'r1',criterion:'produce un registro',stage_ids:['s1'],evidence:'registro observable'}]},ltg_strategy:{mode:'NONE',selections:[]}};
+ const blueprint={blueprint_id:'bp1',revision:1,methodology:{required_operations:['IDENTIFICACION']},project_stages:[{stage_id:'s1',output_artifact_id:'artifact_1'}],session_progression:[{session_number:1,pda_focus:['p1'],methodology_operations:['IDENTIFICACION'],input_artifact_ids:['source_1'],expected_output_artifact_ids:['artifact_1']}],final_outcome:{functional_requirements:[{requirement_id:'r1',criterion:'produce un registro',stage_ids:['s1'],evidence:'registro observable'}]},ltg_strategy:{mode:'NONE',selections:[]}};
  const approval={approved_blueprint_hash:'c'.repeat(64)};
- const proposal={authoring_version:'SESSION_GRAPH_AUTHORING_V1',sessions:[{session_number:1,activities:[{activity_key:'a1',title:'Identificamos',contribution_mode:'DIRECT',contribution_rationale:'construye el registro',common_student_action:'identifican situaciones',grade_participation:[{grade:1,student_action:'identifica una situación',differentiation:'apoyo oral',pda_mobilization:[{pda_id:'p1',status:'DEVELOPING'}],evidence:'registro'}],teacher_role:'modela',resources:['papel'],supports:['modelado'],minutes:30,input_refs:[],output:'registro',contributes_to_artifact_ids:['artifact_1'],methodology_operations:['IDENTIFICACION'],functional_requirement_ids:['r1'],ltg_activity_ids:[],evidence:'registro escrito',assessment_criteria:['registra una situación observable']}]}]};
+ const proposal={authoring_version:'SESSION_GRAPH_AUTHORING_V1',sessions:[{session_number:1,activities:[{activity_key:'a1',title:'Identificamos',contribution_mode:'DIRECT',contribution_rationale:'construye el registro',common_student_action:'identifican situaciones',grade_participation:[{grade:1,student_action:'identifica una situación',differentiation:'apoyo oral',pda_mobilization:[{pda_id:'p1',status:'DEVELOPING'}],evidence:'registro'}],teacher_role:'modela',resources:['papel'],supports:['modelado'],minutes:30,input_refs:['source_1'],output:'registro',contributes_to_artifact_ids:['artifact_1'],methodology_operations:['IDENTIFICACION'],functional_requirement_ids:['r1'],ltg_activity_ids:[],evidence:'registro escrito',assessment_criteria:['registra una situación observable']}]}]};
  return {ctx:{sources:{constraints,curriculum,methodology},blueprint,approval},proposal};
 }
 
@@ -28,6 +28,8 @@ test('GENERATE keeps approved Blueprint out of protected endpoint input and send
  assert.equal(sent.prompt.blueprint.blueprint_id,'bp1');
  assert.equal(sent.prompt.provider_version,'SESSION_GRAPH_PROVIDER_V1_R2');
  assert.match(sent.prompt.preflight_checklist.worked_policy,/WORKED/i);
+ assert.match(sent.prompt.dependency_policy.rule,/misma sesión/i);
+ assert.deepEqual(sent.prompt.dependency_policy.sessions,[{session_number:1,allowed_session_input_refs:['source_1'],rule:'Cualquier otro input_ref sólo puede ser el activity_key de una actividad ya declarada antes en activities de esta misma sesión.'}]);
  assert.deepEqual(sent.prompt.pda_status_policy.allowed_statuses,['WORKED','DEVELOPING']);
  assert.deepEqual(sent.prompt.pda_grade_policy,[{grade:1,allowed_pda_ids:['p1'],rule:'En grade_participation de este grado sólo puedes incluir estos PDA. Nunca copies todos los PDA en todos los grados.'}]);
  assert.equal(sent.prompt.worked_pda_policy[0].official_text,curriculumText(f));
@@ -54,8 +56,12 @@ test('REPAIR preserves Blueprint as immutable context, runs full preflight, and 
  assert.equal(sent.prompt.repair_targets[0].rule_id,'SGD-010');
  assert.equal(sent.prompt.repair_targets[0].target_id,'RT-1');
  assert.match(sent.prompt.repair_completion_contract.rule,/bloqueante/i);
+ assert.match(sent.prompt.repair_completion_contract.rule,/SGD-009/);
+ assert.match(sent.prompt.repair_completion_contract.rule,/input_ref/);
  assert.match(sent.prompt.repair_instruction,/TODOS los repair_targets/i);
  assert.match(sent.prompt.repair_instruction,/revisa TODAS/i);
+ assert.match(sent.prompt.repair_instruction,/dependency_policy/i);
+ assert.match(sent.prompt.repair_instruction,/otra sesión/i);
  assert.match(sent.prompt.repair_instruction,/pda_grade_policy/i);
  assert.match(sent.prompt.repair_instruction,/WORKED y DEVELOPING/i);
  assert.match(sent.prompt.repair_instruction,/methodology_operation_policy/i);
@@ -79,6 +85,21 @@ test('compound authoring contract is expanded into independent blocking repair t
  assert.match(targets[1].required,/RECONOCIMIENTO/);
  assert.match(targets[2].required,/DEVELOPING/);
  assert.match(targets[3].required,/DEVELOPING/);
+});
+
+test('SGD-009 repair target forbids cross-session and future activity refs',()=>{
+ const compile_error={
+  code:'SESSION_GRAPH_REJECTED',
+  rule:'SGD-009',
+  message:'SGD-009: activity act_s3_01 input act_s2_03 is not prior/session input'
+ };
+ const targets=repairTargetsFromContext({compile_error});
+ assert.equal(targets.length,1);
+ assert.equal(targets[0].rule_id,'SGD-009');
+ assert.match(targets[0].required,/input_artifact_id/);
+ assert.match(targets[0].required,/actividad anterior/);
+ assert.match(targets[0].required,/misma sesión/i);
+ assert.match(targets[0].required,/otra sesión/i);
 });
 
 test('REPAIR can request Blueprint revision without rewriting it',async()=>{
