@@ -101,7 +101,6 @@ test('SGD-009 repair target forbids cross-session and future activity refs',()=>
  assert.match(targets[0].required,/misma sesión/i);
  assert.match(targets[0].required,/otra sesión/i);
 });
-
 test('REPAIR can request Blueprint revision without rewriting it',async()=>{
  const f=fixture();
  const fetchImpl=async()=>jsonResponse({provider:'google',finish_reason:'STOP',output:{status:'BLUEPRINT_REVISION_REQUIRED',reason:'el presupuesto aprobado no permite ejecutar la etapa',proposal:f.proposal}});
