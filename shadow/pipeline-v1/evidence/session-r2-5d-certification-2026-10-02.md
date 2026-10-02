@@ -120,4 +120,6 @@ No change to `main`, production application code, PR #3, or PR #4 is part of thi
 
 ## Railway cleanup
 
-After certification, stale staged Railway environment patch `b87c5487-ef34-40c1-b8b2-e359968159ce` was discarded without deployment. Railway reported no active staged changes afterward (`stagedChanges: null`). The temporary certification service itself was left in place to preserve deployment logs and evidence; it was not redeployed or deleted during cleanup.
+After certification, stale staged Railway environment patch `b87c5487-ef34-40c1-b8b2-e359968159ce` was discarded without deployment. Railway reported no active staged changes afterward (`stagedChanges: null`).
+
+The temporary certification service `session-r2-certified-production-recert-p0` was deliberately left in place so its deployment logs remain available as audit evidence, but its active start command was neutralized to the inert command `node -e "console.log('SESSION_R2_CERTIFICATION_COMPLETE_NOOP')"` with restart policy `NEVER`. This cleanup did not trigger a deployment and cannot call the provider on its own.
