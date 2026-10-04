@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { Readable } from 'node:stream';
+import { canonicalPlanHash } from '../lib/v0125/blueprint-canonical-adapter.mjs';
 import { createUnifiedPreviewServerRoute, UNIFIED_PREVIEW_SERVER_ROUTE_VERSION } from '../lib/v0125/unified-preview-server-route.mjs';
 
 function request(body = {}, { method = 'POST', auth = 'Bearer user-token', raw = null } = {}) {
@@ -38,7 +39,7 @@ function helpers() {
 }
 
 test('disabled v0125 route fails closed before constructing external dependencies', async () => {
-  let runtimeCalls = 0, curriculumCalls = 0, routeCalls = 0;
+  let runtimeCalls = 0, curriculumCalls = 0, routeCalls = 0, snapshotCalls = 0;
   const h = helpers();
   const handler = createUnifiedPreviewServerRoute({
     env: { MULTIPLAN_V0125_UNIFIED_PREVIEW_ENABLED: '0' },
@@ -46,6 +47,7 @@ test('disabled v0125 route fails closed before constructing external dependencie
     runtimeFactory: () => { runtimeCalls++; return async () => ({}); },
     curriculumLookupFactory: () => { curriculumCalls++; return async () => ({}); },
     routeFactory: () => { routeCalls++; return async () => ({}); },
+    snapshotPersister: async () => { snapshotCalls++; return { status: 'PERSISTED' }; },
   });
   const out = capture();
   await handler(request(), out.res);
@@ -56,16 +58,18 @@ test('disabled v0125 route fails closed before constructing external dependencie
   assert.equal(runtimeCalls, 0);
   assert.equal(curriculumCalls, 0);
   assert.equal(routeCalls, 0);
+  assert.equal(snapshotCalls, 0);
 });
 
 test('missing bearer authorization fails before constructing runtime or curriculum lookup', async () => {
-  let runtimeCalls = 0, curriculumCalls = 0;
+  let runtimeCalls = 0, curriculumCalls = 0, snapshotCalls = 0;
   const h = helpers();
   const handler = createUnifiedPreviewServerRoute({
     env: { MULTIPLAN_V0125_UNIFIED_PREVIEW_ENABLED: '1' },
     ...h,
     runtimeFactory: () => { runtimeCalls++; return async () => ({}); },
     curriculumLookupFactory: () => { curriculumCalls++; return async () => ({}); },
+    snapshotPersister: async () => { snapshotCalls++; return { status: 'PERSISTED' }; },
   });
   const out = capture();
   await handler(request({}, { auth: '' }), out.res);
@@ -73,12 +77,15 @@ test('missing bearer authorization fails before constructing runtime or curricul
   assert.equal(out.get().body.code, 'USER_AUTHORIZATION_REQUIRED');
   assert.equal(runtimeCalls, 0);
   assert.equal(curriculumCalls, 0);
+  assert.equal(snapshotCalls, 0);
 });
 
-test('authenticated enabled route exposes canonical plan only on valid READY_FOR_TEACHER result', async () => {
-  let seenAuthorization = null, seenRunId = null, seenBaseRunId = null;
+test('authenticated enabled route exposes canonical plan only after canonical snapshot binding', async () => {
+  let seenAuthorization = null, seenRunId = null, seenBaseRunId = null, snapshotCalls = 0;
+  let seenSnapshotPlan = null, seenSnapshotHash = null;
   const h = helpers();
   const plan = { run_id: 'r1', project: { title: 'Proyecto' } };
+  const planHash = canonicalPlanHash(plan);
   const handler = createUnifiedPreviewServerRoute({
     env: {
       MULTIPLAN_V0125_UNIFIED_PREVIEW_ENABLED: '1',
@@ -103,13 +110,20 @@ test('authenticated enabled route exposes canonical plan only on valid READY_FOR
           route_version: 'UNIFIED_PREVIEW_ROUTE_V1',
           status: 'READY_FOR_TEACHER',
           renderable: true,
-          canonical_plan_hash: 'a'.repeat(64),
+          canonical_plan_hash: planHash,
           approved_blueprint_hash: 'b'.repeat(64),
           approved_graph_hash: 'c'.repeat(64),
           teacher_projection_hash: 'd'.repeat(64),
           plan,
         },
       };
+    },
+    snapshotPersister: async ({ authorization, plan: snapshotPlan, canonical_plan_hash }) => {
+      snapshotCalls++;
+      assert.equal(authorization, 'Bearer user-token');
+      seenSnapshotPlan = snapshotPlan;
+      seenSnapshotHash = canonical_plan_hash;
+      return { status: 'PERSISTED', hash: 'remote-hash', canonical_plan_hash, snapshot_version: 'FINAL-PLAN-SNAPSHOT-V1' };
     },
   });
   const out = capture();
@@ -119,11 +133,73 @@ test('authenticated enabled route exposes canonical plan only on valid READY_FOR
   assert.equal(response.body.server_route_version, UNIFIED_PREVIEW_SERVER_ROUTE_VERSION);
   assert.equal(response.body.status, 'READY_FOR_TEACHER');
   assert.equal(response.body.renderable, true);
-  assert.equal(response.body.canonical_plan_hash, 'a'.repeat(64));
+  assert.equal(response.body.canonical_plan_hash, planHash);
   assert.deepEqual(response.body.plan, plan);
+  assert.equal(response.body.snapshot_persistence.status, 'PERSISTED');
+  assert.equal(response.body.snapshot_persistence.canonical_plan_hash, planHash);
   assert.equal(seenAuthorization, 'Bearer user-token');
   assert.equal(seenRunId, 'r1');
   assert.equal(seenBaseRunId, 'b1');
+  assert.equal(snapshotCalls, 1);
+  assert.equal(seenSnapshotPlan, plan);
+  assert.equal(seenSnapshotHash, planHash);
+});
+
+test('snapshot network failure does not mutate or hide a valid canonical plan', async () => {
+  const h = helpers();
+  const plan = { run_id: 'r2', project: { title: 'Proyecto estable' } };
+  const planHash = canonicalPlanHash(plan);
+  const handler = createUnifiedPreviewServerRoute({
+    env: { MULTIPLAN_V0125_UNIFIED_PREVIEW_ENABLED: '1' },
+    ...h,
+    runtimeFactory: () => async () => ({}),
+    curriculumLookupFactory: () => async () => ({}),
+    routeFactory: () => async () => ({
+      http_status: 200,
+      body: {
+        status: 'READY_FOR_TEACHER',
+        renderable: true,
+        canonical_plan_hash: planHash,
+        plan,
+      },
+    }),
+    snapshotPersister: async () => ({ status: 'FAILED', reason: 'SNAPSHOT_PERSIST_EXCEPTION', canonical_plan_hash: planHash }),
+  });
+  const out = capture();
+  await handler(request({ run_id: 'r2' }), out.res);
+  const response = out.get();
+  assert.equal(response.status, 200);
+  assert.equal(response.body.canonical_plan_hash, planHash);
+  assert.deepEqual(response.body.plan, plan);
+  assert.equal(response.body.snapshot_persistence.status, 'FAILED');
+});
+
+test('canonical snapshot rejection fails closed and exposes no plan', async () => {
+  const h = helpers();
+  const plan = { run_id: 'r3', project: { title: 'No debe escapar' } };
+  const handler = createUnifiedPreviewServerRoute({
+    env: { MULTIPLAN_V0125_UNIFIED_PREVIEW_ENABLED: '1' },
+    ...h,
+    runtimeFactory: () => async () => ({}),
+    curriculumLookupFactory: () => async () => ({}),
+    routeFactory: () => async () => ({
+      http_status: 200,
+      body: {
+        status: 'READY_FOR_TEACHER',
+        renderable: true,
+        canonical_plan_hash: '0'.repeat(64),
+        plan,
+      },
+    }),
+    snapshotPersister: async () => ({ status: 'REJECTED', reason: 'CANONICAL_PLAN_HASH_MISMATCH' }),
+  });
+  const out = capture();
+  await handler(request({ run_id: 'r3' }), out.res);
+  const response = out.get();
+  assert.equal(response.status, 503);
+  assert.equal(response.body.code, 'UNIFIED_PREVIEW_CANONICAL_SNAPSHOT_REJECTED');
+  assert.equal(response.body.plan, null);
+  assert.equal(response.body.canonical_plan_hash, null);
 });
 
 test('HTTP boundary fails closed if a non-200 route tries to expose a plan', async () => {
