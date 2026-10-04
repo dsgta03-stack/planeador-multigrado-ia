@@ -1,5 +1,11 @@
 import http from 'node:http';
 import { createUnifiedPreviewServerRoute, UNIFIED_PREVIEW_SERVER_ROUTE_VERSION } from './lib/v0125/unified-preview-server-route.mjs';
+import {
+  createCanonicalReviewServerRoute,
+  createCanonicalDocxServerRoute,
+  CANONICAL_PLAN_SERVER_ROUTES_VERSION,
+} from './lib/v0125/canonical-plan-server-routes.mjs';
+import { CANONICAL_PLAN_SERVICES_VERSION } from './lib/v0125/canonical-plan-services.mjs';
 
 const PORT = Number(process.env.PORT || 3000);
 
@@ -33,6 +39,8 @@ function bearer(req) {
 }
 
 const unifiedPreviewRoute = createUnifiedPreviewServerRoute({ readBody, bearer, json });
+const canonicalReviewRoute = createCanonicalReviewServerRoute({ readBody, bearer, json });
+const canonicalDocxRoute = createCanonicalDocxServerRoute({ readBody, json });
 
 http.createServer(async (req, res) => {
   const url = new URL(req.url || '/', 'http://localhost');
@@ -42,7 +50,11 @@ http.createServer(async (req, res) => {
       ok: true,
       version: '0.12.5-unified-preview-shadow',
       serverRouteVersion: UNIFIED_PREVIEW_SERVER_ROUTE_VERSION,
+      canonicalPlanServicesVersion: CANONICAL_PLAN_SERVICES_VERSION,
+      canonicalPlanServerRoutesVersion: CANONICAL_PLAN_SERVER_ROUTES_VERSION,
       unifiedPreviewEnabled: process.env.MULTIPLAN_V0125_UNIFIED_PREVIEW_ENABLED === '1',
+      canonicalReviewEnabled: true,
+      canonicalDocxEnabled: true,
       legacyWrapperChainSpawned: false,
       productionModified: false,
     });
@@ -50,6 +62,12 @@ http.createServer(async (req, res) => {
 
   if (url.pathname === '/api/v0125/unified-plan') {
     return unifiedPreviewRoute(req, res);
+  }
+  if (url.pathname === '/api/v0125/pedagogical-review') {
+    return canonicalReviewRoute(req, res);
+  }
+  if (url.pathname === '/api/v0125/export/docx') {
+    return canonicalDocxRoute(req, res);
   }
 
   return json(res, 404, {
