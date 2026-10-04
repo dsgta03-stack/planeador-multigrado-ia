@@ -6,6 +6,7 @@ import {
   CANONICAL_PLAN_SERVER_ROUTES_VERSION,
 } from './lib/v0125/canonical-plan-server-routes.mjs';
 import { CANONICAL_PLAN_SERVICES_VERSION } from './lib/v0125/canonical-plan-services.mjs';
+import { CANONICAL_HISTORY_VERSION } from './lib/v0125/canonical-history.mjs';
 
 const PORT = Number(process.env.PORT || 3000);
 
@@ -52,9 +53,11 @@ http.createServer(async (req, res) => {
       serverRouteVersion: UNIFIED_PREVIEW_SERVER_ROUTE_VERSION,
       canonicalPlanServicesVersion: CANONICAL_PLAN_SERVICES_VERSION,
       canonicalPlanServerRoutesVersion: CANONICAL_PLAN_SERVER_ROUTES_VERSION,
+      canonicalHistoryVersion: CANONICAL_HISTORY_VERSION,
       unifiedPreviewEnabled: process.env.MULTIPLAN_V0125_UNIFIED_PREVIEW_ENABLED === '1',
       canonicalReviewEnabled: true,
       canonicalDocxEnabled: true,
+      canonicalSnapshotPersistenceEnabled: true,
       legacyWrapperChainSpawned: false,
       productionModified: false,
     });
