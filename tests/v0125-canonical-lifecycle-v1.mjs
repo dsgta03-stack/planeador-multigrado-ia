@@ -212,6 +212,7 @@ test('canonical lifecycle detects divergence before a consumer receives a mutate
   const { sources, pipelineResult } = fixture();
   const lifecycle = canonicalLifecycleFromPipeline({ sources, pipelineResult });
   const altered = structuredClone(lifecycle);
+  altered.review.payload = { plan: structuredClone(altered.review.payload.plan) };
   altered.review.payload.plan.project.title = 'Título alterado';
   assert.throws(() => assertCanonicalLifecycle(altered), /CANONICAL_LIFECYCLE_REVIEW_HASH_MISMATCH/);
 });
