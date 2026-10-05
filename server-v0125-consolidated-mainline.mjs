@@ -1,0 +1,47 @@
+import http from "node:http";
+import { spawn } from "node:child_process";
+import { V0124_UI } from "./lib/v0124/ui.mjs";
+import { DOCX_EXPORT_UI } from "./lib/v0124/docx-export-ui.mjs";
+import { SNAPSHOT_VERSION, persistSnapshot, applyFinalSnapshot, enrichHistoryList } from "./lib/v0124/history-fidelity.mjs";
+import { REVIEW_VERSION, reviewWithCache } from "./lib/v0124/review-cache.mjs";
+import { applyProjectCoherence } from "./lib/v0124/project-coherence.mjs";
+import { createMultiplanDocx, docxFilename } from "./lib/v0124/docx-export.mjs";
+import { createCertifiedServerRoute } from "./lib/v0124/certified-server-route.mjs";
+import { createUnifiedPreviewServerRoute, UNIFIED_PREVIEW_SERVER_ROUTE_VERSION } from "./lib/v0125/unified-preview-server-route.mjs";
+import { createCanonicalReviewServerRoute, createCanonicalDocxServerRoute, CANONICAL_PLAN_SERVER_ROUTES_VERSION } from "./lib/v0125/canonical-plan-server-routes.mjs";
+import { CANONICAL_PLAN_SERVICES_VERSION } from "./lib/v0125/canonical-plan-services.mjs";
+import { CANONICAL_HISTORY_VERSION } from "./lib/v0125/canonical-history.mjs";
+
+const PORT=Number(process.env.PORT||3000), CHILD_PORT=Number(process.env.MULTIPLAN_V0124_CONSOLIDATED_CHILD_PORT||6901), CHILD_ORIGIN=`http://127.0.0.1:${CHILD_PORT}`;
+const child=spawn(process.execPath,["server-v0123-workflow-guidance.mjs"],{env:{...process.env,PORT:String(CHILD_PORT)},stdio:["ignore","inherit","inherit"]});
+let stopping=false;child.on("exit",(code,signal)=>{console.error(`[v0125-consolidated] child exited code=${code} signal=${signal}`);if(!stopping)setTimeout(()=>process.exit(code||1),50)});for(const signal of["SIGTERM","SIGINT"])process.on(signal,()=>{stopping=true;try{child.kill(signal)}catch{}process.exit(0)});
+function json(res,status,body,extra={}){res.writeHead(status,{"content-type":"application/json; charset=utf-8","cache-control":"no-store",...extra});res.end(JSON.stringify(body))}
+function readBody(req,max=2_500_000){return new Promise((resolve,reject)=>{let raw="";req.on("data",c=>{raw+=c;if(raw.length>max){reject(new Error("PAYLOAD_TOO_LARGE"));req.destroy()}});req.on("end",()=>resolve(raw));req.on("error",reject)})}
+function bearer(req){const v=String(req.headers.authorization||"");return v.startsWith("Bearer ")?v:""}
+function historyRunId(path){return path.match(/^\/api\/history\/([0-9a-f-]{36})$/i)?.[1]||""}
+function copyHeaders(response,names=[]){const out={"content-type":response.headers.get("content-type")||"application/octet-stream","cache-control":response.headers.get("cache-control")||"no-store"};for(const n of names){const v=response.headers.get(n);if(v)out[n]=v}return out}
+const HELPERS={bearer,readBody,json,copyHeaders};
+const certifiedPlanRoute=createCertifiedServerRoute({readBody,bearer,json});
+const unifiedPreviewRoute=createUnifiedPreviewServerRoute({readBody,bearer,json});
+const canonicalReviewRoute=createCanonicalReviewServerRoute({readBody,bearer,json});
+const canonicalDocxRoute=createCanonicalDocxServerRoute({readBody,json});
+
+async function exportDocx(req,res){try{const raw=await readBody(req),body=JSON.parse(raw||"{}"),input=body?.plan||body;if(!input||typeof input!=="object"||Array.isArray(input))return json(res,400,{code:"DOCX_PLAN_REQUIRED",message:"Se requiere una planeación válida para exportar."});const coherence=applyProjectCoherence(input),plan=coherence?.plan&&typeof coherence.plan==="object"?coherence.plan:input,buffer=await createMultiplanDocx(plan),filename=docxFilename(plan),ascii=filename.replace(/[^\x20-\x7E]/g,"_");res.writeHead(200,{"content-type":"application/vnd.openxmlformats-officedocument.wordprocessingml.document","content-disposition":`attachment; filename="${ascii}"; filename*=UTF-8''${encodeURIComponent(filename)}`,"content-length":String(buffer.length),"cache-control":"no-store","x-multiplan-export":"EXPORT-DOCX-V1","x-multiplan-export-sessions":String(Array.isArray(plan?.teacher_presentation?.sessions)?plan.teacher_presentation.sessions.length:Array.isArray(plan?.sessions)?plan.sessions.length:0)});res.end(buffer)}catch(error){json(res,String(error).includes("PAYLOAD_TOO_LARGE")?413:500,{code:String(error).includes("PAYLOAD_TOO_LARGE")?"PAYLOAD_TOO_LARGE":"DOCX_EXPORT_ERROR",message:String(error).slice(0,300)})}}
+
+async function proxy(req,res){try{const headers={};for(const n of["content-type","authorization","accept","cookie","user-agent"])if(req.headers[n])headers[n]=req.headers[n];const init={method:req.method,headers};if(req.method!=="GET"&&req.method!=="HEAD")init.body=await readBody(req);const response=await fetch(CHILD_ORIGIN+(req.url||"/"),init),type=response.headers.get("content-type")||"application/octet-stream",url=new URL(req.url||"/","http://localhost");
+if(req.method==="GET"&&type.includes("text/html")){let html=await response.text();if(html.includes("</body>"))html=html.replace("</body>",V0124_UI+DOCX_EXPORT_UI+"</body>");res.writeHead(response.status,{"content-type":"text/html; charset=utf-8","cache-control":"no-store","x-multiplan-v0124-ui":"CONSOLIDATED-SHADOW"});res.end(html);return}
+if(req.method==="POST"&&url.pathname==="/api/gemini-plan"&&type.includes("application/json")){const text=await response.text();let rawPlan=null;try{rawPlan=JSON.parse(text)}catch{}let plan=rawPlan,coherence={status:"SKIPPED_INVALID_PLAN"};if(response.ok&&rawPlan&&typeof rawPlan==="object"){coherence=applyProjectCoherence(rawPlan);plan=coherence.plan}const p=response.ok&&plan&&typeof plan==="object"?await persistSnapshot(bearer(req),plan):{status:"SKIPPED"};const out=copyHeaders(response,["x-multiplan-plan-engine","x-multiplan-safe-fallback","x-multiplan-v65-promotion","x-multiplan-methodology-sequence","x-multiplan-session-count-preserved","x-multiplan-workflow-ui"]);out["content-type"]="application/json; charset=utf-8";out["x-multiplan-final-snapshot"]=p.status;out["x-multiplan-final-snapshot-version"]=p.version||SNAPSHOT_VERSION;out["x-multiplan-project-coherence"]=coherence.status||"UNKNOWN";res.writeHead(response.status,out);res.end(plan&&typeof plan==="object"?JSON.stringify(plan):text);return}
+if(req.method==="GET"&&url.pathname==="/api/history"&&type.includes("application/json")){const text=await response.text();let body=null;try{body=JSON.parse(text)}catch{}if(response.ok&&body&&Array.isArray(body.items))return json(res,response.status,{...body,items:await enrichHistoryList(body.items,bearer(req))},{"x-multiplan-history-snapshot":"FINAL_OUTPUT_SNAPSHOT_WHEN_AVAILABLE"});res.writeHead(response.status,copyHeaders(response));res.end(text);return}
+if(req.method==="GET"&&historyRunId(url.pathname)&&type.includes("application/json")){const text=await response.text();let row=null;try{row=JSON.parse(text)}catch{}if(response.ok&&row&&typeof row==="object"){const f=applyFinalSnapshot(row);return json(res,response.status,f,{"x-multiplan-history-snapshot":f.snapshot_source,"x-multiplan-final-snapshot-version":f.snapshot_meta?.schema_version||"NONE"})}res.writeHead(response.status,copyHeaders(response));res.end(text);return}
+const data=Buffer.from(await response.arrayBuffer());res.writeHead(response.status,copyHeaders(response,["x-multiplan-plan-engine","x-multiplan-safe-fallback","x-multiplan-v65-promotion","x-multiplan-methodology-sequence","x-multiplan-session-count-preserved","x-multiplan-workflow-ui"]));res.end(data)}catch(error){json(res,String(error).includes("PAYLOAD_TOO_LARGE")?413:502,{code:String(error).includes("PAYLOAD_TOO_LARGE")?"PAYLOAD_TOO_LARGE":"V0125_CONSOLIDATED_PROXY_ERROR",message:String(error).slice(0,300)})}}
+
+http.createServer(async(req,res)=>{const url=new URL(req.url||"/","http://localhost");
+if(req.method==="GET"&&url.pathname==="/v0125_health")return json(res,200,{ok:true,version:"0.12.5-consolidated-mainline",base:"0.12.4-current-mainline",serverRouteVersion:UNIFIED_PREVIEW_SERVER_ROUTE_VERSION,canonicalPlanServicesVersion:CANONICAL_PLAN_SERVICES_VERSION,canonicalPlanServerRoutesVersion:CANONICAL_PLAN_SERVER_ROUTES_VERSION,canonicalHistoryVersion:CANONICAL_HISTORY_VERSION,unifiedPreviewEnabled:process.env.MULTIPLAN_V0125_UNIFIED_PREVIEW_ENABLED==="1",canonicalReviewEnabled:true,canonicalDocxEnabled:true,canonicalSnapshotPersistenceEnabled:true,legacyWrapperChainSpawned:true,productionCompatibilityWrapper:true});
+if(url.pathname==="/api/v0125/unified-plan")return unifiedPreviewRoute(req,res);
+if(url.pathname==="/api/v0125/pedagogical-review")return canonicalReviewRoute(req,res);
+if(url.pathname==="/api/v0125/export/docx")return canonicalDocxRoute(req,res);
+if(url.pathname==="/api/certified-plan")return certifiedPlanRoute(req,res);
+if(req.method==="GET"&&url.pathname==="/v0124_health")return json(res,200,{ok:true,version:"0.12.4-shadow-consolidated",base:"0.12.3",nodeWrapperLayers:1,pedagogicalReview:REVIEW_VERSION,snapshotVersion:SNAPSHOT_VERSION,projectCoherence:"PROJECT-COHERENCE-V1",docxExport:"EXPORT-DOCX-V1",reviewCache:"HASH_AND_VERSION_KEYED",preservesInternalModelOutput:true,historyPrefersFinalSnapshot:true,generationSurvivesSnapshotFailure:true,productionModified:false});
+if(req.method==="POST"&&url.pathname==="/api/pedagogical-review")return reviewWithCache(req,res,HELPERS);
+if(req.method==="POST"&&url.pathname==="/api/export/docx")return exportDocx(req,res);
+return proxy(req,res)}).listen(PORT,"0.0.0.0",()=>console.log(`Multiplan v0.12.5 consolidated mainline on ${PORT}; v0.12.4 UI/proxy preserved; v0.12.5 canonical routes mounted; direct child v0.12.3 on ${CHILD_PORT}`));
