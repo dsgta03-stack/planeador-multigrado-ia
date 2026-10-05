@@ -15,7 +15,7 @@ Certified source hashes from 5D-P:
 
 - constraints: `231186405b12537fc00f9cb7d644bb98e7c79b2cc9eb7cae401aecc399c5400a`
 - curriculum: `e67ab1bb301cebefc9f31f500d0a2e4d8d795ab26a4f26b6840749cca6e9a5bf`
-- methodology: `9d2b4be07b5837ac7f4b181fcbfa95b50dfb404a737698c908cf231837ed9cf6`
+- methodology: `9d2b4be07b5837ac7f4b181fcbfa95b50dfb404a737698c908cf231837ed9cf`
 
 Certified 5D-P result recovered from Railway deployment evidence:
 
@@ -103,7 +103,7 @@ The current Railway/Supabase source object referenced by `SHADOW_EVIDENCE_BUCKET
 
 - constraints: `231186405b12537fc00f9cb7d644bb98e7c79b2cc9eb7cae401aecc399c5400a`
 - curriculum: `e67ab1bb301cebefc9f31f500d0a2e4d8d795ab26a4f26b6840749cca6e9a5bf`
-- methodology: `9d2b4be07b5837ac7f4b181fcbfa95b50dfb404a737698c908cf231837ed9cf6`
+- methodology: `9d2b4be07b5837ac7f4b181fcbfa95b50dfb404a737698c908cf231837ed9cf`
 
 Therefore the certified source bundle has not drifted.
 
