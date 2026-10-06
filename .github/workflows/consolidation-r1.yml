@@ -1,6 +1,8 @@
 name: Consolidation R1 CI
 
 on:
+  push:
+    branches: [consolidation-single-app-r1]
   pull_request:
     branches: [main]
     paths:
