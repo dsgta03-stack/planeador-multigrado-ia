@@ -1,7 +1,7 @@
 # Consolidation R1 — validation status
 
 Branch: `consolidation-single-app-r1`  
-Current evidence head: `63b8c710c04c7c937f523940742e21ef54c31082`
+Validated implementation head before this documentation-only commit: `63b8c710c04c7c937f523940742e21ef54c31082`
 
 ## Safety boundary
 
