@@ -34,6 +34,7 @@ jobs:
             tests/consolidation-r1-manifest.test.mjs \
             tests/consolidation-r1-ui-authority.test.mjs \
             tests/consolidation-r1-server.test.mjs \
+            tests/consolidation-r1-history.test.mjs \
             tests/v0125-unified-preview-server-route-v1.mjs \
             tests/v0125-canonical-plan-server-routes-v1.mjs \
             tests/v0125-canonical-plan-services-v1.mjs \
