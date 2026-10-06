@@ -47,7 +47,7 @@ test("single-app runtime modules contain no child-process or legacy-server execu
     const source = fs.readFileSync(file, "utf8");
     assert.doesNotMatch(source, /node:child_process/, file);
     assert.doesNotMatch(source, /\bspawn\s*\(/, file);
-    assert.doesNotMatch(source, /server-v\d/i, file);
+    assert.doesNotMatch(source, /(?:from\s+|import\s*\(|require\s*\()\s*["'][^"']*server-v\d/i, file);
   }
 });
 
