@@ -38,3 +38,25 @@ test("methodology observer freeze fix is compiled into the single UI", () => {
   assert.ok(CONSOLIDATED_UI_HTML.includes("const observer=new MutationObserver"));
   assert.ok(!CONSOLIDATED_UI_HTML.includes("new MutationObserver(update).observe(document.documentElement,{childList:true,subtree:true});setTimeout(update,300)"));
 });
+
+
+test("canonical client bridge binds generation review history and DOCX to one hash", () => {
+  assert.ok(CONSOLIDATED_UI_HTML.includes("x-multiplan-canonical-plan-hash"));
+  assert.ok(CONSOLIDATED_UI_HTML.includes("canonical_plan_hash"));
+  assert.ok(CONSOLIDATED_UI_HTML.includes("/api/pedagogical-review"));
+  assert.ok(CONSOLIDATED_UI_HTML.includes("/api/export/docx"));
+  assert.ok(CONSOLIDATED_UI_HTML.includes("/api/history/"));
+  assert.equal(CONSOLIDATED_UI_HTML.split('id="mp-canonical-client-bridge-r1"').length - 1, 1);
+});
+
+test("single UI contains every API capability the consolidated server must own", () => {
+  for (const route of [
+    "/api/retrieve",
+    "/api/material",
+    "/api/methodology-recommendation",
+    "/api/gemini-plan",
+    "/api/history",
+    "/api/pedagogical-review",
+    "/api/export/docx",
+  ]) assert.ok(CONSOLIDATED_UI_HTML.includes(route), route);
+});
