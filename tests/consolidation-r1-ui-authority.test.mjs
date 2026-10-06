@@ -30,7 +30,7 @@ test("auth, workflow, history, review and docx controls survive UI collapse", ()
     "mpHistoryNav",
     "mpPedagogicalReview",
     "mpReviewRun",
-    "EXPORT-DOCX-V1"
+    "mpDocxDownload"
   ]) assert.ok(CONSOLIDATED_UI_HTML.includes(token), token);
 });
 
