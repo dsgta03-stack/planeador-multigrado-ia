@@ -31,6 +31,26 @@ test("single-app server source cannot spawn legacy servers", () => {
   assert.doesNotMatch(source, /server-v\d/i);
 });
 
+test("single-app runtime modules contain no child-process or legacy-server execution", () => {
+  const root = fileURLToPath(new URL("../lib/consolidation-r1/", import.meta.url));
+  const stack = [root];
+  const files = [];
+  while (stack.length) {
+    const current = stack.pop();
+    for (const entry of fs.readdirSync(current, { withFileTypes: true })) {
+      const full = current + "/" + entry.name;
+      if (entry.isDirectory()) stack.push(full);
+      else if (entry.name.endsWith(".mjs") && entry.name !== "legacy-layer-manifest.mjs") files.push(full);
+    }
+  }
+  for (const file of files) {
+    const source = fs.readFileSync(file, "utf8");
+    assert.doesNotMatch(source, /node:child_process/, file);
+    assert.doesNotMatch(source, /\bspawn\s*\(/, file);
+    assert.doesNotMatch(source, /server-v\d/i, file);
+  }
+});
+
 test("single-app root and health run in one process without upstream calls", async () => {
   await withServer(async ({ origin, networkCalls }) => {
     const health = await fetch(origin + "/consolidation_r1_health");
