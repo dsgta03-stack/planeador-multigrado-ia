@@ -152,3 +152,26 @@ test('CORE is used once where pertinent without repetition across sessions shari
  for(const session of f.proposal.sessions){session.ltg_decisions=[];for(const a of session.activities){a.ltg_use=[];a.ltg_activity_ids=[];}}
  assert.throws(()=>validateSessionGraphAuthoring(f.proposal,f),/CORE disappeared/);
 });
+
+test('rejects bare assistance instead of student development and attention-only titles',()=>{
+ const claims=['orientar','apoyar','supervisar','Orientaré a los alumnos de 3.º en el uso de técnicas de apunte para organizar su información.','Supervisaré el diseño de carteles de orden.','Apoyaré a los alumnos de 1.º y 2.º.'];
+ for(const text of claims){const f=executableSource();f.proposal.sessions[0].activities[0].common_student_action=text;assert.throws(()=>validateSessionGraphAuthoring(f.proposal,f),/SGD-017/,text);}
+ for(const title of ['Apoyo a 3.º','Tutoría 4, 5, 6','Supervisión 4, 5, 6','Apoyo técnico 4, 5, 6']){const f=executableSource();f.proposal.sessions[0].activities[0].title=title;assert.throws(()=>validateSessionGraphAuthoring(f.proposal,f),/title.teacher_attention_only/,title);}
+ const f=executableSource();f.proposal.sessions[0].activities[0].title='Representamos las situaciones que queremos cambiar';
+ f.proposal.sessions[0].activities[0].common_student_action='Orientaré al grupo con una pregunta sobre sus registros. En parejas, representan una situación del aula mediante un dibujo y contrastan qué acuerdo ayudaría a resolverla. Conservan el dibujo para decidir juntos el acuerdo.';
+ assert.equal(validateSessionGraphAuthoring(f.proposal,f),true,'teacher first-person narrative is allowed when developed');
+ f.proposal.sessions[0].activities[0].teacher_role='Orientaré a los alumnos de 3.º en el uso de técnicas de apunte para organizar su información.';
+ assert.equal(validateSessionGraphAuthoring(f.proposal,f),true,'a concise teacher role does not replace or invalidate an already developed student procedure');
+});
+test('semantic review keeps depth, simultaneous work and coherence fail-closed without a length quota',async()=>{
+ const {buildSessionGraphReviewRequest,SESSION_GRAPH_REVIEW_INSTRUCTION}=await import('../reviewer.mjs');
+ const f=executableSource(),{graph}=compileSessionGraph(f.proposal,f,{graph_id:'depth-review'}),input={...f,graph};
+ const request=buildSessionGraphReviewRequest(input);
+ assert.match(SESSION_GRAPH_REVIEW_INSTRUCTION,/common_student_action.*desarrollo didáctico/);
+ assert.match(SESSION_GRAPH_REVIEW_INSTRUCTION,/simultáneamente los otros grados/);
+ assert.match(SESSION_GRAPH_REVIEW_INSTRUCTION,/propósito de sesión, desarrollo, producto parcial, evidencia e insumo siguiente/);
+ for(const rule_id of ['SGS-006','SGS-011']){
+  const review={input_hash:request.input_hash,findings:Object.keys(SGS).map(id=>({rule_id:id,status:id===rule_id?'FAIL':'PASS',scope:'session_1_activity_1',observed:'Orientaré sin describir desarrollo del alumnado',expected:SGS[id]}))};
+  assert.equal(sessionGraphGate(input,review).status,'FAIL');
+ }
+});

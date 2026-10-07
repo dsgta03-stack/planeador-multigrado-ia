@@ -79,3 +79,21 @@ test('REPAIR propagates scalar text policy and re-evaluates PDA status from DEVE
  assert.match(sent.prompt.repair_instruction,/ESA MISMA actividad/i);
  assert.match(sent.prompt.repair_instruction,/Nunca inventes pasos artificiales sólo para obtener WORKED/i);
 });
+
+test('authoring and its single repair receive the same narrative-depth policy without a second writer',async()=>{
+ const {TEACHER_NARRATIVE_INSTRUCTION}=await import('../../session-graph-v1/authoring.mjs');
+ const f=fixture(),sent=[];
+ const fetchImpl=async (_url,init)=>{const request=JSON.parse(init.body);sent.push(request);return jsonResponse({finish_reason:'STOP',output:request.task==='REPAIR'?{status:'PROPOSAL',proposal:f.proposal}:f.proposal});};
+ const drivers=createSessionGraphDrivers({endpoint,token,durableEvidence:false,fetchImpl});
+ await drivers.sessionAuthor(f.ctx);
+ await drivers.sessionRepair({...f.ctx,previous_proposal:f.proposal,compile_error:'SGD-017 generic development'});
+ assert.deepEqual(sent.map(r=>r.task),['GENERATE','REPAIR']);
+ for(const request of sent){
+  assert.ok(request.prompt.instruction.includes(TEACHER_NARRATIVE_INSTRUCTION));
+  assert.ok(request.prompt.preflight_checklist.teacher_executability.includes(TEACHER_NARRATIVE_INSTRUCTION));
+  assert.deepEqual(request.input.constraints,f.ctx.sources.constraints);
+  assert.deepEqual(request.input.curriculum,f.ctx.sources.curriculum);
+  assert.deepEqual(request.prompt.blueprint,f.ctx.blueprint);
+  assert.equal(request.model,'gemini-3.5-flash-lite');
+ }
+});

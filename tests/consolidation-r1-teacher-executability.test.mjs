@@ -82,3 +82,34 @@ test('DOCX preserves OPTIONAL non-use rationale without synthesizing an LTG use'
  assert.ok(xml.includes('NOT_RECOMMENDED'));assert.ok(xml.includes(plan.sessions[0].ltg_decisions[0].reason));
  assert.deepEqual(plan.sessions[0].activities[0].ltg_use,[]);
 });
+
+test('fluent student development and simultaneous grade work survive to UI and DOCX without invention',async()=>{
+ const f=executableSource(),a=f.proposal.sessions[0].activities[0];
+ a.title='Reconstruimos situaciones para decidir nuestros acuerdos';
+ a.common_student_action='En parejas por grado, recuperan una situación del aula que dificultó escucharse y la representan en el papel. Los alumnos de 1.º dibujan qué ocurrió y lo explican a su compañero; los de 3.º consultan los registros previos, contrastan dos situaciones y escriben qué acuerdo ayudó en cada caso. Mientras el docente acompaña la explicación oral de 1.º, las parejas de 3.º continúan la comparación y marcan la duda que quieren consultar. Después muestran sus hallazgos al grupo y distinguen qué necesitan resolver para decidir el acuerdo en la actividad siguiente.';
+ a.teacher_role='Con 1.º, el docente pide explicar qué pasó antes y después del desacuerdo; al reunirse el grupo, retoma las dudas marcadas por 3.º y contrasta sus registros.';
+ a.execution.grouping='Parejas del mismo grado: 1.º recibe atención directa para la explicación oral, mientras 3.º compara sus registros con su pareja y marca dudas para la puesta en común.';
+ a.execution.student_steps=['Recuperan una situación del aula y la representan según su grado.','Contrastan con su pareja qué ocurrió y qué acuerdo ayudó.','Muestran sus hallazgos y señalan qué necesitan resolver.'];
+ a.execution.connection='Los hallazgos registrados serán el insumo para decidir el acuerdo en la actividad siguiente.';
+ const {graph,projection,plan}=approved(f),b=plan.teacher_presentation.sessions[0].activity_blocks[0];
+ for(const item of [graph.sessions[0].activities[0],projection.sessions[0].activities[0],plan.sessions[0].activities[0],b]){
+  assert.equal(item.common_student_action,a.common_student_action);
+  assert.deepEqual(item.grade_participation,a.grade_participation);
+  assert.deepEqual(item.input_refs,['input_context']);assert.deepEqual(item.contributes_to_artifact_ids,[]);
+ }
+ assert.equal(b.development,a.common_student_action);
+ const html=renderTeacherActivity(b);
+ assert.ok(html.indexOf(a.common_student_action)<html.indexOf('<details'),'student narrative remains primary');
+ assert.ok(html.includes(a.execution.grouping));
+ assert.ok(html.includes('Preparación, acompañamiento y recursos'));
+ const presentation=structuredClone(plan.teacher_presentation);
+ const last=presentation.sessions[0].activity_blocks.at(-1).execution.connection;
+ presentation.sessions[0].closure_narrative=last;
+ const sessionHtml=renderTeacherSessions({sessions:[presentation.sessions[0]]});
+ assert.equal(sessionHtml.split(last).length-1,1,'identical closure appears only once');
+ const zip=await JSZip.loadAsync(await createMultiplanDocx(plan));const xml=await zip.file('word/document.xml').async('string');
+ assert.ok(xml.includes(a.common_student_action));assert.ok(xml.includes(a.execution.grouping));
+ assert.deepEqual(plan.selected_pdas,f.curriculum.pdas);assert.deepEqual(plan.resources,f.constraints.available_resources);
+ assert.deepEqual(plan.project.ltg_strategy,f.blueprint.ltg_strategy);
+ assert.deepEqual(plan.sessions.map(s=>s.pda_focus),f.blueprint.session_progression.map(s=>s.pda_focus));
+});
