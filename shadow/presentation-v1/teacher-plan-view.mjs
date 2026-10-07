@@ -109,6 +109,7 @@ export function toTeacherPlanView({pipelineResult,teacherContextBinding=null}={}
    project_state_after:session.project_state_after,
    terminal:session.terminal,
    next_session_dependency:session.next_session_dependency,
+   ...(session.ltg_decisions!==undefined?{ltg_decisions:clone(session.ltg_decisions)}:{}),
    total_minutes:session.total_minutes,
    activities:clone(session.activities)
   })),

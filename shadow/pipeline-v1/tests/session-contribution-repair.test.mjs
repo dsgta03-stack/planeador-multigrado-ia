@@ -1,3 +1,4 @@
+import {executableFixture} from '../../session-graph-v1/tests/executable-fixture.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {hash} from '../../project-blueprint-v1/contracts.mjs';
@@ -15,6 +16,7 @@ function fixture(){
  const h=hash(blueprint),approval={approval_version:'PROJECT_BLUEPRINT_APPROVAL_V1',status:'APPROVED',gate_version:'BLUEPRINT_GATE_V1',blueprint_hash:h,evaluated_blueprint_hash:h,approved_blueprint_hash:h};
  const base={title:'Analizamos',contribution_rationale:'prepara decisiones del plan',common_student_action:'comparan situaciones de convivencia',grade_participation:[1,3].map(grade=>({grade,student_action:'identifica situaciones y compara hallazgos',differentiation:grade===1?'dibuja':'escribe',pda_mobilization:[{pda_id:grade===1?'p1':'p3',status:'DEVELOPING'}],evidence:'registro de situaciones'})),teacher_role:'modela',resources:['papel'],supports:['modelado'],minutes:20,methodology_operations:['IDENTIFICACION'],functional_requirement_ids:[],ltg_activity_ids:[],evidence:'registro escrito',assessment_criteria:['identifica situaciones']};
  const proposal={authoring_version:'SESSION_GRAPH_AUTHORING_V1',sessions:[{session_number:1,activities:[{...base,activity_key:'preparation',contribution_mode:'COMPLEMENTARY',input_refs:['context'],output:'hallazgos para decidir el plan',contributes_to_artifact_ids:[]},{...structuredClone(base),activity_key:'production',title:'Escribimos el plan',contribution_mode:'DIRECT',contribution_rationale:'produce el plan autorizado',common_student_action:'deciden acuerdos a partir de los hallazgos y escriben el plan de acuerdos',methodology_operations:['PLANIFICACION'],input_refs:['preparation'],output:'plan de acuerdos escrito',contributes_to_artifact_ids:['approved_plan']}]}]};
+ executableFixture(proposal);
  return {source:{constraints,curriculum,methodology,blueprint,approval},proposal};
 }
 const ctx=f=>({sources:{constraints:f.source.constraints,curriculum:f.source.curriculum,methodology:f.source.methodology},blueprint:f.source.blueprint,approval:f.source.approval,previous_proposal:f.proposal,compile_error:{rule:'SGD-010',message:'orphan complementary'}});

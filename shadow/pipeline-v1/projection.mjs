@@ -30,8 +30,13 @@ export function projectTeacherPlan({blueprint,blueprintApproval,graph,graphAppro
   project_state_after:session.project_state_after,
   terminal:session.terminal,
   next_session_dependency:session.next_session_dependency,
+  ...(session.ltg_decisions!==undefined?{ltg_decisions:clone(session.ltg_decisions)}:{}),
   total_minutes:session.activities.reduce((n,a)=>n+a.minutes,0),
   activities:session.activities.map(activity=>({
+   ...(activity.execution!==undefined?{execution:clone(activity.execution)}:{}),
+   ...(activity.ltg_use!==undefined?{ltg_use:clone(activity.ltg_use)}:{}),
+   activity_id:activity.activity_id||null,
+   output_ref:activity.output_ref||null,
    order:activity.order,
    title:activity.title,
    contribution_mode:activity.contribution_mode,

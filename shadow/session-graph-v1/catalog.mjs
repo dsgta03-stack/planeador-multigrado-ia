@@ -36,6 +36,7 @@ export const SGD=Object.freeze({
  'SGD-013':'Los vínculos LTG, si existen, pertenecen a selecciones verificadas del Blueprint; modo NONE implica ausencia total de vínculos.',
  'SGD-014':'Cada sesión moviliza todos los grados que tienen PDA en su foco sin atribuir exigencias curriculares ajenas.',
  'SGD-015':'La última sesión conserva el cierre terminal del Blueprint y ninguna actividad inventa una sesión posterior.',
+ 'SGD-017':'Cada actividad incluye preparación, consigna, pasos, organización, uso de recursos, intervención, apoyo y conexión ejecutables; una tarea genérica no basta.',
  'SGD-016':'La trazabilidad derivada coincide con las actividades compiladas y no puede ser escrita por el modelo.',
 });
 
@@ -50,6 +51,6 @@ export const SGS=Object.freeze({
  'SGS-008':'Cada vínculo a un requisito funcional corresponde a una actividad que realmente ejecuta ese requisito y produce su evidencia; no basta la cobertura nominal.',
  'SGS-009':'La complejidad, autonomía, apoyos y formas de participación son adecuadas a cada grado.',
  'SGS-010':'La distribución temporal es pedagógicamente realista a nivel de actividad, no sólo aritméticamente válida.',
- 'SGS-011':'El alumnado toma decisiones, indaga, produce, explica o evalúa según corresponda; el docente no sustituye la acción cognitiva central.',
+ 'SGS-011':'El procedimiento permite al docente ejecutar la actividad sin inventar pasos: preparación, consigna, secuencia, organización, preguntas/modelado cuando son necesarios, uso de materiales, intervención, diferenciación, apoyo contingente y transición deben ser concretos, coherentes y viables; rechaza campos genéricos, repetidos o relleno. CORE requiere uso LTG concreto al menos una vez en el grafo donde curricularmente corresponda, sin repetición obligatoria por PDA en cada sesión; SUPPORT puede fortalecer una actividad pertinente sin uso obligatorio por sesión; OPTIONAL pertinente requiere uso o justificación de no uso por sesión. El alumnado toma decisiones, indaga, produce, explica o evalúa según corresponda; el docente no sustituye la acción cognitiva central.',
  'SGS-012':'El cierre final culmina el producto y la evaluación sin duplicar presentaciones ni preparar una sesión inexistente.',
 });
