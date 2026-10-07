@@ -184,19 +184,22 @@ export function sessionGraphAuthoringSchema(source){
 export function providerAuthoringShapeSchema(source){return projectShape(sessionGraphAuthoringSchema(source));}
 function projectShape(n){const o={};if(n.anyOf){o.type=n.anyOf.map(child=>child.type);return o;}if(n.type!==undefined)o.type=n.type;if(n.properties){o.properties={};for(const [k,v] of Object.entries(n.properties))o.properties[k]=projectShape(v);o.required=[...(n.required||[])];}if(n.items)o.items=projectShape(n.items);return o;}
 
-export function normalizeSessionGraphAuthoring(proposal,source){
+export function normalizeSessionGraphAuthoring(proposal,source,previousProposal=null){
  const copy=structuredClone(proposal);
  if(!Array.isArray(copy.sessions))return copy;
  const {blueprint,curriculum}=source;
  const pdaById=new Map((curriculum.pdas||[]).map(p=>[p.pda_id,p]));
  const selections=new Map((blueprint.ltg_strategy.selections||[]).map(s=>[s.project_id,s]));
  const ltgCatalog=new Map((curriculum.ltg||[]).map(p=>[p.project_id,p]));
+ const previousSessions=new Map((previousProposal?.sessions||[]).map(s=>[s.session_number,s]));
  for(const session of copy.sessions){
   const b=blueprint.session_progression.find(s=>s.session_number===session.session_number);
+  const previousSession=previousSessions.get(session.session_number);
   const focus=new Set(b?.pda_focus||[]);
   const methods=new Set(b?.methodology_operations||[]);
   const artifacts=new Set(b?.expected_output_artifact_ids||[]);
   for(const activity of session.activities||[]){
+   const previousActivity=(previousSession?.activities||[]).find(a=>a.activity_key===activity.activity_key);
    activity.methodology_operations=(activity.methodology_operations||[]).filter(op=>methods.has(op));
    activity.contributes_to_artifact_ids=(activity.contributes_to_artifact_ids||[]).filter(id=>artifacts.has(id));
    for(const grade of activity.grade_participation||[]){
@@ -204,6 +207,13 @@ export function normalizeSessionGraphAuthoring(proposal,source){
      const p=pdaById.get(m.pda_id);
      return !!p&&p.grade===grade.grade&&focus.has(m.pda_id);
     });
+    const previousGrade=(previousActivity?.grade_participation||[]).find(g=>g.grade===grade.grade);
+    for(const m of previousGrade?.pda_mobilization||[]){
+     const p=pdaById.get(m.pda_id);
+     if(p&&p.grade===grade.grade&&focus.has(m.pda_id)&&!grade.pda_mobilization.some(x=>x.pda_id===m.pda_id)){
+      grade.pda_mobilization.push({pda_id:m.pda_id,status:'DEVELOPING'});
+     }
+    }
    }
    activity.ltg_use=(activity.ltg_use||[]).filter(use=>{
     const sel=selections.get(use.project_id),project=ltgCatalog.get(use.project_id);
