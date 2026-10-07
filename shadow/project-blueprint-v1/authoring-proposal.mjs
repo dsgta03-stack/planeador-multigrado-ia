@@ -58,6 +58,24 @@ function normalizeCoverageReferences(proposal,plan){
  }
  return copy;
 }
+function validateRequiredResources(proposal,src){
+ const allowed=new Set(src.constraints.available_resources);
+ const rows=proposal.final_outcome?.required_resources;
+ if(!Array.isArray(rows))return;
+ const failures=[];
+ for(let i=0;i<rows.length;i++){
+  const row=rows[i];
+  const resourceOk=typeof row.resource==='string'&&allowed.has(row.resource);
+  const alternativeOk=typeof row.alternative==='string'&&allowed.has(row.alternative)&&typeof row.alternative_rationale==='string'&&row.alternative_rationale.trim().length>0;
+  if(!resourceOk&&!alternativeOk)failures.push(i);
+ }
+ if(failures.length){
+  const e=Error('BPD-018: unauthorized required_resources at indexes '+failures.join(', '));
+  e.code='AUTHORING_CONTRACT_INVALID';
+  e.rule='BPD-018';
+  throw e;
+ }
+}
 function validateCoverageCompleteness(proposal,plan){
  const failures=[];
  for(const link of plan.coverage_matrix){
@@ -81,6 +99,7 @@ export function compileAuthoring(proposal,src,plan,{blueprint_id,revision=1}={})
  if(hash(plan)!==hash(constructionPlan(src)))throw Error('AUTHORING_SOURCE_PLAN_MISMATCH');
  validateAuthoring(proposal,authoringSchema(src,plan));
  const normalizedProposal=normalizeCoverageReferences(proposal,plan);
+ validateRequiredResources(normalizedProposal,src);
  validateCoverageCompleteness(normalizedProposal,plan);
  const b=structuredClone(normalizedProposal),coverage=b.coverage;delete b.coverage;
  Object.assign(b,{schema_version:'PROJECT_BLUEPRINT_V1',blueprint_id,revision,status:'DRAFT',source:sourceBinding(src),methodology:{selected_id:src.methodology.selected_id,catalog_version:src.methodology.catalog_version,required_operations:[...src.methodology.required_operations]},gate_result:null});
