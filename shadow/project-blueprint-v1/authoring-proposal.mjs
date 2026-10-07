@@ -39,6 +39,25 @@ function validateAuthoring(value,s,path='$'){
   else if(v&&typeof v==='object')for(const [k,item] of Object.entries(v))if(x.properties?.[k])extra(item,x.properties[k],`${p}.${k}`);
  };extra(value,s,path);if(errors.length){const e=Error(`AUTHORING_CONTRACT: ${errors.join('; ')}`);e.code=errors.some(x=>x.includes('maxLength'))?'AUTHORING_FIELD_EXCESSIVE_LENGTH':'AUTHORING_CONTRACT_INVALID';throw e;}
 }
+function normalizeCoverageReferences(proposal,plan){
+ const copy=structuredClone(proposal);
+ if(!Array.isArray(copy.coverage))return copy;
+ for(const row of copy.coverage){
+  const link=plan.coverage_matrix.find(x=>x.operation===row.operation);
+  if(!link)continue;
+  row.stage_id=link.stage_id;
+  const stage=copy.project_stages?.find(s=>s.stage_id===link.stage_id);
+  if(!stage)continue;
+  if(typeof row.action_quote!=='string'||!row.action_quote.trim()||!stage.student_operation?.includes(row.action_quote)){
+   row.action_quote=stage.student_operation;
+  }
+  const ref=row.evidence_ref;
+  const validExpected=ref?.field==='expected_output'&&ref.index===null&&typeof stage.expected_output==='string'&&stage.expected_output.trim();
+  const validCriterion=ref?.field==='acceptance_criteria'&&Number.isInteger(ref.index)&&ref.index>=0&&ref.index<stage.acceptance_criteria.length&&typeof stage.acceptance_criteria[ref.index]==='string'&&stage.acceptance_criteria[ref.index].trim();
+  if(!validExpected&&!validCriterion)row.evidence_ref={field:'expected_output',index:null};
+ }
+ return copy;
+}
 function validateCoverageCompleteness(proposal,plan){
  const failures=[];
  for(const link of plan.coverage_matrix){
@@ -61,8 +80,9 @@ export function compileAuthoring(proposal,src,plan,{blueprint_id,revision=1}={})
  for(const [name,key] of [['TeacherConstraintsV1','constraints'],['CurriculumSnapshotV1','curriculum'],['MethodologyDecisionV1','methodology']])assertContract(name,src[key]);
  if(hash(plan)!==hash(constructionPlan(src)))throw Error('AUTHORING_SOURCE_PLAN_MISMATCH');
  validateAuthoring(proposal,authoringSchema(src,plan));
- validateCoverageCompleteness(proposal,plan);
- const b=structuredClone(proposal),coverage=b.coverage;delete b.coverage;
+ const normalizedProposal=normalizeCoverageReferences(proposal,plan);
+ validateCoverageCompleteness(normalizedProposal,plan);
+ const b=structuredClone(normalizedProposal),coverage=b.coverage;delete b.coverage;
  Object.assign(b,{schema_version:'PROJECT_BLUEPRINT_V1',blueprint_id,revision,status:'DRAFT',source:sourceBinding(src),methodology:{selected_id:src.methodology.selected_id,catalog_version:src.methodology.catalog_version,required_operations:[...src.methodology.required_operations]},gate_result:null});
  b.problem_frame.original_problem=src.constraints.original_problem;
  for(const g of b.grade_contributions)g.contribution_id=`grade_${g.grade}`;
@@ -74,5 +94,5 @@ export function compileAuthoring(proposal,src,plan,{blueprint_id,revision=1}={})
  });
  const built=compileConstruction(b,plan);
  assertContract('ProjectBlueprintV1',built.blueprint);
- return {blueprint:built.blueprint,record:{authoring_version:AUTHORING_VERSION,proposal_hash:hash(proposal),raw_proposal:structuredClone(proposal),construction:built.record}};
+ return {blueprint:built.blueprint,record:{authoring_version:AUTHORING_VERSION,proposal_hash:hash(proposal),raw_proposal:structuredClone(proposal),normalized_proposal_hash:hash(normalizedProposal),construction:built.record}};
 }
