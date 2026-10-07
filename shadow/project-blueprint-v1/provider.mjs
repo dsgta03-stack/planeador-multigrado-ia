@@ -103,7 +103,8 @@ export async function callProvider(task,input,{endpoint,token,identity='multipla
   }
   const unavailable=[429,500,502,503,504].includes(r.provider_status);
   if(unavailable&&attempt<3){const delay=1000*2**(attempt-1);attempts.at(-1).backoff_ms=delay;await sleep(delay);continue}
-  const error=Error(`${r.code||'PROVIDER_ERROR'}:${r.provider_status||response.status}`);
+  const safeProviderDetail=String(r.provider_message||r.provider_error_status||'').replace(/\s+/g,' ').slice(0,800);
+  const error=Error(`${r.code||'PROVIDER_ERROR'}:${r.provider_status||response.status}${safeProviderDetail?`:${safeProviderDetail}`:''}`);
   error.code=unavailable?'PROVIDER_UNAVAILABLE':(r.code||'PROVIDER_ERROR');error.telemetry={...base,usage:r.usage||null,finish_reason:r.finish_reason||null,latency_ms:Date.now()-start,attempts};throw error;
  }
 }
