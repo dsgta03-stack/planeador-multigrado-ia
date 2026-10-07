@@ -1,6 +1,7 @@
 import {randomUUID} from 'node:crypto';
 import {deepFreeze,hash} from '../project-blueprint-v1/contracts.mjs';
 import {compileSessionGraph} from '../session-graph-v1/session-graph.mjs';
+import {normalizeSessionGraphAuthoring} from '../session-graph-v1/authoring.mjs';
 import {sessionGraphGate,approveSessionGraph} from '../session-graph-v1/gate.mjs';
 import {buildSessionGraphReviewRequest} from '../session-graph-v1/reviewer.mjs';
 import {buildCriticalClaimsReviewRequest,criticalClaimsGate,approvePipelineSessionGraph} from './critical-audit.mjs';
@@ -31,6 +32,7 @@ export async function runShadowPipeline({sources,drivers={},options={}}){
  try{const authored=normalizeProposal(await drivers.sessionAuthor(freezeClone({sources:frozenSources,blueprint:authoritativeBlueprint,approval:blueprintApproval})));if(authored.revision_required)return deepFreeze({...resultBase({status:'BLUEPRINT_REVISION_REQUIRED',stages:[...stages,{stage:'SESSION_AUTHORING',status:'BLUEPRINT_REVISION_REQUIRED'}],blueprintEnvelope,blueprintApproval,errors}),reason:authored.reason});proposal=authored.proposal;stages.push({stage:'SESSION_AUTHORING',status:'PROPOSED'});}catch(e){errors.push({stage:'SESSION_AUTHORING',...errorInfo(e)});return deepFreeze(resultBase({status:'SESSION_AUTHORING_FAILED',stages:[...stages,{stage:'SESSION_AUTHORING',status:'ERROR'}],blueprintEnvelope,blueprintApproval,errors}));}
 
  for(let attempt=0;attempt<=maxRepairs;attempt++){
+  proposal=normalizeSessionGraphAuthoring(proposal,source);
   try{graph=compileSessionGraph(freezeClone(proposal),source,{graph_id:graphId,revision:attempt+1}).graph;stages.push({stage:'SESSION_COMPILE',attempt:attempt+1,status:'PASS',graph_hash:hash(graph)});}catch(e){errors.push({stage:'SESSION_COMPILE',attempt:attempt+1,...errorInfo(e)});stages.push({stage:'SESSION_COMPILE',attempt:attempt+1,status:'FAIL'});if(attempt===0&&maxRepairs&&typeof drivers.sessionRepair==='function'){try{const repaired=normalizeProposal(await drivers.sessionRepair(freezeClone({sources:frozenSources,blueprint:authoritativeBlueprint,approval:blueprintApproval,previous_proposal:proposal,compile_error:errorInfo(e)})));if(repaired.revision_required)return deepFreeze({...resultBase({status:'BLUEPRINT_REVISION_REQUIRED',stages:[...stages,{stage:'SESSION_REPAIR',status:'BLUEPRINT_REVISION_REQUIRED'}],blueprintEnvelope,blueprintApproval,repairCount,errors}),reason:repaired.reason});proposal=repaired.proposal;repairCount=1;stages.push({stage:'SESSION_REPAIR',status:'REPAIRED',reason:'DETERMINISTIC'});continue;}catch(re){errors.push({stage:'SESSION_REPAIR',...errorInfo(re)});return deepFreeze(resultBase({status:'SESSION_REPAIR_FAILED',stages:[...stages,{stage:'SESSION_REPAIR',status:'ERROR'}],blueprintEnvelope,blueprintApproval,repairCount,errors}));}}return deepFreeze(resultBase({status:'SESSION_GRAPH_CONTRACT_REJECTED',stages,blueprintEnvelope,blueprintApproval,repairCount,errors}));}
   if(hash(authoritativeBlueprint)!==authoritativeBlueprintHash)throw Error('PIPELINE_BLUEPRINT_MUTATED_DURING_SESSION_STAGE');
   const input={...source,graph};let semantic,criticalAudit;

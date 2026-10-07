@@ -184,6 +184,38 @@ export function sessionGraphAuthoringSchema(source){
 export function providerAuthoringShapeSchema(source){return projectShape(sessionGraphAuthoringSchema(source));}
 function projectShape(n){const o={};if(n.anyOf){o.type=n.anyOf.map(child=>child.type);return o;}if(n.type!==undefined)o.type=n.type;if(n.properties){o.properties={};for(const [k,v] of Object.entries(n.properties))o.properties[k]=projectShape(v);o.required=[...(n.required||[])];}if(n.items)o.items=projectShape(n.items);return o;}
 
+export function normalizeSessionGraphAuthoring(proposal,source){
+ const copy=structuredClone(proposal);
+ if(!Array.isArray(copy.sessions))return copy;
+ const {blueprint,curriculum}=source;
+ const pdaById=new Map((curriculum.pdas||[]).map(p=>[p.pda_id,p]));
+ const selections=new Map((blueprint.ltg_strategy.selections||[]).map(s=>[s.project_id,s]));
+ const ltgCatalog=new Map((curriculum.ltg||[]).map(p=>[p.project_id,p]));
+ for(const session of copy.sessions){
+  const b=blueprint.session_progression.find(s=>s.session_number===session.session_number);
+  const focus=new Set(b?.pda_focus||[]);
+  for(const activity of session.activities||[]){
+   for(const grade of activity.grade_participation||[]){
+    grade.pda_mobilization=(grade.pda_mobilization||[]).filter(m=>{
+     const p=pdaById.get(m.pda_id);
+     return !!p&&p.grade===grade.grade&&focus.has(m.pda_id);
+    });
+   }
+   activity.ltg_use=(activity.ltg_use||[]).filter(use=>{
+    const sel=selections.get(use.project_id),project=ltgCatalog.get(use.project_id);
+    if(!sel||!project)return false;
+    const gradeOk=(activity.grade_participation||[]).some(g=>g.grade===project.grade);
+    const pdaOk=(sel.pda_ids||[]).some(id=>focus.has(id)&&(project.verified_pda_links||[]).includes(id));
+    if(!gradeOk||!pdaOk)return false;
+    if(use.activity_id===null)return !(sel.activity_ids||[]).length;
+    return (sel.activity_ids||[]).includes(use.activity_id)&&(project.verified_activities||[]).some(v=>v.activity_id===use.activity_id&&v.verification_status==='verified');
+   });
+   activity.ltg_activity_ids=[...new Set(activity.ltg_use.map(u=>u.activity_id).filter(id=>id!==null))];
+  }
+ }
+ return copy;
+}
+
 export function validateSessionGraphAuthoring(proposal,source){
  const schema=sessionGraphAuthoringSchema(source);const errors=schemaErrors(proposal,schema);
  const extra=(v,s,p='$')=>{if(Array.isArray(v)){if(s.maxItems!==undefined&&v.length>s.maxItems)errors.push(`${p}: maxItems`);v.forEach((x,i)=>extra(x,s.items,`${p}[${i}]`));return}if(v&&typeof v==='object'){for(const [k,x] of Object.entries(v))if(s.properties?.[k])extra(x,s.properties[k],`${p}.${k}`);return}if(typeof v==='string'&&s.maxLength!==undefined&&v.length>s.maxLength)errors.push(`${p}: maxLength ${s.maxLength}`);};
