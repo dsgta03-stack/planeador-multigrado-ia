@@ -216,6 +216,10 @@ export function normalizeSessionGraphAuthoring(proposal,source){
    });
    activity.ltg_activity_ids=[...new Set(activity.ltg_use.map(u=>u.activity_id).filter(id=>id!==null))];
   }
+  const usedProjects=new Set((session.activities||[]).flatMap(a=>(a.ltg_use||[]).map(u=>u.project_id)));
+  session.ltg_decisions=(session.ltg_decisions||[])
+   .filter(d=>selections.has(d.project_id))
+   .map(d=>({...d,decision:usedProjects.has(d.project_id)?'USE':'NOT_RECOMMENDED'}));
  }
  return copy;
 }
