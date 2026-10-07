@@ -194,7 +194,11 @@ export function normalizeSessionGraphAuthoring(proposal,source){
  for(const session of copy.sessions){
   const b=blueprint.session_progression.find(s=>s.session_number===session.session_number);
   const focus=new Set(b?.pda_focus||[]);
+  const methods=new Set(b?.methodology_operations||[]);
+  const artifacts=new Set(b?.expected_output_artifact_ids||[]);
   for(const activity of session.activities||[]){
+   activity.methodology_operations=(activity.methodology_operations||[]).filter(op=>methods.has(op));
+   activity.contributes_to_artifact_ids=(activity.contributes_to_artifact_ids||[]).filter(id=>artifacts.has(id));
    for(const grade of activity.grade_participation||[]){
     grade.pda_mobilization=(grade.pda_mobilization||[]).filter(m=>{
      const p=pdaById.get(m.pda_id);
