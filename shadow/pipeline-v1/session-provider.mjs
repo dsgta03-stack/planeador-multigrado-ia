@@ -66,11 +66,15 @@ const LOCAL_SIGNAL_IDS=Object.freeze([
 function repairRuleId(text=''){
  if(/\bSGD-009\b/.test(text))return 'SGD-009';
  if(/\bSGD-010\b/.test(text))return 'SGD-010';
+ if(/\bSGD-013\b/.test(text))return 'SGD-013';
+ if(/\bPDA .+ outside session\/grade\b/.test(text))return 'PDA_OUTSIDE_SESSION_GRADE';
  return LOCAL_SIGNAL_IDS.find(id=>text.includes(id))||'SESSION_REPAIR_TRIGGER';
 }
 function repairRequirement(ruleId){
  if(ruleId==='SGD-009')return 'Cada input_ref debe ser un input_artifact_id autorizado por el Blueprint para esa sesión o el activity_key de una actividad anterior de ESA MISMA sesión. Elimina referencias a activity_key de otra sesión, actividades futuras, output_ref compilados o referencias inventadas. Si intentabas consumir un COMPLEMENTARY de otra sesión, resuelve ese consumo dentro de la sesión productora; no enlaces sesiones mediante activity_key.';
  if(ruleId==='SGD-010')return 'Si la actividad permanece COMPLEMENTARY, una actividad posterior real de ESA MISMA sesión debe consumir su activity_key mediante input_refs. Nunca satisfagas el consumidor en una sesión posterior. Si realmente produce un componente observable de un artefacto autorizado, puede ser DIRECT; no inventes artifact_id.';
+ if(ruleId==='SGD-013')return 'Fix only the indicated LTG use. Keep only ltg_use entries whose project is selected, whose participating grade is compatible, and whose PDA link is verified inside the pda_focus of that same session. Remove unverified LTG uses and also remove their activity_id from ltg_activity_ids. Align ltg_decisions with the concrete uses that remain. Do not invent project_id, activity_id, PDA links, or modify the ProjectBlueprint.';
+ if(ruleId==='PDA_OUTSIDE_SESSION_GRADE')return 'In the indicated scope, remove from pda_mobilization only the observed PDA when it is not in the pda_focus of that session or when its official grade does not match grade_participation.grade. Do not move the PDA to another grade, do not invent another PDA, and do not modify the ProjectBlueprint.';
  if(ruleId==='RECONOCIMIENTO_LOCAL_ACTION')return 'La actividad que porta RECONOCIMIENTO debe ejecutar una acción observable de reconocer, identificar, comparar, revisar o detectar y nombrar un objeto válido como hallazgo, relación, dificultad, criterio, diferencia, avance, ajuste, necesidad, resultado, cambio, pendiente, falta, mejora o calidad. Si no ocurre ahí, mueve la operación a otra actividad auténtica de la misma sesión.';
  if(LOCAL_SIGNAL_IDS.includes(ruleId))return 'No fabriques la señal local faltante. Si la acción auténtica de esa misma actividad no satisface el componente, cambia la movilización a DEVELOPING; sólo conserva WORKED cuando el componente ya se ejecuta localmente.';
  return 'Corrige literalmente este defecto sin modificar decisiones aprobadas del ProjectBlueprint y vuelve a comprobar la misma regla antes de responder.';
@@ -89,7 +93,7 @@ export function repairTargetsFromContext(ctx={}){
  const expanded=[];
  for(const item of raw){
   if(!triggering&&item?.code==='SESSION_GRAPH_AUTHORING_INVALID'&&typeof item.message==='string'&&item.message.startsWith(AUTHORING_CONTRACT_PREFIX)){
-   const defects=item.message.slice(AUTHORING_CONTRACT_PREFIX.length).split(/;\s+(?=\$\.sessions\[)/).map(x=>x.trim()).filter(Boolean);
+   const defects=item.message.slice(AUTHORING_CONTRACT_PREFIX.length).split(/;\s+(?=(?:\$\.sessions\[|SGD-\d{3}\b))/).map(x=>x.trim()).filter(Boolean);
    expanded.push(...defects.map(text=>({kind:'defect',text,source:'SESSION_COMPILE'})));
    continue;
   }

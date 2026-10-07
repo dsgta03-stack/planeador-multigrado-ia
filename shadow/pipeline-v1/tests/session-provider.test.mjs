@@ -155,3 +155,19 @@ test('provider 503 is surfaced and is not replayed by adapter',async()=>{
 test('adapter is locked to Gemini 3.5 Flash-Lite',()=>{
  assert.throws(()=>createSessionGraphDrivers({endpoint,token,model:'gemini-3.1-pro-preview'}),/SESSION_PROVIDER_MODEL_LOCKED/);
 });
+
+test('SGD-013 and PDA outside session grade become explicit independent repair targets',()=>{
+ const compile_error={
+  code:'SESSION_GRAPH_AUTHORING_INVALID',
+  message:'SESSION_GRAPH_AUTHORING_CONTRACT: SGD-013 LTG use without verified grade/PDA link; $.sessions[3].act_s3_01: PDA F4-ENS-3-023 outside session/grade'
+ };
+ const targets=repairTargetsFromContext({compile_error});
+ assert.equal(targets.length,2);
+ assert.deepEqual(targets.map(x=>x.rule_id),['SGD-013','PDA_OUTSIDE_SESSION_GRADE']);
+ assert.equal(targets[0].scope,null);
+ assert.equal(targets[1].scope,'$.sessions[3].act_s3_01');
+ assert.match(targets[0].required,/LTG use/i);
+ assert.match(targets[0].required,/verified/i);
+ assert.match(targets[1].required,/pda_mobilization/i);
+ assert.match(targets[1].required,/do not move/i);
+});
