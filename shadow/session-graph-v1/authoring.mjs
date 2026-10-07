@@ -198,10 +198,13 @@ export function normalizeSessionGraphAuthoring(proposal,source,previousProposal=
   const focus=new Set(b?.pda_focus||[]);
   const methods=new Set(b?.methodology_operations||[]);
   const artifacts=new Set(b?.expected_output_artifact_ids||[]);
+  const allowedSessionInputs=new Set(b?.input_artifact_ids||[]);
+  const seenActivityKeys=new Set();
   for(const activity of session.activities||[]){
    const previousActivity=(previousSession?.activities||[]).find(a=>a.activity_key===activity.activity_key);
    activity.methodology_operations=(activity.methodology_operations||[]).filter(op=>methods.has(op));
    activity.contributes_to_artifact_ids=(activity.contributes_to_artifact_ids||[]).filter(id=>artifacts.has(id));
+   activity.input_refs=(activity.input_refs||[]).filter(ref=>allowedSessionInputs.has(ref)||seenActivityKeys.has(ref));
    for(const grade of activity.grade_participation||[]){
     grade.pda_mobilization=(grade.pda_mobilization||[]).filter(m=>{
      const p=pdaById.get(m.pda_id);
@@ -225,6 +228,7 @@ export function normalizeSessionGraphAuthoring(proposal,source,previousProposal=
     return (sel.activity_ids||[]).includes(use.activity_id)&&(project.verified_activities||[]).some(v=>v.activity_id===use.activity_id&&v.verification_status==='verified');
    });
    activity.ltg_activity_ids=[...new Set(activity.ltg_use.map(u=>u.activity_id).filter(id=>id!==null))];
+   seenActivityKeys.add(activity.activity_key);
   }
   const usedProjects=new Set((session.activities||[]).flatMap(a=>(a.ltg_use||[]).map(u=>u.project_id)));
   session.ltg_decisions=(session.ltg_decisions||[])
