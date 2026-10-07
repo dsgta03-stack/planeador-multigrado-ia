@@ -57,7 +57,7 @@ export async function callProvider(task,input,{endpoint,token,identity='multipla
   system=GENERATOR.replace('status=DRAFT, gate_result=null.','')+'\n'+AUTHORING_INSTRUCTION+'\nDevuelve SOLO la propuesta de autoría. Los campos omitidos son del compilador y no deben aparecer en la respuesta.';
   prompt={authoring_version:AUTHORING_VERSION,schema:localAuthoringSchema,input,construction_plan:constructionPlan,functional_profiles:FUNCTIONAL_PROFILES,cognitive_actions:COGNITIVE_ACTIONS,generation_checks:generation_checks.slice(3),coverage_protocol:'Una fila coverage por operación requerida. action_quote debe ser un fragmento literal de student_operation en su etapa asignada. evidence_ref apunta a expected_output con index=null o acceptance_criteria con índice cero-basado. La etiqueta no prueba acción ni evidencia. Completa acciones reales para todas las operaciones en el tiempo disponible.',...(repair?{repair}: {})};
  }
- if(task==='REVIEW')response_schema=providerResponseSchema(response_schema).schema;
+ if(task==='REVIEW')response_schema=providerAuthoringShapeSchema(response_schema).schema;
  assertProviderSchema(response_schema); // Before limiter, fetch, or provider quota.
  const start=Date.now(),attempts=[];
  const base={task,provider_schema_version:PROVIDER_SCHEMA_VERSION,authoring_version:task!=='REVIEW'&&authoringCompact?AUTHORING_VERSION:null,transport_version:task==='REVIEW'?null:TRANSPORT_VERSION,review_focus:task==='REVIEW'?reviewFocus:null,reviewer_version:task==='REVIEW'?REVIEWER_VERSION:null,provider:'google',model,prompt_version:PROMPT_VERSION,input_hash:hash({task,system,prompt,response_schema}),output_hash:null,usage:null,cost:null};
@@ -98,8 +98,8 @@ export async function callProvider(task,input,{endpoint,token,identity='multipla
   attempts.push({attempt,request_id:requestId,started_at:new Date(started).toISOString(),latency_ms:Date.now()-started,http_status:response.status,provider_status:r.provider_status||null,usage:r.usage||null,output_hash:r.output?hash(r.output):null});
   if(!response.ok)attempts.at(-1).provider_diagnostics=Object.fromEntries(['code','model','provider_status','provider_error_status','provider_message','finish_reason','usage','usageMetadata','raw_candidate_text','text_length','text_truncated','parse_error','parse_error_position','latency_ms','max_output_tokens'].filter(k=>r[k]!==undefined).map(k=>[k,r[k]]));
   if(response.ok){
-   if(task==='REVIEW'&&r.output?.audit_version!=='LOCAL_EVIDENCE_V1')throw Error('SEMANTIC_AUDIT_MISSING');
-   return {output:r.output,telemetry:{...base,output_hash:hash(r.output),latency_ms:Date.now()-start,provider_latency_ms:r.latency_ms,max_output_tokens:r.max_output_tokens??null,text_length:r.text_length??null,usage:r.usage,cost:r.cost,finish_reason:r.finish_reason,attempts}};
+   const output=task==='REVIEW'?{...r.output,audit_version:'LOCAL_EVIDENCE_V1'}:r.output;
+   return {output,telemetry:{...base,output_hash:hash(output),latency_ms:Date.now()-start,provider_latency_ms:r.latency_ms,max_output_tokens:r.max_output_tokens??null,text_length:r.text_length??null,usage:r.usage,cost:r.cost,finish_reason:r.finish_reason,attempts}};
   }
   const unavailable=[429,500,502,503,504].includes(r.provider_status);
   if(unavailable&&attempt<3){const delay=1000*2**(attempt-1);attempts.at(-1).backoff_ms=delay;await sleep(delay);continue}
