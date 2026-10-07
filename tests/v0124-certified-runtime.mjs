@@ -4,7 +4,7 @@ import {readFileSync} from 'node:fs';
 import {createCertifiedPipelineRunner,CERTIFIED_RUNTIME_VERSION} from '../lib/v0124/certified-runtime.mjs';
 import {runShadowPipeline} from '../shadow/pipeline-v1/pipeline.mjs';
 
-const endpoint='https://example.invalid/plan-project-blueprint-v1-shadow';
+const endpoint='https://example.invalid/functions/v1/plan-project-blueprint-v1-shadow';
 const token='secret-token-'.repeat(4);
 const sources=Object.freeze({constraints:{id:'c'},curriculum:{id:'u'},methodology:{id:'m'}});
 const config={endpoint,token,identity:'shadow-integration',fetchImpl:()=>{throw Error('UNEXPECTED_NETWORK');},sleep:async()=>{}};
@@ -16,6 +16,7 @@ test('construction has no side effects; model, repairs, endpoint, identity and t
  assert.equal(calls,0);
  for(const overrides of [
   {model:'gemini-3.1-flash-lite'}, {maxSessionRepairs:2}, {maxSessionRepairs:0},
+  {endpoint:'https://example.invalid/plan-project-blueprint-v1-shadow'},
   {endpoint:'https://example.invalid/other-shadow'},
   {endpoint:'http://example.invalid/plan-project-blueprint-v1-shadow'},
   {endpoint:'https://example.invalid/plan-project-blueprint-v1-shadow?x=1'},
