@@ -57,7 +57,7 @@ export async function callProvider(task,input,{endpoint,token,identity='multipla
   system=GENERATOR.replace('status=DRAFT, gate_result=null.','')+'\n'+AUTHORING_INSTRUCTION+'\nDevuelve SOLO la propuesta de autoría. Los campos omitidos son del compilador y no deben aparecer en la respuesta.';
   prompt={authoring_version:AUTHORING_VERSION,schema:localAuthoringSchema,input,construction_plan:constructionPlan,functional_profiles:FUNCTIONAL_PROFILES,cognitive_actions:COGNITIVE_ACTIONS,generation_checks:generation_checks.slice(3),coverage_protocol:'Una fila coverage por operación requerida. action_quote debe ser un fragmento literal de student_operation en su etapa asignada. evidence_ref apunta a expected_output con index=null o acceptance_criteria con índice cero-basado. La etiqueta no prueba acción ni evidencia. Completa acciones reales para todas las operaciones en el tiempo disponible.',...(repair?{repair}: {})};
  }
- if(task==='REVIEW')response_schema=providerResponseSchema(response_schema).schema;
+ if(task==='REVIEW')response_schema=providerAuthoringShapeSchema(response_schema).schema;
  assertProviderSchema(response_schema); // Before limiter, fetch, or provider quota.
  const start=Date.now(),attempts=[];
  const base={task,provider_schema_version:PROVIDER_SCHEMA_VERSION,authoring_version:task!=='REVIEW'&&authoringCompact?AUTHORING_VERSION:null,transport_version:task==='REVIEW'?null:TRANSPORT_VERSION,review_focus:task==='REVIEW'?reviewFocus:null,reviewer_version:task==='REVIEW'?REVIEWER_VERSION:null,provider:'google',model,prompt_version:PROMPT_VERSION,input_hash:hash({task,system,prompt,response_schema}),output_hash:null,usage:null,cost:null};
