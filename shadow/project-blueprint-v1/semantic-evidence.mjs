@@ -37,7 +37,21 @@ export function applyEvidenceAudit(input,output){
   return {rule_id:rule,severity:'CRITICAL',status:previous?.status==='FAIL'?'FAIL':result,scope:rule==='BPS-004'||rule==='BPS-005'?'pda_checks':rule==='BPS-007'?'stage_checks':'methodology_checks',observed:JSON.stringify(checks||[]),expected:BPS[rule]};
  };
  const pdaUnits=input.curriculum.pdas.filter(p=>input.constraints.selected_pda_ids.includes(p.pda_id));
- const validatePda=(c,p)=>c.grade===p.grade&&c.contribution_ids.length>0&&c.contribution_ids.every(id=>b.grade_contributions.some(g=>g.contribution_id===id&&g.grade===p.grade&&g.pda_ids.includes(p.pda_id)))&&c.stage_ids.every(id=>stages.has(id))&&quoteValid(c.stage_ids,c.operation_quote)&&artifactsValid(c.stage_ids,c.artifact_ids)&&c.evidence_reason.trim().length>0;
+ const validatePda=(c,p)=>{
+  const detail={
+   pda_id:p.pda_id,
+   grade_match:c.grade===p.grade,
+   contributions_present:c.contribution_ids.length>0,
+   contributions_valid:c.contribution_ids.every(id=>b.grade_contributions.some(g=>g.contribution_id===id&&g.grade===p.grade&&g.pda_ids.includes(p.pda_id))),
+   stages_valid:c.stage_ids.every(id=>stages.has(id)),
+   quote_valid:quoteValid(c.stage_ids,c.operation_quote),
+   artifacts_valid:artifactsValid(c.stage_ids,c.artifact_ids),
+   evidence_reason_present:c.evidence_reason.trim().length>0
+  };
+  const valid=detail.grade_match&&detail.contributions_present&&detail.contributions_valid&&detail.stages_valid&&detail.quote_valid&&detail.artifacts_valid&&detail.evidence_reason_present;
+  if(!valid)console.error('[BLUEPRINT_PDA_EVIDENCE_INVALID]',JSON.stringify(detail));
+  return valid;
+ };
  const findings=(output.findings||[]).filter(f=>!['BPS-004','BPS-005','BPS-007','BPS-008'].includes(f.rule_id));
  findings.push(aggregate('BPS-004',pdaUnits,output.pda_checks,'pda_id','bps004',validatePda),aggregate('BPS-005',pdaUnits,output.pda_checks,'pda_id','bps005',validatePda));
  findings.push(aggregate('BPS-007',b.project_stages,output.stage_checks,'stage_id','bps007',(c,s)=>quoteValid([s.stage_id],c.operation_quote)&&c.artifact_id===s.output_artifact_id&&c.criteria_quote.trim().length>0&&s.acceptance_criteria.some(a=>a.includes(c.criteria_quote))&&c.consumed_by.length>0&&c.consumed_by.every(id=>s.consumed_by.includes(id))&&c.outcome_link.trim().length>0));
