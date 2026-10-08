@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {hash,schemaErrors} from '../../project-blueprint-v1/contracts.mjs';
 import {executableSource,ltgFixture,useLtg} from './pedagogical-fixture.mjs';
-import {teacherExecutabilityMissing,validateSessionGraphAuthoring,providerAuthoringShapeSchema,SESSION_GRAPH_AUTHORING_INSTRUCTION} from '../authoring.mjs';
+import {teacherExecutabilityMissing,validateSessionGraphAuthoring,normalizeSessionGraphAuthoring,providerAuthoringShapeSchema,SESSION_GRAPH_AUTHORING_INSTRUCTION} from '../authoring.mjs';
 import {compileSessionGraph} from '../session-graph.mjs';
 import {sessionGraphGate,sessionSemanticInputHash} from '../gate.mjs';
 import {SGS} from '../catalog.mjs';
@@ -94,6 +94,34 @@ test('concrete instructions accept unrestricted verbs without accepting generic 
   assert.deepEqual(teacherExecutabilityMissing(a),[],text);
   assert.equal(validateSessionGraphAuthoring(f.proposal,f),true,text);
  }
+});
+test('normalizer removes supports that are not authorized by teacher constraints',()=>{
+ const f=executableSource();
+ const activity=f.proposal.sessions[0].activities[0];
+ const authorized=[...(activity.supports||[])];
+ activity.supports=[...authorized,'apoyo inventado por proveedor'];
+ const normalized=normalizeSessionGraphAuthoring(f.proposal,f);
+ assert.deepEqual(normalized.sessions[0].activities[0].supports,authorized);
+ assert.equal(normalized.sessions[0].activities[0].supports.includes('apoyo inventado por proveedor'),false);
+});
+
+test('SGD-013 SUPPORT missing decision reports session, project and concrete use state',()=>{
+ const f=ltgFixture('SUPPORT');
+ useLtg(f);
+ const session=f.proposal.sessions[0];
+ const projectId=f.blueprint.ltg_strategy.selections[0].project_id;
+ session.ltg_decisions=[];
+ assert.throws(
+  ()=>validateSessionGraphAuthoring(f.proposal,f),
+  error=>{
+   assert.equal(error.code,'SESSION_GRAPH_AUTHORING_INVALID');
+   assert.match(error.message,/SGD-013 SUPPORT requires explicit session LTG decision/);
+   assert.match(error.message,/session=1/);
+   assert.match(error.message,new RegExp(`project_id=${projectId}`));
+   assert.match(error.message,/concrete_use=present/);
+   return true;
+  }
+ );
 });
 test('SUPPORT can strengthen one session without forced use in other sessions sharing its PDA',()=>{
  const f=ltgFixture('SUPPORT');useLtg(f);

@@ -144,7 +144,7 @@ export function ltgExecutionErrors(sessions,source){
    if(!sel.pda_ids.some(id=>focus.includes(id)))continue;
    const d=decisions.find(d=>d.project_id===sel.project_id);
    const used=uses.some(x=>x.use.project_id===sel.project_id);
-   if(!d&&(sel.role==='OPTIONAL'||used))errors.push(`SGD-013 ${sel.role} requires explicit session LTG decision`);
+   if(!d&&(sel.role==='OPTIONAL'||used))errors.push(`SGD-013 ${sel.role} requires explicit session LTG decision session=${session.session_number} project_id=${sel.project_id} concrete_use=${used?'present':'absent'}`);
   }
  }
  for(const sel of selections)if(sel.role==='CORE'&&!sessions.some(s=>s.activities.some(a=>(a.ltg_use||[]).some(u=>u.project_id===sel.project_id))))errors.push('SGD-013 CORE disappeared');
@@ -191,6 +191,7 @@ export function normalizeSessionGraphAuthoring(proposal,source,previousProposal=
  const pdaById=new Map((curriculum.pdas||[]).map(p=>[p.pda_id,p]));
  const selections=new Map((blueprint.ltg_strategy.selections||[]).map(s=>[s.project_id,s]));
  const ltgCatalog=new Map((curriculum.ltg||[]).map(p=>[p.project_id,p]));
+ const allowedSupports=new Set(source.constraints.supports||[]);
  const previousSessions=new Map((previousProposal?.sessions||[]).map(s=>[s.session_number,s]));
  for(const session of copy.sessions){
   const b=blueprint.session_progression.find(s=>s.session_number===session.session_number);
@@ -204,6 +205,7 @@ export function normalizeSessionGraphAuthoring(proposal,source,previousProposal=
    const previousActivity=(previousSession?.activities||[]).find(a=>a.activity_key===activity.activity_key);
    activity.methodology_operations=(activity.methodology_operations||[]).filter(op=>methods.has(op));
    activity.contributes_to_artifact_ids=(activity.contributes_to_artifact_ids||[]).filter(id=>artifacts.has(id));
+   activity.supports=(activity.supports||[]).filter(support=>allowedSupports.has(support));
    activity.input_refs=(activity.input_refs||[]).filter(ref=>allowedSessionInputs.has(ref)||seenActivityKeys.has(ref));
    for(const grade of activity.grade_participation||[]){
     grade.pda_mobilization=(grade.pda_mobilization||[]).filter(m=>{
