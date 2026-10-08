@@ -30,6 +30,24 @@ test('compiled gate independently rejects stripped execution despite semantic PA
 test('CORE cannot disappear; verified use carries exact references',()=>{
  for(const role of ['CORE']){const f=ltgFixture(role);assert.throws(()=>validateSessionGraphAuthoring(f.proposal,f),/SGD-013/);useLtg(f);const {graph}=compileSessionGraph(f.proposal,f,{graph_id:role});const ref=graph.sessions[0].activities[0].ltg_use[0].reference;assert.equal(ref.book,'Proyectos de Aula');assert.equal(ref.grade,1);assert.deepEqual(ref.pages,{start:11,end:12});assert.equal(ref.verified_activity.summary,'Comparar acuerdos');}
 });
+test('SGD-013 mismatch reports session, project, decision and concrete use state',()=>{
+ const f=ltgFixture('CORE');
+ const session=f.proposal.sessions[0];
+ const projectId=f.blueprint.ltg_strategy.selections[0].project_id;
+ session.ltg_decisions=[{project_id:projectId,decision:'USE',reason:'Se utilizará el proyecto LTG en esta sesión.'}];
+ assert.throws(
+  ()=>validateSessionGraphAuthoring(f.proposal,f),
+  error=>{
+   assert.equal(error.code,'SESSION_GRAPH_AUTHORING_INVALID');
+   assert.match(error.message,/SGD-013 LTG decision\/use mismatch/);
+   assert.match(error.message,/session=1/);
+   assert.match(error.message,new RegExp(`project_id=${projectId}`));
+   assert.match(error.message,/decision=USE/);
+   assert.match(error.message,/concrete_use=absent/);
+   return true;
+  }
+ );
+});
 test('pertinent OPTIONAL requires concrete use or explicit session non-use rationale',()=>{
  const f=ltgFixture();assert.equal(validateSessionGraphAuthoring(f.proposal,f),true);delete f.proposal.sessions[1].ltg_decisions;assert.throws(()=>validateSessionGraphAuthoring(f.proposal,f),/SGD-013/);
  const valid=ltgFixture();useLtg(valid);assert.equal(validateSessionGraphAuthoring(valid.proposal,valid),true);valid.proposal.sessions[0].activities[0].ltg_use[0].activity_id='invented';assert.throws(()=>validateSessionGraphAuthoring(valid.proposal,valid),/unverified LTG activity/);

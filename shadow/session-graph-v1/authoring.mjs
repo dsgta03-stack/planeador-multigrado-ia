@@ -139,7 +139,7 @@ export function ltgExecutionErrors(sessions,source){
    if(GENERIC_EXECUTION.test(normalized(use.student_action)))errors.push('SGD-013 generic LTG use');
   }
   for(const a of session.activities||[]){const actual=(a.ltg_use||[]).map(u=>u.activity_id).filter(id=>id!==null);if(actual.length!==(a.ltg_activity_ids||[]).length||actual.some(id=>!a.ltg_activity_ids.includes(id)))errors.push('SGD-013 LTG IDs without concrete use');}
-  for(const d of decisions){errors.push(...schemaErrors(d,ltgDecisionSchema()).map(e=>'SGD-013 '+e));if(!selectionMap.has(d.project_id)||!d.reason?.trim()||GENERIC_EXECUTION.test(normalized(d.reason)))errors.push('SGD-013 invalid LTG decision');if((d.decision==='USE')!==uses.some(x=>x.use.project_id===d.project_id))errors.push('SGD-013 LTG decision/use mismatch');}
+  for(const d of decisions){errors.push(...schemaErrors(d,ltgDecisionSchema()).map(e=>'SGD-013 '+e));if(!selectionMap.has(d.project_id)||!d.reason?.trim()||GENERIC_EXECUTION.test(normalized(d.reason)))errors.push('SGD-013 invalid LTG decision');if((d.decision==='USE')!==uses.some(x=>x.use.project_id===d.project_id)){const used=uses.some(x=>x.use.project_id===d.project_id);errors.push(`SGD-013 LTG decision/use mismatch session=${session.session_number} project_id=${d.project_id} decision=${d.decision} concrete_use=${used?'present':'absent'}`);}}
   for(const sel of selections){
    if(!sel.pda_ids.some(id=>focus.includes(id)))continue;
    const d=decisions.find(d=>d.project_id===sel.project_id);
