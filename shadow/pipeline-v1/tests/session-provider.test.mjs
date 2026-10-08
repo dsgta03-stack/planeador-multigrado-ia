@@ -72,6 +72,22 @@ test('REPAIR preserves Blueprint as immutable context, runs full preflight, and 
  assert.deepEqual(sent.response_schema.required,['status','reason','proposal']);
 });
 
+test('REPAIR rejects a partial proposal that still fails teacher executability',async()=>{
+ const f=fixture();
+ const partial=structuredClone(f.proposal);
+ partial.sessions[0].activities[0].execution.grouping='organización flexible';
+ const fetchImpl=async()=>jsonResponse({provider:'google',finish_reason:'STOP',output:{status:'PROPOSAL',reason:'reparación parcial',proposal:partial}});
+ const drivers=createSessionGraphDrivers({endpoint,token,durableEvidence:false,fetchImpl});
+ await assert.rejects(
+  ()=>drivers.sessionRepair({...f.ctx,previous_proposal:f.proposal,compile_error:{code:'SESSION_GRAPH_AUTHORING_INVALID',message:'SESSION_GRAPH_AUTHORING_CONTRACT: $.sessions[0].a1: SGD-017 teacher executability missing execution.grouping'}}),
+  error=>{
+   assert.equal(error.code,'SESSION_GRAPH_AUTHORING_INVALID');
+   assert.match(error.message,/SGD-017/);
+   assert.match(error.message,/execution\.grouping/);
+   return true;
+  }
+ );
+});
 test('compound authoring contract is expanded into independent blocking repair targets',()=>{
  const compile_error={
   code:'SESSION_GRAPH_AUTHORING_INVALID',
