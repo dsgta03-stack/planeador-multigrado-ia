@@ -148,9 +148,33 @@ export function validateCompiledSessionGraph(graph,source){
    if(a.contribution_mode==='DIRECT'&&!a.contributes_to_artifact_ids.length)fail('SGD-010',`direct activity ${a.activity_id} has no artifact`);
   }
   for(const artifact of s.expected_output_artifact_ids)if(!s.activities.some(a=>a.contribution_mode==='DIRECT'&&a.contributes_to_artifact_ids.includes(artifact)))fail('SGD-010',`session ${s.session_number} expected artifact uncovered`);
-  const gradesWithPda=new Set((constraints.grades||[]).filter(g=>s.pda_focus.some(id=>source.curriculum.pdas.some(p=>p.pda_id===id&&p.grade===g))));
-  const participating=new Set(s.activities.flatMap(a=>a.grade_participation.filter(g=>g.pda_mobilization.length).map(g=>g.grade)));
-  for(const g of gradesWithPda)if(!participating.has(g))fail('SGD-014',`session ${s.session_number} grade ${g} not mobilized`);
+  const activeGrades=new Set(constraints.grades||[]);
+  const participatingGrades=new Set(
+   s.activities.flatMap(a=>a.grade_participation.map(g=>g.grade))
+  );
+  for(const g of activeGrades){
+   if(!participatingGrades.has(g))
+    fail('SGD-014',`session ${s.session_number} grade ${g} not participating`);
+  }
+
+  const gradesWithPda=new Set(
+   (constraints.grades||[]).filter(g=>
+    s.pda_focus.some(id=>
+     source.curriculum.pdas.some(p=>p.pda_id===id&&p.grade===g)
+    )
+   )
+  );
+  const gradesMobilizingPda=new Set(
+   s.activities.flatMap(a=>
+    a.grade_participation
+     .filter(g=>g.pda_mobilization.length)
+     .map(g=>g.grade)
+   )
+  );
+  for(const g of gradesWithPda){
+   if(!gradesMobilizingPda.has(g))
+    fail('SGD-014',`session ${s.session_number} grade ${g} PDA not mobilized`);
+  }
  }
  for(const r of blueprint.final_outcome.functional_requirements){const hits=graph.sessions.flatMap(s=>s.activities.map(a=>({s,a}))).filter(x=>x.a.functional_requirement_ids.includes(r.requirement_id)&&r.stage_ids.some(id=>x.s.stage_ids.includes(id)));if(!hits.length)fail('SGD-012',`functional requirement ${r.requirement_id} uncovered`)}
  if(blueprint.ltg_strategy.mode==='NONE'&&graph.sessions.some(s=>s.activities.some(a=>a.ltg_activity_ids.length)))fail('SGD-013','LTG links present in NONE mode');

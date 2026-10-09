@@ -221,3 +221,32 @@ test('semantic review keeps depth, simultaneous work and coherence fail-closed w
   assert.equal(sessionGraphGate(input,review).status,'FAIL');
  }
 });
+test('SGD-014 requires every active grade to participate in each session even without PDA focus',()=>{
+ const f=executableSource();
+
+ // Keep both grades active, but make grade 3 transversal in session 1:
+ // it has no PDA in that session and therefore must not borrow grade 1 PDA.
+ const session=f.proposal.sessions[0];
+ const blueprintSession=f.blueprint.session_progression[0];
+
+ blueprintSession.pda_focus=blueprintSession.pda_focus.filter(id=>
+  !f.curriculum.pdas.some(p=>p.pda_id===id&&p.grade===3)
+ );
+
+ for(const activity of session.activities){
+  activity.grade_participation=activity.grade_participation.filter(g=>g.grade!==3);
+ }
+
+ const h=hash(f.blueprint);
+ f.approval={
+  ...f.approval,
+  blueprint_hash:h,
+  evaluated_blueprint_hash:h,
+  approved_blueprint_hash:h
+ };
+
+ assert.throws(
+  ()=>compileSessionGraph(f.proposal,f,{graph_id:'missing-active-grade'}),
+  /SGD-014.*session 1.*grade 3/
+ );
+});
