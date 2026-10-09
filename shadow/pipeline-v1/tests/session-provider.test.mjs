@@ -96,13 +96,17 @@ test('compound authoring contract is expanded into independent blocking repair t
  const targets=repairTargetsFromContext({compile_error});
  assert.equal(targets.length,4);
  assert.deepEqual(targets.map(x=>x.target_id),['RT-1','RT-2','RT-3','RT-4']);
- assert.deepEqual(targets.map(x=>x.rule_id),['SGD-010','RECONOCIMIENTO_LOCAL_ACTION','EXPLICA_LOCAL_ACTION','INDAGA_SOURCE_OR_OBSERVATION']);
+ assert.deepEqual(targets.map(x=>x.rule_id),['SGD-010','RECONOCIMIENTO_LOCAL_ACTION','WORKED_COGNITIVE_REQUIREMENTS','WORKED_COGNITIVE_REQUIREMENTS']);
+ assert.deepEqual(targets[2].missing_requirements,['EXPLICA_LOCAL_ACTION']);
+ assert.deepEqual(targets[3].missing_requirements,['INDAGA_SOURCE_OR_OBSERVATION']);
+ assert.equal(targets[2].status_required,'WORKED');
+ assert.equal(targets[3].status_required,'WORKED');
  assert.equal(targets[0].scope,'$.sessions[2].s3_act2');
  assert.equal(targets[1].scope,'$.sessions[2].s2_act1');
  assert.match(targets[0].required,/input_refs/);
  assert.match(targets[1].required,/RECONOCIMIENTO/);
- assert.match(targets[2].required,/DEVELOPING/);
- assert.match(targets[3].required,/DEVELOPING/);
+ assert.match(targets[2].required,/prohibido degradar/);
+ assert.match(targets[3].required,/prohibido degradar/);
 });
 
 test('SGD-009 repair target forbids cross-session and future activity refs',()=>{

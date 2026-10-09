@@ -244,7 +244,10 @@ export function normalizeSessionGraphAuthoring(proposal,source,previousProposal=
   if(Array.isArray(session.ltg_decisions)){
    session.ltg_decisions=session.ltg_decisions
     .filter(d=>selections.has(d.project_id)).map(d=>{
-     const used=(session.activities||[]).some(a=>(a.ltg_use||[]).some(u=>u.project_id===d.project_id));
+     const used=(session.activities||[]).some(a=>(a.ltg_use||[]).some(u=>u.project_id===d.project_id&&schemaErrors(u,ltgUseSchema()).length===0&&!GENERIC_EXECUTION.test(normalized(u.student_action))));
+     if(used&&d.decision==='NOT_RECOMMENDED'){
+      return {...d,decision:'USE',reason:'Existe uso concreto verificado de este proyecto en una actividad de esta sesión.'};
+     }
      if(d.decision==='USE'&&!used&&selections.get(d.project_id)?.role==='SUPPORT'){
       return {...d,decision:'NOT_RECOMMENDED',reason:'No queda uso concreto verificado de este SUPPORT en esta sesión tras normalizar las referencias.'};
      }
