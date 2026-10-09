@@ -91,17 +91,53 @@ test('runtime has no legacy, UI, history, review cache, DOCX or live runner impo
   assert.ok(!source.includes(forbidden),forbidden);
 });
 
-test('certified project composition invoke preserves request contract and transport identity',async()=>{
- let captured=null;
+test('certified project composition invoke uses durable evidence transport',async()=>{
  let capturedInvoke=null;
+ const calls=[];
+ const sleeps=[];
 
  const fetchImpl=async(url,init)=>{
-  captured={url,init,body:JSON.parse(init.body)};
-  return new Response(JSON.stringify({
-   output:{proposal_version:'PROJECT_COMPOSITION_PROPOSAL_V1'},
-   request_id:'composition-request-1',
-   model:'gemini-3.5-flash-lite'
-  }),{status:200,headers:{'content-type':'application/json'}});
+  const body=JSON.parse(init.body);
+  calls.push({url,init,body});
+
+  if(body.task==='PROJECT_COMPOSITION'){
+   return new Response(JSON.stringify({
+    status:'ACCEPTED',
+    request_id:body.request_id
+   }),{
+    status:202,
+    headers:{'content-type':'application/json'}
+   });
+  }
+
+  if(body.task==='EVIDENCE_READ'){
+   const evidenceReads=
+    calls.filter(call=>call.body.task==='EVIDENCE_READ').length;
+
+   if(evidenceReads===1){
+    return new Response(JSON.stringify({
+     status:'PENDING'
+    }),{
+     status:202,
+     headers:{'content-type':'application/json'}
+    });
+   }
+
+   return new Response(JSON.stringify({
+    http_status:200,
+    body:{
+     output:{
+      proposal_version:'PROJECT_COMPOSITION_PROPOSAL_V1'
+     },
+     model:'gemini-3.5-flash-lite'
+    }
+   }),{
+    status:200,
+    headers:{'content-type':'application/json'}
+   });
+  }
+
+  throw Error(`UNEXPECTED_TASK:${body.task}`);
  };
 
  const factories={
@@ -119,16 +155,21 @@ test('certified project composition invoke preserves request contract and transp
     composition:{
      schema_version:'PROJECT_COMPOSITION_V1',
      composition_id:'fixture',
-     base:{origin:'AI_ORIGINAL',project_id:null},
+     base:{
+      origin:'AI_ORIGINAL',
+      project_id:null
+     },
      enrichments:[]
     },
-    provider:{provider_version:'fixture'}
+    provider:{
+     provider_version:'fixture'
+    }
    });
   },
   async runShadowPipeline(){
    const request={
     task:'GENERATE',
-    prompt_version:'PROJECT_COMPOSITION_PROMPT_V1',
+    prompt_version:'SHOULD_BE_OVERRIDDEN',
     system:'composition system',
     prompt:{instruction:'compose'},
     input:{value:'fixture'},
@@ -138,10 +179,27 @@ test('certified project composition invoke preserves request contract and transp
 
    const result=await capturedInvoke(request);
 
-   assert.equal(result.request_id,'composition-request-1');
-   assert.equal(result.model,'gemini-3.5-flash-lite');
+   assert.equal(
+    result.model,
+    'gemini-3.5-flash-lite'
+   );
 
-   return {status:'BLUEPRINT_NOT_APPROVED',errors:[]};
+   assert.match(
+    result.request_id,
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+   );
+
+   assert.deepEqual(
+    result.output,
+    {
+     proposal_version:'PROJECT_COMPOSITION_PROPOSAL_V1'
+    }
+   );
+
+   return {
+    status:'BLUEPRINT_NOT_APPROVED',
+    errors:[]
+   };
   }
  };
 
@@ -150,45 +208,120 @@ test('certified project composition invoke preserves request contract and transp
   token,
   identity:'shadow-integration',
   fetchImpl,
-  sleep:async()=>{},
+  sleep:async ms=>{
+   sleeps.push(ms);
+  },
   factories
  });
 
  const result=await runner(sources);
 
- assert.equal(result.status,'BLUEPRINT_NOT_APPROVED');
+ assert.equal(
+  result.status,
+  'BLUEPRINT_NOT_APPROVED'
+ );
 
  assert.equal(
-  captured.url,
+  calls.length,
+  3
+ );
+
+ const submit=calls[0];
+ const firstPoll=calls[1];
+ const secondPoll=calls[2];
+
+ assert.equal(
+  submit.url,
   endpoint
  );
 
  assert.equal(
-  captured.init.method,
+  submit.init.method,
   'POST'
  );
 
  assert.equal(
-  captured.init.headers.authorization,
+  submit.init.headers.authorization,
   `Bearer ${token}`
  );
 
  assert.equal(
-  captured.init.headers['x-shadow-identity'],
+  submit.init.headers['x-shadow-identity'],
   'shadow-integration'
  );
 
+ assert.equal(
+  submit.body.task,
+  'PROJECT_COMPOSITION'
+ );
+
+ assert.equal(
+  submit.body.prompt_version,
+  'PROJECT_COMPOSITION_PROMPT_V1'
+ );
+
+ assert.equal(
+  submit.body.model,
+  'gemini-3.5-flash-lite'
+ );
+
+ assert.equal(
+  submit.body.system,
+  'composition system'
+ );
+
  assert.deepEqual(
-  captured.body,
-  {
-   task:'GENERATE',
-   prompt_version:'PROJECT_COMPOSITION_PROMPT_V1',
-   model:'gemini-3.5-flash-lite',
-   system:'composition system',
-   prompt:{instruction:'compose'},
-   input:{value:'fixture'},
-   response_schema:{type:'object'},
-   input_hash:'a'.repeat(64)
-  }
+  submit.body.prompt,
+  {instruction:'compose'}
+ );
+
+ assert.deepEqual(
+  submit.body.input,
+  {value:'fixture'}
+ );
+
+ assert.deepEqual(
+  submit.body.response_schema,
+  {type:'object'}
+ );
+
+ assert.equal(
+  submit.body.input_hash,
+  'a'.repeat(64)
+ );
+
+ assert.match(
+  submit.body.request_id,
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+ );
+
+ assert.equal(
+  firstPoll.body.task,
+  'EVIDENCE_READ'
+ );
+
+ assert.equal(
+  firstPoll.body.request_id,
+  submit.body.request_id
+ );
+
+ assert.equal(
+  firstPoll.body.part,
+  'result'
+ );
+
+ assert.equal(
+  secondPoll.body.task,
+  'EVIDENCE_READ'
+ );
+
+ assert.equal(
+  secondPoll.body.request_id,
+  submit.body.request_id
+ );
+
+ assert.deepEqual(
+  sleeps,
+  [1000]
  );
 });
