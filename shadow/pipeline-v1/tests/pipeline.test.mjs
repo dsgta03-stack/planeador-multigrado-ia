@@ -27,3 +27,69 @@ test('SessionGraph may request Blueprint revision but cannot perform it',async()
 test('general semantic PASS cannot bypass a failing critical claims audit',async()=>{const f=fixture();let repairs=0,criticalCalls=0;const critical=async ({request})=>{criticalCalls++;const out=await passCriticalReview({request});if(criticalCalls===1&&out.methodology_link_audits.length)out.methodology_link_audits[0].status='FAIL';return out};const result=await runShadowPipeline({sources:f.sources,drivers:{blueprintRunner:async()=>f.blueprintEnvelope,sessionAuthor:async()=>f.proposal,sessionReview:passReview,sessionCriticalReview:critical,sessionRepair:async()=>{repairs++;return structuredClone(f.proposal)}},options:{graphId:'g-critical'}});assert.equal(result.status,'READY_FOR_TEACHER');assert.equal(result.repair_count,1);assert.equal(repairs,1);assert.equal(criticalCalls,2);assert.equal(result.session_critical_gate.status,'PASS');});
 test('missing critical reviewer fails closed',async()=>{const f=fixture();const result=await runShadowPipeline({sources:f.sources,drivers:{blueprintRunner:async()=>f.blueprintEnvelope,sessionAuthor:async()=>f.proposal,sessionReview:passReview},options:{graphId:'g-missing-critical'}});assert.equal(result.status,'SESSION_REVIEW_UNAVAILABLE');assert.equal(result.session_approval,null);});
 test('teacher projection rejects a graph approval bound to different bytes',async()=>{const f=fixture();const ready=await runShadowPipeline({sources:f.sources,drivers:{blueprintRunner:async()=>f.blueprintEnvelope,sessionAuthor:async()=>f.proposal,sessionReview:passReview,sessionCriticalReview:passCriticalReview},options:{graphId:'g5'}});const bad={...ready.session_approval,approved_graph_hash:'0'.repeat(64),graph_hash:'0'.repeat(64)};assert.throws(()=>projectTeacherPlan({blueprint:ready.blueprint,blueprintApproval:ready.blueprint_approval,graph:ready.session_graph,graphApproval:bad}),/SESSION_GRAPH_NOT_APPROVED/);});
+
+test('project composition runs before Blueprint and is preserved in pipeline result',async()=>{
+ const f=fixture(),calls=[];
+ const composition={
+  schema_version:'PROJECT_COMPOSITION_V1',
+  composition_id:'pc-pipeline-1',
+  source:{},
+  methodology:{},
+  base:{origin:'AI_ORIGINAL',project_id:null},
+  enrichments:[],
+  references:[],
+  grade_coverage:[],
+  final_outcome:{},
+  cohesion:{},
+  rejected_options:[],
+  ai_original_required:true
+ };
+ const providerMeta={provider_version:'test-composition-provider'};
+ const result=await runShadowPipeline({
+  sources:f.sources,
+  drivers:{
+   projectCompositionProvider:async(sources,pool)=>{
+    calls.push('COMPOSITION');
+    assert.deepEqual(sources,f.sources);
+    assert.ok(pool);
+    return {composition,provider:providerMeta};
+   },
+   blueprintRunner:async(sources,{blueprintOptions})=>{
+    calls.push('BLUEPRINT');
+    assert.deepEqual(blueprintOptions.projectComposition,composition);
+    return f.blueprintEnvelope;
+   },
+   sessionAuthor:async()=>f.proposal,
+   sessionReview:passReview,
+   sessionCriticalReview:passCriticalReview
+  },
+  options:{graphId:'g-composition'}
+ });
+ assert.deepEqual(calls,['COMPOSITION','BLUEPRINT']);
+ assert.equal(result.status,'READY_FOR_TEACHER');
+ assert.deepEqual(result.project_composition,composition);
+ assert.deepEqual(result.project_composition_provider,providerMeta);
+ assert.equal(result.stages.some(x=>x.stage==='PROJECT_COMPOSITION'&&x.status==='COMPOSED'),true);
+});
+
+test('project composition failure stops before Blueprint',async()=>{
+ const f=fixture();
+ let blueprintCalled=false;
+ const result=await runShadowPipeline({
+  sources:f.sources,
+  drivers:{
+   projectCompositionProvider:async()=>{
+    throw Error('composition failed');
+   },
+   blueprintRunner:async()=>{
+    blueprintCalled=true;
+    return f.blueprintEnvelope;
+   }
+  }
+ });
+ assert.equal(result.status,'PROJECT_COMPOSITION_STAGE_FAILED');
+ assert.equal(blueprintCalled,false);
+ assert.equal(result.blueprint,null);
+ assert.equal(result.stages.at(-1).stage,'PROJECT_COMPOSITION');
+ assert.equal(result.stages.at(-1).status,'ERROR');
+});
