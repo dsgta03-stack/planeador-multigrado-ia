@@ -31,7 +31,7 @@ export function providerAuthoringShapeSchema(local){
  const project=(node,path='$')=>{
   if(typeof node==='boolean')return node;
   if(node.anyOf){
-   const simple=node.anyOf.every(x=>x&&typeof x==='object'&&!Array.isArray(x)&&typeof x.type==='string'&&Object.keys(x).every(k=>k==='type'||['minimum','maximum','maxLength','minLength'].includes(k)));
+   const simple=node.anyOf.every(x=>x&&typeof x==='object'&&!Array.isArray(x)&&typeof x.type==='string'&&Object.keys(x).every(k=>k==='type'||k==='enum'||['minimum','maximum','maxLength','minLength'].includes(k)));
    if(simple){removed.push({keyword:'anyOf',path,local_value:structuredClone(node.anyOf),replacement:'nullable_type_array'});return {type:node.anyOf.map(x=>x.type)};}
   }
   const out={};
