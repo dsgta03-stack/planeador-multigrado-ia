@@ -331,3 +331,84 @@ test('proposal cannot omit an active grade',()=>{
     /PROJECT_COMPOSITION_PROPOSAL_SCHEMA/
   );
 });
+test('compiler preserves selected PDA ownership by grade',()=>{
+  const s=sources();
+  const pool=buildProjectCandidatePool(s);
+  const proposal=verifiedProposal();
+
+  const row1=
+    proposal.grade_coverage.find(
+      x=>x.grade===1
+    );
+
+  const row3=
+    proposal.grade_coverage.find(
+      x=>x.grade===3
+    );
+
+  const row6=
+    proposal.grade_coverage.find(
+      x=>x.grade===6
+    );
+
+  row1.mode='TRANSVERSAL_PROJECT';
+  row1.pda_ids=['p1'];
+
+  row3.mode='BASE_PDA';
+  row3.pda_ids=['p3'];
+
+  row6.mode='TRANSVERSAL_PROJECT';
+  row6.pda_ids=['p3'];
+
+  const composition=
+    compileProjectCompositionProposal(
+      proposal,
+      s,
+      pool
+    );
+
+  const c1=
+    composition.grade_coverage.find(
+      x=>x.grade===1
+    );
+
+  const c3=
+    composition.grade_coverage.find(
+      x=>x.grade===3
+    );
+
+  const c6=
+    composition.grade_coverage.find(
+      x=>x.grade===6
+    );
+
+  assert.deepEqual(
+    c1.pda_ids,
+    ['p1']
+  );
+
+  assert.notEqual(
+    c1.mode,
+    'TRANSVERSAL_PROJECT'
+  );
+
+  assert.deepEqual(
+    c3.pda_ids,
+    ['p3']
+  );
+
+  assert.equal(
+    c3.mode,
+    'BASE_PDA'
+  );
+
+  assert.deepEqual(
+    c6.pda_ids,
+    []
+  );
+
+  assert.equal(
+    c6.mode,
+    'TRANSVERSAL_PROJECT'
+  );
+});

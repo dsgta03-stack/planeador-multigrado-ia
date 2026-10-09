@@ -46,6 +46,59 @@ const activityIdsForProject=(pool,projectId)=>{
   );
 };
 
+const normalizeGradeCoverage=(proposal,sources)=>{
+  const selected=new Set(
+    sources.constraints.selected_pda_ids||[]
+  );
+
+  const selectedByGrade=new Map();
+
+  for(const pda of sources.curriculum.pdas||[]){
+    if(!selected.has(pda.pda_id))continue;
+
+    if(!selectedByGrade.has(pda.grade)){
+      selectedByGrade.set(pda.grade,[]);
+    }
+
+    selectedByGrade.get(pda.grade).push(
+      pda.pda_id
+    );
+  }
+
+  const proposedByGrade=new Map(
+    (proposal.grade_coverage||[])
+      .map(row=>[row.grade,row])
+  );
+
+  return (sources.constraints.grades||[])
+    .map(grade=>{
+      const pda_ids=[
+        ...(selectedByGrade.get(grade)||[])
+      ];
+
+      if(!pda_ids.length){
+        return {
+          grade,
+          mode:'TRANSVERSAL_PROJECT',
+          pda_ids:[]
+        };
+      }
+
+      const proposed=
+        proposedByGrade.get(grade);
+
+      const mode=
+        proposed?.mode==='BASE_PDA'
+          ? 'BASE_PDA'
+          : 'ENRICHMENT_PDA';
+
+      return {
+        grade,
+        mode,
+        pda_ids
+      };
+    });
+};
 export function projectCompositionProposalSchema(sources,pool){
   const grades=[...(sources.constraints.grades||[])];
   const selectedPdas=[
@@ -494,8 +547,9 @@ export function compileProjectCompositionProposal(
         ),
 
       grade_coverage:
-        structuredClone(
-          proposal.grade_coverage
+        normalizeGradeCoverage(
+          proposal,
+          sources
         ),
 
       final_outcome:
