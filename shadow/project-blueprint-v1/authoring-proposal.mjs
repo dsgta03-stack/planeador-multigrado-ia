@@ -65,16 +65,24 @@ function validateCoverageCompleteness(proposal,plan){
  const failures=[];
  for(const link of plan.coverage_matrix){
   const rows=proposal.coverage.filter(r=>r.operation===link.operation);
-  if(rows.length!==1){failures.push(link.operation);continue;}
+  if(rows.length!==1){failures.push(`COVERAGE_OPERATION_COUNT_INVALID:${link.operation}`);continue;}
   const row=rows[0],stage=proposal.project_stages.find(s=>s.stage_id===row.stage_id),ref=row.evidence_ref;
   const actionOk=row.stage_id===link.stage_id&&!!row.action_quote?.trim()&&!!stage?.student_operation?.includes(row.action_quote);
   let evidenceText='';
   if(stage&&ref?.field==='expected_output'&&ref.index===null)evidenceText=stage.expected_output;
   else if(stage&&ref?.field==='acceptance_criteria'&&Number.isInteger(ref.index)&&ref.index>=0&&ref.index<stage.acceptance_criteria.length)evidenceText=stage.acceptance_criteria[ref.index];
-  if(!actionOk||!evidenceText?.trim())failures.push(link.operation);
+  if(!actionOk||!evidenceText?.trim()){
+   if(row.stage_id!==link.stage_id||!stage)failures.push(`COVERAGE_STAGE_MISMATCH:${link.operation}`);
+   if(!row.action_quote?.trim()||!stage?.student_operation?.includes(row.action_quote))failures.push(`ACTION_QUOTE_NOT_LITERAL:${link.operation}`);
+   if(!evidenceText?.trim()){
+    if(!['expected_output','acceptance_criteria'].includes(ref?.field))failures.push(`EVIDENCE_REF_FIELD_INVALID:${link.operation}`);
+    else if(ref.field==='expected_output'?ref.index!==null:!Number.isInteger(ref.index)||ref.index<0||!stage||ref.index>=stage.acceptance_criteria.length)failures.push(`EVIDENCE_REF_INDEX_INVALID:${link.operation}`);
+    else failures.push(`EVIDENCE_REF_EMPTY:${link.operation}`);
+   }
+  }
  }
  if(failures.length){
-  const e=Error(`BPD-019: missing literal action/evidence for ${[...new Set(failures)].join(', ')}`);
+  const e=Error(`BPD-019 ${[...new Set(failures)].join('; ')}`);
   e.code='CONSTRUCTION_REJECTED';e.rule='BPD-019';throw e;
  }
 }

@@ -15,6 +15,25 @@ const project=(x,s)=>s.type==='object'?Object.fromEntries(Object.entries(s.prope
 function validProposal(){const p=project(baseline,schema);p.coverage=baseline.construction_evidence.map(r=>({operation:r.operation,stage_id:r.stage_id,action_quote:r.student_operation_quote,evidence_ref:{field:'expected_output',index:null}}));return p;}
 function invalidBpd019(){const p=validProposal(),row=p.coverage.find(x=>x.operation==='INTEGRACION')||p.coverage[0];row.action_quote='CITA NO LITERAL';return p;}
 
+test('repairing PLANIFICACION preserves every other valid coverage row',async()=>{
+ const bad=validProposal();bad.coverage.find(x=>x.operation==='PLANIFICACION').action_quote='CITA NO LITERAL';
+ const retained=structuredClone(bad.coverage.filter(x=>x.operation!=='PLANIFICACION'));
+ const result=await generateShadow(src,{constructionPlan:plan,authoringCompact:true},async(task,input,options)=>{
+  if(task==='GENERATE')return {output:bad,telemetry:{task}};
+  if(task==='REPAIR'){
+   assert.deepEqual(options.repair.previous_authoring_proposal,bad);
+   const repaired=structuredClone(options.repair.previous_authoring_proposal);
+   repaired.coverage.find(x=>x.operation==='PLANIFICACION').action_quote=validProposal().coverage.find(x=>x.operation==='PLANIFICACION').action_quote;
+   assert.deepEqual(repaired.coverage.filter(x=>x.operation!=='PLANIFICACION'),retained);
+   return {output:repaired,telemetry:{task}};
+  }
+  const e=Error('synthetic stop after construction');e.code='PROVIDER_UNAVAILABLE';throw e;
+ });
+ assert.equal(result.construction_attempts[1].status,'CONSTRUCTED');
+ assert.deepEqual(result.construction_attempts[1].raw_proposal.coverage.filter(x=>x.operation!=='PLANIFICACION'),retained);
+ assert.equal(bad.coverage.find(x=>x.operation==='PLANIFICACION').action_quote,'CITA NO LITERAL');
+});
+
 test('ProjectBlueprint construction rejection spends its single repair before giving up',async()=>{
  const bad=invalidBpd019(),good=validProposal(),tasks=[];
  const result=await generateShadow(src,{constructionPlan:plan,authoringCompact:true},async(task,input,options)=>{

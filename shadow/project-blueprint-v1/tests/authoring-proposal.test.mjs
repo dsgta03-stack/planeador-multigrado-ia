@@ -18,6 +18,35 @@ const project=(x,s)=>s.type==='object'?Object.fromEntries(Object.entries(s.prope
 function proposal(){const p=project(baseline,schema);p.coverage=baseline.construction_evidence.map(r=>({operation:r.operation,stage_id:r.stage_id,action_quote:r.student_operation_quote,evidence_ref:{field:'expected_output',index:null}}));return p;}
 const build=p=>compileAuthoring(p,src,plan,{blueprint_id:'authored-fixture',revision:1});
 const unchanged=['schemas/ProjectBlueprintV1.json','gate.mjs','semantic-evidence.mjs'].map(p=>[p,hash(readFileSync(new URL('../'+p,import.meta.url),'utf8'))]);
+const planning=p=>p.coverage.find(r=>r.operation==='PLANIFICACION');
+for(const ref of [{field:'expected_output',index:null},{field:'acceptance_criteria',index:0}])test(`PLANIFICACION literal evidence from ${ref.field}`,()=>{
+ const p=proposal(),row=planning(p);row.evidence_ref=ref;
+ const stage=p.project_stages.find(s=>s.stage_id===row.stage_id),before=hash(p),built=build(p);
+ const evidence=built.record.construction.raw_proposal.construction_evidence.find(r=>r.operation==='PLANIFICACION');
+ assert.equal(evidence.student_operation_quote,row.action_quote);
+ assert.equal(evidence.evidence_quote,ref.field==='expected_output'?stage.expected_output:stage.acceptance_criteria[ref.index]);
+ assert.equal(hash(p),before);assert.deepEqual(build(p).blueprint,built.blueprint);
+});
+for(const [name,mutate,diagnostic] of [
+ ['wrong assigned stage',(p,r)=>r.stage_id=p.project_stages.find(s=>s.stage_id!==r.stage_id).stage_id,'COVERAGE_STAGE_MISMATCH'],
+ ['paraphrased action',(p,r)=>r.action_quote='El grupo prepara un plan de trabajo.','ACTION_QUOTE_NOT_LITERAL'],
+ ['changed punctuation',(p,r)=>r.action_quote+='!','ACTION_QUOTE_NOT_LITERAL'],
+ ['changed spaces',(p,r)=>r.action_quote=r.action_quote.replace(' ','  '),'ACTION_QUOTE_NOT_LITERAL'],
+ ['expected_output index zero',(p,r)=>r.evidence_ref.index=0,'EVIDENCE_REF_INDEX_INVALID'],
+ ['criterion outside range',(p,r)=>r.evidence_ref={field:'acceptance_criteria',index:999},'EVIDENCE_REF_INDEX_INVALID'],
+ ['empty referenced text',(p,r)=>p.project_stages.find(s=>s.stage_id===r.stage_id).expected_output='   ','EVIDENCE_REF_EMPTY'],
+ ['stale quote after stage rewrite',(p,r)=>p.project_stages.find(s=>s.stage_id===r.stage_id).student_operation='Nueva redacción de la etapa.','ACTION_QUOTE_NOT_LITERAL'],
+ ['empty action',(p,r)=>r.action_quote='','ACTION_QUOTE_NOT_LITERAL'],
+ ['duplicate operation',(p,r)=>p.coverage[p.coverage.findIndex(x=>x.operation!==r.operation)]=structuredClone(r),'COVERAGE_OPERATION_COUNT_INVALID']
+])test(`PLANIFICACION rejects ${name} without rewriting proposal`,()=>{
+ const p=proposal();mutate(p,planning(p));const before=hash(p);
+ assert.throws(()=>build(p),e=>e.code==='CONSTRUCTION_REJECTED'&&e.rule==='BPD-019'&&e.message.includes(`${diagnostic}:PLANIFICACION`));
+ assert.equal(hash(p),before);
+});
+for(const ref of [null,{}, {field:'invented',index:null},{field:'acceptance_criteria',index:-1}])test(`malformed evidence_ref remains fail-closed: ${JSON.stringify(ref)}`,()=>{
+ const p=proposal();planning(p).evidence_ref=ref;const before=hash(p);
+ assert.throws(()=>build(p),e=>e.code==='AUTHORING_CONTRACT_INVALID');assert.equal(hash(p),before);
+});
 test('compact proposal compiles to same full domain without inventing or removing pedagogy',()=>{
  const p=proposal(),before=hash(p),built=build(p).blueprint;
  assert.deepEqual(built,expected);assert.equal(hash(p),before);assertContract('ProjectBlueprintV1',built);
