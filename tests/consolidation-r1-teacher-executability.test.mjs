@@ -152,3 +152,99 @@ test('DOCX renders approved activity structure as distinct paragraphs instead of
   'DOCX activity sections must render in distinct paragraphs'
  );
 });
+test('DOCX landscape renders active multigrade grades horizontally without inventing missing participation',async()=>{
+ const plan={
+  grades:[1,2,3,4,5,6],
+  resources:[],
+  project:{
+   title:'Proyecto multigrado',
+   final_product:'Producto común',
+   grade_contributions:[]
+  },
+  project_sequence:[{
+   session_number:1,
+   phase:'DESARROLLO',
+   purpose:'Propósito',
+   project_advance:'Avance',
+   partial_product:'Producto parcial',
+   prepares_next:'2'
+  }],
+  teacher_presentation:{
+   project_title:'Proyecto multigrado',
+   project_final_product:'Producto común',
+   sessions:[{
+    session_number:1,
+    phase:'DESARROLLO',
+    purpose:'Propósito',
+    project_advance:'Avance',
+    partial_product:'Producto parcial',
+    prepares_next:'2',
+    teacher_narrative:'No debe duplicarse',
+    closure_narrative:'No debe duplicarse',
+    ltg_decisions:[],
+    activity_blocks:[{
+     label:'Actividad multigrado',
+     grades:[1,2],
+     common_student_action:'Trabajo común del grupo.',
+     development:'Trabajo común del grupo.',
+     teacher_role:'Acompaña el trabajo.',
+     supports:[],
+     output:'Producto',
+     evidence:'Evidencia',
+     assessment_criteria:['Criterio observable'],
+     ltg_use:[],
+     execution:{
+      preparation:'Preparación',
+      instruction:'Consigna',
+      grouping:'Organización',
+      student_steps:['Paso uno'],
+      guidance:['Pregunta guía'],
+      resource_use:[],
+      contingency:'Apoyo si no avanza',
+      connection:'Conexión final'
+     },
+     grade_participation:[
+      {
+       grade:1,
+       student_action:'Actividad de primero',
+       differentiation:'Apoyo para primero',
+       evidence:'Evidencia de primero'
+      },
+      {
+       grade:2,
+       student_action:'Actividad de segundo',
+       differentiation:'Apoyo para segundo',
+       evidence:'Evidencia de segundo'
+      }
+     ]
+    }]
+   }]
+  }
+ };
+
+ const zip=await JSZip.loadAsync(await createMultiplanDocx(plan));
+ const xml=await zip.file('word/document.xml').async('string');
+
+ assert.match(xml,/w:orient="landscape"/);
+ assert.ok(xml.includes('ACTIVIDADES DIFERENCIADAS POR GRADO'));
+
+ for(const grade of ['1.º','2.º','3.º','4.º','5.º','6.º']){
+  assert.ok(xml.includes(grade),grade);
+ }
+
+ assert.equal(
+  (xml.match(/Sin participación registrada en esta actividad\./g)||[]).length,
+  4
+ );
+
+ assert.ok(xml.includes('Actividad de primero'));
+ assert.ok(xml.includes('Actividad de segundo'));
+
+ assert.equal(
+  (xml.match(/No debe duplicarse/g)||[]).length,
+  0,
+  'structured DOCX must not repeat teacher/closure fallback narrative'
+ );
+
+ assert.ok(xml.includes('Sesión 2'));
+});
