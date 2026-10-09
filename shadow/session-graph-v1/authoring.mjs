@@ -232,8 +232,10 @@ export function normalizeSessionGraphAuthoring(proposal,source,previousProposal=
    activity.ltg_activity_ids=[...new Set(activity.ltg_use.map(u=>u.activity_id).filter(id=>id!==null))];
    seenActivityKeys.add(activity.activity_key);
   }
-  session.ltg_decisions=(session.ltg_decisions||[])
-   .filter(d=>selections.has(d.project_id));
+  if(Array.isArray(session.ltg_decisions)){
+   session.ltg_decisions=session.ltg_decisions
+    .filter(d=>selections.has(d.project_id));
+  }
  }
  return copy;
 }
