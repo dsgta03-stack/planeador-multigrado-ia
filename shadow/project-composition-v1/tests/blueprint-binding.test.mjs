@@ -38,6 +38,7 @@ const composition=()=>({
   enrichments:[
     {
       project_id:'support-project',
+      reason:'Approved support.',
       activity_ids:[
         'support-a1'
       ]
@@ -338,7 +339,7 @@ test('binder removes unapproved operational LTG and restores composition-owned b
   );
 });
 
-test('binder never invents a missing composition-approved LTG selection',()=>{
+test('binder deterministically materializes a missing composition-approved enrichment selection',()=>{
   const c=composition();
   const b=blueprint();
 
@@ -358,16 +359,16 @@ test('binder never invents a missing composition-approved LTG selection',()=>{
     bound.ltg_strategy.selections.some(
       x=>x.project_id==='support-project'
     ),
-    false
+    true
   );
 
-  assert.throws(
-    ()=>assertProjectCompositionBinding(
+  assert.equal(
+    assertProjectCompositionBinding(
       bound,
       c,
       sources()
     ),
-    /PCB-006/
+    true
   );
 });
 
@@ -465,6 +466,64 @@ test('binder and assertion reject genuine role conflicts before rewriting teache
   assert.throws(()=>bindProjectCompositionToBlueprint(b,c,s),/PCD-009 EXPLICIT_LTG_INTENT_MISMATCH/);
   assert.throws(()=>assertProjectCompositionBinding(b,c,s),/PCD-009 EXPLICIT_LTG_INTENT_MISMATCH/);
   assert.deepEqual({s,c,b},before);
+});
+
+test('missing enrichment uses only verified selected grade-owned PDA and preserves curriculum immutably',()=>{
+  const s=sources(),c=composition(),b=blueprint();
+  b.ltg_strategy.selections=b.ltg_strategy.selections.filter(x=>x.project_id!=='support-project');
+  b.pda_analysis=s.constraints.selected_pda_ids.map(pda_id=>({pda_id}));
+  b.grade_contributions=structuredClone(c.grade_coverage);
+  b.session_progression=[{pda_focus:[...s.constraints.selected_pda_ids]}];
+  const before=structuredClone({s,c,b});freeze(s);freeze(c);freeze(b);
+  assert.throws(()=>assertProjectCompositionBinding(b,c,s),/PCB-006 ENRICHMENT_SELECTION_REQUIRED/);
+  const bound=bindProjectCompositionToBlueprint(b,c,s);
+  assert.deepEqual(bound.ltg_strategy.selections[1],{
+    project_id:'support-project',role:'SUPPORT',pda_ids:['p1'],
+    activity_ids:['support-a1'],reason:c.enrichments[0].reason
+  });
+  assert.equal(assertProjectCompositionBinding(bound,c,s),true);
+  assert.deepEqual(bindProjectCompositionToBlueprint(bound,c,s),bound);
+  for(const field of ['pda_analysis','grade_contributions','session_progression'])assert.deepEqual(bound[field],b[field]);
+  assert.deepEqual({s,c,b},before);
+});
+
+test('existing enrichment is normalized without duplicate or extra selection fields',()=>{
+  const b=blueprint(),c=composition();
+  Object.assign(b.ltg_strategy.selections[1],{role:'CORE',activity_ids:['invented'],extra:'not allowed'});
+  const bound=bindProjectCompositionToBlueprint(b,c,sources());
+  assert.equal(bound.ltg_strategy.selections.filter(x=>x.project_id==='support-project').length,1);
+  assert.equal(bound.ltg_strategy.selections[1].role,'SUPPORT');
+  assert.ok(!('extra' in bound.ltg_strategy.selections[1]));
+  assert.equal(assertProjectCompositionBinding(bound,c,sources()),true);
+});
+
+test('missing enrichment preserves real explicit SUPPORT',()=>{
+  const s=sources(),c=composition(),b=blueprint();
+  s.constraints.explicit_ltg_selections=[{project_id:'support-project',pda_ids:['p1'],intent:'SUPPORT'}];
+  b.ltg_strategy.selections.pop();
+  const bound=bindProjectCompositionToBlueprint(b,c,s);
+  assert.deepEqual(bound.ltg_strategy.selections[1].pda_ids,['p1']);
+  assert.equal(assertProjectCompositionBinding(bound,c,s),true);
+});
+
+test('missing enrichment with empty verified projection fails explicitly',()=>{
+  const s=sources(),b=blueprint();b.ltg_strategy.selections.pop();
+  s.curriculum.ltg[1].verified_pda_links=['p1-wrong-grade','unselected'];
+  assert.throws(()=>bindProjectCompositionToBlueprint(b,composition(),s),/PCB-010 EMPTY_VERIFIED_LTG_PDA_PROJECTION:support-project/);
+});
+
+for(const present of [false,true])test(`unverified approved enrichment activity fails before acceptance (present=${present})`,()=>{
+  for(const status of ['pending','missing']){
+    const s=sources(),b=blueprint();if(!present)b.ltg_strategy.selections.pop();
+    s.curriculum.ltg[1].verified_activities=status==='missing'?[]:[{activity_id:'support-a1',verification_status:status}];
+    assert.throws(()=>bindProjectCompositionToBlueprint(b,composition(),s),/PCB-006 ENRICHMENT_ACTIVITY_BINDING_MISMATCH:support-project/);
+  }
+});
+
+test('explicit CORE cannot be materialized as enrichment SUPPORT',()=>{
+  const s=sources(),b=blueprint();b.ltg_strategy.selections.pop();
+  s.constraints.explicit_ltg_selections=[{project_id:'support-project',pda_ids:['p1'],intent:'CORE'}];
+  assert.throws(()=>bindProjectCompositionToBlueprint(b,composition(),s),/PCD-009 EXPLICIT_LTG_INTENT_MISMATCH:support-project:CORE:SUPPORT/);
 });
 
 test('binder rejects an unverified explicit PDA instead of filtering the teacher decision away',()=>{

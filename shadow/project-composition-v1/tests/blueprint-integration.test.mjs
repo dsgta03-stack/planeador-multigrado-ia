@@ -46,7 +46,7 @@ const semanticPass=input=>({
   )
 });
 
-test('composition to binding to blueprint gate preserves real CORE/SUPPORT and curricular PDA',async()=>{
+for(const missingSupport of [false,true])test(`composition to binding to blueprint gate preserves real CORE/SUPPORT and curricular PDA (missingSupport=${missingSupport})`,async()=>{
   const {blueprint,...sources}=fixture('PB-016-LTG-CORE').input;
   const base=sources.curriculum.ltg[0];
   base.purpose='Propósito verificado de prueba';
@@ -78,7 +78,7 @@ test('composition to binding to blueprint gate preserves real CORE/SUPPORT and c
     rejected_options:[],ai_original_required:false
   },sources);
   blueprint.ltg_strategy.selections[0].activity_ids.push('not-verified');
-  blueprint.ltg_strategy.selections.push({project_id:support.project_id,
+  if(!missingSupport)blueprint.ltg_strategy.selections.push({project_id:support.project_id,
     role:'SUPPORT',pda_ids:[sources.constraints.selected_pda_ids[0]],
     activity_ids:['not-approved'],reason:'Apoyo de prueba'});
   const before=structuredClone({sources,composition,blueprint});

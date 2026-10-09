@@ -106,17 +106,25 @@ export function bindProjectCompositionToBlueprint(
         enrichment.project_id
       );
 
-    if(!current)continue;
-
     const explicitPdas=explicit.filter(x=>x.project_id===enrichment.project_id)
       .flatMap(x=>x.pda_ids);
-    const projection=verifiedLtgProjection(current,sources,[...current.pda_ids,...explicitPdas]);
+    // Composition authorizes SUPPORT; the model need not repeat that decision.
+    // Only source-verified attribution can materialize a missing selection.
+    const candidate={
+      project_id:enrichment.project_id,
+      pda_ids:current?current.pda_ids:sources?.constraints?.selected_pda_ids||[],
+      activity_ids:[...enrichment.activity_ids]
+    };
+    const projection=verifiedLtgProjection(candidate,sources,[...candidate.pda_ids,...explicitPdas]);
+    if(!sameSet(candidate.activity_ids,projection.activity_ids)){
+      throw Error(`PCB-006 ENRICHMENT_ACTIVITY_BINDING_MISMATCH:${enrichment.project_id}`);
+    }
 
     selections.push({
-      ...current,
       project_id:enrichment.project_id,
       role:'SUPPORT',
       pda_ids:projection.pda_ids,
+      reason:current?current.reason:enrichment.reason,
       activity_ids:[
         ...enrichment.activity_ids
       ]
