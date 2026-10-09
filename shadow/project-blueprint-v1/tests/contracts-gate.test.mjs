@@ -12,6 +12,46 @@ const failures=x=>blueprintGate(x,review(x)).deterministic_findings.filter(x=>x.
 for(const [field,value]of Object.entries({grades:[1,2,3],selected_pda_ids:['different'],explicit_ltg_selections:[{project_id:'test',pda_ids:['different'],intent:'CORE'}],requested_sessions:4,minutes_per_session:60,original_problem:'Otro problema',original_context:'Otro contexto',students_by_grade:{1:9,3:5},reading_profile:'Avanzada',writing_profile:'Avanzada',autonomy_profile:'Alta',connectivity:'Con internet',available_resources:['tableta'],supports:['tutor'],teacher_explicit_constraints:['Otra condición']}))test(`hash changes: ${field}`,()=>{const c=seed().constraints;assert.notEqual(makeConstraints({...c,[field]:value}).constraints_hash,c.constraints_hash)});
 test('fingerprint stable across metadata and object key ordering',()=>{const c=seed().constraints;assert.equal(makeConstraints(c).constraints_hash,c.constraints_hash);assert.equal(hash({a:1,b:2}),hash({b:2,a:1}))});
 test('official text changes snapshot hash',()=>{const k=seed().curriculum;k.pdas[0].pda_official+=' cambiado';assert.notEqual(makeSnapshot(k).snapshot_hash,k.snapshot_hash)});
+test('rich LTG project context survives curriculum snapshot',()=>{
+ const k=structuredClone(seed().curriculum);
+ const pdaId=k.pdas[0].pda_id;
+ k.ltg=[{
+  project_id:'rich-ltg-1',
+  grade:k.pdas[0].grade,
+  book:'Libro de prueba',
+  scenario:'Aula',
+  name:'Proyecto de prueba',
+  related_contents:'Contenido relacionado',
+  purpose:'Investigar una situacion del entorno',
+  central_product:'Modelo explicativo',
+  pages:{start:10,end:12},
+  verified_pda_links:[pdaId],
+  verified_activities:[{
+   activity_id:'rich-act-1',
+   activity_order:1,
+   activity_type:'indagacion',
+   title:'Exploramos',
+   summary:'Actividad de prueba',
+   organization:'Equipos',
+   materials:'Papel y lapiz',
+   guiding_questions:'Que observamos',
+   evidence_or_record:'Registro de observaciones',
+   product_contribution:'Aporta evidencia al modelo',
+   semantic_tags:['indagacion','observacion'],
+   page_start:10,
+   page_end:11,
+   verification_status:'verified'
+  }]
+ }];
+ const out=makeSnapshot(k);
+ assert.equal(out.ltg[0].purpose,'Investigar una situacion del entorno');
+ assert.equal(out.ltg[0].central_product,'Modelo explicativo');
+ assert.equal(out.ltg[0].related_contents,'Contenido relacionado');
+ assert.equal(out.ltg[0].verified_activities[0].activity_type,'indagacion');
+ assert.equal(out.ltg[0].verified_activities[0].title,'Exploramos');
+ assert.equal(out.ltg[0].verified_activities[0].product_contribution,'Aporta evidencia al modelo');
+ assert.deepEqual(out.ltg[0].verified_activities[0].semantic_tags,['indagacion','observacion']);
+});
 test('methodology unknown has no ABP fallback',()=>assert.throws(()=>makeDecision({selected_id:'unknown',selection_source:'TEACHER'})));
 test('accepted recommendation must equal choice',()=>assert.throws(()=>makeDecision({selected_id:'abp',recommended_id:'steam',selection_source:'TEACHER_ACCEPTED_RECOMMENDATION'})));
 const cases={
