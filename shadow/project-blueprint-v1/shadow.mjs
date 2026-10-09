@@ -5,6 +5,7 @@ import {randomUUID} from 'node:crypto';
 import {assertContract,hash,deepFreeze,sourceBinding} from './contracts.mjs';
 import {blueprintGate,semanticInputHash,functionalDiagnostics} from './gate.mjs';
 import {callProvider} from './provider.mjs';
+import {assertProjectCompositionBinding} from '../project-composition-v1/blueprint-binding.mjs';
 export function structuralDiff(a,b,path='$'){
  if(JSON.stringify(a)===JSON.stringify(b))return [];
  if(a&&b&&typeof a==='object'&&typeof b==='object'&&!Array.isArray(a)&&!Array.isArray(b))return [...new Set([...Object.keys(a),...Object.keys(b)])].flatMap(k=>structuralDiff(a[k],b[k],`${path}.${k}`));
@@ -26,12 +27,21 @@ export async function generateShadow(sources,options={},provider=callProvider){
  if(Object.keys(sources).sort().join(',')!=='constraints,curriculum,methodology')throw Error('ONLY_SOURCE_ARTIFACTS_ALLOWED_NO_LEGACY_PLAN');
  for(const [name,key] of [['TeacherConstraintsV1','constraints'],['CurriculumSnapshotV1','curriculum'],['MethodologyDecisionV1','methodology']])assertContract(name,sources[key]);
  const frozen=deepFreeze(structuredClone(sources)),revisions=[],telemetry=[],errors=[],construction_attempts=[];const id=randomUUID();let repairCount=0,constructionRepair=null;
+ const projectComposition=options.projectComposition?deepFreeze(structuredClone(options.projectComposition)):null;
+ if(projectComposition){
+  if(projectComposition.schema_version!=='PROJECT_COMPOSITION_V1')throw Error('PROJECT_COMPOSITION_V1_REQUIRED');
+  const expectedCompositionSource=sourceBinding(frozen);
+  const actualCompositionSource=projectComposition.source||{};
+  for(const key of ['constraints_hash','curriculum_snapshot_hash','methodology_decision_id','methodology_decision_hash']){
+   if(actualCompositionSource[key]!==expectedCompositionSource[key])throw Error(`PROJECT_COMPOSITION_SOURCE_MISMATCH:${key}`);
+  }
+ }
  for(let revision=1;revision<=2;revision++){
   const previous=revisions.at(-1);
   const semanticRepair=previous?{previous_blueprint:previous.blueprint,triggering_rules:[...previous.gate.deterministic_findings,...previous.gate.semantic_findings].filter(x=>x.status!=='PASS'),instruction:'Repara sólo el Blueprint. Conserva decisiones docentes, texto oficial, método y fuentes. No añadas frases para aparentar PASS.'}:null;
   const repair=constructionRepair||semanticRepair;constructionRepair=null;
 
-  let r;try{r=await provider(revision===1?'GENERATE':'REPAIR',frozen,{...options,repair})}catch(e){
+  let r;try{r=await provider(revision===1?'GENERATE':'REPAIR',frozen,{...options,projectComposition,repair})}catch(e){
    errors.push({revision,task:revision===1?'GENERATE':'REPAIR',error:String(e),code:e.code||'PROVIDER_ERROR'});
    telemetry.push({...e.telemetry,task:revision===1?'GENERATE':'REPAIR',error:String(e),repair_count:repairCount});
    break; // Preserve prior revisions; transport failure is not a pedagogical rejection.
@@ -51,14 +61,37 @@ export async function generateShadow(sources,options={},provider=callProvider){
   // Envelope IDs are assigned by the orchestrator, never pedagogy or source fields.
   const b={...raw,blueprint_id:id,revision,status:'DRAFT',gate_result:null};
   const input={...frozen,blueprint:b};let gate=blueprintGate(input),semantic=null,reviewUnavailable=false;
+   if(projectComposition){
+    try{
+     assertProjectCompositionBinding(b,projectComposition);
+    }catch(e){
+     const bindingFinding={
+      rule_id:'PCB-BINDING',
+      severity:'CRITICAL',
+      status:'FAIL',
+      scope:'project_composition',
+      observed:String(e?.message||e),
+      expected:'El Blueprint debe conservar exactamente el proyecto central, outcome y uso operacional de LTG aprobados por PROJECT_COMPOSITION_V1.'
+     };
+     gate=deepFreeze({
+      ...gate,
+      status:'FAIL',
+      critical_count:gate.critical_count+1,
+      deterministic_findings:[
+       ...gate.deterministic_findings,
+       bindingFinding
+      ]
+     });
+    }
+   }
   // Full gate is rerun after semantic review. Invalid schema is never sent for review.
-  if(!gate.deterministic_findings.some(x=>(options.constructionPlan||x.rule_id==='BPD-SCHEMA')&&x.status!=='PASS')){
+  if(!gate.deterministic_findings.some(x=>(options.constructionPlan||x.rule_id==='BPD-SCHEMA'||x.rule_id==='PCB-BINDING')&&x.status!=='PASS')){
    try{semantic=await reviewBlueprint(input,options,provider);telemetry.push({...semantic.telemetry,repair_count:revision-1})}catch(e){telemetry.push({...e.telemetry,task:'REVIEW',error:String(e),repair_count:revision-1});reviewUnavailable=true;errors.push({revision,task:'REVIEW',code:e.code||'PROVIDER_ERROR',error:String(e)})}
    gate=blueprintGate(input,semantic);
   }
   const status=reviewUnavailable?errors.at(-1).code:gate.status==='PASS'?'APPROVED':b.pda_analysis?.some(x=>['WEAK','INCOMPATIBLE'].includes(x.integration_strength))?'NEEDS_TEACHER_DECISION':revision===1?'NEEDS_REPAIR':gate.status==='NOT_EVALUABLE'?'NEEDS_REPAIR':'REJECTED';
   revisions.push({revision,label:reviewUnavailable?errors.at(-1).code:revision===1?(status==='APPROVED'?'PASS':'FAIL'):(status==='APPROVED'?'REPAIRED':'REPAIR_FAILED'),status,blueprint:b,gate,semantic,functional_diagnostics:b.final_outcome&&b.project_stages?functionalDiagnostics(b):[],diff:previous?structuralDiff(previous.blueprint,b):[],triggering_rules:repair?.triggering_rules.map(x=>x.rule_id)||[]});
-  if(options.constructionPlan&&gate.deterministic_findings.some(f=>f.status!=='PASS'))break;
+  if(options.constructionPlan&&gate.deterministic_findings.some(f=>f.status!=='PASS'&&f.rule_id!=='PCB-BINDING'))break;
   if(reviewUnavailable||['APPROVED','NEEDS_TEACHER_DECISION'].includes(status))break;
  }
  const final=revisions.at(-1);
