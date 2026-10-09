@@ -56,3 +56,87 @@ test('initial provider outage yields recorded unevaluated result with no invente
  assert.equal(result.status,'PROVIDER_UNAVAILABLE');assert.equal(result.blueprint,null);assert.equal(result.gate,null);
  assert.equal(result.repair_count,0);assert.equal(result.telemetry.length,1);
 });
+
+test('project composition protocol preserves mandatory PDA development and exact BASE binding', async ()=>{
+  const {blueprint,...sources}=fixture('PB-010');
+  const projectComposition={
+    schema_version:'PROJECT_COMPOSITION_V1',
+    grade_coverage:[
+      {grade:1,mode:'ENRICHMENT_PDA',pda_ids:['p1']},
+      {grade:3,mode:'BASE_PDA',pda_ids:['p3']}
+    ],
+    base:{
+      origin:'LTG_VERIFIED',
+      project_id:'base-project'
+    },
+    enrichments:[],
+    references:[],
+    final_outcome:{
+      name:'Producto común',
+      purpose:'Propósito común',
+      description:'Descripción común'
+    }
+  };
+
+  let sent=null;
+  const previousRun=process.env.MULTIPLAN_SHADOW_RUN;
+  const previousEnv=process.env.NODE_ENV;
+  process.env.MULTIPLAN_SHADOW_RUN='1';
+  process.env.NODE_ENV='test';
+
+  await callProvider('GENERATE',sources,{
+    endpoint:'https://example.test/functions/v1/plan-project-blueprint-v1-shadow',
+    token:'x'.repeat(64),
+    executionMode:'SHADOW',
+    projectComposition,
+    fetchImpl:async(_url,options)=>{
+      sent=JSON.parse(options.body);
+      return {
+        ok:true,
+        status:200,
+        json:async()=>({
+          output:{
+            value:'synthetic'
+          },
+          usage:{
+            totalTokenCount:1
+          }
+        })
+      };
+    }
+  }).catch(()=>{});
+
+  if(previousRun===undefined){
+    delete process.env.MULTIPLAN_SHADOW_RUN;
+  }else{
+    process.env.MULTIPLAN_SHADOW_RUN=previousRun;
+  }
+
+  if(previousEnv===undefined){
+    delete process.env.NODE_ENV;
+  }else{
+    process.env.NODE_ENV=previousEnv;
+  }
+
+  assert.ok(sent);
+  assert.match(
+    sent.system,
+    /TODOS los PDA incluidos en constraints\.selected_pda_ids son aprendizajes curriculares obligatorios/
+  );
+  assert.match(
+    sent.system,
+    /ninguno puede tratarse como opcional, decorativo, secundario ni como simple apoyo/
+  );
+  assert.match(
+    sent.prompt.project_composition_protocol,
+    /pda_ids DEBE contener EXACTAMENTE/
+  );
+  assert.match(
+    sent.prompt.project_composition_protocol,
+    /mode sea BASE_PDA/
+  );
+  assert.match(
+    sent.prompt.project_composition_protocol,
+    /ENRICHMENT significa integración al mismo proyecto, no menor importancia curricular/
+  );
+});
