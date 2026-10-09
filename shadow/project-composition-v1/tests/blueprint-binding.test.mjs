@@ -1,9 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 
-import {
-  assertProjectCompositionBinding
-} from '../blueprint-binding.mjs';
+import {assertProjectCompositionBinding,bindProjectCompositionToBlueprint} from '../blueprint-binding.mjs';
 
 const composition=()=>({
   methodology:{
@@ -239,5 +237,104 @@ test('AI original cannot silently operationalize LTG',()=>{
       c
     ),
     /PCB-007|PCB-009/
+  );
+});
+test('binder removes unapproved operational LTG and restores composition-owned bindings',()=>{
+  const c=composition();
+  const b=blueprint();
+
+  b.ltg_strategy.selections[0].role='SUPPORT';
+  b.ltg_strategy.selections[0].pda_ids=['p1'];
+
+  b.ltg_strategy.selections[1].activity_ids=[
+    'invented-or-unapproved'
+  ];
+
+  b.ltg_strategy.selections.push({
+    project_id:'reference-project',
+    role:'OPTIONAL',
+    pda_ids:['p1'],
+    activity_ids:[],
+    reason:'No debe quedar operacional.'
+  });
+
+  const bound=
+    bindProjectCompositionToBlueprint(
+      b,
+      c
+    );
+
+  assert.deepEqual(
+    bound.ltg_strategy.selections.map(
+      x=>x.project_id
+    ),
+    [
+      'base-project',
+      'support-project'
+    ]
+  );
+
+  assert.equal(
+    bound.ltg_strategy.mode,
+    'CORE'
+  );
+
+  assert.equal(
+    bound.ltg_strategy.selections[0].role,
+    'CORE'
+  );
+
+  assert.deepEqual(
+    bound.ltg_strategy.selections[0].pda_ids,
+    ['p3']
+  );
+
+  assert.equal(
+    bound.ltg_strategy.selections[1].role,
+    'SUPPORT'
+  );
+
+  assert.deepEqual(
+    bound.ltg_strategy.selections[1].activity_ids,
+    ['support-a1']
+  );
+
+  assert.equal(
+    assertProjectCompositionBinding(
+      bound,
+      c
+    ),
+    true
+  );
+});
+
+test('binder never invents a missing composition-approved LTG selection',()=>{
+  const c=composition();
+  const b=blueprint();
+
+  b.ltg_strategy.selections=
+    b.ltg_strategy.selections.filter(
+      x=>x.project_id!=='support-project'
+    );
+
+  const bound=
+    bindProjectCompositionToBlueprint(
+      b,
+      c
+    );
+
+  assert.equal(
+    bound.ltg_strategy.selections.some(
+      x=>x.project_id==='support-project'
+    ),
+    false
+  );
+
+  assert.throws(
+    ()=>assertProjectCompositionBinding(
+      bound,
+      c
+    ),
+    /PCB-006/
   );
 });

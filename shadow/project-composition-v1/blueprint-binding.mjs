@@ -27,6 +27,83 @@ const selectionMap=blueprint=>{
   return map;
 };
 
+export function bindProjectCompositionToBlueprint(
+  blueprint,
+  composition
+){
+  if(!composition)return structuredClone(blueprint);
+
+  const bound=structuredClone(blueprint);
+
+  const currentSelections=
+    bound?.ltg_strategy?.selections||[];
+
+  const currentByProject=new Map(
+    currentSelections.map(
+      selection=>[
+        selection.project_id,
+        selection
+      ]
+    )
+  );
+
+  const selections=[];
+
+  if(composition.base.origin==='LTG_VERIFIED'){
+    const projectId=composition.base.project_id;
+    const current=currentByProject.get(projectId);
+
+    if(current){
+      const basePdaIds=[
+        ...new Set(
+          composition.grade_coverage
+            .filter(x=>x.mode==='BASE_PDA')
+            .flatMap(x=>x.pda_ids)
+        )
+      ];
+
+      selections.push({
+        ...current,
+        project_id:projectId,
+        role:'CORE',
+        pda_ids:basePdaIds
+      });
+    }
+  }
+
+  for(const enrichment of composition.enrichments){
+    const current=
+      currentByProject.get(
+        enrichment.project_id
+      );
+
+    if(!current)continue;
+
+    selections.push({
+      ...current,
+      project_id:enrichment.project_id,
+      role:'SUPPORT',
+      activity_ids:[
+        ...enrichment.activity_ids
+      ]
+    });
+  }
+
+  const mode=
+    composition.base.origin==='LTG_VERIFIED'
+      ? 'CORE'
+      : composition.enrichments.length
+        ? 'SUPPORT'
+        : 'NONE';
+
+  bound.ltg_strategy={
+    ...bound.ltg_strategy,
+    mode,
+    selections
+  };
+
+  return bound;
+}
 export function assertProjectCompositionBinding(
   blueprint,
   composition

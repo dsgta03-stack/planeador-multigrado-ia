@@ -5,7 +5,7 @@ import {randomUUID} from 'node:crypto';
 import {assertContract,hash,deepFreeze,sourceBinding} from './contracts.mjs';
 import {blueprintGate,semanticInputHash,functionalDiagnostics} from './gate.mjs';
 import {callProvider} from './provider.mjs';
-import {assertProjectCompositionBinding} from '../project-composition-v1/blueprint-binding.mjs';
+import {assertProjectCompositionBinding,bindProjectCompositionToBlueprint} from '../project-composition-v1/blueprint-binding.mjs';
 export function structuralDiff(a,b,path='$'){
  if(JSON.stringify(a)===JSON.stringify(b))return [];
  if(a&&b&&typeof a==='object'&&typeof b==='object'&&!Array.isArray(a)&&!Array.isArray(b))return [...new Set([...Object.keys(a),...Object.keys(b)])].flatMap(k=>structuralDiff(a[k],b[k],`${path}.${k}`));
@@ -59,6 +59,12 @@ export async function generateShadow(sources,options={},provider=callProvider){
    }
   }
   // Envelope IDs are assigned by the orchestrator, never pedagogy or source fields.
+  if(projectComposition){
+   raw=bindProjectCompositionToBlueprint(
+    raw,
+    projectComposition
+   );
+  }
   const b={...raw,blueprint_id:id,revision,status:'DRAFT',gate_result:null};
   const input={...frozen,blueprint:b};let gate=blueprintGate(input),semantic=null,reviewUnavailable=false;
    if(projectComposition){
