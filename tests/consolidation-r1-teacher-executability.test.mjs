@@ -113,3 +113,42 @@ test('fluent student development and simultaneous grade work survive to UI and D
  assert.deepEqual(plan.project.ltg_strategy,f.blueprint.ltg_strategy);
  assert.deepEqual(plan.sessions.map(s=>s.pda_focus),f.blueprint.session_progression.map(s=>s.pda_focus));
 });
+
+test('DOCX renders approved activity structure as distinct paragraphs instead of one narrative cell',async()=>{
+ const f=ltgFixture('CORE');useLtg(f);
+ const {plan}=approved(f);
+ const buffer=await createMultiplanDocx(plan);
+ const zip=await JSZip.loadAsync(buffer);
+ const xml=await zip.file('word/document.xml').async('string');
+
+ const paragraphs=[...xml.matchAll(/<w:p(?:\s[^>]*)?>([\s\S]*?)<\/w:p>/g)]
+  .map(match=>match[1].replace(/<[^>]+>/g,'').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').trim())
+  .filter(Boolean);
+
+ const paragraphFor=label=>paragraphs.findIndex(value=>value.includes(label));
+
+ const labels=[
+  'Desarrollo',
+  'Preparaci\u00f3n',
+  'Consigna',
+  'Organizaci\u00f3n',
+  'Acci\u00f3n docente',
+  'Si no avanza',
+  'Producto',
+  'Evidencia',
+  'Criterio',
+  'LTG',
+  'Cierre/conexi\u00f3n'
+ ];
+
+ const positions=labels.map(label=>[label,paragraphFor(label)]);
+ for(const [label,index] of positions){
+  assert.notEqual(index,-1,`missing DOCX section: ${label}`);
+ }
+
+ assert.equal(
+  new Set(positions.map(([,index])=>index)).size,
+  positions.length,
+  'DOCX activity sections must render in distinct paragraphs'
+ );
+});
