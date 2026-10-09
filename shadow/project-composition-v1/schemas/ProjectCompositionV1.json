@@ -1,0 +1,290 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:multiplan:shadow:ProjectCompositionV1",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "PROJECT_COMPOSITION_V1"
+    },
+    "composition_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source": {
+      "type": "object",
+      "properties": {
+        "constraints_hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "curriculum_snapshot_hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "methodology_decision_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "methodology_decision_hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "required": [
+        "constraints_hash",
+        "curriculum_snapshot_hash",
+        "methodology_decision_id",
+        "methodology_decision_hash"
+      ],
+      "additionalProperties": false
+    },
+    "methodology": {
+      "type": "object",
+      "properties": {
+        "selected_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "catalog_version": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "selected_id",
+        "catalog_version"
+      ],
+      "additionalProperties": false
+    },
+    "base": {
+      "type": "object",
+      "properties": {
+        "origin": {
+          "enum": [
+            "LTG_VERIFIED",
+            "AI_ORIGINAL"
+          ]
+        },
+        "project_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "purpose": {
+          "type": "string",
+          "minLength": 1
+        },
+        "central_product": {
+          "type": "string",
+          "minLength": 1
+        },
+        "compatibility": {
+          "enum": [
+            "DIRECT",
+            "ADAPTABLE"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "origin",
+        "project_id",
+        "name",
+        "purpose",
+        "central_product",
+        "compatibility",
+        "reason"
+      ],
+      "additionalProperties": false
+    },
+    "enrichments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "activity_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          },
+          "contribution": {
+            "type": "string",
+            "minLength": 1
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "project_id",
+          "activity_ids",
+          "contribution",
+          "reason"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0
+    },
+    "references": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "project_id",
+          "reason"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0
+    },
+    "grade_coverage": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "grade": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 6
+          },
+          "mode": {
+            "enum": [
+              "BASE_PDA",
+              "ENRICHMENT_PDA",
+              "TRANSVERSAL_PROJECT"
+            ]
+          },
+          "pda_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 0,
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "grade",
+          "mode",
+          "pda_ids"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
+    "final_outcome": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "purpose": {
+          "type": "string",
+          "minLength": 1
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "name",
+        "purpose",
+        "description"
+      ],
+      "additionalProperties": false
+    },
+    "cohesion": {
+      "type": "object",
+      "properties": {
+        "one_project_reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "enrichment_boundary": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "one_project_reason",
+        "enrichment_boundary"
+      ],
+      "additionalProperties": false
+    },
+    "rejected_options": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "project_id",
+          "reason"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0
+    },
+    "ai_original_required": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "schema_version",
+    "composition_id",
+    "source",
+    "methodology",
+    "base",
+    "enrichments",
+    "references",
+    "grade_coverage",
+    "final_outcome",
+    "cohesion",
+    "rejected_options",
+    "ai_original_required"
+  ],
+  "additionalProperties": false
+}
