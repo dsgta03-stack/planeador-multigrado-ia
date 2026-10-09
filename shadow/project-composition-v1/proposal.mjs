@@ -56,7 +56,8 @@ export function projectCompositionProposalSchema(sources,pool){
     type:'object',
     properties:{
       proposal_version:{
-        const:PROJECT_COMPOSITION_PROPOSAL_VERSION
+        type:'string',
+        enum:[PROJECT_COMPOSITION_PROPOSAL_VERSION]
       },
 
       base:{
@@ -139,8 +140,7 @@ export function projectCompositionProposalSchema(sources,pool){
                 type:'string',
                 minLength:1
               },
-              minItems:1,
-              uniqueItems:true
+              minItems:1
             },
 
             contribution:{
@@ -215,8 +215,7 @@ export function projectCompositionProposalSchema(sources,pool){
                     type:'string',
                     enum:['__NO_SELECTED_PDA__']
                   },
-              minItems:0,
-              uniqueItems:true
+              minItems:0
             }
           },
           required:[
@@ -362,7 +361,27 @@ function assertProposalSemantics(proposal,pool){
     }
   }
 
+  for(const row of proposal.grade_coverage){
+    if(
+      new Set(row.pda_ids).size!==
+      row.pda_ids.length
+    ){
+      throw Error(
+        `PCP-106 DUPLICATE_GRADE_PDA:${row.grade}`
+      );
+    }
+  }
+
   for(const enrichment of proposal.enrichments){
+    if(
+      new Set(enrichment.activity_ids).size!==
+      enrichment.activity_ids.length
+    ){
+      throw Error(
+        `PCP-104 DUPLICATE_ACTIVITY_ID:${enrichment.project_id}`
+      );
+    }
+
     const project=candidateById.get(
       enrichment.project_id
     );
