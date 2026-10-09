@@ -112,7 +112,16 @@ export function repairTargetsFromContext(ctx={}){
    const rule_id=item.rule_id||item.rule||item.code||repairRuleId(entry.text);
    return {target_id:`RT-${index+1}`,source:entry.source,scope:item.scope||null,rule_id,observed:entry.text,required:item.expected||repairRequirement(rule_id)};
   }
-  return defectTarget(entry.text,index,entry.source);
+  const target=defectTarget(entry.text,index,entry.source);
+  const match=target.scope?.match(/^\$\.sessions\[(\d+)\]\.activities\[(\d+)\]\.functional_requirement_ids$/);
+  if(match&&target.observed==='maxItems'){
+   const proposal=ctx.previous_proposal??ctx.previous_authoring_proposal;
+   const ids=proposal?.sessions?.[Number(match[1])]?.activities?.[Number(match[2])]?.functional_requirement_ids;
+   return {...target,rule_id:'FUNCTIONAL_REQUIREMENT_IDS_MAX_ITEMS',field:'functional_requirement_ids',maximum:20,
+    ...(Array.isArray(ids)?{observed_count:ids.length}:{}),
+    required:'Máximo 20 elementos por actividad. Elimina duplicados y selecciona por pertinencia semántica únicamente requisitos realmente ejecutados o evidenciados por esta actividad. No copies todos los requisitos del producto final, no trunques mecánicamente y no elimines actividades ni reduzcas narrativa docente.'};
+  }
+  return target;
  });
 }
 
