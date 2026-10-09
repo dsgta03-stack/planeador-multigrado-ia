@@ -250,3 +250,62 @@ test('SGD-014 requires every active grade to participate in each session even wi
   /SGD-014.*session 1.*grade 3/
  );
 });
+
+test('rich LTG source is projected to compact SessionGraph reference',()=>{
+ const f=ltgFixture('CORE');
+
+ const sourceActivity=
+  f.curriculum.ltg[0].verified_activities[0];
+
+ Object.assign(
+  sourceActivity,
+  {
+   activity_type:'discussion',
+   title:'Comparación ampliada',
+   organization:'Parejas',
+   guiding_questions:'¿Qué cambia?',
+   evidence_or_record:'Registro comparativo',
+   product_contribution:'Aporta al acuerdo',
+   semantic_tags:['acuerdos','comparación'],
+   source_excerpt:'detalle rico que no debe viajar al graph'
+  }
+ );
+
+ useLtg(f);
+
+ const {graph}=
+  compileSessionGraph(
+   f.proposal,
+   f,
+   {graph_id:'compact-rich-ltg'}
+  );
+
+ const reference=
+  graph.sessions[0]
+   .activities[0]
+   .ltg_use[0]
+   .reference
+   .verified_activity;
+
+ assert.deepEqual(
+  reference,
+  {
+   activity_id:'ltg-a1',
+   activity_order:1,
+   summary:'Comparar acuerdos',
+   page_start:11,
+   page_end:12,
+   verification_status:'verified'
+  }
+ );
+
+ assert.equal(
+  sourceActivity.title,
+  'Comparación ampliada'
+ );
+
+ assert.equal(
+  sourceActivity.source_excerpt,
+  'detalle rico que no debe viajar al graph'
+ );
+});

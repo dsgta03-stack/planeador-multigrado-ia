@@ -155,7 +155,14 @@ export function resolveLtgUse(use,curriculum){
  if(!project)throw Error('SGD-013 LTG source missing');
  const activity=use.activity_id===null?null:project.verified_activities.find(a=>a.activity_id===use.activity_id&&a.verification_status==='verified');
  if(use.activity_id!==null&&!activity)throw Error('SGD-013 LTG activity missing');
- return {...structuredClone(use),reference:{book:project.book,project:project.name,grade:project.grade,pages:activity?{start:activity.page_start,end:activity.page_end}:structuredClone(project.pages),verified_activity:activity?structuredClone(activity):null}};
+ return {...structuredClone(use),reference:{book:project.book,project:project.name,grade:project.grade,pages:activity?{start:activity.page_start,end:activity.page_end}:structuredClone(project.pages),verified_activity:activity?{
+ activity_id:activity.activity_id,
+ activity_order:activity.activity_order,
+ summary:activity.summary,
+ page_start:activity.page_start,
+ page_end:activity.page_end,
+ verification_status:activity.verification_status
+}:null}};
 }
 
 export function sessionGraphAuthoringSchema(source){
