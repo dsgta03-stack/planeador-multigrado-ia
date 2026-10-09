@@ -86,7 +86,7 @@ test('an uncaught provider error cannot expose the configured credential',async(
 test('runtime has no legacy, UI, history, review cache, DOCX or live runner imports',()=>{
  const source=readFileSync(new URL('../lib/v0124/certified-runtime.mjs',import.meta.url),'utf8');
  assert.match(source,/import \{createSessionGraphDriversSplitCritical\}/);
- assert.match(source,/import \{createProjectCompositionProvider\}/);
+ assert.match(source,/import \{createProjectCompositionProvider,PROJECT_COMPOSITION_PROMPT_VERSION\}/);
  for(const forbidden of ['project-coherence.mjs','ui.mjs','history-fidelity.mjs','review-cache.mjs','docx-export.mjs','live-shadow.mjs'])
   assert.ok(!source.includes(forbidden),forbidden);
 });
@@ -183,6 +183,7 @@ test('certified project composition invoke preserves request contract and transp
   {
    task:'GENERATE',
    prompt_version:'PROJECT_COMPOSITION_PROMPT_V1',
+   model:'gemini-3.5-flash-lite',
    system:'composition system',
    prompt:{instruction:'compose'},
    input:{value:'fixture'},
