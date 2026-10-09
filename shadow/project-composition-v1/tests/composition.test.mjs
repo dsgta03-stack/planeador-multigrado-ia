@@ -251,3 +251,53 @@ test('selected PDA cannot appear in more than one coverage row',()=>{
     /PCD-004/
   );
 });
+
+test('real CORE and SUPPORT decisions are retained by compatible composition',()=>{
+  const s=sources(),input=validInput();
+  s.constraints.explicit_ltg_selections=[
+    {project_id:'ltg-base',pda_ids:['p3'],intent:'CORE'},
+    {project_id:'ltg-enrich',pda_ids:['p1'],intent:'SUPPORT'}
+  ];
+  const before=structuredClone(s);
+  const composition=makeProjectComposition(input,s);
+  assert.equal(validateProjectComposition(composition,s),composition);
+  assert.deepEqual(s,before);
+});
+
+for(const [project_id,intent] of [
+  ['ltg-base','SUPPORT'],['ltg-enrich','CORE'],['ltg-enrich','OPTIONAL']
+]){
+  test(`composition rejects replacing explicit ${intent} on ${project_id}`,()=>{
+    const s=sources();
+    s.constraints.explicit_ltg_selections=[{project_id,pda_ids:[project_id==='ltg-base'?'p3':'p1'],intent}];
+    assert.throws(()=>makeProjectComposition(validInput(),s),/PCD-009 EXPLICIT_LTG_INTENT_MISMATCH/);
+  });
+}
+
+test('explicit project cannot be omitted or reduced to REFERENCE',()=>{
+  for(const reference of [false,true]){
+    const s=sources(),input=validInput();
+    s.constraints.explicit_ltg_selections=[{project_id:'ltg-enrich',pda_ids:['p1'],intent:'SUPPORT'}];
+    input.enrichments=[];
+    if(reference)input.references=[{project_id:'ltg-enrich',reason:'Referencia'}];
+    assert.throws(()=>makeProjectComposition(input,s),/PCD-009 EXPLICIT_LTG_OPERATIONAL_PROJECT_REQUIRED/);
+  }
+});
+
+test('explicit PDA must be selected, linked and of the official LTG grade',()=>{
+  for(const kind of ['unselected','unlinked','wrong-grade']){
+    const s=sources();
+    if(kind==='unselected')s.curriculum.ltg[1].verified_pda_links.push('outside');
+    if(kind==='unlinked')s.curriculum.ltg[1].verified_pda_links=[];
+    if(kind==='wrong-grade')s.curriculum.ltg[1].grade=3;
+    s.constraints.explicit_ltg_selections=[{project_id:'ltg-enrich',pda_ids:[kind==='unselected'?'outside':'p1'],intent:'SUPPORT'}];
+    assert.throws(()=>makeProjectComposition(validInput(),s),/PCD-009 EXPLICIT_LTG_PDA_NOT_VERIFIED/);
+  }
+});
+
+test('explicit BASE PDA must belong to BASE_PDA curricular coverage',()=>{
+  const s=sources(),input=validInput();
+  s.constraints.explicit_ltg_selections=[{project_id:'ltg-base',pda_ids:['p3'],intent:'CORE'}];
+  input.grade_coverage[1].mode='ENRICHMENT_PDA';
+  assert.throws(()=>makeProjectComposition(input,s),/PCD-009 EXPLICIT_LTG_BASE_PDA_COVERAGE_MISMATCH/);
+});

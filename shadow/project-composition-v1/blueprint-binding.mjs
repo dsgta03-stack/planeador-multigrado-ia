@@ -1,3 +1,5 @@
+import {assertExplicitLtgComposition} from './explicit-ltg-decisions.mjs';
+
 const sameSet=(a,b)=>{
   const aa=[...new Set(a)].sort();
   const bb=[...new Set(b)].sort();
@@ -64,6 +66,8 @@ export function bindProjectCompositionToBlueprint(
 ){
   if(!composition)return structuredClone(blueprint);
 
+  const explicit=assertExplicitLtgComposition(composition,sources);
+
   const bound=structuredClone(blueprint);
 
   const currentSelections=
@@ -104,7 +108,9 @@ export function bindProjectCompositionToBlueprint(
 
     if(!current)continue;
 
-    const projection=verifiedLtgProjection(current,sources);
+    const explicitPdas=explicit.filter(x=>x.project_id===enrichment.project_id)
+      .flatMap(x=>x.pda_ids);
+    const projection=verifiedLtgProjection(current,sources,[...current.pda_ids,...explicitPdas]);
 
     selections.push({
       ...current,
@@ -142,6 +148,8 @@ export function assertProjectCompositionBinding(
       'PCB-001 PROJECT_COMPOSITION_REQUIRED'
     );
   }
+
+  const explicit=assertExplicitLtgComposition(composition,sources);
 
   if(
     blueprint?.methodology?.selected_id!==
@@ -279,6 +287,13 @@ export function assertProjectCompositionBinding(
 
   const mode=
     blueprint?.ltg_strategy?.mode;
+
+  for(const decision of explicit){
+    const selection=byProject.get(decision.project_id);
+    if(!selection||selection.role!==decision.intent||decision.pda_ids.some(id=>!selection.pda_ids.includes(id))){
+      throw Error(`PCB-011 EXPLICIT_LTG_BINDING_MISMATCH:${decision.project_id}`);
+    }
+  }
 
   if(composition.base.origin==='LTG_VERIFIED'){
     if(mode!=='CORE'){

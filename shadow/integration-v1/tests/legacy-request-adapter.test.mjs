@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {analyzeLegacyPlanRequest,buildPipelineSourceArtifacts} from '../legacy-request-adapter.mjs';
 import {assertContract} from '../../project-blueprint-v1/contracts.mjs';
+import {buildProjectCandidatePool} from '../../project-composition-v1/candidate-pool.mjs';
 
 function legacyBody(){return {
  grados:[1,3],
@@ -31,6 +32,26 @@ function authoritativePdas(){return [
  {pda_id:'p1',grade:1,field:'De lo humano y lo comunitario',content_official:'Contenido oficial uno',pda_official:'PDA OFICIAL UNO',verification_status:'VERIFIED'},
  {pda_id:'p3',grade:3,field:'De lo humano y lo comunitario',content_official:'Contenido oficial tres',pda_official:'PDA OFICIAL TRES',verification_status:'VERIFIED'}
 ];}
+
+test('legacy LTG has no implicit role; authoritative candidates remain available',()=>{
+ const body=legacyBody();body.teacher_constraints=explicitTeacherConstraints();
+ body.ltg=[{project_id:'legacy-project',pda_id:'p3'}];
+ const analysis=analyzeLegacyPlanRequest(body);
+ assert.deepEqual(analysis.normalized.explicit_ltg_selections,[]);
+ const ltg=[{project_id:'legacy-project',grade:3,book:'Libro',scenario:'Aula',name:'Proyecto',
+   purpose:'Indagar',central_product:'Registro',pages:{start:1,end:2},
+   verified_pda_links:['p3'],verified_activities:[]}];
+ const {sources}=buildPipelineSourceArtifacts(analysis,{curriculum_pdas:authoritativePdas(),ltg,corpus_version_or_provenance:'db'});
+ const pool=buildProjectCandidatePool(sources);
+ assert.equal(pool.candidates[0].project_id,'legacy-project');
+ assert.equal(pool.candidates[0].explicit_intent,null);
+ assert.deepEqual(sources.constraints.explicit_ltg_selections,[]);
+});
+
+test('adapter never erases malformed real explicit decisions',()=>{
+ const body=legacyBody();body.explicit_ltg_selections={intent:'SUPPORT'};
+ assert.throws(()=>analyzeLegacyPlanRequest(body),/INVALID_EXPLICIT_LTG_SELECTIONS/);
+});
 
 test('current legacy request fails closed instead of inventing missing TeacherConstraints',()=>{
  const result=analyzeLegacyPlanRequest(legacyBody());

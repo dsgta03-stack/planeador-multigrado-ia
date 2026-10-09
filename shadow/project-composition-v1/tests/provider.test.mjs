@@ -392,3 +392,11 @@ test('provider output does not mutate sources or candidate pool',async()=>{
     beforePool
   );
 });
+
+test('provider cannot replace real SUPPORT with BASE/CORE despite a justification',async()=>{
+  const s=sources();
+  s.constraints.explicit_ltg_selections[0].intent='SUPPORT';
+  const pool=buildProjectCandidatePool(s);
+  const provider=createProjectCompositionProvider({invoke:async()=>({output:proposal()})});
+  await assert.rejects(()=>provider(s,pool),/PCD-009 EXPLICIT_LTG_INTENT_MISMATCH/);
+});

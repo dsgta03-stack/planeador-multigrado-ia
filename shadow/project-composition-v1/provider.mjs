@@ -126,7 +126,7 @@ export function buildProjectCompositionRequest(
     'REFERENCE reconoce material pertinente que no debe incorporarse operativamente.',
     'Evalúa compatibilidad semántica real con la metodología, PDA, problemática, contexto, grados y producto; no uses coincidencia de palabras como prueba.',
     'Un LTG puede ser adaptable sin copiar literalmente toda su secuencia.',
-    'Respeta explicit_intent como una decisión docente relevante y justifica cualquier decisión que limite su función.',
+    'explicit_intent y explicit_pda_ids son decisiones docentes obligatorias, no sugerencias. CORE exige BASE; SUPPORT exige ENRICHMENT. No cambies su rol, no omitas sus PDA verificados ni conviertas esos proyectos en REFERENCE. Una decisión incompatible debe rechazarse, no justificarse para reemplazarla.',
     'AI_ORIGINAL es último recurso.',
     'Si eliges AI_ORIGINAL debes rechazar explícitamente todos los candidatos estructuralmente elegibles como BASE.',
     'No uses el atractivo del producto como criterio suficiente.',

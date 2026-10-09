@@ -12,7 +12,8 @@ import {
 
 import {
   sourceBinding,
-  makeSnapshot
+  makeSnapshot,
+  makeConstraints
 } from '../../project-blueprint-v1/contracts.mjs';
 
 import {makeProjectComposition} from '../composition.mjs';
@@ -45,13 +46,17 @@ const semanticPass=input=>({
   )
 });
 
-test('composition to binding to blueprint gate projects verified LTG without losing curricular PDA',async()=>{
+test('composition to binding to blueprint gate preserves real CORE/SUPPORT and curricular PDA',async()=>{
   const {blueprint,...sources}=fixture('PB-016-LTG-CORE').input;
   const base=sources.curriculum.ltg[0];
   base.purpose='Propósito verificado de prueba';
   base.central_product='Producto verificado de prueba';
   const support={...structuredClone(base),project_id:'integration-support'};
   sources.curriculum=makeSnapshot({...sources.curriculum,ltg:[base,support]});
+  sources.constraints=makeConstraints({...sources.constraints,explicit_ltg_selections:[
+    ...sources.constraints.explicit_ltg_selections,
+    {project_id:support.project_id,pda_ids:[...support.verified_pda_links],intent:'SUPPORT'}
+  ]});
   blueprint.source=sourceBinding(sources);
   const composition=makeProjectComposition({
     methodology:{selected_id:sources.methodology.selected_id,
@@ -74,7 +79,7 @@ test('composition to binding to blueprint gate projects verified LTG without los
   },sources);
   blueprint.ltg_strategy.selections[0].activity_ids.push('not-verified');
   blueprint.ltg_strategy.selections.push({project_id:support.project_id,
-    role:'SUPPORT',pda_ids:[...sources.constraints.selected_pda_ids],
+    role:'SUPPORT',pda_ids:[sources.constraints.selected_pda_ids[0]],
     activity_ids:['not-approved'],reason:'Apoyo de prueba'});
   const before=structuredClone({sources,composition,blueprint});
   const result=await generateShadow(sources,{projectComposition:composition},async(task,input)=>({

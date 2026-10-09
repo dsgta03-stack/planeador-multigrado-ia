@@ -438,3 +438,37 @@ test('operational LTG projection requires sources',()=>{
   assert.throws(()=>assertProjectCompositionBinding(blueprint(),composition()),
     /PCB-010 LTG_PROJECTION_SOURCES_REQUIRED/);
 });
+
+test('binder includes a valid explicit enrichment PDA omitted by generation, without mutation',()=>{
+  const s=sources(),c=composition(),b=blueprint();
+  s.constraints.selected_pda_ids.push('p1-second');
+  s.curriculum.pdas.push({pda_id:'p1-second',grade:1});
+  s.curriculum.ltg[1].verified_pda_links.push('p1-second');
+  c.grade_coverage[0].pda_ids.push('p1-second');
+  s.constraints.explicit_ltg_selections=[
+    {project_id:'base-project',pda_ids:['p3'],intent:'CORE'},
+    {project_id:'support-project',pda_ids:['p1-second'],intent:'SUPPORT'}
+  ];
+  const before=structuredClone({s,c,b});freeze(s);freeze(c);freeze(b);
+  assert.throws(()=>assertProjectCompositionBinding(b,c,s),/PCB-011 EXPLICIT_LTG_BINDING_MISMATCH/);
+  const bound=bindProjectCompositionToBlueprint(b,c,s);
+  assert.deepEqual(bound.ltg_strategy.selections[1].pda_ids,['p1','p1-second']);
+  assert.equal(assertProjectCompositionBinding(bound,c,s),true);
+  assert.deepEqual(bindProjectCompositionToBlueprint(bound,c,s),bound);
+  assert.deepEqual({s,c,b},before);
+});
+
+test('binder and assertion reject genuine role conflicts before rewriting teacher decisions',()=>{
+  const s=sources(),c=composition(),b=blueprint();
+  s.constraints.explicit_ltg_selections=[{project_id:'base-project',pda_ids:['p3'],intent:'SUPPORT'}];
+  const before=structuredClone({s,c,b});
+  assert.throws(()=>bindProjectCompositionToBlueprint(b,c,s),/PCD-009 EXPLICIT_LTG_INTENT_MISMATCH/);
+  assert.throws(()=>assertProjectCompositionBinding(b,c,s),/PCD-009 EXPLICIT_LTG_INTENT_MISMATCH/);
+  assert.deepEqual({s,c,b},before);
+});
+
+test('binder rejects an unverified explicit PDA instead of filtering the teacher decision away',()=>{
+  const s=sources();
+  s.constraints.explicit_ltg_selections=[{project_id:'support-project',pda_ids:['p3-unlinked'],intent:'SUPPORT'}];
+  assert.throws(()=>bindProjectCompositionToBlueprint(blueprint(),composition(),s),/PCD-009 EXPLICIT_LTG_PDA_NOT_VERIFIED/);
+});

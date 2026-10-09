@@ -1,5 +1,6 @@
 import {randomUUID} from 'node:crypto';
 import {readFileSync} from 'node:fs';
+import {assertExplicitLtgComposition} from './explicit-ltg-decisions.mjs';
 import {
   deepFreeze,
   hash,
@@ -245,6 +246,7 @@ export function validateProjectComposition(composition,sources){
     }
   }
 
+  assertExplicitLtgComposition(composition,sources);
   return composition;
 }
 
