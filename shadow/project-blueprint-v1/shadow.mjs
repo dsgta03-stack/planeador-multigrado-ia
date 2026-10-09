@@ -1,6 +1,6 @@
 import {compileAuthoring} from './authoring-proposal.mjs';
 import {compileConstruction} from './construction.mjs';
-import {applyEvidenceAudit} from './semantic-evidence.mjs';
+import {applyEvidenceAudit,stageReviewTelemetry} from './semantic-evidence.mjs';
 import {randomUUID} from 'node:crypto';
 import {assertContract,hash,deepFreeze,sourceBinding} from './contracts.mjs';
 import {blueprintGate,semanticInputHash,functionalDiagnostics} from './gate.mjs';
@@ -12,10 +12,10 @@ export function structuralDiff(a,b,path='$'){
  return [{changed_field:path,previous_value:a??null,new_value:b??null}];
 }
 export async function reviewBlueprint(input,options={},provider=callProvider){
- if(provider!==callProvider){const r=await provider('REVIEW',input,options);return {input_hash:semanticInputHash(input),findings:r.output.audit_version?applyEvidenceAudit(input,r.output):r.output.findings,audit:r.output.audit_version?r.output:null,telemetry:r.telemetry}}
+ if(provider!==callProvider){const r=await provider('REVIEW',input,options);return {input_hash:semanticInputHash(input),findings:r.output.audit_version?applyEvidenceAudit(input,r.output):r.output.findings,audit:r.output.audit_version?r.output:null,telemetry:{...r.telemetry,...(r.output.audit_version?{stages_review:stageReviewTelemetry(r.output,r.telemetry)}:{})}}}
  const audit={audit_version:'LOCAL_EVIDENCE_V1'},calls=[];
  for(const reviewFocus of ['GLOBAL','PDA','STAGES','METHOD']){
-  try{const r=await provider('REVIEW',input,{...options,reviewFocus});Object.assign(audit,r.output);calls.push(r.telemetry)}
+  try{const r=await provider('REVIEW',input,{...options,reviewFocus});Object.assign(audit,r.output);calls.push({...r.telemetry,...(reviewFocus==='STAGES'?{stages_review:stageReviewTelemetry(r.output,r.telemetry)}:{})})}
   catch(e){e.telemetry={...e.telemetry,completed_review_calls:calls};throw e}
  }
  return {input_hash:semanticInputHash(input),findings:applyEvidenceAudit(input,audit),audit,telemetry:{task:'REVIEW',provider:'google',model:calls[0].model,prompt_version:calls[0].prompt_version,input_hash:semanticInputHash(input),output_hash:hash(audit),latency_ms:calls.reduce((n,c)=>n+c.latency_ms,0),calls}};
@@ -102,6 +102,21 @@ export async function generateShadow(sources,options={},provider=callProvider){
   if(reviewUnavailable||['APPROVED','NEEDS_TEACHER_DECISION'].includes(status))break;
  }
  const final=revisions.at(-1);
+ if(final&&(final.status==='NEEDS_REPAIR'||final.gate?.status==='NOT_EVALUABLE')){
+  const finding=final.gate?.semantic_findings.find(x=>x.rule_id==='BPS-007');
+  let summary;try{if(final.semantic?.audit)summary=JSON.parse(finding?.observed||'null')}catch{}
+  const stagesReview=final.semantic?.telemetry?.stages_review||final.semantic?.telemetry?.calls?.find(x=>x.review_focus==='STAGES')?.stages_review;
+  console.error('[BLUEPRINT_BPS007_DIAGNOSTIC]',JSON.stringify({
+   status:finding?.status??null,
+   stage_diagnostics:Array.isArray(summary?.stage_diagnostics)?summary.stage_diagnostics.slice(0,24).map(x=>({
+    stage_id:/^[a-z][a-z0-9_]{0,63}$/.test(x.stage_id)?x.stage_id:'REDACTED_STAGE_ID',
+    status:x.status,reasons:x.reasons
+   })):[],
+   finish_reason:['STOP','MAX_TOKENS','SAFETY','RECITATION','OTHER'].includes(stagesReview?.finish_reason)?stagesReview.finish_reason:null,
+   stage_checks_count:Number.isInteger(stagesReview?.stage_checks_count)&&stagesReview.stage_checks_count>=0?stagesReview.stage_checks_count:null,
+   omitted_count:summary?.omitted_count??0
+  }));
+ }
  // Keep the evaluated DRAFT bytes immutable. Approval is an external envelope;
  // do not mutate the candidate to set gate_result/status after hashing/reviewing.
  return deepFreeze({mode:'SHADOW',status:errors.length?errors.at(-1).code:final.status,blueprint:final?.blueprint||null,gate:final?.gate||null,approved_blueprint_hash:!errors.length&&final?.status==='APPROVED'?hash(final.blueprint):null,revisions,telemetry,errors,construction_attempts,repair_count:repairCount});
