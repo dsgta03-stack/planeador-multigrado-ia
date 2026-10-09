@@ -41,21 +41,6 @@ function validateAuthoring(value,s,path='$'){
 }
 function normalizeCoverageReferences(proposal,plan){
  const copy=structuredClone(proposal);
- if(!Array.isArray(copy.coverage))return copy;
- for(const row of copy.coverage){
-  const link=plan.coverage_matrix.find(x=>x.operation===row.operation);
-  if(!link)continue;
-  row.stage_id=link.stage_id;
-  const stage=copy.project_stages?.find(s=>s.stage_id===link.stage_id);
-  if(!stage)continue;
-  if(typeof row.action_quote!=='string'||!row.action_quote.trim()||!stage.student_operation?.includes(row.action_quote)){
-   row.action_quote=stage.student_operation;
-  }
-  const ref=row.evidence_ref;
-  const validExpected=ref?.field==='expected_output'&&ref.index===null&&typeof stage.expected_output==='string'&&stage.expected_output.trim();
-  const validCriterion=ref?.field==='acceptance_criteria'&&Number.isInteger(ref.index)&&ref.index>=0&&ref.index<stage.acceptance_criteria.length&&typeof stage.acceptance_criteria[ref.index]==='string'&&stage.acceptance_criteria[ref.index].trim();
-  if(!validExpected&&!validCriterion)row.evidence_ref={field:'expected_output',index:null};
- }
  return copy;
 }
 function validateRequiredResources(proposal,src){
