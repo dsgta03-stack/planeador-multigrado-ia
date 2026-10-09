@@ -5,6 +5,36 @@ const sameSet=(a,b)=>{
     aa.every((x,i)=>x===bb[i]);
 };
 
+// LTG attribution is narrower than mandatory curricular coverage.
+// Share this projection between construction and validation; never edit sources.
+const verifiedLtgProjection=(selection,sources,pdaIds=selection.pda_ids)=>{
+  if(!sources?.constraints||!sources?.curriculum){
+    throw Error('PCB-010 LTG_PROJECTION_SOURCES_REQUIRED');
+  }
+  const project=sources.curriculum.ltg.find(x=>x.project_id===selection.project_id);
+  if(!project){
+    throw Error(`PCB-010 LTG_PROJECTION_PROJECT_NOT_FOUND:${selection.project_id}`);
+  }
+  const selected=new Set(sources.constraints.selected_pda_ids);
+  const pdas=new Map(sources.curriculum.pdas.map(x=>[x.pda_id,x]));
+  const links=new Set(project.verified_pda_links);
+  const pda_ids=[...new Set(pdaIds)].filter(id=>
+    selected.has(id)&&links.has(id)&&pdas.get(id)?.grade===project.grade
+  );
+  if(!pda_ids.length){
+    throw Error(`PCB-010 EMPTY_VERIFIED_LTG_PDA_PROJECTION:${selection.project_id}`);
+  }
+  const activities=new Set(project.verified_activities
+    .filter(x=>x.verification_status==='verified').map(x=>x.activity_id));
+  return {
+    pda_ids,
+    activity_ids:selection.activity_ids.filter(id=>activities.has(id))
+  };
+};
+
+const basePdaIds=composition=>composition.grade_coverage
+  .filter(x=>x.mode==='BASE_PDA').flatMap(x=>x.pda_ids);
+
 const selectionMap=blueprint=>{
   const selections=
     blueprint?.ltg_strategy?.selections||[];
@@ -29,7 +59,8 @@ const selectionMap=blueprint=>{
 
 export function bindProjectCompositionToBlueprint(
   blueprint,
-  composition
+  composition,
+  sources
 ){
   if(!composition)return structuredClone(blueprint);
 
@@ -54,19 +85,13 @@ export function bindProjectCompositionToBlueprint(
     const current=currentByProject.get(projectId);
 
     if(current){
-      const basePdaIds=[
-        ...new Set(
-          composition.grade_coverage
-            .filter(x=>x.mode==='BASE_PDA')
-            .flatMap(x=>x.pda_ids)
-        )
-      ];
+      const projection=verifiedLtgProjection(current,sources,basePdaIds(composition));
 
       selections.push({
         ...current,
         project_id:projectId,
         role:'CORE',
-        pda_ids:basePdaIds
+        ...projection
       });
     }
   }
@@ -79,10 +104,13 @@ export function bindProjectCompositionToBlueprint(
 
     if(!current)continue;
 
+    const projection=verifiedLtgProjection(current,sources);
+
     selections.push({
       ...current,
       project_id:enrichment.project_id,
       role:'SUPPORT',
+      pda_ids:projection.pda_ids,
       activity_ids:[
         ...enrichment.activity_ids
       ]
@@ -106,7 +134,8 @@ export function bindProjectCompositionToBlueprint(
 }
 export function assertProjectCompositionBinding(
   blueprint,
-  composition
+  composition,
+  sources
 ){
   if(!composition){
     throw Error(
@@ -166,20 +195,20 @@ export function assertProjectCompositionBinding(
       );
     }
 
-    const expectedBasePdas=
-      composition.grade_coverage
-        .filter(x=>x.mode==='BASE_PDA')
-        .flatMap(x=>x.pda_ids);
+    const projection=verifiedLtgProjection(baseSelection,sources,basePdaIds(composition));
 
     if(
       !sameSet(
         baseSelection.pda_ids||[],
-        expectedBasePdas
+        projection.pda_ids
       )
     ){
       throw Error(
         'PCB-005 VERIFIED_BASE_PDA_BINDING_MISMATCH'
       );
+    }
+    if(!sameSet(baseSelection.activity_ids,projection.activity_ids)){
+      throw Error('PCB-005 VERIFIED_BASE_ACTIVITY_BINDING_MISMATCH');
     }
   }
 
@@ -205,11 +234,16 @@ export function assertProjectCompositionBinding(
       );
     }
 
+    const projection=verifiedLtgProjection(selection,sources);
+    if(!sameSet(selection.pda_ids,projection.pda_ids)){
+      throw Error(`PCB-006 ENRICHMENT_PDA_BINDING_MISMATCH:${enrichment.project_id}`);
+    }
+
     if(
       !sameSet(
         selection.activity_ids||[],
         enrichment.activity_ids
-      )
+      )||!sameSet(selection.activity_ids,projection.activity_ids)
     ){
       throw Error(
         `PCB-006 ENRICHMENT_ACTIVITY_BINDING_MISMATCH:${enrichment.project_id}`

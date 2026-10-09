@@ -3,6 +3,27 @@ import assert from 'node:assert/strict';
 
 import {assertProjectCompositionBinding,bindProjectCompositionToBlueprint} from '../blueprint-binding.mjs';
 
+const sources=()=>({
+  constraints:{selected_pda_ids:['p1','p3','p3-unlinked','p3-other','p1-wrong-grade']},
+  curriculum:{
+    pdas:[
+      {pda_id:'p1',grade:1},{pda_id:'p3',grade:3},
+      {pda_id:'p3-unlinked',grade:3},{pda_id:'p3-other',grade:3},
+      {pda_id:'p1-wrong-grade',grade:3},{pda_id:'unselected',grade:1}
+    ],
+    ltg:[
+      {project_id:'base-project',grade:3,verified_pda_links:['p3','p3-other'],
+        verified_activities:[
+          {activity_id:'base-a1',verification_status:'verified'},
+          {activity_id:'base-unverified',verification_status:'pending'}
+        ]},
+      {project_id:'support-project',grade:1,
+        verified_pda_links:['p1','p1-wrong-grade','unselected'],
+        verified_activities:[{activity_id:'support-a1',verification_status:'verified'}]}
+    ]
+  }
+});
+
 const composition=()=>({
   methodology:{
     selected_id:'steam',
@@ -99,7 +120,8 @@ test('Blueprint matching composition passes',()=>{
   assert.equal(
     assertProjectCompositionBinding(
       blueprint(),
-      composition()
+      composition(),
+      sources()
     ),
     true
   );
@@ -118,7 +140,8 @@ test('Blueprint cannot replace final outcome with museum',()=>{
   assert.throws(
     ()=>assertProjectCompositionBinding(
       b,
-      composition()
+      composition(),
+      sources()
     ),
     /PCB-003/
   );
@@ -133,7 +156,8 @@ test('verified BASE must remain CORE',()=>{
   assert.throws(
     ()=>assertProjectCompositionBinding(
       b,
-      composition()
+      composition(),
+      sources()
     ),
     /PCB-005/
   );
@@ -150,7 +174,8 @@ test('enrichment activities cannot be expanded by Blueprint',()=>{
   assert.throws(
     ()=>assertProjectCompositionBinding(
       b,
-      composition()
+      composition(),
+      sources()
     ),
     /PCB-006/
   );
@@ -170,7 +195,8 @@ test('Blueprint cannot operationalize REFERENCE project',()=>{
   assert.throws(
     ()=>assertProjectCompositionBinding(
       b,
-      composition()
+      composition(),
+      sources()
     ),
     /PCB-007|PCB-008/
   );
@@ -198,7 +224,8 @@ test('AI original with no LTG requires NONE mode',()=>{
   assert.equal(
     assertProjectCompositionBinding(
       b,
-      c
+      c,
+      sources()
     ),
     true
   );
@@ -234,7 +261,8 @@ test('AI original cannot silently operationalize LTG',()=>{
   assert.throws(
     ()=>assertProjectCompositionBinding(
       b,
-      c
+      c,
+      sources()
     ),
     /PCB-007|PCB-009/
   );
@@ -261,7 +289,8 @@ test('binder removes unapproved operational LTG and restores composition-owned b
   const bound=
     bindProjectCompositionToBlueprint(
       b,
-      c
+      c,
+      sources()
     );
 
   assert.deepEqual(
@@ -302,7 +331,8 @@ test('binder removes unapproved operational LTG and restores composition-owned b
   assert.equal(
     assertProjectCompositionBinding(
       bound,
-      c
+      c,
+      sources()
     ),
     true
   );
@@ -320,7 +350,8 @@ test('binder never invents a missing composition-approved LTG selection',()=>{
   const bound=
     bindProjectCompositionToBlueprint(
       b,
-      c
+      c,
+      sources()
     );
 
   assert.equal(
@@ -333,8 +364,77 @@ test('binder never invents a missing composition-approved LTG selection',()=>{
   assert.throws(
     ()=>assertProjectCompositionBinding(
       bound,
-      c
+      c,
+      sources()
     ),
     /PCB-006/
   );
+});
+
+const freeze=value=>{
+  if(value&&typeof value==='object'){
+    Object.values(value).forEach(freeze);
+    Object.freeze(value);
+  }
+  return value;
+};
+
+test('verified projection preserves curricular PDA, filters BASE activities and ENRICHMENT PDA, and is immutable/idempotent',()=>{
+  const c=composition(),b=blueprint(),s=sources();
+  c.grade_coverage[1].pda_ids.push('p3-unlinked');
+  b.pda_analysis=s.constraints.selected_pda_ids.map(pda_id=>({pda_id}));
+  b.grade_contributions=structuredClone(c.grade_coverage);
+  b.session_progression=[{pda_focus:[...s.constraints.selected_pda_ids]}];
+  b.ltg_strategy.selections[0].activity_ids=[
+    'base-a1','base-unverified','support-a1','missing'
+  ];
+  b.ltg_strategy.selections[1].pda_ids=[
+    'p1','p3-unlinked','p1-wrong-grade','unselected','missing'
+  ];
+  const before=structuredClone({b,c,s});
+  freeze(b);freeze(c);freeze(s);
+  const bound=bindProjectCompositionToBlueprint(b,c,s);
+  assert.deepEqual(bound.ltg_strategy.selections[0].pda_ids,['p3']);
+  assert.deepEqual(bound.ltg_strategy.selections[0].activity_ids,['base-a1']);
+  assert.deepEqual(bound.ltg_strategy.selections[1].pda_ids,['p1']);
+  assert.deepEqual(bound.ltg_strategy.selections[1].activity_ids,['support-a1']);
+  assert.equal(assertProjectCompositionBinding(bound,c,s),true);
+  for(const field of ['pda_analysis','grade_contributions','session_progression']){
+    assert.deepEqual(bound[field],b[field]);
+  }
+  assert.deepEqual({b,c,s},before);
+  assert.deepEqual(bindProjectCompositionToBlueprint(bound,c,s),bound);
+});
+
+for(const kind of ['BASE','ENRICHMENT']){
+  test(`${kind} empty verified PDA projection fails closed in binder and assertion`,()=>{
+    const c=composition(),b=blueprint(),s=sources();
+    if(kind==='BASE')c.grade_coverage[1].pda_ids=['p3-unlinked'];
+    else b.ltg_strategy.selections[1].pda_ids=['p3-unlinked'];
+    const before=structuredClone({b,c,s});
+    assert.throws(()=>bindProjectCompositionToBlueprint(b,c,s),
+      /PCB-010 EMPTY_VERIFIED_LTG_PDA_PROJECTION:/);
+    assert.throws(()=>assertProjectCompositionBinding(b,c,s),
+      /PCB-010 EMPTY_VERIFIED_LTG_PDA_PROJECTION:/);
+    assert.deepEqual({b,c,s},before);
+  });
+}
+
+test('assertion rejects unprojected PDA and activity attribution',()=>{
+  for(const mutate of [
+    b=>b.ltg_strategy.selections[0].pda_ids.push('p3-unlinked'),
+    b=>b.ltg_strategy.selections[0].pda_ids.push('p3-other'),
+    b=>b.ltg_strategy.selections[0].activity_ids.push('base-unverified'),
+    b=>b.ltg_strategy.selections[1].pda_ids.push('p3-unlinked')
+  ]){
+    const b=blueprint();mutate(b);
+    assert.throws(()=>assertProjectCompositionBinding(b,composition(),sources()),/PCB-005|PCB-006/);
+  }
+});
+
+test('operational LTG projection requires sources',()=>{
+  assert.throws(()=>bindProjectCompositionToBlueprint(blueprint(),composition()),
+    /PCB-010 LTG_PROJECTION_SOURCES_REQUIRED/);
+  assert.throws(()=>assertProjectCompositionBinding(blueprint(),composition()),
+    /PCB-010 LTG_PROJECTION_SOURCES_REQUIRED/);
 });

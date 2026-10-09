@@ -62,14 +62,15 @@ export async function generateShadow(sources,options={},provider=callProvider){
   if(projectComposition){
    raw=bindProjectCompositionToBlueprint(
     raw,
-    projectComposition
+    projectComposition,
+    frozen
    );
   }
   const b={...raw,blueprint_id:id,revision,status:'DRAFT',gate_result:null};
   const input={...frozen,blueprint:b};let gate=blueprintGate(input),semantic=null,reviewUnavailable=false;
    if(projectComposition){
     try{
-     assertProjectCompositionBinding(b,projectComposition);
+     assertProjectCompositionBinding(b,projectComposition,frozen);
     }catch(e){
      const bindingFinding={
       rule_id:'PCB-BINDING',
