@@ -2,6 +2,7 @@ import { persistProviderResponse } from './durable-response.mjs'
 import { evidenceStore } from './evidence-store.mjs'
 import { outputBudget } from './output-budget.mjs'
 import { parseCandidate, redactSecrets } from './provider-output.mjs'
+import { classifyShadowOperation } from './operation-contract.mjs'
 
 const json = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), {
@@ -46,12 +47,22 @@ Deno.serve(async (req: Request) => {
       const saved = await store.get(b.request_id, b.part || 'result')
       return saved ? json(saved) : json({ status: 'PENDING' }, 202)
     }
+    const operation = classifyShadowOperation(b)
+
+    if (!operation.valid) {
+      return json({ code: 'INVALID_SHADOW_OPERATION' }, 400)
+    }
+
     if (
-      !['GENERATE', 'REPAIR', 'REVIEW'].includes(b.task) ||
-      b.prompt_version !== 'PROJECT_BLUEPRINT_SHADOW_V1_R2' ||
-      !['gemini-3.1-flash-lite', 'gemini-3.5-flash-lite', 'gemini-3.1-pro-preview'].includes(b.model)
-    ) return json({ code: 'INVALID_SHADOW_OPERATION' }, 400)
-    if (!b.input || !b.input.constraints || !b.input.curriculum || !b.input.methodology || (b.task === 'GENERATE' && b.input.blueprint)) {
+      operation.blueprintTask &&
+      (
+        !b.input ||
+        !b.input.constraints ||
+        !b.input.curriculum ||
+        !b.input.methodology ||
+        (b.task === 'GENERATE' && b.input.blueprint)
+      )
+    ) {
       return json({ code: 'INVALID_INPUT' }, 400)
     }
     if (typeof b.system !== 'string' || typeof b.prompt !== 'object') {
