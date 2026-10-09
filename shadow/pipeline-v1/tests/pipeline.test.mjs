@@ -93,3 +93,72 @@ test('project composition failure stops before Blueprint',async()=>{
  assert.equal(result.stages.at(-1).stage,'PROJECT_COMPOSITION');
  assert.equal(result.stages.at(-1).status,'ERROR');
 });
+test('blueprint failure preserves completed project composition trace',async()=>{
+ const composition={
+  schema_version:'PROJECT_COMPOSITION_V1',
+  composition_id:'composition-fixture',
+  base:{
+   origin:'AI_ORIGINAL',
+   project_id:null
+  },
+  enrichments:[]
+ };
+
+ const providerMeta={
+  provider_version:'fixture-provider',
+  prompt_version:'fixture-prompt',
+  input_hash:'a'.repeat(64)
+ };
+
+ const result=await runShadowPipeline({
+  sources:fixture().sources,
+  drivers:{
+   projectCompositionProvider:async()=>({
+    composition,
+    provider:providerMeta
+   }),
+   blueprintRunner:async()=>{
+    throw Error('BLUEPRINT_PROVIDER_DOWN');
+   }
+  }
+ });
+
+ assert.equal(
+  result.status,
+  'BLUEPRINT_STAGE_FAILED'
+ );
+
+ assert.deepEqual(
+  result.project_composition,
+  composition
+ );
+
+ assert.deepEqual(
+  result.project_composition_provider,
+  providerMeta
+ );
+
+ assert.deepEqual(
+  result.stages.map(x=>x.stage),
+  [
+   'PROJECT_COMPOSITION_CANDIDATES',
+   'PROJECT_COMPOSITION',
+   'PROJECT_BLUEPRINT'
+  ]
+ );
+
+ assert.equal(
+  result.stages.at(-1).status,
+  'ERROR'
+ );
+
+ assert.equal(
+  result.errors.at(-1).stage,
+  'PROJECT_BLUEPRINT'
+ );
+
+ assert.match(
+  result.errors.at(-1).message,
+  /BLUEPRINT_PROVIDER_DOWN/
+ );
+});
