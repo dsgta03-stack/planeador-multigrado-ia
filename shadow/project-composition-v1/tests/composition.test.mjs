@@ -200,3 +200,54 @@ test('AI original BASE requires explicit necessity',()=>{
     composition
   );
 });
+test('every selected PDA must remain in composition coverage',()=>{
+  const s=sources();
+  const input=validInput();
+
+  const row=
+    input.grade_coverage.find(
+      x=>x.grade===1
+    );
+
+  row.pda_ids=[];
+
+  assert.throws(
+    ()=>makeProjectComposition(input,s),
+    /PCD-004 SELECTED_PDA_MUST_BE_DEVELOPED/
+  );
+});
+
+test('selected PDA grade cannot become transversal',()=>{
+  const s=sources();
+  const input=validInput();
+
+  const row=
+    input.grade_coverage.find(
+      x=>x.grade===1
+    );
+
+  row.mode='TRANSVERSAL_PROJECT';
+
+  assert.throws(
+    ()=>makeProjectComposition(input,s),
+    /PCD-004 TRANSVERSAL_MUST_NOT_BORROW_PDA:1/
+  );
+});
+
+test('selected PDA cannot appear in more than one coverage row',()=>{
+  const s=sources();
+  const input=validInput();
+
+  const row6=
+    input.grade_coverage.find(
+      x=>x.grade===6
+    );
+
+  row6.mode='ENRICHMENT_PDA';
+  row6.pda_ids=['p1'];
+
+  assert.throws(
+    ()=>makeProjectComposition(input,s),
+    /PCD-004/
+  );
+});

@@ -94,6 +94,53 @@ export function validateProjectComposition(composition,sources){
     }
   }
 
+  const coveredPdas=
+    composition.grade_coverage
+      .flatMap(row=>row.pda_ids);
+
+  if(
+    new Set(coveredPdas).size!==
+    coveredPdas.length
+  ){
+    throw Error(
+      'PCD-004 DUPLICATE_SELECTED_PDA_COVERAGE'
+    );
+  }
+
+  if(
+    !sameSet(
+      [...selectedPdas],
+      coveredPdas
+    )
+  ){
+    throw Error(
+      'PCD-004 SELECTED_PDA_MUST_BE_DEVELOPED'
+    );
+  }
+
+  for(const row of composition.grade_coverage){
+    const expectedForGrade=
+      [...selectedPdas]
+        .filter(
+          pdaId=>
+            pdaById.get(pdaId)?.grade===
+            row.grade
+        );
+
+
+    if(
+      row.mode!=='TRANSVERSAL_PROJECT'&&
+      !sameSet(
+        row.pda_ids,
+        expectedForGrade
+      )
+    ){
+      throw Error(
+        `PCD-004 GRADE_SELECTED_PDA_COVERAGE_MISMATCH:${row.grade}`
+      );
+    }
+  }
+
   if(composition.base.origin==='LTG_VERIFIED'){
     if(!composition.base.project_id){
       throw Error('PCD-005 VERIFIED_BASE_REQUIRES_PROJECT_ID');
