@@ -1,7 +1,7 @@
 import {providerResponseSchema,providerAuthoringShapeSchema,assertProviderSchema,PROVIDER_SCHEMA_VERSION} from './provider-schema.mjs';
 import {randomUUID} from 'node:crypto';
 import {saveLocalEvidence} from './local-evidence.mjs';
-import {authoringSchema,AUTHORING_INSTRUCTION,AUTHORING_VERSION,FUNCTIONAL_PROFILE_INSTRUCTION,FUNCTIONAL_PROFILE_REPAIR_INSTRUCTION} from './authoring-proposal.mjs';
+import {authoringSchema,AUTHORING_INSTRUCTION,AUTHORING_VERSION,FUNCTIONAL_PROFILE_INSTRUCTION,FUNCTIONAL_PROFILE_REPAIR_INSTRUCTION,COMPOSITION_OUTCOME_INSTRUCTION} from './authoring-proposal.mjs';
 import {constructionTransport} from './construction.mjs';
 import {transportSchema,TRANSPORT_VERSION} from './transport-schema.mjs';
 import {limitShadowRequest} from './request-limiter.mjs';
@@ -60,6 +60,8 @@ export async function callProvider(task,input,{endpoint,token,identity='multipla
  if(task!=='REVIEW'){prompt.functional_profile_protocol=FUNCTIONAL_PROFILE_INSTRUCTION;if(repair)prompt.functional_profile_repair_protocol=FUNCTIONAL_PROFILE_REPAIR_INSTRUCTION;}
  if(task!=='REVIEW'&&projectComposition){
   prompt.project_composition=structuredClone(projectComposition);
+  prompt.composition_outcome_protocol=COMPOSITION_OUTCOME_INSTRUCTION;
+  prompt.binding_final_outcome=structuredClone(projectComposition.final_outcome);
   prompt.project_composition_protocol='PROJECT_COMPOSITION_V1 es una decisión semántica vinculante previa al Blueprint. Conserva exactamente final_outcome.name, final_outcome.purpose y final_outcome.description. Si BASE es LTG_VERIFIED, ese project_id debe permanecer CORE. Para esa selección CORE, pda_ids DEBE contener EXACTAMENTE, sin añadir ni quitar IDs, la unión de project_composition.grade_coverage[*].pda_ids donde mode sea BASE_PDA. No vuelvas a decidir qué PDA pertenecen al LTG BASE. Los PDA clasificados como ENRICHMENT_PDA siguen siendo aprendizajes obligatorios de sus respectivos grados y deben desarrollarse completamente en pda_analysis, grade_contributions, etapas, progresión y evidencia; ENRICHMENT significa integración al mismo proyecto, no menor importancia curricular. Nunca atribuyas a un proyecto LTG un PDA que no tenga vínculo verificado con ese proyecto. Cada ENRICHMENT sólo puede aparecer como SUPPORT y únicamente con sus activity_ids aprobados. REFERENCE nunca puede volverse selección operacional. No añadas proyectos LTG ni actividades fuera de la composición. No conviertas el proyecto en museo, campaña, exposición, prototipo u otro formato distinto por preferencia del modelo. Diseña guiding_question, etapas, progresión, requisitos funcionales y contribuciones dentro de esta composición, sin alterar sus decisiones.';
  }
  if(task==='REVIEW')response_schema=providerAuthoringShapeSchema(response_schema).schema;

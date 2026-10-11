@@ -142,3 +142,25 @@ test('semantic reviewer cannot approve missing profile requirements; BPS-003 unc
  const g=blueprintGate({...src,blueprint:b},{input_hash:semanticInputHash({...src,blueprint:b}),findings});
  assert.equal(g.semantic_findings.find(x=>x.rule_id==='BPS-003').status,'FAIL');
 });
+
+for(const field of ['name','purpose','description'])for(const revision of [1,2])test('composition-authority preflight '+field+' revision '+revision,()=>{
+ const p=proposal(),composition={final_outcome:structuredClone(p.final_outcome)},before=hash(p);
+ assert.doesNotThrow(()=>compileAuthoring(p,src,plan,{blueprint_id:'binding',revision,projectComposition:composition}));
+ for(const suffix of [' ','!']){
+  const bad=structuredClone(p);bad.final_outcome[field]+=suffix;const badHash=hash(bad);
+  assert.throws(()=>compileAuthoring(bad,src,plan,{blueprint_id:'binding',revision,projectComposition:composition}),e=>{
+   assert.match(e.message,/PCB-AUTHORING FINAL_OUTCOME_/);
+   assert.deepEqual(e.outcome_binding_diagnostics,[{field,revision,phase:revision===1?'GENERATE':'REPAIR'}]);return true;
+  });assert.equal(hash(bad),badHash);
+ }
+ assert.equal(hash(p),before);
+});
+test('functional repair can remove profiles or complete requirements without rewriting composition texts',()=>{
+ const p=proposal(),composition={final_outcome:structuredClone(p.final_outcome)};
+ p.final_outcome.type='EXHIBITION';p.final_outcome.functional_profiles=[];
+ assert.doesNotThrow(()=>compileAuthoring(p,src,plan,{blueprint_id:'profiles',revision:2,projectComposition:composition}));
+ const q=proposal();q.final_outcome.functional_requirements[0].criterion+=' detalle real';
+ assert.doesNotThrow(()=>compileAuthoring(q,src,plan,{blueprint_id:'requirements',revision:2,projectComposition:composition}));
+ q.final_outcome.description+='!';
+ assert.throws(()=>compileAuthoring(q,src,plan,{blueprint_id:'drift',revision:2,projectComposition:composition}),/FINAL_OUTCOME_DESCRIPTION_DRIFT/);
+});

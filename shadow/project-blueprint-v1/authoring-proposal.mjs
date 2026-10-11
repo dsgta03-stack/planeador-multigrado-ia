@@ -5,6 +5,17 @@ import {constructionPlan,constructionTransport,compileConstruction} from './cons
 import {transportSchema} from './transport-schema.mjs';
 import {FUNCTIONAL_PROFILES} from './catalog.mjs';
 import {functionalDiagnostics} from './gate.mjs';
+export const COMPOSITION_OUTCOME_INSTRUCTION='PROJECT_COMPOSITION_V1 es autoridad absoluta sobre final_outcome.name, final_outcome.purpose y final_outcome.description. Copia esos tres textos EXACTAMENTE: no resumir, mejorar redaccion, cambiar puntuacion, mayusculas o espacios ni parafrasear. En REPAIR funcional modifica solo los campos funcionales necesarios y conserva intactos los tres textos vinculantes. No reinterpretar el resultado aprobado.';
+export function compositionOutcomeDiagnostics(proposal,composition,revision=1){
+ if(!composition)return [];
+ return ['name','purpose','description'].filter(field=>proposal?.final_outcome?.[field]!==composition.final_outcome[field]).map(field=>({field,revision,phase:revision===1?'GENERATE':'REPAIR'}));
+}
+export function assertCompositionOutcomeAuthoring(proposal,composition,revision=1){
+ const diagnostics=compositionOutcomeDiagnostics(proposal,composition,revision);
+ if(!diagnostics.length)return;
+ const e=Error('PCB-AUTHORING '+diagnostics.map(x=>`FINAL_OUTCOME_${x.field.toUpperCase()}_DRIFT`).join('; '));
+ e.code='AUTHORING_CONTRACT_INVALID';e.rule='PCB-AUTHORING';e.outcome_binding_diagnostics=diagnostics;throw e;
+}
 export const FUNCTIONAL_PROFILE_INSTRUCTION='available_functional_profiles es un catalogo de ALTERNATIVAS DISPONIBLES, no una seleccion. final_outcome.functional_profiles contiene solo perfiles que describen el funcionamiento real del RESULTADO FINAL, no actividades del proceso ni semejanza tematica. Investigar durante el proyecto no convierte automaticamente el outcome en INVESTIGATION; comunicar informacion no lo convierte en CAMPAIGN; construir materiales no lo convierte en PROTOTYPE; ayudar a la comunidad no lo convierte en SERVICE; actuar sobre el contexto no lo convierte en INTERVENTION; una exposicion no lo convierte en MUSEUM. ITINERANT solo aplica cuando el resultado realmente se mueve/circula entre espacios o publicos distintos. Para cada perfil seleccionado y para un type catalogado, incluye TODOS sus requirement_id obligatorios exactos; cada requisito debe representar una funcion real del outcome, con criterio, etapas y evidencia autenticos. No inventes requirements para justificar perfiles innecesarios. functional_profiles puede quedar vacio si no necesita perfiles especializados; conserva al menos los functional_requirements reales exigidos por el schema.';
 export const FUNCTIONAL_PROFILE_REPAIR_INSTRUCTION='Resuelve simultaneamente TODOS los missing_requirement_ids de cada target. Si el perfil es genuino y funcional al outcome, conservalo y desarrolla TODOS sus requirements reales. Si fue sobredeclarado, retiralo unicamente si el resultado real no depende de esa funcion. No completes artificialmente siete perfiles ni inventes requisitos. Un type catalogado sigue exigiendo sus requisitos. La propuesta reparada completa volvera a pasar el mismo preflight.';
 function validateFunctionalProfiles(proposal){
@@ -97,11 +108,12 @@ function validateCoverageCompleteness(proposal,plan){
   e.code='CONSTRUCTION_REJECTED';e.rule='BPD-019';throw e;
  }
 }
-export function compileAuthoring(proposal,src,plan,{blueprint_id,revision=1}={}){
+export function compileAuthoring(proposal,src,plan,{blueprint_id,revision=1,projectComposition=null}={}){
  if(!blueprint_id||![1,2].includes(revision))throw Error('AUTHORING_ENVELOPE_REQUIRED');
  for(const [name,key] of [['TeacherConstraintsV1','constraints'],['CurriculumSnapshotV1','curriculum'],['MethodologyDecisionV1','methodology']])assertContract(name,src[key]);
  if(hash(plan)!==hash(constructionPlan(src)))throw Error('AUTHORING_SOURCE_PLAN_MISMATCH');
  validateAuthoring(proposal,authoringSchema(src,plan));
+ assertCompositionOutcomeAuthoring(proposal,projectComposition,revision);
  const normalizedProposal=normalizeCoverageReferences(proposal,plan);
  validateRequiredResources(normalizedProposal,src);
  validateCoverageCompleteness(normalizedProposal,plan);

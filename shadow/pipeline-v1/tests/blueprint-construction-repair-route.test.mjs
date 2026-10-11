@@ -4,6 +4,7 @@ import {sources,candidate} from '../../project-blueprint-v1/fixtures/build.mjs';
 import {FUNCTIONAL_PROFILES} from '../../project-blueprint-v1/catalog.mjs';
 import {authoringSchema} from '../../project-blueprint-v1/authoring-proposal.mjs';
 import {constructionPlan} from '../../project-blueprint-v1/construction.mjs';
+import {sourceBinding} from '../../project-blueprint-v1/contracts.mjs';
 import {generateShadow} from '../../project-blueprint-v1/shadow.mjs';
 
 const src=sources(),plan=constructionPlan(src);
@@ -99,4 +100,21 @@ for(const resolution of ['remove_overdeclared','complete_genuine','still_missing
  });
  assert.equal(result.construction_attempts[1].status,resolution==='still_missing'?'CONSTRUCTION_REJECTED':'CONSTRUCTED');
  assert.equal(tasks.includes('REVIEW'),resolution!=='still_missing');
+});
+
+test('composition drift is rejected before binding and repair receives exact authority',async()=>{
+ const p=validProposal(),composition={schema_version:'PROJECT_COMPOSITION_V1',source:sourceBinding(src),methodology:src.methodology,base:{origin:'AI_ORIGINAL',project_id:null},enrichments:[],references:[],grade_coverage:[],final_outcome:{name:p.final_outcome.name,purpose:p.final_outcome.purpose,description:p.final_outcome.description}};
+ const bad=structuredClone(p);bad.final_outcome.name+=' ';
+ const result=await generateShadow(src,{constructionPlan:plan,authoringCompact:true,projectComposition:composition},async(task,input,options)=>{
+  if(task==='GENERATE')return {output:bad,telemetry:{task}};
+  if(task==='REPAIR'){
+   assert.deepEqual(options.repair.binding_final_outcome,composition.final_outcome);
+   assert.deepEqual(options.repair.outcome_binding_diagnostics,[{field:'name',revision:1,phase:'GENERATE'}]);
+   const repaired=structuredClone(p);repaired.final_outcome.description+='!';
+   return {output:repaired,telemetry:{task}};
+  }throw Error('review must not run');
+ });
+ assert.deepEqual(result.construction_attempts.map(x=>x.status),['CONSTRUCTION_REJECTED','CONSTRUCTION_REJECTED']);
+ assert.deepEqual(result.errors[0].outcome_binding_diagnostics,[{field:'description',revision:2,phase:'REPAIR'}]);
+ assert.equal(bad.final_outcome.name,p.final_outcome.name+' ');
 });
