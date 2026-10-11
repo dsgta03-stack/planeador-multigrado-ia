@@ -12,7 +12,7 @@ import {createProjectCompositionProvider} from '../project-composition-v1/provid
 export const PIPELINE_VERSION='MULTIPLAN_SHADOW_PIPELINE_V1';
 export const PIPELINE_STATUSES=Object.freeze(['PROJECT_COMPOSITION_STAGE_FAILED','BLUEPRINT_NOT_APPROVED','BLUEPRINT_STAGE_FAILED','BLUEPRINT_REVISION_REQUIRED','SESSION_AUTHOR_DRIVER_REQUIRED','SESSION_AUTHORING_FAILED','SESSION_GRAPH_CONTRACT_REJECTED','SESSION_REVIEW_UNAVAILABLE','SESSION_GRAPH_REJECTED','SESSION_REPAIR_FAILED','READY_FOR_TEACHER']);
 const freezeClone=value=>deepFreeze(structuredClone(value));
-const errorInfo=e=>({code:e?.code||'ERROR',rule:e?.rule||null,message:String(e?.message||e)});
+const errorInfo=e=>({code:e?.code||'ERROR',rule:e?.rule||null,message:String(e?.message||e),...(e?.repair_local_validation?{repair_local_validation:{provider_responded:e.repair_local_validation.provider_responded===true,proposal_normalized:e.repair_local_validation.proposal_normalized===true,rejected_at:'validateRepairTargets'},repair_target_diagnostics:(e.repair_target_diagnostics||[]).map(t=>({target_id:t.target_id,session:t.session,activity_key:t.activity_key,grade:t.grade,pda_id:t.pda_id,reason:t.reason}))}:{})});
 const exactSourceKeys=s=>Object.keys(s||{}).sort().join(',')==='constraints,curriculum,methodology';
 
 export function assertApprovedBlueprintEnvelope(envelope){const h=envelope?.blueprint?hash(envelope.blueprint):null;if(!envelope||envelope.status!=='APPROVED'||envelope.gate?.gate_version!=='BLUEPRINT_GATE_V1'||envelope.gate?.status!=='PASS'||!h||envelope.approved_blueprint_hash!==h||envelope.gate.evaluated_blueprint_hash!==h)throw Error('APPROVED_BLUEPRINT_TAMPERED_OR_NOT_APPROVED');return h;}

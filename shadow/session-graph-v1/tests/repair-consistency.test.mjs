@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {executableSource,ltgFixture,useLtg} from './pedagogical-fixture.mjs';
-import {normalizeSessionGraphAuthoring,ltgExecutionErrors} from '../authoring.mjs';
+import {normalizeSessionGraphAuthoring,ltgExecutionErrors,workedSemanticMissing,validateSessionGraphAuthoring} from '../authoring.mjs';
 import {repairTargetsFromContext,validateRepairTargets,createSessionGraphDrivers} from '../../pipeline-v1/session-provider.mjs';
 for(const [role,decision,used] of [['SUPPORT','USE',true],['SUPPORT','NOT_RECOMMENDED',true],['SUPPORT','USE',false],['SUPPORT','NOT_RECOMMENDED',false],['CORE','USE',true],['CORE','USE',false]])test(`LTG ${role} ${decision} used=${used}`,()=>{
  const f=ltgFixture(role);useLtg(f);const s=f.proposal.sessions[0];s.ltg_decisions[0].decision=decision;
@@ -29,6 +29,35 @@ const cognitive=()=>{
  return {f,a,g,t};
 };
 const fullAction='Observan acuerdos del aula; comparan dos casos; registran las diferencias en una lista; proponen un acuerdo concreto para cuidar materiales.';
+test('INDAGA repair communicates official scope and diagnoses local rejection after provider response',async()=>{
+ const {f,a,g}=cognitive(),official='Indaga acuerdos del aula y comparte su importancia.';
+ f.curriculum.pdas.find(p=>p.pda_id==='p1').pda_official=official;
+ g.student_action='Presentan acuerdos del aula.';
+ const missing=workedSemanticMissing(official,g.student_action);
+ assert.deepEqual(missing,['INDAGA_SOURCE_OR_OBSERVATION','INDAGA_PROCESS_OR_CONTRAST','INDAGA_TRACEABLE_RECORD']);
+ const ctx={sources:{constraints:f.constraints,curriculum:f.curriculum,methodology:f.methodology},blueprint:f.blueprint,approval:f.approval,previous_proposal:f.proposal,compile_error:{code:'SESSION_GRAPH_AUTHORING_INVALID',message:'SESSION_GRAPH_AUTHORING_CONTRACT: '+`$.sessions[1].${a.activity_key}.grade_1: WORKED p1 missing ${missing.join(',')}`}};
+ const t=repairTargetsFromContext(ctx)[0];
+ assert.equal(t.requirement,'indaga_source_must_address_official_pda_scope');assert.equal(t.official_text,official);
+ assert.deepEqual(t.missing_requirements,missing);assert.equal(t.status_required,'WORKED');
+ assert.deepEqual(repairTargetsFromContext({compile_error:ctx.compile_error})[0].official_text_reference,{collection:'curriculum.pdas',pda_id:'p1',grade:1,field:'pda_official'});
+ for(const action of ['Consulta fuentes sobre visitantes; compara datos; registra notas y comparte acuerdos del aula.','Consulta acuerdos del aula; compara casos; registra notas y comparte su importancia.']){
+  const repaired=structuredClone(f.proposal);
+  for(const s of repaired.sessions)for(const act of s.activities)for(const row of act.grade_participation)if(row.grade===1)row.student_action=action;
+  const reasons=workedSemanticMissing(official,action);let sent;
+  const driver=createSessionGraphDrivers({endpoint:'https://example.invalid/plan-project-blueprint-v1-shadow',token:'x'.repeat(64),durableEvidence:false,fetchImpl:async(url,request)=>{sent=JSON.parse(request.body);return new Response(JSON.stringify({output:{status:'PROPOSAL',reason:'Synthetic',proposal:repaired}}));}});
+  if(reasons.length){
+   assert.deepEqual(reasons,['INDAGA_OFFICIAL_SCOPE']);
+   assert.throws(()=>validateSessionGraphAuthoring(repaired,f),e=>e.message.includes('INDAGA_OFFICIAL_SCOPE'));
+   await assert.rejects(driver.sessionRepair(ctx),e=>{
+    assert.deepEqual(e.repair_local_validation,{provider_responded:true,proposal_normalized:true,rejected_at:'validateRepairTargets'});
+    assert.deepEqual(e.repair_target_diagnostics,[{target_id:'RT-1',session:1,activity_key:a.activity_key,grade:1,pda_id:'p1',reason:'INDAGA_OFFICIAL_SCOPE'}]);
+    assert.ok(!JSON.stringify(e.repair_target_diagnostics).includes(action));return true;
+   });
+  }else {assert.equal(validateRepairTargets(repaired,f,[t]),true);const r=await driver.sessionRepair(ctx);assert.equal(r.proposal.sessions[0].activities[0].grade_participation[0].pda_mobilization[0].status,'WORKED');}
+  assert.equal(sent.prompt.repair_targets[0].official_text,official);
+  assert.match(sent.prompt.indaga_repair_scope,/directamente el objeto expresado en pda_official/);
+ }
+});
 test('WORKED target retains every missing dimension and independent PDA targets',()=>{
  const {t}=cognitive();assert.deepEqual(t[0].missing_requirements,missing);assert.equal(t[0].status_required,'WORKED');assert.equal(t[0].session,1);assert.equal(t[0].grade,1);assert.equal(t[0].pda_id,'p1');
  const two=targets(`$.sessions[1].a1.grade_1: WORKED p1 missing ${missing.toReversed().join(',')}; $.sessions[1].a1.grade_3: WORKED p3 missing EXPLICA_LOCAL_ACTION`);

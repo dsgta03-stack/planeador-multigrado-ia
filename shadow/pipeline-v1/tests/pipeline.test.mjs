@@ -17,6 +17,19 @@ function fixture(){
  return {sources:{constraints,curriculum,methodology},blueprintEnvelope,proposal};
 }
 const passReview=async ({request})=>({input_hash:request.input_hash,findings:Object.keys(SGS).map(rule_id=>({rule_id,status:'PASS',scope:'fixture',observed:'ok',expected:SGS[rule_id]}))});
+test('pipeline retains compact post-provider repair diagnostics without changing ERROR status',async()=>{
+ const f=fixture(),bad=structuredClone(f.proposal);bad.sessions[0].activities[0].contribution_mode='DIRECT';bad.sessions[0].activities[0].contributes_to_artifact_ids=[];
+ const diagnostic={target_id:'RT-4',session:3,activity_key:'synthetic_action',grade:5,pda_id:'synthetic_pda',reason:'INDAGA_OFFICIAL_SCOPE'};
+ const result=await runShadowPipeline({sources:f.sources,drivers:{blueprintRunner:async()=>f.blueprintEnvelope,sessionAuthor:async()=>bad,sessionRepair:async()=>{
+  const e=Error('SESSION_GRAPH_REPAIR_TARGET: RT-4: INDAGA_OFFICIAL_SCOPE');e.code='SESSION_GRAPH_AUTHORING_INVALID';
+  e.repair_local_validation={provider_responded:true,proposal_normalized:true,rejected_at:'validateRepairTargets',candidate_text:'MUST_NOT_LEAK'};
+  e.repair_target_diagnostics=[{...diagnostic,student_action:'MUST_NOT_LEAK',official_text:'MUST_NOT_LEAK'}];throw e;
+ }}});
+ assert.equal(result.status,'SESSION_REPAIR_FAILED');assert.equal(result.stages.find(x=>x.stage==='SESSION_REPAIR').status,'ERROR');
+ const error=result.errors.find(x=>x.stage==='SESSION_REPAIR');assert.deepEqual(error.repair_target_diagnostics,[diagnostic]);
+ assert.deepEqual(error.repair_local_validation,{provider_responded:true,proposal_normalized:true,rejected_at:'validateRepairTargets'});
+ assert.ok(!JSON.stringify(error).includes('MUST_NOT_LEAK'));
+});
 const passCriticalReview=async ({request})=>({input_hash:request.input_hash,worked_audits:request.claims.worked.map(x=>({activity_id:x.activity_id,grade:x.grade,pda_id:x.pda_id,status:'PASS',component_checks:[{component:'fixture',satisfied:true,exact_quote:x.student_action}],reason:'ok'})),methodology_link_audits:request.claims.methodology_links.map(x=>({operation:x.operation,activity_id:x.activity_id,status:'PASS',exact_quote:x.common_student_action,reason:'ok'})),functional_link_audits:request.claims.functional_links.map(x=>({requirement_id:x.requirement_id,activity_id:x.activity_id,status:'PASS',action_quote:x.common_student_action,evidence_quote:x.evidence,reason:'ok'}))});
 
 test('approved Blueprint -> approved SessionGraph -> deterministic teacher projection',async()=>{const f=fixture();const result=await runShadowPipeline({sources:f.sources,drivers:{blueprintRunner:async()=>f.blueprintEnvelope,sessionAuthor:async()=>f.proposal,sessionReview:passReview,sessionCriticalReview:passCriticalReview},options:{graphId:'g1'}});assert.equal(result.status,'READY_FOR_TEACHER');assert.equal(result.session_approval.status,'APPROVED');assert.equal(result.session_approval.approved_graph_hash,hash(result.session_graph));assert.equal(result.teacher_plan.source.approved_blueprint_hash,f.blueprintEnvelope.approved_blueprint_hash);assert.equal(result.teacher_plan.source.approved_graph_hash,result.session_approval.approved_graph_hash);assert.equal(result.teacher_plan.sessions[0].activities[1].title,'Planificamos');});
