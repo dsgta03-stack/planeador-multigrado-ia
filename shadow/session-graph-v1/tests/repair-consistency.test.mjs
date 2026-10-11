@@ -99,6 +99,6 @@ test('real repair adapter rejects downgrading target, accepts complete WORKED an
   const driver=createSessionGraphDrivers({endpoint:'https://example.invalid/plan-project-blueprint-v1-shadow',token:'x'.repeat(64),durableEvidence:false,fetchImpl:async(url,request)=>{sent=JSON.parse(request.body);return new Response(JSON.stringify({output:{status:'PROPOSAL',reason:'Synthetic',proposal:repaired}}));}});
   if(downgrade)await assert.rejects(driver.sessionRepair(ctx),/WORKED required/);
   else {const r=await driver.sessionRepair(ctx);assert.equal(r.proposal.sessions[0].activities[0].grade_participation[0].pda_mobilization[0].status,'WORKED');}
-  assert.deepEqual(sent.prompt.repair_targets[0].missing_requirements,missing);assert.ok(sent.prompt.worked_repair_audit.includes('prohibido degradar'));
+  assert.match(sent.prompt.curricular_preservation,/no relacionada con el target/);assert.match(sent.prompt.curricular_preservation,/renombrar y reorganizar/);assert.match(sent.prompt.curricular_preservation,/sin PDA focalizado/);assert.deepEqual(sent.prompt.repair_targets[0].missing_requirements,missing);assert.ok(sent.prompt.worked_repair_audit.includes('prohibido degradar'));
  }
 });

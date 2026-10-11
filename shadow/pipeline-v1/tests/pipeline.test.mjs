@@ -175,3 +175,33 @@ test('blueprint failure preserves completed project composition trace',async()=>
   /BLUEPRINT_PROVIDER_DOWN/
  );
 });
+
+for(const mode of ['empty','absent','filtered','valid-renamed','valid-moved','developing','worked','transversal'])test('global post-repair preflight '+mode,async()=>{
+ const f=fixture(),bad=structuredClone(f.proposal);
+ bad.sessions[0].activities[0].contribution_mode='DIRECT';bad.sessions[0].activities[0].contributes_to_artifact_ids=[];
+ const repaired=structuredClone(f.proposal),session=repaired.sessions[0];
+ for(const a of session.activities){
+  a.activity_key='new_'+a.activity_key;
+  a.input_refs=a.input_refs.map(r=>f.proposal.sessions[0].activities.some(x=>x.activity_key===r)?'new_'+r:r);
+  if(['empty','filtered'].includes(mode))for(const g of a.grade_participation)if(g.grade===3)g.pda_mobilization=mode==='empty'?[]:[{pda_id:'foreign',status:'DEVELOPING'}];
+  if(mode==='absent')a.grade_participation=a.grade_participation.filter(g=>g.grade!==3);
+  if(mode==='developing')for(const g of a.grade_participation)for(const m of g.pda_mobilization)m.status='DEVELOPING';
+ }
+ if(mode==='valid-moved'){
+  const rows=session.activities.map(a=>a.grade_participation.find(g=>g.grade===3));
+  rows[1].pda_mobilization=[{pda_id:'p3',status:'DEVELOPING'}];rows[0].pda_mobilization=[];
+ }
+ if(mode==='transversal'){
+  f.blueprintEnvelope.blueprint.session_progression[0].pda_focus=['p1'];
+  const h=hash(f.blueprintEnvelope.blueprint);f.blueprintEnvelope.approved_blueprint_hash=h;f.blueprintEnvelope.gate.evaluated_blueprint_hash=h;
+  for(const a of session.activities)for(const g of a.grade_participation)if(g.grade===3)g.pda_mobilization=[];
+ }
+ const result=await runShadowPipeline({sources:f.sources,drivers:{blueprintRunner:async()=>f.blueprintEnvelope,sessionAuthor:async()=>bad,sessionRepair:async()=>repaired,sessionReview:passReview,sessionCriticalReview:passCriticalReview},options:{graphId:'post-repair-fixture'}});
+ if(['empty','absent','filtered'].includes(mode)){
+  assert.equal(result.status,'SESSION_REPAIR_FAILED');
+  assert.equal(result.stages.find(s=>s.stage==='SESSION_REPAIR').status,'ERROR');
+  assert.equal(result.stages.some(s=>s.stage==='SESSION_COMPILE'&&s.attempt===2),false);
+  const e=result.errors.find(e=>e.stage==='SESSION_REPAIR');assert.equal(e.rule,'SGD-014');
+  assert.deepEqual(e.global_post_repair_validation,{provider_responded:true,proposal_normalized:true,rejected_at:'GLOBAL_POST_REPAIR_VALIDATION',rule:'SGD-014',session:1,grade:3,attempt:2});
+ }else {assert.equal(result.status,'READY_FOR_TEACHER');assert.equal(result.stages.find(s=>s.stage==='SESSION_REPAIR').status,'REPAIRED');}
+});
