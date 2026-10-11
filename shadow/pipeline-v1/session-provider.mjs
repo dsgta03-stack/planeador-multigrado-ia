@@ -127,6 +127,12 @@ export function repairTargetsFromContext(ctx={}){
    return {...target,rule_id:'WORKED_COGNITIVE_REQUIREMENTS',session:Number(worked[1]),activity_key:worked[2],grade:Number(worked[3]),pda_id:cognitive[1],status_required:'WORKED',missing_requirements,...scope,required:WORKED_REPAIR_AUDIT};
   }
   const grouping=target.scope?.match(/^\$\.sessions\[(\d+)\]\.([^.[\]]+)$/);
+  if(grouping&&target.observed.startsWith('SGD-017 teacher executability missing ')&&target.observed.includes('execution.missing_resource_use')){
+   const prior=ctx.previous_proposal??ctx.previous_authoring_proposal;
+   const row=prior?.sessions?.[Number(grouping[1])],activity=row?.activities?.find(a=>a.activity_key===grouping[2]);
+   const declared_resources=[...(activity?.resources||[])],covered_resources=(activity?.execution?.resource_use||[]).map(r=>r.resource);
+   return {...target,session:row?.session_number??Number(grouping[1])+1,activity_key:grouping[2],field:'execution.resource_use',declared_resources,covered_resources,missing_resources:declared_resources.filter(r=>!covered_resources.includes(r)),requirement:'exact_declared_resource_usage',required:'execution.missing_resource_use es un diagnostico, NO un campo. Por cada missing_resources agrega una fila a execution.resource_use con resource EXACTAMENTE igual a activity.resources y use concreto, no generico, de su uso en ESTA actividad. Conserva todas las filas validas existentes. No renombres ni resumas recursos, no cambies mayusculas o espacios, no elimines recursos declarados, no crees recursos ni el campo missing_resource_use. Conserva grados, PDA, LTG, artefactos y grouping. Revalida toda la propuesta final.'};
+  }
   if(grouping&&target.observed.startsWith('SGD-017 teacher executability missing ')&&target.observed.includes('execution.grouping')){
    const prior=ctx.previous_proposal??ctx.previous_authoring_proposal;
    return {...target,session:prior?.sessions?.[Number(grouping[1])]?.session_number??Number(grouping[1])+1,activity_key:grouping[2],field:'execution.grouping',requirement:'concrete_student_organization',required:'Describe una organización docente operable y reconocible para ESTA actividad final: individual, parejas, equipos, plenaria, círculo, por grado o turnos según corresponda, sin usar etiquetas vagas. Revisa TODAS las actividades finales después de modificar una; no rellenes mecánicamente.'};
@@ -146,10 +152,19 @@ export function repairTargetsFromContext(ctx={}){
 export function validateRepairTargets(proposal,source,targets){
  const failures=[],target_diagnostics=[];
  for(const t of targets){
-  if(t.rule_id!=='WORKED_COGNITIVE_REQUIREMENTS'&&t.field!=='execution.grouping')continue;
+  if(t.rule_id!=='WORKED_COGNITIVE_REQUIREMENTS'&&t.field!=='execution.grouping'&&t.field!=='execution.resource_use')continue;
   const a=proposal.sessions?.find(s=>s.session_number===t.session)?.activities?.find(a=>a.activity_key===t.activity_key);
   if(!a){failures.push(`${t.target_id}: activity missing`);continue;}
-  if(t.field==='execution.grouping'){
+  if(t.field==='execution.resource_use'){
+   const reasons=teacherExecutabilityMissing(a).filter(reason=>reason.includes('resource_use'));
+   // Resource deletion is not a repair of the reported correspondence defect.
+   if(t.declared_resources.some(r=>!a.resources.includes(r)))reasons.push('DECLARED_RESOURCE_REMOVED');
+   if(reasons.length){
+    failures.push(`${t.target_id}: SGD-017 ${reasons.join(',')}`);
+    const missing_resources_count=a.resources.filter(r=>!a.execution?.resource_use?.some(row=>row.resource===r)).length;
+    for(const reason of reasons)target_diagnostics.push({target_id:t.target_id,session:t.session,activity_key:t.activity_key,field:t.field,missing_resources_count,reason});
+   }
+  }else if(t.field==='execution.grouping'){
    if(teacherExecutabilityMissing(a).some(x=>x.includes('grouping')))failures.push(`${t.target_id}: SGD-017 execution.grouping`);
   }else{
    const g=a.grade_participation?.find(g=>g.grade===t.grade);
