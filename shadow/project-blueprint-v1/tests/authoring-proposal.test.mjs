@@ -5,7 +5,8 @@ import {sources,candidate} from '../fixtures/build.mjs';
 import {authoringSchema,compileAuthoring} from '../authoring-proposal.mjs';
 import {constructionPlan,compileConstruction,validateConstruction} from '../construction.mjs';
 import {assertContract,hash,schemaFor} from '../contracts.mjs';
-import {blueprintGate} from '../gate.mjs';
+import {FUNCTIONAL_PROFILES,BPS} from '../catalog.mjs';
+import {blueprintGate,functionalDiagnostics,semanticInputHash} from '../gate.mjs';
 const src=sources(),plan=constructionPlan(src);
 // Test-only conversion of an explicitly authored synthetic fixture. Never a live PASS.
 const ids={frame:'planning',investigate:'production',apply:'intervention',questions:'artifact_planning',shared_explanations:'artifact_production',completion:'artifact_intervention'};
@@ -106,4 +107,38 @@ test('BPD-019 compact preflight reports every invalid literal coverage row befor
   ()=>build(p),
   e=>e.code==='CONSTRUCTION_REJECTED'&&e.rule==='BPD-019'&&targets.every(op=>e.message.includes(op))
  );
+});
+
+test('functional preflight shares gate authority and rejects generic or unknown requirements',()=>{
+ for(const profiles of [['MUSEUM'],['ITINERANT'],Object.keys(FUNCTIONAL_PROFILES)]){
+  const p=proposal();p.final_outcome.functional_profiles=profiles;p.final_outcome.type='EXHIBITION';
+  p.final_outcome.functional_requirements=[{...p.final_outcome.functional_requirements[0],requirement_id:'unknown_generic'}];
+  const before=hash(p),diagnostics=functionalDiagnostics(p);
+  assert.throws(()=>build(p),e=>{
+   assert.equal(e.code,'AUTHORING_CONTRACT_INVALID');
+   assert.deepEqual(e.functional_profile_targets.map(x=>({profile:x.profile,missing:x.missing_requirement_ids})),diagnostics);
+   assert.match(e.message,/FUNCTIONAL_PROFILE_REQUIREMENTS_MISSING/);return true;
+  });assert.equal(hash(p),before);
+ }
+});
+test('EXHIBITION without selected profiles does not acquire MUSEUM',()=>{
+ const p=proposal();p.final_outcome.type='EXHIBITION';p.final_outcome.functional_profiles=[];
+ assert.deepEqual(functionalDiagnostics(p),[]);assert.deepEqual(build(p).blueprint.final_outcome.functional_profiles,[]);
+});
+test('catalogued type requires all requirements even without selected profiles',()=>{
+ const p=proposal();p.final_outcome.type='MUSEUM';p.final_outcome.functional_profiles=[];
+ p.final_outcome.functional_requirements=p.final_outcome.functional_requirements.filter(x=>x.requirement_id!=='mediation');
+ assert.throws(()=>build(p),e=>e.functional_profile_targets[0].missing_requirement_ids.includes('mediation'));
+});
+test('ITINERANT requires circulation_evidence and two complete genuine profiles pass',()=>{
+ const p=proposal();p.final_outcome.functional_profiles=['MUSEUM','ITINERANT'];assert.doesNotThrow(()=>build(p));
+ p.final_outcome.functional_requirements=p.final_outcome.functional_requirements.filter(x=>x.requirement_id!=='circulation_evidence');
+ assert.throws(()=>build(p),e=>e.functional_profile_targets.some(x=>x.profile==='ITINERANT'&&x.missing_requirement_ids.includes('circulation_evidence')));
+});
+test('semantic reviewer cannot approve missing profile requirements; BPS-003 unchanged',()=>{
+ const b=build(proposal()).blueprint;
+ b.final_outcome.functional_requirements=b.final_outcome.functional_requirements.filter(x=>x.requirement_id!=='circulation_evidence');
+ const findings=Object.keys(BPS).map(rule_id=>({rule_id,severity:'CRITICAL',status:'PASS',scope:'test',observed:'synthetic',expected:'synthetic'}));
+ const g=blueprintGate({...src,blueprint:b},{input_hash:semanticInputHash({...src,blueprint:b}),findings});
+ assert.equal(g.semantic_findings.find(x=>x.rule_id==='BPS-003').status,'FAIL');
 });

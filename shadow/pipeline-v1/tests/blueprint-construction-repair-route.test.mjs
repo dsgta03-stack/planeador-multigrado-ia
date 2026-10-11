@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {sources,candidate} from '../../project-blueprint-v1/fixtures/build.mjs';
+import {FUNCTIONAL_PROFILES} from '../../project-blueprint-v1/catalog.mjs';
 import {authoringSchema} from '../../project-blueprint-v1/authoring-proposal.mjs';
 import {constructionPlan} from '../../project-blueprint-v1/construction.mjs';
 import {generateShadow} from '../../project-blueprint-v1/shadow.mjs';
@@ -74,4 +75,28 @@ test('ProjectBlueprint construction repair is bounded to one attempt',async()=>{
  assert.equal(result.errors.length,1);
  assert.equal(result.errors[0].revision,2);
  assert.equal(result.errors[0].task,'CONSTRUCT');
+});
+
+for(const resolution of ['remove_overdeclared','complete_genuine','still_missing'])test('profile preflight repair: '+resolution,async()=>{
+ const bad=validProposal();bad.final_outcome.type='EXHIBITION';
+ bad.final_outcome.functional_profiles.push('CAMPAIGN');
+ const tasks=[];
+ const result=await generateShadow(src,{constructionPlan:plan,authoringCompact:true},async(task,input,options)=>{
+  tasks.push(task);
+  if(task==='GENERATE')return {output:bad,telemetry:{task}};
+  if(task==='REPAIR'){
+   const targets=options.repair.functional_profile_targets;
+   assert.equal(targets.length,1);assert.equal(targets[0].profile,'CAMPAIGN');
+   assert.deepEqual(targets[0].missing_requirement_ids,FUNCTIONAL_PROFILES.CAMPAIGN);
+   assert.deepEqual(targets[0].outcome,{name:bad.final_outcome.name,type:'EXHIBITION',purpose:bad.final_outcome.purpose});
+   assert.match(targets[0].instruction,/sobredeclarado/);
+   const good=structuredClone(bad);
+   if(resolution==='remove_overdeclared')good.final_outcome.functional_profiles=good.final_outcome.functional_profiles.filter(x=>x!=='CAMPAIGN');
+   if(resolution==='complete_genuine')good.final_outcome.functional_requirements.push(...FUNCTIONAL_PROFILES.CAMPAIGN.map(requirement_id=>({...good.final_outcome.functional_requirements[0],requirement_id})));
+   return {output:good,telemetry:{task}};
+  }
+  const e=Error('synthetic stop after preflight');e.code='PROVIDER_UNAVAILABLE';throw e;
+ });
+ assert.equal(result.construction_attempts[1].status,resolution==='still_missing'?'CONSTRUCTION_REJECTED':'CONSTRUCTED');
+ assert.equal(tasks.includes('REVIEW'),resolution!=='still_missing');
 });

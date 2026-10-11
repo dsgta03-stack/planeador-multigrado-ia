@@ -17,8 +17,16 @@ test('compact GENERATE and REPAIR share final-stage literal coverage rules',asyn
  assert.equal(sent.length,2);
  assert.equal(sent[0].prompt.coverage_protocol,sent[1].prompt.coverage_protocol);
  for(const request of sent){
+  assert.equal(request.prompt.functional_profiles,undefined);
+  assert.equal(Object.keys(request.prompt.available_functional_profiles).length,7);
+  assert.deepEqual(request.prompt.available_functional_profiles,sent[0].prompt.available_functional_profiles);
+  const profiles=request.prompt.functional_profile_protocol;
+  for(const rule of ['ALTERNATIVAS DISPONIBLES','RESULTADO FINAL','INVESTIGATION','CAMPAIGN','PROTOTYPE','SERVICE','INTERVENTION','MUSEUM','ITINERANT','vacio','no actividades del proceso','No inventes'])assert.ok(profiles.includes(rule),rule);
+  assert.equal(profiles,sent[0].prompt.functional_profile_protocol);
   const protocol=request.prompt.coverage_protocol;
   for(const rule of ['primero la versión final','después construye coverage','coverage.stage_id','coverage_matrix','literal, contigua, carácter por carácter','ESA MISMA etapa','No resumir','no parafrasear','no unir fragmentos separados','puntuación, conectores o espacios','stage.student_operation.includes(action_quote) === true','expected_output, index DEBE ser null','acceptance_criteria, index DEBE ser un entero cero-basado existente','texto referenciado debe existir y no estar vacío','sin volver a recalcular sus filas coverage'])assert.ok(protocol.includes(rule),rule);
  }
  assert.deepEqual(sent[1].prompt.repair,{instruction:'Repair only invalid coverage'});
+ assert.match(sent[1].prompt.functional_profile_repair_protocol,/TODOS los missing_requirement_ids/);
+ assert.match(sent[1].prompt.functional_profile_repair_protocol,/sobredeclarado/);
 });
