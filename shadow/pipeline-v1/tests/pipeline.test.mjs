@@ -5,6 +5,7 @@ import {hash} from '../../project-blueprint-v1/contracts.mjs';
 import {SGS} from '../../session-graph-v1/catalog.mjs';
 import {runShadowPipeline} from '../pipeline.mjs';
 import {projectTeacherPlan} from '../projection.mjs';
+import {repairTargetsFromContext} from '../session-provider.mjs';
 
 function fixture(){
  const constraints={constraints_hash:'a'.repeat(64),grades:[1,3],minutes_per_session:90,available_resources:['papel','lapiz'],supports:['modelado','pares']};
@@ -17,6 +18,15 @@ function fixture(){
  return {sources:{constraints,curriculum,methodology},blueprintEnvelope,proposal};
 }
 const passReview=async ({request})=>({input_hash:request.input_hash,findings:Object.keys(SGS).map(rule_id=>({rule_id,status:'PASS',scope:'fixture',observed:'ok',expected:SGS[rule_id]}))});
+test('WORKED critical repair receives exact audit and cannot retry a second critical failure',async()=>{
+ const f=fixture();let repairs=0;
+ const critical=async({request})=>{const out=await passCriticalReview({request});const row=out.worked_audits[0];row.status='FAIL';row.component_checks.push({component:'synthetic_missing_component',satisfied:false,exact_quote:''});return out;};
+ const result=await runShadowPipeline({sources:f.sources,drivers:{blueprintRunner:async()=>f.blueprintEnvelope,sessionAuthor:async()=>f.proposal,sessionReview:passReview,sessionCriticalReview:critical,sessionRepair:async ctx=>{
+  repairs++;const targets=repairTargetsFromContext(ctx),t=targets.find(t=>t.source==='SESSION_CRITICAL_GATE');assert.equal(t.rule_id,'WORKED');assert.deepEqual(t.missing_components,['synthetic_missing_component']);assert.equal(t.session,1);assert.equal(t.activity_key,'a2');assert.ok(ctx.critical_audit.input_hash);
+  return {proposal:structuredClone(f.proposal),worked_critical_repair_diagnostics:[{target_id:t.target_id,session:t.session,activity_key:t.activity_key,grade:t.grade,pda_id:t.pda_id,missing_components_count:1,missing_components:t.missing_components,repair_applied_to_expected_claim:true}]};
+ }},options:{graphId:'g-worked-once'}});
+ assert.equal(result.status,'SESSION_GRAPH_REJECTED');assert.equal(result.repair_count,1);assert.equal(repairs,1);assert.equal(result.session_critical_gate.status,'FAIL');assert.equal(result.stages.find(s=>s.stage==='SESSION_REPAIR').worked_critical_repair_diagnostics[0].missing_components_count,1);
+});
 test('pipeline retains compact post-provider repair diagnostics without changing ERROR status',async()=>{
  const f=fixture(),bad=structuredClone(f.proposal);bad.sessions[0].activities[0].contribution_mode='DIRECT';bad.sessions[0].activities[0].contributes_to_artifact_ids=[];
  const diagnostic={target_id:'RT-4',session:3,activity_key:'synthetic_action',grade:5,pda_id:'synthetic_pda',reason:'INDAGA_OFFICIAL_SCOPE'};
