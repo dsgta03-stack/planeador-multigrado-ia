@@ -1,5 +1,6 @@
 import {normalizeSessionGraphAuthoring,ltgExecutionErrors,ltgUseSchema} from '../session-graph-v1/authoring.mjs';
 import {schemaErrors} from '../project-blueprint-v1/contracts.mjs';
+import {ltgSessionEligibility,LTG_SESSION_ELIGIBILITY_INSTRUCTION} from './ltg-session-eligibility.mjs';
 
 const sourceOf=ctx=>({...ctx.sources,blueprint:ctx.blueprint});
 const usesIn=(proposal,session,project)=> (proposal?.sessions?.find(s=>s.session_number===session)?.activities||[]).flatMap(a=>(a.ltg_use||[]).filter(u=>u.project_id===project).map(use=>({activity:a,use})));
@@ -10,10 +11,8 @@ export function structuredLtgTarget(target,ctx){
  const session=Number(m[1]),project_id=m[2],decision=m[3],source=sourceOf(ctx);
  const sel=ctx.blueprint?.ltg_strategy?.selections?.find(s=>s.project_id===project_id);
  const project=ctx.sources?.curriculum?.ltg?.find(p=>p.project_id===project_id);
- const focus=ctx.blueprint?.session_progression?.find(s=>s.session_number===session)?.pda_focus||[];
- const selected_activity_ids=[...(sel?.activity_ids||[])];
- const verified_activity_ids=selected_activity_ids.filter(id=>project?.verified_activities?.some(a=>a.activity_id===id&&a.verification_status==='verified'));
- const compatible_pda_ids=(sel?.pda_ids||[]).filter(id=>focus.includes(id)&&project?.verified_pda_links?.includes(id)&&ctx.sources?.curriculum?.pdas?.some(p=>p.pda_id===id&&p.grade===project.grade));
+ const eligibility=(ctx.ltg_session_eligibility||(ctx.blueprint&&ctx.sources?ltgSessionEligibility(source):[])).find(row=>row.project_id===project_id&&row.session===session);
+ const selected_activity_ids=eligibility?.selected_activity_ids||[],verified_activity_ids=eligibility?.verified_activity_ids||[],compatible_pda_ids=eligibility?.compatible_pda_ids||[];
  const prior=ctx.previous_proposal??ctx.previous_authoring_proposal;
  const before=usesIn(prior,session,project_id);
  const normalized=prior&&ctx.blueprint&&ctx.sources?normalizeSessionGraphAuthoring(prior,source):null;
@@ -21,8 +20,8 @@ export function structuredLtgTarget(target,ctx){
  const invalid=before.length>0&&(!after.length||ltgExecutionErrors([{session_number:session,activities:before.map(x=>x.activity),ltg_decisions:[]}],source).some(e=>/unverified|generic LTG use|without verified|selected LTG activity|required|minLength|additionalProperties|maxLength/.test(e)));
  const mismatch_kind=decision==='NOT_RECOMMENDED'?'CONCRETE_USE_WITH_NOT_RECOMMENDED':invalid?'USE_WITH_INVALID_CONCRETE_USE':'USE_WITHOUT_CONCRETE_USE';
  return {...target,session,project_id,decision,concrete_use:invalid?'invalid':m[4],role:sel?.role??null,selected_activity_ids,verified_activity_ids,compatible_grade:project?.grade??null,compatible_pda_ids,mismatch_kind,
-  authorized_use_possible:!!sel&&!!project&&compatible_pda_ids.length>0&&(selected_activity_ids.length===0||verified_activity_ids.length>0),
-  requirement:'Resolve the structured mismatch using only these authorized references and authentic student use. CORE: never automatically convert USE to NOT_RECOMMENDED; if this session keeps USE, supply a real ltg_use with project_id, authorized activity_id (null only when selected_activity_ids is empty), student_action, moment and purpose. If the real design does not use it here, adjust the session decision only without violating global CORE use. SUPPORT: valid use implies USE; no valid use may remain NOT_RECOMMENDED under existing reconciliation. OPTIONAL: preserve its existing semantics. Do not invent IDs, links or pedagogical use. If no authorized combination exists, report the limitation; do not fabricate one.'};
+  authorized_use_possible:eligibility?.eligible===true,eligibility_reasons:eligibility?.reasons||['PROJECT_NOT_SELECTED'],authorized_activity_ids:eligibility?.authorized_activity_ids||[],null_activity_allowed:eligibility?.null_activity_allowed===true,
+  requirement:LTG_SESSION_ELIGIBILITY_INSTRUCTION};
 }
 
 // Metadata only. Acceptance remains exclusively with existing normalizer/validators.
