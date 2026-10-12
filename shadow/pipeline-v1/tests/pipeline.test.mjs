@@ -18,6 +18,15 @@ function fixture(){
  return {sources:{constraints,curriculum,methodology},blueprintEnvelope,proposal};
 }
 const passReview=async ({request})=>({input_hash:request.input_hash,findings:Object.keys(SGS).map(rule_id=>({rule_id,status:'PASS',scope:'fixture',observed:'ok',expected:SGS[rule_id]}))});
+test('combined WORKED repair cannot bypass an independently failing SGS-002 after critical PASS',async()=>{
+ const f=fixture();let repairs=0,criticalCalls=0;
+ const review=async({input,request})=>{const out=await passReview({request}),s=input.graph.sessions[0],a=s.activities[1],g=a.grade_participation[0];Object.assign(out.findings.find(x=>x.rule_id==='SGS-002'),{status:'FAIL',scope:`session=${s.session_number} activity_id=${a.activity_id} grade=${g.grade} pda_id=${g.pda_mobilization[0].pda_id}`,observed:'An additional authentic local component is still absent.'});return out;};
+ const critical=async({request})=>{criticalCalls++;const out=await passCriticalReview({request});if(criticalCalls===1){out.worked_audits[0].status='FAIL';out.worked_audits[0].component_checks.push({component:'synthetic_missing',satisfied:false,exact_quote:''});}return out;};
+ const result=await runShadowPipeline({sources:f.sources,drivers:{blueprintRunner:async()=>f.blueprintEnvelope,sessionAuthor:async()=>f.proposal,sessionReview:review,sessionCriticalReview:critical,sessionRepair:async ctx=>{
+  repairs++;const targets=repairTargetsFromContext(ctx),t=targets.find(t=>t.rule_id==='WORKED');assert.equal(targets.length,1);assert.ok(t.related_findings.some(x=>x.rule_id==='SGS-002'));const repaired=structuredClone(f.proposal);repaired.sessions[0].activities[1].grade_participation[0].student_action+=' Explica a su pareja la decision del grupo.';return repaired;
+ }},options:{graphId:'g-combined-independent'}});
+ assert.equal(repairs,1);assert.equal(result.status,'SESSION_GRAPH_REJECTED');assert.equal(result.session_critical_gate.status,'PASS');assert.equal(result.session_gate.status,'FAIL');
+});
 test('WORKED critical repair receives exact audit and cannot retry a second critical failure',async()=>{
  const f=fixture();let repairs=0;
  const critical=async({request})=>{const out=await passCriticalReview({request});const row=out.worked_audits[0];row.status='FAIL';row.component_checks.push({component:'synthetic_missing_component',satisfied:false,exact_quote:''});return out;};

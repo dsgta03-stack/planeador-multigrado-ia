@@ -1,6 +1,6 @@
 import {ltgSessionEligibility,assertCoreLtgEligibility,ltgEligibilityDiagnostics,LTG_SESSION_ELIGIBILITY_INSTRUCTION} from './ltg-session-eligibility.mjs';
 import {structuredLtgTarget,ltgRepairDiagnostics} from './ltg-repair-diagnostics.mjs';
-import {workedCriticalTarget,validateWorkedCriticalTarget,WORKED_COMPLETE_ACTION_POLICY} from './worked-critical-repair.mjs';
+import {workedCriticalTarget,validateWorkedCriticalTarget,WORKED_COMPLETE_ACTION_POLICY,groupWorkedRepairTargets} from './worked-critical-repair.mjs';
 import {randomUUID} from 'node:crypto';
 import {contributionRepairPreflight,validateContributionRepair,DIRECT_REPAIR_INSTRUCTION,directRepairDiagnostics,validateDirectRepair} from './session-contribution-repair.mjs';
 import {hash} from '../project-blueprint-v1/contracts.mjs';
@@ -115,7 +115,7 @@ export function repairTargetsFromContext(ctx={}){
    expanded.push({kind:'finding',item,text,source:'SESSION_GATE'});
   }else expanded.push({kind:'defect',text:String(item||''),source:'SESSION_REPAIR'});
  }
- return expanded.map((entry,index)=>{
+ const targets=expanded.map((entry,index)=>{
   if(entry.kind==='finding'){
    const item=entry.item;
     const critical=workedCriticalTarget(item,ctx,`RT-${index+1}`);if(critical)return critical;
@@ -160,6 +160,7 @@ export function repairTargetsFromContext(ctx={}){
   }
   return target;
  }).map(target=>structuredLtgTarget(target,ctx));
+ return groupWorkedRepairTargets(targets,expanded,ctx);
 }
 
 export function validateRepairTargets(proposal,source,targets){

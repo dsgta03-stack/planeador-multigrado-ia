@@ -50,3 +50,24 @@ test('repair adapter sends owned target and complete GENERATE policy; compact re
  const repaired=await drivers.sessionRepair(ctx);assert.equal(repaired.worked_critical_repair_diagnostics[0].repair_applied_to_expected_claim,true);
  const expected=structuredClone(f.proposal);expected.sessions[0].activities[1].grade_participation[0].student_action+=addition;assert.deepEqual(repaired.proposal,expected);
 });
+
+test('component witnesses preserve validated association and additive instruction',()=>{
+ const {ctx}=setup(),t=repairTargetsFromContext(ctx)[0];assert.equal(t.original_student_action,partial);assert.deepEqual(t.satisfied_component_witnesses,[{component:'organs_function',exact_quote:partial}]);assert.match(t.required,/ADITIVA/);assert.match(t.required,/caracter por caracter/);
+});
+for(const kind of ['replacement','paraphrase','punctuation','additive'])test('literal additive repair '+kind,()=>{
+ const {f,a,ctx}=setup(),t=repairTargetsFromContext(ctx)[0];
+ a.grade_participation[0].student_action=kind==='additive'?partial+addition:kind==='punctuation'?partial.replace('.',';')+addition:kind==='paraphrase'?'Describe como la piel permite percibir texturas.'+addition:addition;
+ const d=validateWorkedCriticalTarget(f.proposal,f,t);
+ if(kind==='additive')assert.equal(d.repair_applied_to_expected_claim,true);
+ else {assert.equal(d.reason,'SATISFIED_COMPONENT_WITNESS_REMOVED');assert.equal(d.lost_component,'organs_function');assert.equal(JSON.stringify(d).includes(partial),false);assert.equal(JSON.stringify(d).includes('exact_quote'),false);assert.throws(()=>validateRepairTargets(f.proposal,f,[t]),/SATISFIED_COMPONENT_WITNESS_REMOVED/);}
+});
+for(const kind of ['same','compiled-id','other-activity','other-grade','other-pda','ambiguous','contradictory'])test('SGS-002 grouping '+kind,()=>{
+ const {ctx}=setup();const item={rule_id:'SGS-002',status:'FAIL',session:1,activity_key:'a2',grade:1,pda_id:'p1',scope:'owned row',observed:'Also demonstrate risks, representation and prevention.',expected:'Complete owned WORKED action.'};
+ if(kind==='compiled-id'){delete item.activity_key;delete item.session;delete item.grade;delete item.pda_id;item.scope='session=1 activity_id=compiled_activity grade=1 pda_id=p1';}
+ if(kind==='other-activity')item.activity_key='a1';if(kind==='other-grade')item.grade=3;if(kind==='other-pda')item.pda_id='p3';
+ if(kind==='ambiguous'){delete item.pda_id;item.scope='All WORKED rows';}
+ if(kind==='contradictory')item.scope='session=2 activity_key=a2 grade=1 pda_id=p1';
+ ctx.triggering_rules.unshift(item);const targets=repairTargetsFromContext(ctx),t=targets.find(t=>t.rule_id==='WORKED');
+ if(['same','compiled-id'].includes(kind)){assert.equal(targets.length,1);assert.deepEqual(t.related_findings.map(f=>[f.source,f.rule_id]),[['SESSION_CRITICAL_GATE','WORKED'],['SESSION_GATE','SGS-002']]);assert.equal(t.related_findings[1].observed_summary,item.observed);assert.equal(t.related_findings[1].expected_summary,item.expected);assert.deepEqual(t.missing_components,['risks','representation','prevention_care']);}
+ else {assert.equal(targets.length,2);assert.equal(t.related_findings.length,1);assert.equal(targets[0].rule_id,'SGS-002');}
+});
