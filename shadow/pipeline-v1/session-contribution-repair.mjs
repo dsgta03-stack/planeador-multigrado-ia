@@ -1,5 +1,26 @@
 import {deepFreeze} from '../project-blueprint-v1/contracts.mjs';
-import {complementaryConsumerMissing,validateSessionGraphAuthoring} from '../session-graph-v1/authoring.mjs';
+import {complementaryConsumerMissing,validateSessionGraphAuthoring,directArtifactErrors} from '../session-graph-v1/authoring.mjs';
+
+export const DIRECT_REPAIR_INSTRUCTION='DIRECT significa que el output constituye una contribucion observable a un artefacto esperado de ESA MISMA sesion. Si permanece DIRECT, contributes_to_artifact_ids debe contener al menos un authorized_artifact_id de esa sesion ya existente. No inventes artifacts ni IDs, no uses IDs de otras sesiones, no elimines vinculos validos existentes ni actividades. No cambies contribution_mode solo para pasar. Conserva las otras actividades DIRECT validas. Audita TODAS las actividades DIRECT finales despues de normalizacion: todas deben conservar al menos una referencia autorizada. No completes nada automaticamente.';
+
+export function directRepairDiagnostics(raw,normalized,blueprint){
+ const known=new Set((blueprint.project_stages||[]).map(s=>s.output_artifact_id));
+ return (normalized.sessions||[]).flatMap(s=>(s.activities||[]).filter(a=>a.contribution_mode==='DIRECT').map(a=>{
+  const before=raw.sessions?.find(row=>row.session_number===s.session_number)?.activities?.find(row=>row.activity_key===a.activity_key)?.contributes_to_artifact_ids||[];
+  const after=a.contributes_to_artifact_ids||[];
+  const authorized=blueprint.session_progression.find(row=>row.session_number===s.session_number)?.expected_output_artifact_ids||[];
+  return {session:s.session_number,activity_key:a.activity_key,mode:a.contribution_mode,artifact_ids_before_normalization:[...before],artifact_ids_after_normalization:[...after],authorized_artifact_ids:[...authorized],status:!before.length?'NOT_PROVIDED':!after.length?'ALL_FILTERED':'RETAINED',filtered_reasons:[...new Set(before.filter(id=>!authorized.includes(id)).map(id=>known.has(id)?'ARTIFACT_NOT_AUTHORIZED_FOR_SESSION':'ARTIFACT_NOT_FOUND'))]};
+ }));
+}
+
+export function validateDirectRepair(proposal,source){
+ const errors=(proposal.sessions||[]).flatMap(s=>{
+  const authorized=source.blueprint.session_progression.find(row=>row.session_number===s.session_number)?.expected_output_artifact_ids||[];
+  return (s.activities||[]).filter(a=>a.contribution_mode==='DIRECT').flatMap(a=>directArtifactErrors(a,authorized).map(reason=>`$.sessions[${s.session_number}].${a.activity_key}: ${reason}`));
+ });
+ if(errors.length){const e=Error(`SESSION_GRAPH_REPAIR_TARGET: ${errors.join('; ')}`);e.code='SESSION_GRAPH_AUTHORING_INVALID';throw e;}
+ return true;
+}
 
 // This is a structural witness, never a pedagogical transformation. In
 // particular, a permitted artifact ID is not proof of an authentic DIRECT.

@@ -259,6 +259,13 @@ export function normalizeSessionGraphAuthoring(proposal,source,previousProposal=
  return copy;
 }
 
+export function directArtifactErrors(activity,authorizedArtifactIds){
+ const errors=[];
+ if((activity.contributes_to_artifact_ids||[]).some(id=>!authorizedArtifactIds.includes(id)))errors.push('artifact outside session');
+ if(activity.contribution_mode==='DIRECT'&&!(activity.contributes_to_artifact_ids||[]).length)errors.push('DIRECT requires artifact');
+ return errors;
+}
+
 export function validateSessionGraphAuthoring(proposal,source){
  const schema=sessionGraphAuthoringSchema(source);const errors=schemaErrors(proposal,schema);
  const extra=(v,s,p='$')=>{if(Array.isArray(v)){if(s.maxItems!==undefined&&v.length>s.maxItems)errors.push(`${p}: maxItems`);v.forEach((x,i)=>extra(x,s.items,`${p}[${i}]`));return}if(v&&typeof v==='object'){for(const [k,x] of Object.entries(v))if(s.properties?.[k])extra(x,s.properties[k],`${p}.${k}`);return}if(typeof v==='string'&&s.maxLength!==undefined&&v.length>s.maxLength)errors.push(`${p}: maxLength ${s.maxLength}`);};
@@ -287,8 +294,7 @@ export function validateSessionGraphAuthoring(proposal,source){
    if((a.methodology_operations||[]).some(op=>!methods.has(op)))errors.push(`$.sessions[${row.session_number}].${a.activity_key}: methodology operation outside session`);
    const localAction=[a.common_student_action,...(a.grade_participation||[]).map(g=>g.student_action)].join(' ');
    for(const op of a.methodology_operations||[]){const missing=methodologySemanticMissing(op,localAction);if(missing.length)errors.push(`$.sessions[${row.session_number}].${a.activity_key}: methodology ${op} missing ${missing.join(',')}`)}
-   if((a.contributes_to_artifact_ids||[]).some(id=>!artifacts.has(id)))errors.push(`$.sessions[${row.session_number}].${a.activity_key}: artifact outside session`);
-   if(a.contribution_mode==='DIRECT'&&!(a.contributes_to_artifact_ids||[]).length)errors.push(`$.sessions[${row.session_number}].${a.activity_key}: DIRECT requires artifact`);
+    for(const reason of directArtifactErrors(a,[...artifacts]))errors.push(`$.sessions[${row.session_number}].${a.activity_key}: ${reason}`);
    if(a.contribution_mode==='COMPLEMENTARY'&&(a.contributes_to_artifact_ids||[]).length)errors.push(`$.sessions[${row.session_number}].${a.activity_key}: COMPLEMENTARY cannot claim artifact`);
    for(const id of a.functional_requirement_ids||[]){const r=reqById.get(id);if(!r||!(r.stage_ids||[]).some(x=>stageIds.has(x)))errors.push(`$.sessions[${row.session_number}].${a.activity_key}: functional requirement ${id} outside authorized stage`)}
    for(const g of a.grade_participation||[])for(const m of g.pda_mobilization||[]){
