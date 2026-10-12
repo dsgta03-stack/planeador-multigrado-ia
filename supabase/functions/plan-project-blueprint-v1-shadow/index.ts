@@ -1,3 +1,4 @@
+import { blueprintTraceStore } from './blueprint-trace-store.mjs'
 import { persistProviderResponse } from './durable-response.mjs'
 import { evidenceStore } from './evidence-store.mjs'
 import { outputBudget } from './output-budget.mjs'
@@ -46,6 +47,13 @@ Deno.serve(async (req: Request) => {
     if (b.task === 'EVIDENCE_READ') {
       const saved = await store.get(b.request_id, b.part || 'result')
       return saved ? json(saved) : json({ status: 'PENDING' }, 202)
+    }
+    if (b.task === 'BLUEPRINT_TRACE_WRITE') {
+      await blueprintTraceStore(store).write(b.trace)
+      return json({ status: 'PERSISTED' })
+    }
+    if (b.task === 'BLUEPRINT_TRACE_READ') {
+      return json({ traces: await blueprintTraceStore(store).recover(b) })
     }
     const operation = classifyShadowOperation(b)
 

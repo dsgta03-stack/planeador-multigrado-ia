@@ -1,3 +1,4 @@
+import {buildBlueprintEvidenceTrace,publicBlueprintEvidenceTrace,createBlueprintEvidenceTransport} from './evidence-trace.mjs';
 import {compileAuthoring,assertCompositionOutcomeAuthoring,compositionOutcomeDiagnostics} from './authoring-proposal.mjs';
 import {compileConstruction} from './construction.mjs';
 import {applyEvidenceAudit,stageReviewTelemetry} from './semantic-evidence.mjs';
@@ -27,7 +28,8 @@ export async function generateShadow(sources,options={},provider=callProvider){
  if(Object.keys(sources).sort().join(',')!=='constraints,curriculum,methodology')throw Error('ONLY_SOURCE_ARTIFACTS_ALLOWED_NO_LEGACY_PLAN');
  for(const [name,key] of [['TeacherConstraintsV1','constraints'],['CurriculumSnapshotV1','curriculum'],['MethodologyDecisionV1','methodology']])assertContract(name,sources[key]);
  const frozen=deepFreeze(structuredClone(sources)),revisions=[],telemetry=[],errors=[],construction_attempts=[];const id=randomUUID();let repairCount=0,constructionRepair=null;
- const projectComposition=options.projectComposition?deepFreeze(structuredClone(options.projectComposition)):null;
+ const traceStore=options.blueprintEvidenceStore||(options.durableEvidence&&provider===callProvider?createBlueprintEvidenceTransport(options):null);
+  const projectComposition=options.projectComposition?deepFreeze(structuredClone(options.projectComposition)):null;
  if(projectComposition){
   if(projectComposition.schema_version!=='PROJECT_COMPOSITION_V1')throw Error('PROJECT_COMPOSITION_V1_REQUIRED');
   const expectedCompositionSource=sourceBinding(frozen);
@@ -99,6 +101,9 @@ export async function generateShadow(sources,options={},provider=callProvider){
   }
   const status=reviewUnavailable?errors.at(-1).code:gate.status==='PASS'?'APPROVED':b.pda_analysis?.some(x=>['WEAK','INCOMPATIBLE'].includes(x.integration_strength))?'NEEDS_TEACHER_DECISION':revision===1?'NEEDS_REPAIR':gate.status==='NOT_EVALUABLE'?'NEEDS_REPAIR':'REJECTED';
   revisions.push({revision,label:reviewUnavailable?errors.at(-1).code:revision===1?(status==='APPROVED'?'PASS':'FAIL'):(status==='APPROVED'?'REPAIRED':'REPAIR_FAILED'),status,blueprint:b,gate,semantic,functional_diagnostics:b.final_outcome&&b.project_stages?functionalDiagnostics(b):[],diff:previous?structuralDiff(previous.blueprint,b):[],triggering_rules:repair?.triggering_rules.map(x=>x.rule_id)||[]});
+  if(traceStore){
+   try{const trace=buildBlueprintEvidenceTrace({blueprint:b,semantic,sources:frozen,composition:projectComposition,authorTelemetry:r.telemetry,run_id:options.runId??null});let persistence_status='PERSISTED';try{await traceStore.write(trace)}catch{persistence_status='FAILED'}console.error('[BLUEPRINT_EVIDENCE_TRACE]',JSON.stringify(publicBlueprintEvidenceTrace(trace,persistence_status)));}catch{console.error('[BLUEPRINT_EVIDENCE_TRACE]',JSON.stringify({blueprint_id:id,composition_id:projectComposition?.composition_id??null,revision,persistence_status:'FAILED'}));}
+  }
   if(options.constructionPlan&&gate.deterministic_findings.some(f=>f.status!=='PASS'&&f.rule_id!=='PCB-BINDING'))break;
   if(reviewUnavailable||['APPROVED','NEEDS_TEACHER_DECISION'].includes(status))break;
  }
