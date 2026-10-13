@@ -42,11 +42,13 @@ test('pipeline retains compact post-provider repair diagnostics without changing
  const result=await runShadowPipeline({sources:f.sources,drivers:{blueprintRunner:async()=>f.blueprintEnvelope,sessionAuthor:async()=>bad,sessionRepair:async()=>{
   const e=Error('SESSION_GRAPH_REPAIR_TARGET: RT-4: INDAGA_OFFICIAL_SCOPE');e.code='SESSION_GRAPH_AUTHORING_INVALID';
   e.repair_local_validation={provider_responded:true,proposal_normalized:true,rejected_at:'validateRepairTargets',candidate_text:'MUST_NOT_LEAK'};
+  e.repair_field_diagnostics=[{...diagnostic,field:'execution.grouping',before:{present:true,reasons:['execution.grouping'],text:'MUST_NOT_LEAK'},provider_after:{present:true,reasons:['execution.grouping']},after:{present:true,reasons:['execution.grouping']},rejection_reason:'execution.grouping',student_action:'MUST_NOT_LEAK'}];
   e.repair_target_diagnostics=[{...diagnostic,student_action:'MUST_NOT_LEAK',official_text:'MUST_NOT_LEAK'}];throw e;
  }}});
  assert.equal(result.status,'SESSION_REPAIR_FAILED');assert.equal(result.stages.find(x=>x.stage==='SESSION_REPAIR').status,'ERROR');
  const error=result.errors.find(x=>x.stage==='SESSION_REPAIR');assert.deepEqual(error.repair_target_diagnostics,[diagnostic]);
  assert.deepEqual(error.repair_local_validation,{provider_responded:true,proposal_normalized:true,rejected_at:'validateRepairTargets'});
+ assert.equal(error.repair_field_diagnostics[0].rejection_reason,'execution.grouping');assert.deepEqual(error.repair_field_diagnostics[0].before,{present:true,reasons:['execution.grouping']});
  assert.ok(!JSON.stringify(error).includes('MUST_NOT_LEAK'));
 });
 const passCriticalReview=async ({request})=>({input_hash:request.input_hash,worked_audits:request.claims.worked.map(x=>({activity_id:x.activity_id,grade:x.grade,pda_id:x.pda_id,status:'PASS',component_checks:[{component:'fixture',satisfied:true,exact_quote:x.student_action}],reason:'ok'})),methodology_link_audits:request.claims.methodology_links.map(x=>({operation:x.operation,activity_id:x.activity_id,status:'PASS',exact_quote:x.common_student_action,reason:'ok'})),functional_link_audits:request.claims.functional_links.map(x=>({requirement_id:x.requirement_id,activity_id:x.activity_id,status:'PASS',action_quote:x.common_student_action,evidence_quote:x.evidence,reason:'ok'}))});
