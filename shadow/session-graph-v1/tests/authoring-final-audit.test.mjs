@@ -85,7 +85,11 @@ test('GENERATE/REPAIR share audit; complete repair resolves maxItems, orphan and
  const ctx={sources:{constraints:f.constraints,curriculum:f.curriculum,methodology:f.methodology},blueprint:f.blueprint,approval:f.approval},sent=[];
  const drivers=createSessionGraphDrivers({endpoint:'https://example.invalid/plan-project-blueprint-v1-shadow',token:'x'.repeat(64),durableEvidence:false,fetchImpl:async(url,request)=>{
   const b=JSON.parse(request.body);sent.push(b);
-  const proposal=b.task==='GENERATE'?f.proposal:good;
+  const proposal=structuredClone(b.task==='GENERATE'?f.proposal:good);
+  for(const session of proposal.sessions)for(const item of [...session.ltg_decisions,...session.activities.flatMap(a=>a.ltg_use||[])]){
+   item.row_id=b.prompt.ltg_decision_authority.provider_rows.find(r=>r.session===session.session_number&&r.project_id===item.project_id).row_id;
+   delete item.project_id;
+  }
   return new Response(JSON.stringify({output:b.task==='GENERATE'?proposal:{status:'PROPOSAL',reason:'Synthetic repair',proposal},finish_reason:'STOP'}));
  }});
  const generated=await drivers.sessionAuthor(ctx);let e;try{validateSessionGraphAuthoring(generated.proposal,f)}catch(error){e=error;}

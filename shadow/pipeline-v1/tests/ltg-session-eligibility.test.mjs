@@ -4,6 +4,15 @@ import {ltgFixture,useLtg} from '../../session-graph-v1/tests/pedagogical-fixtur
 import {normalizeSessionGraphAuthoring,ltgExecutionErrors} from '../../session-graph-v1/authoring.mjs';
 import {ltgSessionEligibility,assertCoreLtgEligibility,ltgEligibilityDiagnostics,LTG_SESSION_ELIGIBILITY_INSTRUCTION,ltgDecisionAuthority,assembleLtgDecisions} from '../ltg-session-eligibility.mjs';
 import {repairTargetsFromContext,createSessionGraphDrivers} from '../session-provider.mjs';
+
+function transport(proposal,matrix){
+ const copy=structuredClone(proposal),rows=ltgDecisionAuthority(matrix).provider_rows;
+ for(const session of copy.sessions)for(const item of [...(session.ltg_decisions||[]),...session.activities.flatMap(a=>a.ltg_use||[])]){
+  const row=rows.find(r=>r.session===session.session_number&&r.project_id===item.project_id);
+  item.row_id=row?.row_id||'unknown';delete item.project_id;
+ }
+ return copy;
+}
 function setup(role='CORE'){
  const f=ltgFixture(role);useLtg(f);const s=f.proposal.sessions[1],b=f.blueprint.session_progression[1];
  f.proposal.sessions=[2,3,4].map(session_number=>({...structuredClone(s),session_number}));
@@ -18,7 +27,7 @@ test('explicit LTG assembly fixes sessions 2/3/5, leaves eligible decisions auth
  const matrix=ltgSessionEligibility(f),authority=ltgDecisionAuthority(matrix);
  assert.deepEqual(authority.fixed_decisions.map(d=>d.session),[2,3,5]);
  for(const row of f.proposal.sessions)if(row.session_number!==4){row.ltg_decisions=row.session_number===1?[{project_id:'ltg1',decision:'NOT_RECOMMENDED',reason:'La sesion usa el registro propio del grupo.'}]:[];row.activities.forEach(a=>{a.ltg_use=[];a.ltg_activity_ids=[];});}
- const before=structuredClone(f.proposal),out=assembleLtgDecisions(f.proposal,matrix);
+ const before=structuredClone(f.proposal),out=assembleLtgDecisions(transport(f.proposal,matrix),matrix);
  assert.deepEqual(f.proposal,before);assert.deepEqual(out.sessions.map(s=>s.ltg_decisions[0].decision),['NOT_RECOMMENDED','NOT_RECOMMENDED','NOT_RECOMMENDED','USE','NOT_RECOMMENDED']);
  assert.deepEqual(ltgExecutionErrors(normalizeSessionGraphAuthoring(out,f).sessions,f),[]);
  const noUse=structuredClone(out);noUse.sessions[3].ltg_decisions[0].decision='NOT_RECOMMENDED';noUse.sessions[3].activities.forEach(a=>{a.ltg_use=[];a.ltg_activity_ids=[];});
@@ -73,6 +82,7 @@ for(const role of ['SUPPORT','OPTIONAL'])test(role+' preserves existing decision
 });
 test('GENERATE and REPAIR share matrix; no eligible CORE blocks before any provider call',async()=>{
  const f=setup();let calls=0,sent;let output=structuredClone(f.proposal);for(const row of output.sessions)if(row.session_number!==4){row.ltg_decisions=[];row.activities.forEach(a=>{a.ltg_use=[];a.ltg_activity_ids=[];});}
+ output=transport(output,ltgSessionEligibility(f));
  const drivers=createSessionGraphDrivers({endpoint:'https://example.invalid/plan-project-blueprint-v1-shadow',token:'x'.repeat(64),durableEvidence:false,fetchImpl:async(_u,init)=>{calls++;sent=JSON.parse(init.body);return new Response(JSON.stringify({output}));}});
  const author=await drivers.sessionAuthor(ctx(f)),matrix=sent.prompt.ltg_session_eligibility;assert.equal(author.ltg_eligibility_diagnostics.local_decisions.length,0);assert.match(sent.prompt.ltg_session_eligibility_instruction,/NO declares USE/);
  assert.equal(sent.prompt.ltg_session_eligibility_instruction,LTG_SESSION_ELIGIBILITY_INSTRUCTION);

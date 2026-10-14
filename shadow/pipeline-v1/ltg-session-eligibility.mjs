@@ -1,4 +1,5 @@
 import {normalizeSessionGraphAuthoring} from '../session-graph-v1/authoring.mjs';
+import {hash} from '../project-blueprint-v1/contracts.mjs';
 
 export const LTG_SESSION_ELIGIBILITY_INSTRUCTION='CORE is a graph-level obligation, not a per-session obligation. CORE exige al menos un uso valido en todo el grafo, NO USE en todas las sesiones. Para CADA fila de ltg_session_eligibility: eligible=false => ltg_decision MUST be NOT_RECOMMENDED and no ltg_use may be authored. NO declares USE ni intentes crear ltg_use en esa sesion. eligible=true => USE is allowed only when a concrete authorized use is authored. Usa compatible_grade, compatible_pda_ids y authorized_activity_ids; null solo si null_activity_allowed. Never emit USE solely because role=CORE. If CORE has at least one eligible session, it is valid for other sessions to be NOT_RECOMMENDED; el CORE debe conservar al menos un uso concreto valido en alguna sesion elegible. No infieras vinculos por tema o grado, no uses PDA de otra sesion ni IDs de otro proyecto. Una decision local NOT_RECOMMENDED no cambia el rol global CORE. SUPPORT y OPTIONAL mantienen su semantica existente. Aplica estas reglas tanto en GENERATE como en REPAIR y audita TODAS las decisiones finales contra la matriz. Cero sesiones elegibles para CORE es incompatibilidad global: no inventes usos, no cambies focos, vinculos ni Blueprint.';
 
@@ -38,8 +39,8 @@ export function coreEligibilitySummary(source,matrix){
 export function ltgDecisionAuthority(matrix){
  return {
   fixed_decisions:matrix.filter(r=>!r.eligible).map(r=>({session:r.session,project_id:r.project_id,decision:'NOT_RECOMMENDED',reason:'No existe una combinacion curricular LTG autorizada para esta sesion.'})),
-  provider_rows:matrix.filter(r=>r.eligible).map(r=>({session:r.session,project_id:r.project_id})),
-  instruction:'En la respuesta, ltg_decisions contiene SOLO decisiones para provider_rows. Omite todas las fixed_decisions: el motor las ensamblara sin pedirte que las copies. No declares decisiones ni ltg_use de proyectos no seleccionados o filas no elegibles. Una fila fija enviada por el provider sera rechazada, nunca sobrescrita. Conserva la obligacion CORE global de uso valido en alguna fila elegible.'
+  provider_rows:matrix.filter(r=>r.eligible).map(r=>({row_id:'LTG_ROW_'+hash({session:r.session,project_id:r.project_id}),session:r.session,project_id:r.project_id,role:r.role})),
+  instruction:'En la respuesta, ltg_decisions y ltg_use identifican el LTG exclusivamente mediante row_id de provider_rows; NO contienen project_id, role ni otra identidad del proyecto. El motor resuelve row_id a la sesion y proyecto autorizados. Omite todas las fixed_decisions: el motor las ensamblara sin pedirte que las copies. Una fila desconocida, fija o de otra sesion sera rechazada, nunca corregida. Conserva la obligacion CORE global de uso valido en alguna fila elegible.'
  };
 }
 
@@ -47,15 +48,31 @@ export function ltgDecisionAuthority(matrix){
 export function assembleLtgDecisions(proposal,matrix){
  const authority=ltgDecisionAuthority(matrix),assembled=structuredClone(proposal);
  for(const session of assembled.sessions||[]){
-  const allowed=new Set(authority.provider_rows.filter(r=>r.session===session.session_number).map(r=>r.project_id));
+  const allowed=new Map(authority.provider_rows.filter(r=>r.session===session.session_number).map(r=>[r.row_id,r]));
   const authored=session.ltg_decisions;
   if(!Array.isArray(authored)&&matrix.length)throw Error('SESSION_PROVIDER_LTG_AUTHORITY: decisions array required');
   for(const item of [...(Array.isArray(authored)?authored:[]),...(session.activities||[]).flatMap(a=>a.ltg_use||[])]){
-   if(!allowed.has(item.project_id))throw Error(`SESSION_PROVIDER_LTG_AUTHORITY: session=${session.session_number} project_id=${item.project_id} NOT_PROVIDER_OWNED`);
+   if(Object.hasOwn(item,'project_id')||Object.hasOwn(item,'role'))throw Error(`SESSION_PROVIDER_LTG_AUTHORITY: session=${session.session_number} PROJECT_ID_NOT_PROVIDER_OWNED`);
+   const row=allowed.get(item.row_id);
+   if(!row)throw Error(`SESSION_PROVIDER_LTG_AUTHORITY: session=${session.session_number} UNKNOWN_OR_NONLOCAL_ROW_ID NOT_PROVIDER_OWNED`);
+   delete item.row_id;
+   item.project_id=row.project_id;
   }
   if(Array.isArray(authored))session.ltg_decisions=[...authored,...authority.fixed_decisions.filter(r=>r.session===session.session_number).map(({session:_,...d})=>d)];
  }
  return assembled;
+}
+
+// Transport-only schema; the persisted authoring contract and validators are unchanged.
+export function providerLtgRowSchema(schema){
+ const copy=structuredClone(schema),session=copy.properties.sessions.items;
+ for(const item of [session.properties.ltg_decisions.items,session.properties.activities.items.properties.ltg_use.items]){
+  delete item.properties.project_id;
+  item.properties.row_id={type:'string'};
+  item.required=item.required.map(field=>field==='project_id'?'row_id':field);
+  item.additionalProperties=false;
+ }
+ return copy;
 }
 
 export function assertCoreLtgEligibility(source,matrix){

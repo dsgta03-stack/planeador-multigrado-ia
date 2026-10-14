@@ -1,3 +1,4 @@
+import {ltgSessionEligibility,ltgDecisionAuthority} from '../ltg-session-eligibility.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {ltgFixture,useLtg} from '../../session-graph-v1/tests/pedagogical-fixture.mjs';
@@ -33,7 +34,7 @@ for(const [mode,reason] of [['absent',null],['valid',null],['activity','ACTIVITY
 });
 test('repair adapter sends target and retains no-created diagnostics on local rejection',async()=>{
  const f=ltgFixture('CORE');useLtg(f);f.proposal.sessions[1].activities[0].ltg_use=[];let sent;
- const driver=createSessionGraphDrivers({endpoint:'https://example.invalid/plan-project-blueprint-v1-shadow',token:'x'.repeat(64),durableEvidence:false,fetchImpl:async(url,request)=>{sent=JSON.parse(request.body);return new Response(JSON.stringify({output:{status:'PROPOSAL',reason:'synthetic',proposal:f.proposal}}));}});
+ const driver=createSessionGraphDrivers({endpoint:'https://example.invalid/plan-project-blueprint-v1-shadow',token:'x'.repeat(64),durableEvidence:false,fetchImpl:async(url,request)=>{sent=JSON.parse(request.body);return new Response(JSON.stringify({output:{status:'PROPOSAL',reason:'synthetic',proposal:(()=>{const p=structuredClone(f.proposal),rows=ltgDecisionAuthority(ltgSessionEligibility(f)).provider_rows;for(const session of p.sessions)for(const item of [...session.ltg_decisions,...session.activities.flatMap(a=>a.ltg_use||[])]){item.row_id=rows.find(r=>r.session===session.session_number&&r.project_id===item.project_id).row_id;delete item.project_id;}return p;})()}}));}});
  await assert.rejects(driver.sessionRepair(context(f)),e=>{assert.match(e.message,/SGD-013/);assert.equal(e.ltg_repair_diagnostics[0].normalization_outcome,'NOT_CREATED');return true;});
  assert.equal(sent.prompt.repair_targets[0].role,'CORE');assert.equal(sent.prompt.repair_targets[0].session,2);
 });
