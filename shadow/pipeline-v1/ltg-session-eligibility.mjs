@@ -35,6 +35,29 @@ export function coreEligibilitySummary(source,matrix){
  return (source.blueprint.ltg_strategy?.selections||[]).filter(s=>s.role==='CORE').map(s=>({project_id:s.project_id,eligible_sessions:matrix.filter(row=>row.project_id===s.project_id&&row.eligible).map(row=>row.session)}));
 }
 
+export function ltgDecisionAuthority(matrix){
+ return {
+  fixed_decisions:matrix.filter(r=>!r.eligible).map(r=>({session:r.session,project_id:r.project_id,decision:'NOT_RECOMMENDED',reason:'No existe una combinacion curricular LTG autorizada para esta sesion.'})),
+  provider_rows:matrix.filter(r=>r.eligible).map(r=>({session:r.session,project_id:r.project_id})),
+  instruction:'En la respuesta, ltg_decisions contiene SOLO decisiones para provider_rows. Omite todas las fixed_decisions: el motor las ensamblara sin pedirte que las copies. No declares decisiones ni ltg_use de proyectos no seleccionados o filas no elegibles. Una fila fija enviada por el provider sera rechazada, nunca sobrescrita. Conserva la obligacion CORE global de uso valido en alguna fila elegible.'
+ };
+}
+
+// Explicit ownership boundary, before normalization; never rewrite or discard provider decisions/uses.
+export function assembleLtgDecisions(proposal,matrix){
+ const authority=ltgDecisionAuthority(matrix),assembled=structuredClone(proposal);
+ for(const session of assembled.sessions||[]){
+  const allowed=new Set(authority.provider_rows.filter(r=>r.session===session.session_number).map(r=>r.project_id));
+  const authored=session.ltg_decisions;
+  if(!Array.isArray(authored)&&matrix.length)throw Error('SESSION_PROVIDER_LTG_AUTHORITY: decisions array required');
+  for(const item of [...(Array.isArray(authored)?authored:[]),...(session.activities||[]).flatMap(a=>a.ltg_use||[])]){
+   if(!allowed.has(item.project_id))throw Error(`SESSION_PROVIDER_LTG_AUTHORITY: session=${session.session_number} project_id=${item.project_id} NOT_PROVIDER_OWNED`);
+  }
+  if(Array.isArray(authored))session.ltg_decisions=[...authored,...authority.fixed_decisions.filter(r=>r.session===session.session_number).map(({session:_,...d})=>d)];
+ }
+ return assembled;
+}
+
 export function assertCoreLtgEligibility(source,matrix){
  const failures=coreEligibilitySummary(source,matrix).filter(row=>row.eligible_sessions.length===0).map(row=>{
   const selection=source.blueprint.ltg_strategy.selections.find(s=>s.project_id===row.project_id);

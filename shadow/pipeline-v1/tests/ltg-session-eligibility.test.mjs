@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {ltgFixture,useLtg} from '../../session-graph-v1/tests/pedagogical-fixture.mjs';
 import {normalizeSessionGraphAuthoring,ltgExecutionErrors} from '../../session-graph-v1/authoring.mjs';
-import {ltgSessionEligibility,assertCoreLtgEligibility,ltgEligibilityDiagnostics,LTG_SESSION_ELIGIBILITY_INSTRUCTION} from '../ltg-session-eligibility.mjs';
+import {ltgSessionEligibility,assertCoreLtgEligibility,ltgEligibilityDiagnostics,LTG_SESSION_ELIGIBILITY_INSTRUCTION,ltgDecisionAuthority,assembleLtgDecisions} from '../ltg-session-eligibility.mjs';
 import {repairTargetsFromContext,createSessionGraphDrivers} from '../session-provider.mjs';
 function setup(role='CORE'){
  const f=ltgFixture(role);useLtg(f);const s=f.proposal.sessions[1],b=f.blueprint.session_progression[1];
@@ -11,6 +11,26 @@ function setup(role='CORE'){
  return f;
 }
 const ctx=f=>({sources:{constraints:f.constraints,curriculum:f.curriculum,methodology:f.methodology},blueprint:f.blueprint,approval:f.approval,previous_proposal:f.proposal,compile_error:{code:'SESSION_GRAPH_AUTHORING_INVALID',message:'SESSION_GRAPH_AUTHORING_CONTRACT: SGD-013 LTG decision/use mismatch session=2 project_id=ltg1 decision=USE concrete_use=absent'}});
+test('explicit LTG assembly fixes sessions 2/3/5, leaves eligible decisions authored, and preserves CORE globally',()=>{
+ const f=setup(),s=f.proposal.sessions[0],b=f.blueprint.session_progression[0];
+ f.proposal.sessions=[1,2,3,4,5].map(session_number=>({...structuredClone(s),session_number}));
+ f.blueprint.session_progression=[1,2,3,4,5].map(session_number=>({...structuredClone(b),session_number,pda_focus:[1,4].includes(session_number)?['p1']:['p3']}));
+ const matrix=ltgSessionEligibility(f),authority=ltgDecisionAuthority(matrix);
+ assert.deepEqual(authority.fixed_decisions.map(d=>d.session),[2,3,5]);
+ for(const row of f.proposal.sessions)if(row.session_number!==4){row.ltg_decisions=row.session_number===1?[{project_id:'ltg1',decision:'NOT_RECOMMENDED',reason:'La sesion usa el registro propio del grupo.'}]:[];row.activities.forEach(a=>{a.ltg_use=[];a.ltg_activity_ids=[];});}
+ const before=structuredClone(f.proposal),out=assembleLtgDecisions(f.proposal,matrix);
+ assert.deepEqual(f.proposal,before);assert.deepEqual(out.sessions.map(s=>s.ltg_decisions[0].decision),['NOT_RECOMMENDED','NOT_RECOMMENDED','NOT_RECOMMENDED','USE','NOT_RECOMMENDED']);
+ assert.deepEqual(ltgExecutionErrors(normalizeSessionGraphAuthoring(out,f).sessions,f),[]);
+ const noUse=structuredClone(out);noUse.sessions[3].ltg_decisions[0].decision='NOT_RECOMMENDED';noUse.sessions[3].activities.forEach(a=>{a.ltg_use=[];a.ltg_activity_ids=[];});
+ assert.ok(ltgExecutionErrors(noUse.sessions,f).includes('SGD-013 CORE disappeared'));
+ for(const [session,project_id,decision] of [[2,'ltg1','USE'],[2,'ltg1','NOT_RECOMMENDED'],[4,'foreign','USE']]){
+  const invalid=structuredClone(before);invalid.sessions.find(s=>s.session_number===session).ltg_decisions.push({project_id,decision,reason:'Provider candidate'});
+  assert.throws(()=>assembleLtgDecisions(invalid,matrix),/NOT_PROVIDER_OWNED/);
+ }
+ const invalidUse=structuredClone(before);invalidUse.sessions[1].activities[0].ltg_use=[{project_id:'ltg1',activity_id:'ltg-a1'}];
+ assert.throws(()=>assembleLtgDecisions(invalidUse,matrix),/NOT_PROVIDER_OWNED/);
+ assert.ok(out.sessions.every(s=>s.ltg_decisions.every(d=>d.project_id==='ltg1')));
+});
 for(const eligible of [[1],[1,4]])test(`CORE global may use only session ${eligible.at(-1)} with local NOT_RECOMMENDED elsewhere`,()=>{
  const f=setup(),s=f.proposal.sessions[0],b=f.blueprint.session_progression[0];
  f.proposal.sessions=[1,2,3,4,5].map(session_number=>({...structuredClone(s),session_number}));
@@ -52,12 +72,12 @@ for(const role of ['SUPPORT','OPTIONAL'])test(role+' preserves existing decision
  const f=setup(role);const before=structuredClone(f);ltgSessionEligibility(f);assert.deepEqual(f,before);const n=normalizeSessionGraphAuthoring(f.proposal,f);assert.equal(n.sessions[0].ltg_decisions[0].decision,role==='SUPPORT'?'NOT_RECOMMENDED':'USE');
 });
 test('GENERATE and REPAIR share matrix; no eligible CORE blocks before any provider call',async()=>{
- const f=setup();let calls=0,sent;let output=f.proposal;
+ const f=setup();let calls=0,sent;let output=structuredClone(f.proposal);for(const row of output.sessions)if(row.session_number!==4){row.ltg_decisions=[];row.activities.forEach(a=>{a.ltg_use=[];a.ltg_activity_ids=[];});}
  const drivers=createSessionGraphDrivers({endpoint:'https://example.invalid/plan-project-blueprint-v1-shadow',token:'x'.repeat(64),durableEvidence:false,fetchImpl:async(_u,init)=>{calls++;sent=JSON.parse(init.body);return new Response(JSON.stringify({output}));}});
- const author=await drivers.sessionAuthor(ctx(f)),matrix=sent.prompt.ltg_session_eligibility;assert.equal(author.ltg_eligibility_diagnostics.local_decisions.length,2);assert.match(sent.prompt.ltg_session_eligibility_instruction,/NO declares USE/);
+ const author=await drivers.sessionAuthor(ctx(f)),matrix=sent.prompt.ltg_session_eligibility;assert.equal(author.ltg_eligibility_diagnostics.local_decisions.length,0);assert.match(sent.prompt.ltg_session_eligibility_instruction,/NO declares USE/);
  assert.equal(sent.prompt.ltg_session_eligibility_instruction,LTG_SESSION_ELIGIBILITY_INSTRUCTION);
  assert.deepEqual(Object.keys(matrix[0]),['project_id','role','session','eligible','compatible_grade','compatible_pda_ids','selected_activity_ids','verified_activity_ids','authorized_activity_ids','null_activity_allowed','reasons']);
- output={status:'PROPOSAL',proposal:f.proposal};await assert.rejects(drivers.sessionRepair(ctx(f)),/SGD-013/);assert.deepEqual(sent.prompt.ltg_session_eligibility,matrix);assert.equal(sent.prompt.repair_targets[0].authorized_use_possible,false);
+ output={status:'PROPOSAL',proposal:f.proposal};await assert.rejects(drivers.sessionRepair(ctx(f)),/SESSION_PROVIDER_LTG_AUTHORITY/);assert.deepEqual(sent.prompt.ltg_session_eligibility,matrix);assert.equal(sent.prompt.repair_targets[0].authorized_use_possible,false);
  assert.equal(sent.prompt.ltg_session_eligibility_instruction,LTG_SESSION_ELIGIBILITY_INSTRUCTION);
  f.blueprint.session_progression.forEach(s=>s.pda_focus=['p3']);const priorCalls=calls;
  await assert.rejects(drivers.sessionAuthor(ctx(f)),e=>e.code==='CORE_LTG_NO_ELIGIBLE_SESSION');await assert.rejects(drivers.sessionRepair(ctx(f)),e=>e.code==='CORE_LTG_NO_ELIGIBLE_SESSION');assert.equal(calls,priorCalls);
