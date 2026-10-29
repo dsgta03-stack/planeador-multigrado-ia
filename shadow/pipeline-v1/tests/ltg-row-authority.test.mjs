@@ -57,6 +57,7 @@ test('GENERATE and REPAIR actually send row-only schemas and resolve provider ro
  assert.deepEqual(sent.prompt.ltg_decision_authority.provider_rows,ltgDecisionAuthority(matrix).provider_rows);
  assert.ok(!('project_id' in sent.response_schema.properties.sessions.items.properties.ltg_decisions.items.properties));
  // Boundary rejection precedes normalization and any unrelated full-graph checks.
+ ctx.compile_error={code:'SESSION_GRAPH_AUTHORING_INVALID',message:'SESSION_GRAPH_AUTHORING_CONTRACT: SGD-013 LTG decision/use mismatch session=4 project_id=ltg1 decision=USE concrete_use=absent'};
  output={status:'PROPOSAL',proposal:structuredClone(raw)};output.proposal.sessions[3].ltg_decisions[0].row_id='unknown';
  await assert.rejects(drivers.sessionRepair(ctx),/UNKNOWN_OR_NONLOCAL_ROW_ID/);
  assert.ok(!('project_id' in sent.response_schema.properties.proposal.properties.sessions.items.properties.activities.items.properties.ltg_use.items.properties));
