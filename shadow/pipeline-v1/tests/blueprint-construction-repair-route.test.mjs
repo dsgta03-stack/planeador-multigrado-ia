@@ -1,8 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {sources,candidate} from '../../project-blueprint-v1/fixtures/build.mjs';
+import {FUNCTIONAL_PROFILES} from '../../project-blueprint-v1/catalog.mjs';
 import {authoringSchema} from '../../project-blueprint-v1/authoring-proposal.mjs';
 import {constructionPlan} from '../../project-blueprint-v1/construction.mjs';
+import {sourceBinding} from '../../project-blueprint-v1/contracts.mjs';
 import {generateShadow} from '../../project-blueprint-v1/shadow.mjs';
 
 const src=sources(),plan=constructionPlan(src);
@@ -14,6 +16,25 @@ const schema=authoringSchema(src,plan);
 const project=(x,s)=>s.type==='object'?Object.fromEntries(Object.entries(s.properties).filter(([k])=>k in x).map(([k,v])=>[k,project(x[k],v)])):s.type==='array'?x.map(v=>project(v,s.items)):structuredClone(x);
 function validProposal(){const p=project(baseline,schema);p.coverage=baseline.construction_evidence.map(r=>({operation:r.operation,stage_id:r.stage_id,action_quote:r.student_operation_quote,evidence_ref:{field:'expected_output',index:null}}));return p;}
 function invalidBpd019(){const p=validProposal(),row=p.coverage.find(x=>x.operation==='INTEGRACION')||p.coverage[0];row.action_quote='CITA NO LITERAL';return p;}
+
+test('repairing PLANIFICACION preserves every other valid coverage row',async()=>{
+ const bad=validProposal();bad.coverage.find(x=>x.operation==='PLANIFICACION').action_quote='CITA NO LITERAL';
+ const retained=structuredClone(bad.coverage.filter(x=>x.operation!=='PLANIFICACION'));
+ const result=await generateShadow(src,{constructionPlan:plan,authoringCompact:true},async(task,input,options)=>{
+  if(task==='GENERATE')return {output:bad,telemetry:{task}};
+  if(task==='REPAIR'){
+   assert.deepEqual(options.repair.previous_authoring_proposal,bad);
+   const repaired=structuredClone(options.repair.previous_authoring_proposal);
+   repaired.coverage.find(x=>x.operation==='PLANIFICACION').action_quote=validProposal().coverage.find(x=>x.operation==='PLANIFICACION').action_quote;
+   assert.deepEqual(repaired.coverage.filter(x=>x.operation!=='PLANIFICACION'),retained);
+   return {output:repaired,telemetry:{task}};
+  }
+  const e=Error('synthetic stop after construction');e.code='PROVIDER_UNAVAILABLE';throw e;
+ });
+ assert.equal(result.construction_attempts[1].status,'CONSTRUCTED');
+ assert.deepEqual(result.construction_attempts[1].raw_proposal.coverage.filter(x=>x.operation!=='PLANIFICACION'),retained);
+ assert.equal(bad.coverage.find(x=>x.operation==='PLANIFICACION').action_quote,'CITA NO LITERAL');
+});
 
 test('ProjectBlueprint construction rejection spends its single repair before giving up',async()=>{
  const bad=invalidBpd019(),good=validProposal(),tasks=[];
@@ -55,4 +76,45 @@ test('ProjectBlueprint construction repair is bounded to one attempt',async()=>{
  assert.equal(result.errors.length,1);
  assert.equal(result.errors[0].revision,2);
  assert.equal(result.errors[0].task,'CONSTRUCT');
+});
+
+for(const resolution of ['remove_overdeclared','complete_genuine','still_missing'])test('profile preflight repair: '+resolution,async()=>{
+ const bad=validProposal();bad.final_outcome.type='EXHIBITION';
+ bad.final_outcome.functional_profiles.push('CAMPAIGN');
+ const tasks=[];
+ const result=await generateShadow(src,{constructionPlan:plan,authoringCompact:true},async(task,input,options)=>{
+  tasks.push(task);
+  if(task==='GENERATE')return {output:bad,telemetry:{task}};
+  if(task==='REPAIR'){
+   const targets=options.repair.functional_profile_targets;
+   assert.equal(targets.length,1);assert.equal(targets[0].profile,'CAMPAIGN');
+   assert.deepEqual(targets[0].missing_requirement_ids,FUNCTIONAL_PROFILES.CAMPAIGN);
+   assert.deepEqual(targets[0].outcome,{name:bad.final_outcome.name,type:'EXHIBITION',purpose:bad.final_outcome.purpose});
+   assert.match(targets[0].instruction,/sobredeclarado/);
+   const good=structuredClone(bad);
+   if(resolution==='remove_overdeclared')good.final_outcome.functional_profiles=good.final_outcome.functional_profiles.filter(x=>x!=='CAMPAIGN');
+   if(resolution==='complete_genuine')good.final_outcome.functional_requirements.push(...FUNCTIONAL_PROFILES.CAMPAIGN.map(requirement_id=>({...good.final_outcome.functional_requirements[0],requirement_id})));
+   return {output:good,telemetry:{task}};
+  }
+  const e=Error('synthetic stop after preflight');e.code='PROVIDER_UNAVAILABLE';throw e;
+ });
+ assert.equal(result.construction_attempts[1].status,resolution==='still_missing'?'CONSTRUCTION_REJECTED':'CONSTRUCTED');
+ assert.equal(tasks.includes('REVIEW'),resolution!=='still_missing');
+});
+
+test('composition drift is rejected before binding and repair receives exact authority',async()=>{
+ const p=validProposal(),composition={schema_version:'PROJECT_COMPOSITION_V1',source:sourceBinding(src),methodology:src.methodology,base:{origin:'AI_ORIGINAL',project_id:null},enrichments:[],references:[],grade_coverage:[],final_outcome:{name:p.final_outcome.name,purpose:p.final_outcome.purpose,description:p.final_outcome.description}};
+ const bad=structuredClone(p);bad.final_outcome.name+=' ';
+ const result=await generateShadow(src,{constructionPlan:plan,authoringCompact:true,projectComposition:composition},async(task,input,options)=>{
+  if(task==='GENERATE')return {output:bad,telemetry:{task}};
+  if(task==='REPAIR'){
+   assert.deepEqual(options.repair.binding_final_outcome,composition.final_outcome);
+   assert.deepEqual(options.repair.outcome_binding_diagnostics,[{field:'name',revision:1,phase:'GENERATE'}]);
+   const repaired=structuredClone(p);repaired.final_outcome.description+='!';
+   return {output:repaired,telemetry:{task}};
+  }throw Error('review must not run');
+ });
+ assert.deepEqual(result.construction_attempts.map(x=>x.status),['CONSTRUCTION_REJECTED','CONSTRUCTION_REJECTED']);
+ assert.deepEqual(result.errors[0].outcome_binding_diagnostics,[{field:'description',revision:2,phase:'REPAIR'}]);
+ assert.equal(bad.final_outcome.name,p.final_outcome.name+' ');
 });

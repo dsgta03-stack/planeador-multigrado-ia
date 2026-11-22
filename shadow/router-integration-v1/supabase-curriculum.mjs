@@ -30,14 +30,44 @@ export function createSupabaseCurriculumLookup({url,publishableKey,authorization
     const verifiedLinks=links.filter(x=>String(x.verification_type||'').toLowerCase()==='verificado');
     const projectIds=safeIds(verifiedLinks.map(x=>x.project_id));
     if(!projectIds.length)return {provenance:'SUPABASE public.pda + project_pda + projects_ltg + ltg_project_activities; active verified rows',pdas,ltg:[]};
-    const projects=await get('projects_ltg',{select:'project_id,grade,book,scenario,name,start_page,end_page,verification_status,active',project_id:filterIn(projectIds),active:'eq.true'});
-    const activities=await get('ltg_project_activities',{select:'id,project_id,activity_order,page_start,page_end,activity_summary,verification_status',project_id:filterIn(projectIds),order:'project_id.asc,activity_order.asc'});
+    const projects=await get('projects_ltg',{select:'project_id,grade,book,scenario,name,start_page,end_page,related_contents,purpose,central_product,verification_status,active',project_id:filterIn(projectIds),active:'eq.true'});
+    const activities=await get('ltg_project_activities',{select:'id,project_id,activity_order,page_start,page_end,activity_type,title,activity_summary,organization,materials,guiding_questions,evidence_or_record,product_contribution,semantic_tags,verification_status',project_id:filterIn(projectIds),order:'project_id.asc,activity_order.asc'});
     const linksByProject=new Map();
     for(const row of verifiedLinks){const a=linksByProject.get(row.project_id)||[];a.push(row.pda_id);linksByProject.set(row.project_id,a)}
     const actsByProject=new Map();
-    for(const row of activities){if(String(row.verification_status||'').toLowerCase()!=='verified')continue;const a=actsByProject.get(row.project_id)||[];a.push({activity_id:String(row.id),activity_order:Number(row.activity_order),summary:String(row.activity_summary||'').trim(),page_start:Number(row.page_start),page_end:Number(row.page_end),verification_status:String(row.verification_status)});actsByProject.set(row.project_id,a)}
+    for(const row of activities){
+      if(String(row.verification_status||'').toLowerCase()!=='verified')continue;
+      const a=actsByProject.get(row.project_id)||[];
+      a.push({
+        activity_id:String(row.id),
+        activity_order:Number(row.activity_order),
+        activity_type:String(row.activity_type||'').trim(),
+        title:String(row.title||'').trim(),
+        summary:String(row.activity_summary||'').trim(),
+        page_start:pageNumber(row.page_start),
+        page_end:pageNumber(row.page_end),
+        organization:String(row.organization||'').trim(),
+        materials:String(row.materials||'').trim(),
+        guiding_questions:String(row.guiding_questions||'').trim(),
+        evidence_or_record:String(row.evidence_or_record||'').trim(),
+        product_contribution:String(row.product_contribution||'').trim(),
+        semantic_tags:Array.isArray(row.semantic_tags)?row.semantic_tags.map(x=>String(x).trim()).filter(Boolean):[],
+        verification_status:String(row.verification_status)
+      });
+      actsByProject.set(row.project_id,a);
+    }
     const ltg=projects.filter(x=>wantedGrades.has(Number(x.grade))&&String(x.verification_status||'').toLowerCase()==='verificado').map(row=>({
-      project_id:String(row.project_id),grade:Number(row.grade),book:String(row.book||'').trim(),scenario:String(row.scenario||'').trim(),name:String(row.name||'').trim(),pages:{start:pageNumber(row.start_page),end:pageNumber(row.end_page)},verified_pda_links:unique((linksByProject.get(row.project_id)||[]).filter(id=>ids.includes(id))),verified_activities:actsByProject.get(row.project_id)||[]
+      project_id:String(row.project_id),
+      grade:Number(row.grade),
+      book:String(row.book||'').trim(),
+      scenario:String(row.scenario||'').trim(),
+      name:String(row.name||'').trim(),
+      pages:{start:pageNumber(row.start_page),end:pageNumber(row.end_page)},
+      related_contents:String(row.related_contents||'').trim(),
+      purpose:String(row.purpose||'').trim(),
+      central_product:String(row.central_product||'').trim(),
+      verified_pda_links:unique((linksByProject.get(row.project_id)||[]).filter(id=>ids.includes(id))),
+      verified_activities:actsByProject.get(row.project_id)||[]
     })).filter(x=>x.book&&x.scenario&&x.name&&x.pages.start&&x.pages.end&&x.pages.end>=x.pages.start);
     return {provenance:'SUPABASE public.pda + project_pda + projects_ltg + ltg_project_activities; active verified rows',pdas,ltg};
   };

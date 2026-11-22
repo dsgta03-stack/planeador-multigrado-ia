@@ -1,6 +1,6 @@
 import {deepFreeze,hash} from '../project-blueprint-v1/contracts.mjs';
 import {SESSION_GRAPH_VERSION,SESSION_GRAPH_PROPOSAL_VERSION,BLUEPRINT_APPROVAL_VERSION,CONTRIBUTION_MODES,PDA_MOBILIZATION_STATUSES} from './catalog.mjs';
-import {validateSessionGraphAuthoring} from './authoring.mjs';
+import {validateSessionGraphAuthoring,teacherExecutabilityMissing,ltgExecutionErrors,resolveLtgUse} from './authoring.mjs';
 
 const fail=(rule,detail)=>{const e=Error(`${rule}: ${detail}`);e.code='SESSION_GRAPH_REJECTED';e.rule=rule;throw e};
 const asSet=a=>new Set(a||[]);
@@ -89,7 +89,7 @@ export function compileSessionGraph(proposal,source,{graph_id,revision=1}={}){
    }
    const row={
     activity_id:activityId,order:i+1,title:a.title,contribution_mode:a.contribution_mode,contribution_rationale:a.contribution_rationale,
-    common_student_action:a.common_student_action,grade_participation:gradeParticipation,teacher_role:a.teacher_role,
+    execution:structuredClone(a.execution),ltg_use:a.ltg_use.map(use=>resolveLtgUse(use,curriculum)),common_student_action:a.common_student_action,grade_participation:gradeParticipation,teacher_role:a.teacher_role,
     resources:[...a.resources],supports:[...a.supports],minutes:a.minutes,input_refs:resolvedInputs,output:a.output,output_ref:outputRef,
     contributes_to_artifact_ids:[...a.contributes_to_artifact_ids],methodology_operations:[...a.methodology_operations],
     functional_requirement_ids:[...a.functional_requirement_ids],ltg_activity_ids:[...a.ltg_activity_ids],evidence:a.evidence,assessment_criteria:[...a.assessment_criteria]
@@ -102,7 +102,7 @@ export function compileSessionGraph(proposal,source,{graph_id,revision=1}={}){
    pda_focus:[...bSession.pda_focus],methodology_operations:[...bSession.methodology_operations],input_artifact_ids:[...bSession.input_artifact_ids],
    expected_output_artifact_ids:[...bSession.expected_output_artifact_ids],expected_partial_product:bSession.expected_partial_product,
    blueprint_acceptance_criteria:structuredClone(bSession.acceptance_criteria),project_state_after:bSession.project_state_after,terminal:bSession.terminal,
-   next_session_dependency:bSession.next_session_dependency,activities
+   next_session_dependency:bSession.next_session_dependency,ltg_decisions:structuredClone(authored.ltg_decisions||[]),activities
   });
  }
  const graph={schema_version:SESSION_GRAPH_VERSION,graph_id,revision,status:'DRAFT',source_blueprint:{blueprint_id:blueprint.blueprint_id,blueprint_revision:blueprint.revision,blueprint_hash:blueprintHash,approved_blueprint_hash:approval.approved_blueprint_hash,gate_version:approval.gate_version},sessions:compiledSessions,traceability:deriveTraceability(compiledSessions,blueprint),gate_result:null};
@@ -132,6 +132,7 @@ export function validateCompiledSessionGraph(graph,source){
  if(graph.sessions.length!==blueprint.session_progression.length||graph.sessions.some((s,i)=>s.session_number!==i+1))fail('SGD-002','session sequence mismatch');
  const allActivityIds=new Set();
  for(const s of graph.sessions){
+  if(!Array.isArray(s.ltg_decisions))fail('SGD-013','LTG decisions array required');
   const b=blueprint.session_progression.find(x=>x.session_number===s.session_number);
   if(!b||s.project_state_before!==b.project_state_before||s.session_project_goal!==b.session_project_goal||s.project_state_after!==b.project_state_after||s.terminal!==b.terminal||s.next_session_dependency!==b.next_session_dependency||!sameSet(s.pda_focus,b.pda_focus)||!sameSet(s.methodology_operations,b.methodology_operations)||!sameSet(s.input_artifact_ids,b.input_artifact_ids)||!sameSet(s.expected_output_artifact_ids,b.expected_output_artifact_ids))fail('SGD-003',`session ${s.session_number} immutable projection mismatch`);
   if(!s.activities.length||s.activities.some((a,i)=>a.order!==i+1||allActivityIds.has(a.activity_id)||(allActivityIds.add(a.activity_id),false)))fail('SGD-004',`session ${s.session_number} activity identity/order`);
@@ -139,17 +140,45 @@ export function validateCompiledSessionGraph(graph,source){
   const methods=new Set(s.activities.flatMap(a=>a.methodology_operations));if(s.methodology_operations.some(op=>!methods.has(op)))fail('SGD-008',`session ${s.session_number} uncovered methodology operation`);
   const outputs=new Set(s.activities.map(a=>a.output_ref));
   for(const [i,a] of s.activities.entries()){
+   if(!Array.isArray(a.ltg_use))fail('SGD-013','concrete LTG use array required');
+   const missing=teacherExecutabilityMissing(a);if(missing.length)fail('SGD-017',`${a.activity_id}: ${missing.join(',')}`);
+   for(const use of a.ltg_use||[]){const {reference,...authored}=use;if(hash(resolveLtgUse(authored,source.curriculum))!==hash(use))fail('SGD-013','LTG reference mismatch');}
    for(const ref of a.input_refs)if(outputs.has(ref)){const producer=s.activities.findIndex(x=>x.output_ref===ref);if(producer<0||producer>=i)fail('SGD-009',`activity ${a.activity_id} future dependency`)}
    if(a.contribution_mode==='COMPLEMENTARY'&&!s.activities.slice(i+1).some(n=>n.input_refs.includes(a.output_ref)))fail('SGD-010',`orphan complementary ${a.activity_id}`);
    if(a.contribution_mode==='DIRECT'&&!a.contributes_to_artifact_ids.length)fail('SGD-010',`direct activity ${a.activity_id} has no artifact`);
   }
   for(const artifact of s.expected_output_artifact_ids)if(!s.activities.some(a=>a.contribution_mode==='DIRECT'&&a.contributes_to_artifact_ids.includes(artifact)))fail('SGD-010',`session ${s.session_number} expected artifact uncovered`);
-  const gradesWithPda=new Set((constraints.grades||[]).filter(g=>s.pda_focus.some(id=>source.curriculum.pdas.some(p=>p.pda_id===id&&p.grade===g))));
-  const participating=new Set(s.activities.flatMap(a=>a.grade_participation.filter(g=>g.pda_mobilization.length).map(g=>g.grade)));
-  for(const g of gradesWithPda)if(!participating.has(g))fail('SGD-014',`session ${s.session_number} grade ${g} not mobilized`);
+  const activeGrades=new Set(constraints.grades||[]);
+  const participatingGrades=new Set(
+   s.activities.flatMap(a=>a.grade_participation.map(g=>g.grade))
+  );
+  for(const g of activeGrades){
+   if(!participatingGrades.has(g))
+    fail('SGD-014',`session ${s.session_number} grade ${g} not participating`);
+  }
+
+  const gradesWithPda=new Set(
+   (constraints.grades||[]).filter(g=>
+    s.pda_focus.some(id=>
+     source.curriculum.pdas.some(p=>p.pda_id===id&&p.grade===g)
+    )
+   )
+  );
+  const gradesMobilizingPda=new Set(
+   s.activities.flatMap(a=>
+    a.grade_participation
+     .filter(g=>g.pda_mobilization.length)
+     .map(g=>g.grade)
+   )
+  );
+  for(const g of gradesWithPda){
+   if(!gradesMobilizingPda.has(g))
+    fail('SGD-014',`session ${s.session_number} grade ${g} PDA not mobilized`);
+  }
  }
  for(const r of blueprint.final_outcome.functional_requirements){const hits=graph.sessions.flatMap(s=>s.activities.map(a=>({s,a}))).filter(x=>x.a.functional_requirement_ids.includes(r.requirement_id)&&r.stage_ids.some(id=>x.s.stage_ids.includes(id)));if(!hits.length)fail('SGD-012',`functional requirement ${r.requirement_id} uncovered`)}
  if(blueprint.ltg_strategy.mode==='NONE'&&graph.sessions.some(s=>s.activities.some(a=>a.ltg_activity_ids.length)))fail('SGD-013','LTG links present in NONE mode');
+ const ltgErrors=ltgExecutionErrors(graph.sessions.map(s=>({...s,activities:s.activities.map(a=>({...a,ltg_use:(a.ltg_use||[]).map(({reference,...use})=>use)}))})),source);if(ltgErrors.length)fail('SGD-013',ltgErrors.join('; '));
  const last=graph.sessions.at(-1);if(!last?.terminal||last.next_session_dependency!==null)fail('SGD-015','terminal closure mismatch');
  const derived=deriveTraceability(graph.sessions,blueprint);if(hash(derived)!==hash(graph.traceability))fail('SGD-016','traceability mismatch');
  return true;

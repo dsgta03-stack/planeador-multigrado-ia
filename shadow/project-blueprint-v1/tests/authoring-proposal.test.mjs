@@ -5,7 +5,8 @@ import {sources,candidate} from '../fixtures/build.mjs';
 import {authoringSchema,compileAuthoring} from '../authoring-proposal.mjs';
 import {constructionPlan,compileConstruction,validateConstruction} from '../construction.mjs';
 import {assertContract,hash,schemaFor} from '../contracts.mjs';
-import {blueprintGate} from '../gate.mjs';
+import {FUNCTIONAL_PROFILES,BPS} from '../catalog.mjs';
+import {blueprintGate,functionalDiagnostics,semanticInputHash} from '../gate.mjs';
 const src=sources(),plan=constructionPlan(src);
 // Test-only conversion of an explicitly authored synthetic fixture. Never a live PASS.
 const ids={frame:'planning',investigate:'production',apply:'intervention',questions:'artifact_planning',shared_explanations:'artifact_production',completion:'artifact_intervention'};
@@ -18,6 +19,35 @@ const project=(x,s)=>s.type==='object'?Object.fromEntries(Object.entries(s.prope
 function proposal(){const p=project(baseline,schema);p.coverage=baseline.construction_evidence.map(r=>({operation:r.operation,stage_id:r.stage_id,action_quote:r.student_operation_quote,evidence_ref:{field:'expected_output',index:null}}));return p;}
 const build=p=>compileAuthoring(p,src,plan,{blueprint_id:'authored-fixture',revision:1});
 const unchanged=['schemas/ProjectBlueprintV1.json','gate.mjs','semantic-evidence.mjs'].map(p=>[p,hash(readFileSync(new URL('../'+p,import.meta.url),'utf8'))]);
+const planning=p=>p.coverage.find(r=>r.operation==='PLANIFICACION');
+for(const ref of [{field:'expected_output',index:null},{field:'acceptance_criteria',index:0}])test(`PLANIFICACION literal evidence from ${ref.field}`,()=>{
+ const p=proposal(),row=planning(p);row.evidence_ref=ref;
+ const stage=p.project_stages.find(s=>s.stage_id===row.stage_id),before=hash(p),built=build(p);
+ const evidence=built.record.construction.raw_proposal.construction_evidence.find(r=>r.operation==='PLANIFICACION');
+ assert.equal(evidence.student_operation_quote,row.action_quote);
+ assert.equal(evidence.evidence_quote,ref.field==='expected_output'?stage.expected_output:stage.acceptance_criteria[ref.index]);
+ assert.equal(hash(p),before);assert.deepEqual(build(p).blueprint,built.blueprint);
+});
+for(const [name,mutate,diagnostic] of [
+ ['wrong assigned stage',(p,r)=>r.stage_id=p.project_stages.find(s=>s.stage_id!==r.stage_id).stage_id,'COVERAGE_STAGE_MISMATCH'],
+ ['paraphrased action',(p,r)=>r.action_quote='El grupo prepara un plan de trabajo.','ACTION_QUOTE_NOT_LITERAL'],
+ ['changed punctuation',(p,r)=>r.action_quote+='!','ACTION_QUOTE_NOT_LITERAL'],
+ ['changed spaces',(p,r)=>r.action_quote=r.action_quote.replace(' ','  '),'ACTION_QUOTE_NOT_LITERAL'],
+ ['expected_output index zero',(p,r)=>r.evidence_ref.index=0,'EVIDENCE_REF_INDEX_INVALID'],
+ ['criterion outside range',(p,r)=>r.evidence_ref={field:'acceptance_criteria',index:999},'EVIDENCE_REF_INDEX_INVALID'],
+ ['empty referenced text',(p,r)=>p.project_stages.find(s=>s.stage_id===r.stage_id).expected_output='   ','EVIDENCE_REF_EMPTY'],
+ ['stale quote after stage rewrite',(p,r)=>p.project_stages.find(s=>s.stage_id===r.stage_id).student_operation='Nueva redacción de la etapa.','ACTION_QUOTE_NOT_LITERAL'],
+ ['empty action',(p,r)=>r.action_quote='','ACTION_QUOTE_NOT_LITERAL'],
+ ['duplicate operation',(p,r)=>p.coverage[p.coverage.findIndex(x=>x.operation!==r.operation)]=structuredClone(r),'COVERAGE_OPERATION_COUNT_INVALID']
+])test(`PLANIFICACION rejects ${name} without rewriting proposal`,()=>{
+ const p=proposal();mutate(p,planning(p));const before=hash(p);
+ assert.throws(()=>build(p),e=>e.code==='CONSTRUCTION_REJECTED'&&e.rule==='BPD-019'&&e.message.includes(`${diagnostic}:PLANIFICACION`));
+ assert.equal(hash(p),before);
+});
+for(const ref of [null,{}, {field:'invented',index:null},{field:'acceptance_criteria',index:-1}])test(`malformed evidence_ref remains fail-closed: ${JSON.stringify(ref)}`,()=>{
+ const p=proposal();planning(p).evidence_ref=ref;const before=hash(p);
+ assert.throws(()=>build(p),e=>e.code==='AUTHORING_CONTRACT_INVALID');assert.equal(hash(p),before);
+});
 test('compact proposal compiles to same full domain without inventing or removing pedagogy',()=>{
  const p=proposal(),before=hash(p),built=build(p).blueprint;
  assert.deepEqual(built,expected);assert.equal(hash(p),before);assertContract('ProjectBlueprintV1',built);
@@ -77,4 +107,60 @@ test('BPD-019 compact preflight reports every invalid literal coverage row befor
   ()=>build(p),
   e=>e.code==='CONSTRUCTION_REJECTED'&&e.rule==='BPD-019'&&targets.every(op=>e.message.includes(op))
  );
+});
+
+test('functional preflight shares gate authority and rejects generic or unknown requirements',()=>{
+ for(const profiles of [['MUSEUM'],['ITINERANT'],Object.keys(FUNCTIONAL_PROFILES)]){
+  const p=proposal();p.final_outcome.functional_profiles=profiles;p.final_outcome.type='EXHIBITION';
+  p.final_outcome.functional_requirements=[{...p.final_outcome.functional_requirements[0],requirement_id:'unknown_generic'}];
+  const before=hash(p),diagnostics=functionalDiagnostics(p);
+  assert.throws(()=>build(p),e=>{
+   assert.equal(e.code,'AUTHORING_CONTRACT_INVALID');
+   assert.deepEqual(e.functional_profile_targets.map(x=>({profile:x.profile,missing:x.missing_requirement_ids})),diagnostics);
+   assert.match(e.message,/FUNCTIONAL_PROFILE_REQUIREMENTS_MISSING/);return true;
+  });assert.equal(hash(p),before);
+ }
+});
+test('EXHIBITION without selected profiles does not acquire MUSEUM',()=>{
+ const p=proposal();p.final_outcome.type='EXHIBITION';p.final_outcome.functional_profiles=[];
+ assert.deepEqual(functionalDiagnostics(p),[]);assert.deepEqual(build(p).blueprint.final_outcome.functional_profiles,[]);
+});
+test('catalogued type requires all requirements even without selected profiles',()=>{
+ const p=proposal();p.final_outcome.type='MUSEUM';p.final_outcome.functional_profiles=[];
+ p.final_outcome.functional_requirements=p.final_outcome.functional_requirements.filter(x=>x.requirement_id!=='mediation');
+ assert.throws(()=>build(p),e=>e.functional_profile_targets[0].missing_requirement_ids.includes('mediation'));
+});
+test('ITINERANT requires circulation_evidence and two complete genuine profiles pass',()=>{
+ const p=proposal();p.final_outcome.functional_profiles=['MUSEUM','ITINERANT'];assert.doesNotThrow(()=>build(p));
+ p.final_outcome.functional_requirements=p.final_outcome.functional_requirements.filter(x=>x.requirement_id!=='circulation_evidence');
+ assert.throws(()=>build(p),e=>e.functional_profile_targets.some(x=>x.profile==='ITINERANT'&&x.missing_requirement_ids.includes('circulation_evidence')));
+});
+test('semantic reviewer cannot approve missing profile requirements; BPS-003 unchanged',()=>{
+ const b=build(proposal()).blueprint;
+ b.final_outcome.functional_requirements=b.final_outcome.functional_requirements.filter(x=>x.requirement_id!=='circulation_evidence');
+ const findings=Object.keys(BPS).map(rule_id=>({rule_id,severity:'CRITICAL',status:'PASS',scope:'test',observed:'synthetic',expected:'synthetic'}));
+ const g=blueprintGate({...src,blueprint:b},{input_hash:semanticInputHash({...src,blueprint:b}),findings});
+ assert.equal(g.semantic_findings.find(x=>x.rule_id==='BPS-003').status,'FAIL');
+});
+
+for(const field of ['name','purpose','description'])for(const revision of [1,2])test('composition-authority preflight '+field+' revision '+revision,()=>{
+ const p=proposal(),composition={final_outcome:structuredClone(p.final_outcome)},before=hash(p);
+ assert.doesNotThrow(()=>compileAuthoring(p,src,plan,{blueprint_id:'binding',revision,projectComposition:composition}));
+ for(const suffix of [' ','!']){
+  const bad=structuredClone(p);bad.final_outcome[field]+=suffix;const badHash=hash(bad);
+  assert.throws(()=>compileAuthoring(bad,src,plan,{blueprint_id:'binding',revision,projectComposition:composition}),e=>{
+   assert.match(e.message,/PCB-AUTHORING FINAL_OUTCOME_/);
+   assert.deepEqual(e.outcome_binding_diagnostics,[{field,revision,phase:revision===1?'GENERATE':'REPAIR'}]);return true;
+  });assert.equal(hash(bad),badHash);
+ }
+ assert.equal(hash(p),before);
+});
+test('functional repair can remove profiles or complete requirements without rewriting composition texts',()=>{
+ const p=proposal(),composition={final_outcome:structuredClone(p.final_outcome)};
+ p.final_outcome.type='EXHIBITION';p.final_outcome.functional_profiles=[];
+ assert.doesNotThrow(()=>compileAuthoring(p,src,plan,{blueprint_id:'profiles',revision:2,projectComposition:composition}));
+ const q=proposal();q.final_outcome.functional_requirements[0].criterion+=' detalle real';
+ assert.doesNotThrow(()=>compileAuthoring(q,src,plan,{blueprint_id:'requirements',revision:2,projectComposition:composition}));
+ q.final_outcome.description+='!';
+ assert.throws(()=>compileAuthoring(q,src,plan,{blueprint_id:'drift',revision:2,projectComposition:composition}),/FINAL_OUTCOME_DESCRIPTION_DRIFT/);
 });

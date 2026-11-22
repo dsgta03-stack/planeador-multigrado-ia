@@ -94,7 +94,9 @@ export function criticalClaimsGate(input,audit=null){
  for(const group of groups){
   if(!exactRows(group.expected,group.actual,group.key)){add(group.type,'coverage','NOT_EVALUABLE','Missing, duplicated or foreign audit rows','Exactly one audit row per critical claim');continue;}
   const expectedByKey=new Map(group.expected.map(row=>[group.key(row),row]));
-  for(const row of group.actual){const key=group.key(row),claim=expectedByKey.get(key);const valid=group.valid(row,claim);const status=!valid?'NOT_EVALUABLE':row.status;const reason=valid?(row.reason||'Critical claim evaluated'):'Audit row is malformed or its claimed literal evidence is not present in the local claim';add(group.type,key,status,reason,'Critical semantic claim must be locally true and any PASS quote must be literal evidence from this exact claim');}
+  for(const row of group.actual){const key=group.key(row),claim=expectedByKey.get(key);const valid=group.valid(row,claim);const status=!valid?'NOT_EVALUABLE':row.status;const reason=valid?(row.reason||'Critical claim evaluated'):'Audit row is malformed or its claimed literal evidence is not present in the local claim';add(group.type,key,status,reason,'Critical semantic claim must be locally true and any PASS quote must be literal evidence from this exact claim');
+   if(group.type==='WORKED'&&valid&&status==='FAIL')Object.assign(findings[findings.length-1],{session:claim.session_number,grade:claim.grade,pda_id:claim.pda_id,component_checks:row.component_checks.map(c=>({component:c.component,satisfied:c.satisfied}))});
+  }
  }
  const failed=findings.some(x=>x.status==='FAIL'),incomplete=findings.some(x=>x.status==='NOT_EVALUABLE');
  return deepFreeze({gate_version:SESSION_CRITICAL_GATE_VERSION,status:failed?'FAIL':incomplete?'NOT_EVALUABLE':'PASS',critical_count:findings.filter(x=>x.status==='FAIL').length,input_hash:request.input_hash,evaluated_graph_hash:hash(input.graph),findings});

@@ -36,6 +36,7 @@ export const SGD=Object.freeze({
  'SGD-013':'Los vínculos LTG, si existen, pertenecen a selecciones verificadas del Blueprint; modo NONE implica ausencia total de vínculos.',
  'SGD-014':'Cada sesión moviliza todos los grados que tienen PDA en su foco sin atribuir exigencias curriculares ajenas.',
  'SGD-015':'La última sesión conserva el cierre terminal del Blueprint y ninguna actividad inventa una sesión posterior.',
+ 'SGD-017':'Cada actividad incluye preparación, consigna, pasos, organización, uso de recursos, intervención, apoyo y conexión ejecutables; una tarea genérica no basta.',
  'SGD-016':'La trazabilidad derivada coincide con las actividades compiladas y no puede ser escrita por el modelo.',
 });
 
@@ -45,11 +46,11 @@ export const SGS=Object.freeze({
  'SGS-003':'La evidencia y los criterios permiten observar el aprendizaje declarado y el avance del proyecto mediante desempeños, productos o registros verificables, no fórmulas vagas.',
  'SGS-004':'Las operaciones metodológicas se realizan auténticamente mediante acciones del alumnado.',
  'SGS-005':'No hay actividades de relleno ni falsos DIRECT: DIRECT produce una parte observable del artefacto esperado; una preparación necesaria consumida después es COMPLEMENTARY.',
- 'SGS-006':'La secuencia de outputs e inputs produce los artefactos de sesión y sostiene continuidad entre sesiones.',
+ 'SGS-006':'La cadena propósito → actividad del alumnado → producto parcial → evidencia → insumo siguiente es pedagógicamente justificada por el problema, PDA y artefactos aprobados. La secuencia de outputs e inputs sostiene continuidad real; no basta repetir una frase de vinculación ni introducir productos ajenos.',
  'SGS-007':'La organización multigrado integra aportaciones diferenciadas e interdependientes, no dos trayectorias paralelas.',
  'SGS-008':'Cada vínculo a un requisito funcional corresponde a una actividad que realmente ejecuta ese requisito y produce su evidencia; no basta la cobertura nominal.',
  'SGS-009':'La complejidad, autonomía, apoyos y formas de participación son adecuadas a cada grado.',
  'SGS-010':'La distribución temporal es pedagógicamente realista a nivel de actividad, no sólo aritméticamente válida.',
- 'SGS-011':'El alumnado toma decisiones, indaga, produce, explica o evalúa según corresponda; el docente no sustituye la acción cognitiva central.',
+ 'SGS-011':'El procedimiento permite al docente ejecutar la actividad sin inventar pasos: preparación, consigna, secuencia, organización, preguntas/modelado cuando son necesarios, uso de materiales, intervención, diferenciación, apoyo contingente y transición deben ser concretos, coherentes y viables; rechaza campos genéricos, repetidos o relleno. common_student_action desarrolla una secuencia narrativa aplicable por el maestro, centrada en acciones concretas del alumnado; título de aprendizaje y trabajo simultáneo de otros grados cuando hay atención focalizada. Orientar, apoyar o supervisar sin explicar qué hacen los alumnos y cómo avanzan es insuficiente; no se evalúa por longitud ni por una lista cerrada de verbos. CORE requiere uso LTG concreto al menos una vez en el grafo donde curricularmente corresponda, sin repetición obligatoria por PDA en cada sesión; SUPPORT puede fortalecer una actividad pertinente sin uso obligatorio por sesión; OPTIONAL pertinente requiere uso o justificación de no uso por sesión. El alumnado toma decisiones, indaga, produce, explica o evalúa según corresponda; el docente no sustituye la acción cognitiva central.',
  'SGS-012':'El cierre final culmina el producto y la evaluación sin duplicar presentaciones ni preparar una sesión inexistente.',
 });

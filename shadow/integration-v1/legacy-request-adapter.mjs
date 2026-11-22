@@ -72,7 +72,9 @@ export function analyzeLegacyPlanRequest(body){
  const original_problem=string(body.situacion_problema??body.original_problem,'problem');
  const original_context=string(body.contexto??body.original_context,'context');
  const teacher=teacherConstraintPayload(body,grades);
- const explicit_ltg_selections=Array.isArray(body.explicit_ltg_selections)?clone(body.explicit_ltg_selections):[];
+ if(body.explicit_ltg_selections!==undefined&&!Array.isArray(body.explicit_ltg_selections))throw Error('LEGACY_REQUEST_INVALID_EXPLICIT_LTG_SELECTIONS');
+ // Only the canonical field expresses an explicit project/PDA/intent decision.
+ const explicit_ltg_selections=body.explicit_ltg_selections===undefined?[]:clone(body.explicit_ltg_selections);
  const normalized={adapter_version:LEGACY_REQUEST_ADAPTER_VERSION,grades,selected_pda_ids:pdas.map(x=>x.pda_id),legacy_pda_hints:pdas,requested_sessions,minutes_per_session,original_problem,original_context,methodology,explicit_ltg_selections,teacher_constraints:teacher.values,legacy_resource_text:nonEmpty(body.recursos)?body.recursos.trim():null};
  return Object.freeze({status:teacher.missing.length?'NEEDS_TEACHER_INPUT':'READY_FOR_CURRICULUM_RESOLUTION',missing_teacher_fields:Object.freeze([...teacher.missing]),normalized:Object.freeze(normalized),curriculum_query:Object.freeze({grades:[...grades],pda_ids:pdas.map(x=>x.pda_id)})});
 }

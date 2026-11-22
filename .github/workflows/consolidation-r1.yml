@@ -1,0 +1,46 @@
+name: Consolidation R1 CI
+
+on:
+  push:
+    branches: [consolidation-single-app-r1]
+  pull_request:
+    branches: [main]
+    paths:
+      - "lib/consolidation-r1/**"
+      - "server-consolidation-r1.mjs"
+      - "tests/consolidation-r1-*.mjs"
+      - ".github/workflows/consolidation-r1.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  consolidation-r1:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npm install
+      - name: Syntax check
+        run: |
+          find lib/consolidation-r1 -name '*.mjs' -print0 | xargs -0 -n1 node --check
+          node --check server-consolidation-r1.mjs
+      - name: Consolidation tests
+        run: |
+          node --test \
+            tests/consolidation-r1-manifest.test.mjs \
+            tests/consolidation-r1-ui-authority.test.mjs \
+            tests/consolidation-r1-server.test.mjs \
+            tests/consolidation-r1-history.test.mjs \
+            tests/consolidation-r1-teacher-executability.test.mjs \
+            shadow/session-graph-v1/tests/teacher-executability.test.mjs \
+            shadow/session-graph-v1/tests/session-graph.test.mjs \
+            shadow/pipeline-v1/tests/pipeline.test.mjs \
+            shadow/pipeline-v1/tests/projection.test.mjs \
+            tests/v0125-unified-preview-server-route-v1.mjs \
+            tests/v0125-canonical-plan-server-routes-v1.mjs \
+            tests/v0125-canonical-plan-services-v1.mjs \
+            tests/v0125-canonical-history-v1.mjs

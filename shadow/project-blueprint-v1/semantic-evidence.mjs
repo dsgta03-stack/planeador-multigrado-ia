@@ -19,6 +19,37 @@ export function localEvidenceInput(input){
   required_methodology_operations:input.methodology.required_operations,
  };
 }
+// Diagnostic only: aggregation below remains authoritative, including exceptions.
+export function stageCheckDiagnostics(input,checks){
+ return input.blueprint.project_stages.map(s=>{
+  const rows=(checks||[]).filter(c=>c.stage_id===s.stage_id),reasons=[];
+  if(rows.length!==1)return {stage_id:s.stage_id,status:'NOT_EVALUABLE',reasons:[rows.length?'STAGE_CHECK_DUPLICATE':'STAGE_CHECK_MISSING']};
+  const c=rows[0];
+  if(!['PASS','FAIL','NOT_EVALUABLE'].includes(c.bps007))return {stage_id:s.stage_id,status:'NOT_EVALUABLE',reasons:['BPS007_STATUS_INVALID']};
+  if(c.bps007!=='PASS')return {stage_id:s.stage_id,status:c.bps007,reasons:[c.bps007==='FAIL'?'REVIEWER_FAIL':'REVIEWER_NOT_EVALUABLE']};
+  const nonempty=x=>typeof x==='string'&&x.trim().length>0;
+  if(!nonempty(c.operation_quote))reasons.push('OPERATION_QUOTE_EMPTY');
+  else if(!s.student_operation.includes(c.operation_quote))reasons.push('OPERATION_QUOTE_NOT_LITERAL');
+  if(c.artifact_id!==s.output_artifact_id)reasons.push('ARTIFACT_ID_MISMATCH');
+  if(!nonempty(c.criteria_quote))reasons.push('CRITERIA_QUOTE_EMPTY');
+  else if(!s.acceptance_criteria.some(a=>a.includes(c.criteria_quote)))reasons.push('CRITERIA_QUOTE_NOT_LITERAL');
+  if(!Array.isArray(c.consumed_by)||!c.consumed_by.length)reasons.push('CONSUMED_BY_EMPTY');
+  else if(!c.consumed_by.every(id=>s.consumed_by.includes(id)))reasons.push('CONSUMED_BY_INVALID');
+  if(!nonempty(c.outcome_link))reasons.push('OUTCOME_LINK_EMPTY');
+  return {stage_id:s.stage_id,status:reasons.length?'NOT_EVALUABLE':'PASS',reasons};
+ });
+}
+export function stageReviewTelemetry(output,telemetry={}){
+ const rows=output?.stage_checks;
+ return {
+  finish_reason:telemetry.finish_reason??null,
+  output_token_count:telemetry.usage?.candidatesTokenCount??telemetry.usage?.output_tokens??null,
+  text_length:telemetry.text_length??null,
+  parse_status:'JSON_PARSED',
+  stage_checks_count:Array.isArray(rows)?rows.length:null,
+  stage_ids:Array.isArray(rows)?rows.map(r=>r?.stage_id??null):[]
+ };
+}
 // Aggregates explicit local judgements. Never infers pedagogy from verb keywords.
 export function applyEvidenceAudit(input,output){
  const b=input.blueprint,stages=new Map(b.project_stages.map(s=>[s.stage_id,s]));
@@ -37,10 +68,33 @@ export function applyEvidenceAudit(input,output){
   return {rule_id:rule,severity:'CRITICAL',status:previous?.status==='FAIL'?'FAIL':result,scope:rule==='BPS-004'||rule==='BPS-005'?'pda_checks':rule==='BPS-007'?'stage_checks':'methodology_checks',observed:JSON.stringify(checks||[]),expected:BPS[rule]};
  };
  const pdaUnits=input.curriculum.pdas.filter(p=>input.constraints.selected_pda_ids.includes(p.pda_id));
- const validatePda=(c,p)=>c.grade===p.grade&&c.contribution_ids.length>0&&c.contribution_ids.every(id=>b.grade_contributions.some(g=>g.contribution_id===id&&g.grade===p.grade&&g.pda_ids.includes(p.pda_id)))&&c.stage_ids.every(id=>stages.has(id))&&quoteValid(c.stage_ids,c.operation_quote)&&artifactsValid(c.stage_ids,c.artifact_ids)&&c.evidence_reason.trim().length>0;
+ const validatePda=(c,p)=>{
+  const detail={
+   pda_id:p.pda_id,
+   grade_match:c.grade===p.grade,
+   contributions_present:c.contribution_ids.length>0,
+   contributions_valid:c.contribution_ids.every(id=>b.grade_contributions.some(g=>g.contribution_id===id&&g.grade===p.grade&&g.pda_ids.includes(p.pda_id))),
+   stages_valid:c.stage_ids.every(id=>stages.has(id)),
+   quote_valid:quoteValid(c.stage_ids,c.operation_quote),
+   artifacts_valid:artifactsValid(c.stage_ids,c.artifact_ids),
+   evidence_reason_present:c.evidence_reason.trim().length>0
+  };
+  const valid=detail.grade_match&&detail.contributions_present&&detail.contributions_valid&&detail.stages_valid&&detail.quote_valid&&detail.artifacts_valid&&detail.evidence_reason_present;
+  if(!valid)console.error('[BLUEPRINT_PDA_EVIDENCE_INVALID]',JSON.stringify(detail));
+  return valid;
+ };
  const findings=(output.findings||[]).filter(f=>!['BPS-004','BPS-005','BPS-007','BPS-008'].includes(f.rule_id));
  findings.push(aggregate('BPS-004',pdaUnits,output.pda_checks,'pda_id','bps004',validatePda),aggregate('BPS-005',pdaUnits,output.pda_checks,'pda_id','bps005',validatePda));
  findings.push(aggregate('BPS-007',b.project_stages,output.stage_checks,'stage_id','bps007',(c,s)=>quoteValid([s.stage_id],c.operation_quote)&&c.artifact_id===s.output_artifact_id&&c.criteria_quote.trim().length>0&&s.acceptance_criteria.some(a=>a.includes(c.criteria_quote))&&c.consumed_by.length>0&&c.consumed_by.every(id=>s.consumed_by.includes(id))&&c.outcome_link.trim().length>0));
+ const diagnostics=stageCheckDiagnostics(input,output.stage_checks);
+ const affected=diagnostics.filter(x=>x.status!=='PASS');
+ findings.find(x=>x.rule_id==='BPS-007').observed=JSON.stringify({
+  pass_count:diagnostics.filter(x=>x.status==='PASS').length,
+  fail_count:diagnostics.filter(x=>x.status==='FAIL').length,
+  not_evaluable_count:diagnostics.filter(x=>x.status==='NOT_EVALUABLE').length,
+  global_fail_preserved:output.findings?.some(x=>x.rule_id==='BPS-007'&&x.status==='FAIL')||false,
+  stage_diagnostics:affected.slice(0,24),omitted_count:Math.max(0,affected.length-24)
+ });
  findings.push(aggregate('BPS-008',input.methodology.required_operations.map(operation_id=>({operation_id})),output.methodology_checks,'operation_id','bps008',(c,u)=>c.stage_ids.length>0&&c.stage_ids.every(id=>stages.get(id)?.methodology_operations.includes(u.operation_id))&&quoteValid(c.stage_ids,c.operation_quote)&&artifactsValid(c.stage_ids,c.artifact_ids)&&c.evidence_reason.trim().length>0));
  return findings;
 }

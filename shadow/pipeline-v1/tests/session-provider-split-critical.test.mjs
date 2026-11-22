@@ -59,6 +59,27 @@ test('split critical review performs three focused calls and merges exact-hash a
  assert.equal(driver.diagnostics().min_interval_ms,0);
 });
 
+test('FUNCTIONAL response schema restricts quotes to literal claim fields',async()=>{
+ let functionalBody=null;
+ const fetchImpl=async(_url,init)=>{
+  const body=JSON.parse(init.body);
+  const focus=body.prompt.review_focus;
+  if(focus==='WORKED')return jsonResponse({output:{input_hash:'critical-hash',worked_audits:[{activity_id:'a1',grade:1,pda_id:'p1',status:'PASS',component_checks:[{component:'all',satisfied:true,exact_quote:'explica y propone'}],reason:'literal'}]}});
+  if(focus==='METHODOLOGY')return jsonResponse({output:{input_hash:'critical-hash',methodology_link_audits:[{operation:'DIFUSION',activity_id:'a2',status:'PASS',exact_quote:'presenta al grupo',reason:'literal'}]}});
+  functionalBody=body;
+  return jsonResponse({output:{input_hash:'critical-hash',functional_link_audits:[{requirement_id:'mounting',activity_id:'a3',status:'PASS',action_quote:'monta las piezas',evidence_quote:'piezas montadas',reason:'literal'}]}});
+ };
+ const driver=createSplitCriticalReview({endpoint,token,durableEvidence:false,minIntervalMs:0,fetchImpl});
+ await driver.sessionCriticalReview({input,request:requestFixture()});
+ const item=functionalBody.response_schema.properties.functional_link_audits.items;
+ assert.deepEqual(item.properties.requirement_id.enum,['mounting']);
+ assert.deepEqual(item.properties.activity_id.enum,['a3']);
+ assert.deepEqual(item.properties.status.enum,['PASS','FAIL']);
+ assert.deepEqual(item.properties.action_quote.enum,['','monta las piezas']);
+ assert.deepEqual(item.properties.evidence_quote.enum,['','museo montado','piezas montadas']);
+ assert.equal(item.properties.action_quote.enum.includes('paráfrasis inventada'),false);
+ assert.equal(item.properties.evidence_quote.enum.includes('evidencia aproximada'),false);
+});
 test('split critical review fails closed if any partial audit changes input hash',async()=>{
  let calls=0;
  const fetchImpl=async(_url,init)=>{

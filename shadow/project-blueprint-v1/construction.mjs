@@ -1,21 +1,33 @@
 import {deepFreeze,hash} from './contracts.mjs';
 import {COMMUNITY_GROUPS} from './catalog.mjs';
 export const CONSTRUCTION_VERSION='BLUEPRINT_CONSTRUCTION_V1';
+const genericSessionGroups=(operations,requestedSessions)=>{
+ const groups=[];
+ for(let i=0;i<requestedSessions;i++){
+  const start=Math.floor(i*operations.length/requestedSessions);
+  const end=Math.floor((i+1)*operations.length/requestedSessions);
+  groups.push({stage_id:`session_${i+1}`,session_number:i+1,operations:operations.slice(start,end)});
+ }
+ return groups;
+};
 const fail=(rule,detail)=>{const e=Error(`${rule}: ${detail}`);e.code='CONSTRUCTION_REJECTED';e.rule=rule;throw e};
 export function constructionPlan(src){
  const {constraints:c,curriculum:k,methodology:m}=src;
- if(m.selected_id!=='proyectos_comunitarios'||![1,3].includes(c.requested_sessions))fail('CONSTRUCTION_SCOPE','This limited construction policy supports community projects with 1 or 3 sessions only');
+ if(!Number.isInteger(c.requested_sessions)||c.requested_sessions<1)fail('CONSTRUCTION_SCOPE','requested_sessions must be a positive integer');
+ if(!Array.isArray(m.required_operations)||!m.required_operations.length)fail('CONSTRUCTION_SCOPE','methodology requires at least one operation');
  const bindings=c.selected_pda_ids.map(id=>{const p=k.pdas.find(p=>p.pda_id===id);if(!p||!c.grades.includes(p.grade))fail('BPD-002',id);return {pda_id:id,grade:p.grade,official_text:p.pda_official}});
  // Official purpose-based phases, never proportional assignment of operation indices.
- const groups=c.requested_sessions===3?[
+ const groups=m.selected_id==='proyectos_comunitarios'&&c.requested_sessions===3?[
   {stage_id:'planning',session_number:1,operations:COMMUNITY_GROUPS.PLANEACION},
   {stage_id:'production',session_number:2,operations:COMMUNITY_GROUPS.ACCION},
   {stage_id:'intervention',session_number:3,operations:COMMUNITY_GROUPS.INTERVENCION},
- ]:[{stage_id:'integrated',session_number:1,operations:m.required_operations}];
+ ]:m.selected_id==='proyectos_comunitarios'&&c.requested_sessions===1?
+  [{stage_id:'integrated',session_number:1,operations:m.required_operations}]:
+  genericSessionGroups(m.required_operations,c.requested_sessions);
  const stages=groups.map((g,i)=>({...g,order:i+1,output_artifact_id:`artifact_${g.stage_id}`,required_inputs:i?[`artifact_${groups[i-1].stage_id}`]:['input_context','input_curriculum'],consumed_by:i+1<groups.length?[groups[i+1].stage_id]:['outcome_01'],max_minutes:c.minutes_per_session}));
  const operations=stages.flatMap(s=>s.operations);
  if(m.required_operations.some(op=>!operations.includes(op))||operations.some(op=>!m.required_operations.includes(op)))fail('BPD-019','catalog coverage');
- return deepFreeze({version:CONSTRUCTION_VERSION,pda_bindings:bindings,grade_bindings:c.grades.map(grade=>({grade,pda_ids:bindings.filter(p=>p.grade===grade).map(p=>p.pda_id)})),outcome_id:'outcome_01',stages,coverage_matrix:stages.flatMap(s=>s.operations.map(operation=>({operation,stage_id:s.stage_id,session_number:s.session_number,output_artifact_id:s.output_artifact_id,student_operation:'REQUIRED_FROM_MODEL: exact observable action quote',evidence:'REQUIRED_FROM_MODEL: exact output or acceptance criterion quote'}))),artifact_dag:stages.map(s=>({artifact_id:s.output_artifact_id,produced_by_stage:s.stage_id,produced_in_session:s.session_number,valid_consumers:s.consumed_by})),budget:{requested_sessions:c.requested_sessions,session_minutes:c.minutes_per_session,total_minutes:c.requested_sessions*c.minutes_per_session},instruction:'Design pedagogy within official phase purposes. No one-stage-per-operation requirement. Action must execute every assigned operation with observable evidence. Estimates must be realistic; never compress impossible work to fake feasibility. This is construction metadata, not sessions or a lesson plan.'});
+ return deepFreeze({version:CONSTRUCTION_VERSION,pda_bindings:bindings,grade_bindings:c.grades.map(grade=>({grade,pda_ids:bindings.filter(p=>p.grade===grade).map(p=>p.pda_id)})),outcome_id:'outcome_01',stages,coverage_matrix:stages.flatMap(s=>s.operations.map(operation=>({operation,stage_id:s.stage_id,session_number:s.session_number,output_artifact_id:s.output_artifact_id,student_operation:'REQUIRED_FROM_MODEL: exact observable action quote',evidence:'REQUIRED_FROM_MODEL: exact output or acceptance criterion quote'}))),artifact_dag:stages.map(s=>({artifact_id:s.output_artifact_id,produced_by_stage:s.stage_id,produced_in_session:s.session_number,valid_consumers:s.consumed_by})),budget:{requested_sessions:c.requested_sessions,session_minutes:c.minutes_per_session,total_minutes:c.requested_sessions*c.minutes_per_session},instruction:'Design pedagogy within the selected methodology operations and their official sequence. Preserve the certified 1/3-session community grouping when applicable; otherwise distribute ordered operations across the teacher-requested sessions without inventing or reordering operations. Sessions may legitimately contain no new methodology operation when the teacher requests more sessions than the methodology has distinct operations. No one-stage-per-operation requirement. Action must execute every assigned operation with observable evidence. Estimates must be realistic; never compress impossible work to fake feasibility. This is construction metadata, not sessions or a lesson plan.'});
 }
 export function constructionTransport(schema,plan){
  const s=structuredClone(schema),p=s.properties;

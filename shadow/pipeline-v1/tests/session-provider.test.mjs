@@ -1,3 +1,4 @@
+import {executableFixture} from '../../session-graph-v1/tests/executable-fixture.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createSessionGraphDrivers,repairTargetsFromContext} from '../session-provider.mjs';
@@ -12,6 +13,7 @@ function fixture(){
  const blueprint={blueprint_id:'bp1',revision:1,methodology:{required_operations:['IDENTIFICACION']},project_stages:[{stage_id:'s1',output_artifact_id:'artifact_1'}],session_progression:[{session_number:1,pda_focus:['p1'],methodology_operations:['IDENTIFICACION'],input_artifact_ids:['source_1'],expected_output_artifact_ids:['artifact_1']}],final_outcome:{functional_requirements:[{requirement_id:'r1',criterion:'produce un registro',stage_ids:['s1'],evidence:'registro observable'}]},ltg_strategy:{mode:'NONE',selections:[]}};
  const approval={approved_blueprint_hash:'c'.repeat(64)};
  const proposal={authoring_version:'SESSION_GRAPH_AUTHORING_V1',sessions:[{session_number:1,activities:[{activity_key:'a1',title:'Identificamos',contribution_mode:'DIRECT',contribution_rationale:'construye el registro',common_student_action:'identifican situaciones',grade_participation:[{grade:1,student_action:'identifica una situación',differentiation:'apoyo oral',pda_mobilization:[{pda_id:'p1',status:'DEVELOPING'}],evidence:'registro'}],teacher_role:'modela',resources:['papel'],supports:['modelado'],minutes:30,input_refs:['source_1'],output:'registro',contributes_to_artifact_ids:['artifact_1'],methodology_operations:['IDENTIFICACION'],functional_requirement_ids:['r1'],ltg_activity_ids:[],evidence:'registro escrito',assessment_criteria:['registra una situación observable']}]}]};
+ executableFixture(proposal);
  return {ctx:{sources:{constraints,curriculum,methodology},blueprint,approval},proposal};
 }
 
@@ -70,6 +72,22 @@ test('REPAIR preserves Blueprint as immutable context, runs full preflight, and 
  assert.deepEqual(sent.response_schema.required,['status','reason','proposal']);
 });
 
+test('REPAIR rejects a partial proposal that still fails teacher executability',async()=>{
+ const f=fixture();
+ const partial=structuredClone(f.proposal);
+ partial.sessions[0].activities[0].execution.grouping='organización flexible';
+ const fetchImpl=async()=>jsonResponse({provider:'google',finish_reason:'STOP',output:{status:'PROPOSAL',reason:'reparación parcial',proposal:partial}});
+ const drivers=createSessionGraphDrivers({endpoint,token,durableEvidence:false,fetchImpl});
+ await assert.rejects(
+  ()=>drivers.sessionRepair({...f.ctx,previous_proposal:f.proposal,compile_error:{code:'SESSION_GRAPH_AUTHORING_INVALID',message:'SESSION_GRAPH_AUTHORING_CONTRACT: $.sessions[0].a1: SGD-017 teacher executability missing execution.grouping'}}),
+  error=>{
+   assert.equal(error.code,'SESSION_GRAPH_AUTHORING_INVALID');
+   assert.match(error.message,/SGD-017/);
+   assert.match(error.message,/execution\.grouping/);
+   return true;
+  }
+ );
+});
 test('compound authoring contract is expanded into independent blocking repair targets',()=>{
  const compile_error={
   code:'SESSION_GRAPH_AUTHORING_INVALID',
@@ -78,13 +96,17 @@ test('compound authoring contract is expanded into independent blocking repair t
  const targets=repairTargetsFromContext({compile_error});
  assert.equal(targets.length,4);
  assert.deepEqual(targets.map(x=>x.target_id),['RT-1','RT-2','RT-3','RT-4']);
- assert.deepEqual(targets.map(x=>x.rule_id),['SGD-010','RECONOCIMIENTO_LOCAL_ACTION','EXPLICA_LOCAL_ACTION','INDAGA_SOURCE_OR_OBSERVATION']);
+ assert.deepEqual(targets.map(x=>x.rule_id),['SGD-010','RECONOCIMIENTO_LOCAL_ACTION','WORKED_COGNITIVE_REQUIREMENTS','WORKED_COGNITIVE_REQUIREMENTS']);
+ assert.deepEqual(targets[2].missing_requirements,['EXPLICA_LOCAL_ACTION']);
+ assert.deepEqual(targets[3].missing_requirements,['INDAGA_SOURCE_OR_OBSERVATION']);
+ assert.equal(targets[2].status_required,'WORKED');
+ assert.equal(targets[3].status_required,'WORKED');
  assert.equal(targets[0].scope,'$.sessions[2].s3_act2');
  assert.equal(targets[1].scope,'$.sessions[2].s2_act1');
  assert.match(targets[0].required,/input_refs/);
  assert.match(targets[1].required,/RECONOCIMIENTO/);
- assert.match(targets[2].required,/DEVELOPING/);
- assert.match(targets[3].required,/DEVELOPING/);
+ assert.match(targets[2].required,/prohibido degradar/);
+ assert.match(targets[3].required,/prohibido degradar/);
 });
 
 test('SGD-009 repair target forbids cross-session and future activity refs',()=>{
@@ -152,4 +174,20 @@ test('provider 503 is surfaced and is not replayed by adapter',async()=>{
 
 test('adapter is locked to Gemini 3.5 Flash-Lite',()=>{
  assert.throws(()=>createSessionGraphDrivers({endpoint,token,model:'gemini-3.1-pro-preview'}),/SESSION_PROVIDER_MODEL_LOCKED/);
+});
+
+test('SGD-013 and PDA outside session grade become explicit independent repair targets',()=>{
+ const compile_error={
+  code:'SESSION_GRAPH_AUTHORING_INVALID',
+  message:'SESSION_GRAPH_AUTHORING_CONTRACT: SGD-013 LTG use without verified grade/PDA link; $.sessions[3].act_s3_01: PDA F4-ENS-3-023 outside session/grade'
+ };
+ const targets=repairTargetsFromContext({compile_error});
+ assert.equal(targets.length,2);
+ assert.deepEqual(targets.map(x=>x.rule_id),['SGD-013','PDA_OUTSIDE_SESSION_GRADE']);
+ assert.equal(targets[0].scope,null);
+ assert.equal(targets[1].scope,'$.sessions[3].act_s3_01');
+ assert.match(targets[0].required,/LTG use/i);
+ assert.match(targets[0].required,/verified/i);
+ assert.match(targets[1].required,/pda_mobilization/i);
+ assert.match(targets[1].required,/do not move/i);
 });

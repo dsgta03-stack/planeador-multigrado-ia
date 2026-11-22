@@ -28,12 +28,38 @@ const outputFromPayload=payload=>{
  if(!payload||typeof payload!=='object'||!payload.output||typeof payload.output!=='object')throw providerError(payload,200);
  return payload.output;
 };
-const partialShape=resultKey=>({
+const literalValues=values=>[...new Set(values.filter(value=>typeof value==='string'&&value.trim().length>0))];
+
+const functionalAuditShape=claims=>{
+ const shape=structuredClone(criticalAuditResponseShape.properties.functional_link_audits);
+ const items=shape.items;
+ const actionQuotes=literalValues(claims.flatMap(claim=>[
+  claim.common_student_action,
+  ...(claim.grade_actions||[]).map(row=>row.student_action)
+ ]));
+ const evidenceQuotes=literalValues(claims.flatMap(claim=>[
+  claim.output,
+  claim.evidence,
+  ...(claim.grade_actions||[]).map(row=>row.evidence)
+ ]));
+ items.properties.requirement_id.enum=literalValues(claims.map(claim=>claim.requirement_id));
+ items.properties.activity_id.enum=literalValues(claims.map(claim=>claim.activity_id));
+ items.properties.status.enum=['PASS','FAIL'];
+ items.properties.action_quote.enum=['',...actionQuotes];
+ items.properties.evidence_quote.enum=['',...evidenceQuotes];
+ return shape;
+};
+
+const partialShape=(resultKey,claims)=>({
  type:'object',
- properties:{input_hash:{type:'string'},[resultKey]:structuredClone(criticalAuditResponseShape.properties[resultKey])},
+ properties:{
+  input_hash:{type:'string'},
+  [resultKey]:resultKey==='functional_link_audits'
+   ?functionalAuditShape(claims)
+   :structuredClone(criticalAuditResponseShape.properties[resultKey])
+ },
  required:['input_hash',resultKey]
 });
-
 function assertSplitConfig({endpoint,token,identity,model}){
  if(typeof endpoint!=='string'||!endpoint.startsWith('https://'))throw Error('SESSION_PROVIDER_SHADOW_ENDPOINT_REQUIRED');
  if(typeof token!=='string'||token.length<40)throw Error('SESSION_PROVIDER_SHADOW_TOKEN_REQUIRED');
@@ -69,7 +95,7 @@ export function createSplitCriticalReview({endpoint,token,identity='multiplan-bl
     output_contract:{input_hash:'repeat exact input_hash',[group.result_key]:request.output_contract?.[group.result_key]||`exactly one row per ${group.focus} claim`}
    },
    input:{constraints:input.constraints,curriculum:input.curriculum,methodology:input.methodology,blueprint:input.blueprint,graph:input.graph},
-   response_schema:partialShape(group.result_key),
+   response_schema:partialShape(group.result_key,claims),
    input_hash:request.input_hash,
    ...(request_id?{request_id}:{})
   };
