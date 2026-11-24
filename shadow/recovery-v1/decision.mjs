@@ -85,14 +85,68 @@ export function assessStage7Recovery({ state, expected, registeredOperations = [
 
   const names = Object.keys(data.families);
   if (names.some(k => !REVIEW_FAMILIES.includes(k)) ||
-      registeredOperations.length > REVIEW_FAMILIES.length) return blocked('UNKNOWN_REVIEW_FAMILY');
-  const byFamily = new Map();
+      registeredOperations.length > 120) return blocked('UNKNOWN_REVIEW_FAMILY');
+
+  // A retry after a confirmed, retryable provider failure creates a NEW
+  // request_id and an operation row that supersedes the old row. Therefore the
+  // database can legitimately contain several operation rows for ONE family.
+  // Require exactly one linear chain per family, no forks, no missing ancestors,
+  // no input/version changes, and the current checkpoint request must be its
+  // unique leaf. A raw "one row per family" check would wrongly reject a
+  // legitimate recovery after a 503 followed by a durable retry registration.
+  const registrations = new Map(REVIEW_FAMILIES.map(k => [k, []]));
+  const globalIds = new Set();
   for (const op of registeredOperations) {
     if (!isObject(op) || !REVIEW_FAMILIES.includes(op.family) ||
-        !validText(op.request_id) || byFamily.has(op.family)) {
+        !validText(op.request_id) || globalIds.has(op.request_id)) {
       return blocked('DURABLE_OPERATION_NOT_UNIQUE');
     }
-    byFamily.set(op.family, op);
+    globalIds.add(op.request_id);
+    if (op.input_hash !== expected.bindings.critical_input_hash ||
+        (op.code_version != null && op.code_version !== expected.versions.code_version) ||
+        (op.registered_revision != null && (!Number.isSafeInteger(op.registered_revision) ||
+          op.registered_revision < 1 || op.registered_revision > state.revision))) {
+      return blocked('DURABLE_OPERATION_HISTORY_INVALID');
+    }
+    registrations.get(op.family).push(op);
+  }
+  const byFamily = new Map();
+  for (const family of REVIEW_FAMILIES) {
+    const ops = registrations.get(family);
+    if (!ops.length) continue;
+    if (data.families[family] === undefined) return blocked('ORPHANED_DURABLE_OPERATION');
+    const map = new Map(ops.map(op => [op.request_id, op]));
+    const linked = new Set();
+    let rootCount = 0;
+    for (const op of ops) {
+      if (op.supersedes == null) {rootCount++;continue;}
+      const parent = map.get(op.supersedes);
+      if (!parent || parent.request_id === op.request_id || linked.has(op.supersedes) ||
+          (op.registered_revision != null && parent.registered_revision != null &&
+            op.registered_revision <= parent.registered_revision)) {
+        return blocked('DURABLE_OPERATION_HISTORY_INVALID');
+      }
+      linked.add(op.supersedes);
+    }
+    const leaves = ops.filter(op => !linked.has(op.request_id));
+    if (rootCount !== 1 || leaves.length !== 1) {
+      return blocked('DURABLE_OPERATION_HISTORY_INVALID');
+    }
+    if (leaves[0].request_id !== data.families[family]?.request_id) {
+      return blocked('DURABLE_OPERATION_NOT_PROVEN');
+    }
+    // Every element must be reachable backwards from the current leaf; a
+    // disconnected cycle must not count as a legitimate supersession chain.
+    const reached = new Set();
+    let current = leaves[0];
+    while (current && !reached.has(current.request_id)) {
+      reached.add(current.request_id);
+      current = current.supersedes == null ? null : map.get(current.supersedes);
+    }
+    if (reached.size !== ops.length || current != null) {
+      return blocked('DURABLE_OPERATION_HISTORY_INVALID');
+    }
+    byFamily.set(family, leaves[0]);
   }
 
   for (const family of REVIEW_FAMILIES) {
