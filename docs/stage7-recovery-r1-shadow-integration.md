@@ -65,3 +65,32 @@ Se deben conservar sin modificaciones las rutas productivas, el despliegue Railw
 ### Límite de la evidencia
 
 Las pruebas locales de la nueva decisión verifican **invariantes y decisiones**, no la integración funcional de las llamadas reales del pipeline. Los resultados del laboratorio confirman que una Edge Function aislada fue capaz de guardar y recuperar datos; no prueban todavía la recuperación extremo a extremo con la construcción pedagógica y el proveedor real.
+
+## Paso siguiente implementado: adaptador de autenticación y lectura (shadow, 24 nov 2026)
+
+Archivos añadidos en el PR de borrador:
+
+- `shadow/recovery-v1/authenticated-adapter.mjs`
+- `shadow/recovery-v1/tests/authenticated-adapter.test.mjs`
+
+`createSupabaseSessionVerifier` consulta `GET https://<project_ref>.supabase.co/auth/v1/user` usando un **publishable/anon key** y un bearer de sesión. Requiere usuario autenticado, rechaza JWT inválido/sesión caducada, timeout y errores HTTP. No decodifica JWT en el navegador como fuente de autoridad.
+
+`createStage7AuthenticatedAdapter` recibe un verificador y tres lectores **de confianza, ejecutados exclusivamente en el servidor**. Todos reciben el mismo alcance `{actorId,runId,attemptId}`. Comprueba la pertenencia del `plan_run` y del intento al docente autenticado, así como el acuerdo entre los datos canónicos originales del plan y los bindings inmóviles del intento. Solo después carga `read_state` completo y las operaciones registradas; decide con `assessStage7Recovery`.
+
+`inspectStage7BeforePipeline` establece el punto de observación previo a futura integración: no ejecuta ningún pipeline ni solicita proveedores. Incluso ante snapshots válidos solo devuelve **revalidación necesaria**, nunca `provider_call_allowed=true`. Ante pérdida de autenticación, discordancia de dueño, hash incorrecto, `PENDING` o lectura incompleta, falla cerrado.
+
+### Pruebas locales sin proveedor
+
+```bash
+node --test shadow/recovery-v1/tests/decision.test.mjs \
+  shadow/recovery-v1/tests/authenticated-adapter.test.mjs
+node --check shadow/recovery-v1/authenticated-adapter.mjs
+```
+
+Resultado: **22/22 casos PASS**, cero peticiones al proveedor; 9 pruebas del guard y 13 del adaptador. Comprueban identidad cruzada, divergencia canónica, ruta de Auth de proyecto fijo, fallo de red, lecturas duraderas, pérdida de ACK, `PENDING`, corrupción de digest y estado inicial sin checkpoint.
+
+### Límite explícito (todavía NO integrado ni certificado en vivo)
+
+Las dependencias `readCanonicalContext`, `readState` y `readOperations` son interfaces exigidas, **NO adaptadores de base de datos implementados**: deben conectarse a una nueva lectura transaccional bajo RLS/rol mínimo que obtenga originales canónicos verificables. La función de prueba de laboratorio v18 **no publica** todo el bundle de estado/canon ni listado de operaciones que necesita el guard; no es correcto simular estos datos con valores del navegador ni copiar las credenciales del laboratorio a la aplicación.
+
+Falta un puente autorizado de lectura servidor/Edge que entregue estado + operaciones coherentes, la conexión en un punto exacto del pipeline shadow, el registro `PENDING` antes de la petición, la persistencia posterior a respuesta, y la reejecución integral de los gates curriculares. El PR sigue en **borrador**, sin merge, producción congelada. No se han ejecutado llamadas reales a Gemini ni tests de integración con Supabase autenticada para este adaptador.
