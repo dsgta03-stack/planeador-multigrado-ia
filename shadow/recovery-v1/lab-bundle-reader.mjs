@@ -16,7 +16,7 @@ export function createStage7LabBundleReader({ projectRef, publishableKey, fetchI
   if (!/^[a-z0-9]{20}$/.test(projectRef || '') ||
       typeof publishableKey !== 'string' || publishableKey.length < 1 ||
       typeof fetchImpl !== 'function') throw Error('STAGE7_LAB_READER_CONFIGURATION_INVALID');
-  const endpoint = \`https://\${projectRef}.supabase.co/functions/v1/multiplan-stage7-worker-lab\`;
+  const endpoint = `https://${projectRef}.supabase.co/functions/v1/multiplan-stage7-worker-lab`;
   return async function readTrustedBundle({ actorId, runId, attemptId, accessToken } = {}) {
     // actorId is supplied ONLY after /auth/v1/user verified the actual session.
     if (!UUID.test(actorId || '') || !UUID.test(runId || '') ||
@@ -29,7 +29,7 @@ export function createStage7LabBundleReader({ projectRef, publishableKey, fetchI
         method: 'POST',
         headers: {
           apikey: publishableKey,
-          authorization: \`Bearer \${accessToken}\`,
+          authorization: `Bearer ${accessToken}`,
           'content-type': 'application/json',
         },
         body: JSON.stringify({ action: 'read_bundle', run_id: runId, attempt_id: attemptId }),
