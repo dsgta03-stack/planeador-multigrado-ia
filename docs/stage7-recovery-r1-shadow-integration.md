@@ -94,3 +94,38 @@ Resultado: **22/22 casos PASS**, cero peticiones al proveedor; 9 pruebas del gua
 Las dependencias `readCanonicalContext`, `readState` y `readOperations` son interfaces exigidas, **NO adaptadores de base de datos implementados**: deben conectarse a una nueva lectura transaccional bajo RLS/rol mínimo que obtenga originales canónicos verificables. La función de prueba de laboratorio v18 **no publica** todo el bundle de estado/canon ni listado de operaciones que necesita el guard; no es correcto simular estos datos con valores del navegador ni copiar las credenciales del laboratorio a la aplicación.
 
 Falta un puente autorizado de lectura servidor/Edge que entregue estado + operaciones coherentes, la conexión en un punto exacto del pipeline shadow, el registro `PENDING` antes de la petición, la persistencia posterior a respuesta, y la reejecución integral de los gates curriculares. El PR sigue en **borrador**, sin merge, producción congelada. No se han ejecutado llamadas reales a Gemini ni tests de integración con Supabase autenticada para este adaptador.
+## Paso siguiente: lector atómico autenticado de laboratorio (24 nov 2026, ~04:02 UTC)
+
+Archivos nuevos en PR #9:
+
+- `shadow/recovery-v1/lab-bundle-reader.mjs`
+- `shadow/recovery-v1/tests/lab-bundle-reader.test.mjs`
+- `docs/stage7-lab-bundle-read.sql`
+
+Se implementó un lector HTTP de solo consulta contra la Edge Function **del proyecto LAB**. Requiere `actorId` obtenido de `/auth/v1/user`, `runId`, `attemptId` y bearer válido; no solicita claves de administración. La respuesta esperada `read_bundle` ata docente, run e intento, incluye estado completo con SHA, bindings originales del intento y operaciones duraderas en un solo snapshot transaccional.
+
+`createStage7LabRecoveryInspector` consume **una sola** respuesta autenticada por inspección, y delega en el guard anterior únicamente cuando el servidor entrega un contexto canónico auténtico e independiente. Si la respuesta declara `canonical_context_available:false`, retorna `BLOCKED / CANONICAL_CONTEXT_NOT_PERSISTED`. Ningún camino devuelve `provider_call_allowed:true`.
+
+Pruebas locales:
+
+```bash
+node --test shadow/recovery-v1/tests/*.test.mjs
+node --check shadow/recovery-v1/lab-bundle-reader.mjs
+```
+
+**31/31 PASS** (9 del guard + 13 del adaptador + 9 del lector atómico), sin Gemini ni red real. Incluyen `401/403/409/500/504`, rechazo cruzado, transporte caído, respuesta malformada y no reutilización de fuentes del propio checkpoint como fuente canónica.
+
+### Bloqueo de instalación DB — no superar elevando privilegios
+
+La instalación automatizada de `multiplan_recovery.read_bundle(uuid,uuid)` vía gestión de Supabase se intentó exclusivamente sobre MULTIPLAN-LAB y fue rechazada con `42501: permission denied for schema multiplan_recovery`. Confirmado:
+
+- el usuario conectado a migraciones es `postgres`, sin permiso `CREATE` sobre `multiplan_recovery`;
+- el propietario es `multiplan_recovery_owner`, un rol sin `BYPASSRLS`;
+- `postgres` tampoco puede asumir ese rol (`pg_has_role(...,'SET')=false`);
+- por lo tanto, la nueva función **no quedó instalada**.
+
+**No se concedieron roles, no se alteraron permisos ni se utilizó el rol de servicio.** El SQL permanece como archivo para revisión/instalación por una identidad expresamente autorizada como propietaria de ese esquema. No desplegar `action:'read_bundle'` en el worker hasta confirmar instalación y permisos mínimos.
+
+El laboratorio actual contiene `plan_runs` con sólo `synthetic/lab_fixture/test_ordinal`; no tiene un registro curricular canónico independiente. Por eso la función propuesta declara `canonical_context_available:false` y el puente **debe bloquear** la reanudación aunque recupere el checkpoint: esta parte requiere un contrato adicional para persistir canónicos en el run.
+
+**Estado:** implementación del cliente y 31 mocks aprobados; SQL de lectura preparado pero NO instalado; lectura autenticada en vivo y reanudación curricular de extremo a extremo AÚN NO validadas. No hay cambios en producción, rutas certificadas, Railway, secretos ni modelos.
